@@ -24,12 +24,12 @@ Install [uv](https://github.com/astral-sh/uv)
 ## Configuration
 Use [VS Code](https://code.visualstudio.com/) + [Cline](https://cline.bot/) to config MCP Server.
 
-To use huaweicloud-ecs-ops-mcp-server MCP Server with any other MCP Client, you can manually add this configuration and restart for changes to take effect:
+To use huaweicloud-mcp-server MCP Server with any other MCP Client, you can manually add this configuration and restart for changes to take effect:
 
 ```json
 {
   "mcpServers": {
-    "huaweicloud-ecs-ops-mcp-server": {
+    "huaweicloud-mcp-server": {
       "timeout": 600,
       "command": "uv",
       "args": [
@@ -39,6 +39,7 @@ To use huaweicloud-ecs-ops-mcp-server MCP Server with any other MCP Client, you 
             "server.py"
       ],
       "env": {
+        "HUAWEI_CLOUD_MCP_TRANSPORT": "stdio",
         "HUAWEI_CLOUD_AK": "Your Access Key AK",
         "HUAWEI_CLOUD_SK": "Your Access Key SK"
       }
@@ -67,3 +68,4 @@ To use huaweicloud-ecs-ops-mcp-server MCP Server with any other MCP Client, you 
 |  | get_objects | Get objects in the bucket     | OBS               | Done |
 |  | download_object | Download object               | OBS               | Done |
 |  | delete_object | Delete object                 | OBS               | Done |
+| OCR | recognize_general_text | Recognize general text in images                 | OCR               | Done |

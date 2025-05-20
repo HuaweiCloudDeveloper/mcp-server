@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import os
 from dotenv import load_dotenv
 import logging
@@ -5,6 +7,11 @@ from logging.handlers import RotatingFileHandler
 
 
 load_dotenv()  # 这将默认从当前目录下的 .env 文件加载变量
+
+
+# Transport protocol to use ("stdio", "sse", or "streamable-http")
+def get_transport():
+    ak = os.getenv("HUAWEI_CLOUD_MCP_TRANSPORT", "stdio")
 
 
 def get_aksk():

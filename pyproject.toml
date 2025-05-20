@@ -7,6 +7,8 @@ requires-python = ">=3.12"
 dependencies = [
     "huaweicloudsdkecs>=3.1.147",
     "mcp[cli]>=1.8.0",
-    "esdk-obs-python",
+    "esdk-obs-python>=3.25.3",
     "httpx>=0.28.1",
+    "huaweicloudsdkcore>=3.1.147",
+    "huaweicloudsdkocr>=3.1.147",
 ]
