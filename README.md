@@ -69,3 +69,7 @@ To use huaweicloud-mcp-server MCP Server with any other MCP Client, you can manu
 |  | download_object | Download object               | OBS               | Done |
 |  | delete_object | Delete object                 | OBS               | Done |
 | OCR | recognize_general_text | Recognize general text in images                 | OCR               | Done |
+
+## Roadmap
+
+Please refer to the [roadmap](docs/roadmap.md).
