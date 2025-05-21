@@ -6,6 +6,7 @@ from tools import utils
 from tools import ecs_tools
 from tools import obs_tools
 from tools import ocr_tools
+from tools import evs_tools
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +24,9 @@ def main(transport: str):
         mcp.add_tool(tool)
 
     for tool in ocr_tools.tools:
+        mcp.add_tool(tool)
+
+    for tool in evs_tools.tools:
         mcp.add_tool(tool)
 
     # Initialize and run the server
