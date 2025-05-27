@@ -3,9 +3,9 @@
 基于产品对外提供的API接口，用 HuaweiCloud SDK 进行开发
 
 ## 了解业务功能
-从华为云首页找到相应产品，进入文档学习[业务功能](https://support.huaweicloud.com/productdesc-evs/evs_01_0127.html) 以及 [API接口规格](https://support.huaweicloud.com/api-evs/evs_04_0001.html)。
+从华为云首页找到相应产品，进入文档学习[业务功能](https://support.huaweicloud.com/productdesc-evs/evs_01_0127.html) 以及 [API接口规格](https://support.huaweicloud.com/api-evs/evs_04_0001.html)。<br>
 
-![alt text](images/20250522_103123.png)
+![alt text](images/20250522_103123.png) <br>
 
 ![alt text](images/20250522_103200.png)
 
@@ -13,7 +13,7 @@
 华为云的产品提供有在线API调用体验和多语言的SDK代码。 
 进入[API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi/EVS/doc?api=CreateVolume)选择相应产品，根据输入参数会生成相应的代码， 调试可以看到运行效果。 <br>
 如下图所示的代码是可以用来开放后续MCP服务的。
-
+<br>
 ![alt text](images/20250522_103734.png)
 
 
@@ -22,7 +22,7 @@
 - 下载VSCode + Cline
 - 下载当前项目代码根据ReadMe配置开发环境
 - 具体编码参考已有evs_tools的代码
-- ak/sk、log等功能复用已有代码
+- ak/sk、log等功能复用已有代码 <br>
 ![alt text](images/20250522_104923.png)
 
 
@@ -35,8 +35,8 @@
 ![alt text](images/20250523_092603.png)
 
 ### 通过Cline进行自然语言级验证
-[参考文档](https://docs.cline.bot/mcp/configuring-mcp-servers)
-![alt text](images/20250523_092726.png)
+[参考文档](https://docs.cline.bot/mcp/configuring-mcp-servers) <br>
+![alt text](images/20250523_092726.png) <br>
 ![alt text](images/20250523_092806.png)
 
 ## 提交代码
