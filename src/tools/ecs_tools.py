@@ -60,7 +60,7 @@ class ECSInstanceConfig(BaseModel):
     data_volume_type: Optional[str] = Field("SSD", description="数据盘类型")
     data_volume_size: Optional[int] = Field(100, description="数据盘大小，单位GB")
     adminPass: str = Field(
-        "luke@158",
+        "Huawei123!@",
         description="登录密码，密码复杂度要求:长度为8-26位。密码至少必须包含大写字母、小写字母、数字和特殊字符(!@$%^-_=+[{}]:,./?)中的三种。密码不能包含用户名或用户名的逆序。",
     )
     vpc_id: str = Field(
