@@ -6,10 +6,16 @@ from huaweicloudsdkeip.v2.region.eip_region import EipRegion
 from typing import List
 from tools.utils import get_aksk
 from huaweicloudsdkcore.auth.credentials import BasicCredentials
-from huaweicloudsdkeip.v2 import *
+from huaweicloudsdkeip.v2 import EipClient
+from huaweicloudsdkeip.v2 import CreatePublicipBandwidthOption
+from huaweicloudsdkeip.v2 import CreatePublicipRequestBody
+from huaweicloudsdkeip.v2 import CreatePublicipRequest
+from huaweicloudsdkeip.v2 import CreatePublicipOption
+from huaweicloudsdkeip.v2 import ListPublicipsRequest
+from huaweicloudsdkeip.v2 import ShowPublicipRequest
+from huaweicloudsdkeip.v2 import DeletePublicipRequest
 from huaweicloudsdkcore.exceptions import exceptions
 from pydantic import BaseModel, Field
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 tools = []

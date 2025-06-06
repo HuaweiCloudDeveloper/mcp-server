@@ -9,6 +9,7 @@ from tools import evs_tools
 from tools import ims_tools
 from tools import vpc_tools
 from tools import eip_tools
+from tools import das_tools
 
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,9 @@ def main(transport: str):
         mcp.add_tool(tool)
 
     for tool in eip_tools.tools:
+        mcp.add_tool(tool)
+
+    for tool in das_tools.tools:
         mcp.add_tool(tool)
 
     # Initialize and run the server
