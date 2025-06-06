@@ -65,30 +65,49 @@ def get_region(region_name: str) -> str:
 
 
 class EipConfig(BaseModel):
-    region: str = Field(default="cn-south-1",
-                        description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3")
-    charge_mode: str = Field(default="bandwidth",
-                             description="功能说明：按带宽计费还是按流量计费。取值范围：bandwidth（按带宽计费），traffic（按流量计费），不填或者为空时默认是bandwidth。")
+    region: str = Field(
+        default="cn-south-1",
+        description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3",
+    )
+    charge_mode: str = Field(
+        default="bandwidth",
+        description="功能说明：按带宽计费还是按流量计费。取值范围：bandwidth（按带宽计费），traffic（按流量计费），不填或者为空时默认是bandwidth。",
+    )
 
-    name: str = Field(default=None,
-                      description="功能说明：带宽名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点） 约束：如果share_type是PER，该参数必须带，如果share_type是WHOLE并且id有值，该参数会忽略。 最小长度：1最大长度：64")
+    name: str = Field(
+        default=None,
+        description="功能说明：带宽名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点） 约束：如果share_type是PER，该参数必须带，如果share_type是WHOLE并且id有值，该参数会忽略。 最小长度：1最大长度：64",
+    )
 
-    share_type: str = Field(default="PRE",
-                            description="取值范围：PER，WHOLE（P   ER为独占带宽，WHOLE是共享带宽）。约束：该字段为WHOLE时，必须指定带宽ID。")
+    share_type: str = Field(
+        default="PRE",
+        description="取值范围：PER，WHOLE（P   ER为独占带宽，WHOLE是共享带宽）。约束：该字段为WHOLE时，必须指定带宽ID。",
+    )
 
-    size: int = Field(default=None,
-                      description="功能说明：带宽大小  带宽大小当未输入带宽id，创建独占带宽时，该字段为必输 取值范围：默认1Mbit/s~2000Mbit/s（具体范围以各区域配置为准，请参见控制台对应页面显示）。约束：share_type是PER，该参数必须带，如果share_type是WHOLE并且id有值，该参数会忽略")
+    size: int = Field(
+        default=None,
+        description="功能说明：带宽大小  带宽大小当未输入带宽id，创建独占带宽时，该字段为必输 取值范围：默认1Mbit/s~2000Mbit/s（具体范围以各区域配置为准，请参见控制台对应页面显示）。约束：share_type是PER，该参数必须带，如果share_type是WHOLE并且id有值，该参数会忽略",
+    )
 
-    type: str = Field(default="5_bgp", description="弹性公网IP的类型 5_bgp（全动态BGP），5_sbgp（静态BGP）")
+    type: str = Field(
+        default="5_bgp",
+        description="弹性公网IP的类型 5_bgp（全动态BGP），5_sbgp（静态BGP）",
+    )
 
-    id: str = Field(default=None,
-                    description="功能说明：带宽ID，创建WHOLE类型带宽的弹性公网IP时可以指定之前的共享带宽创建 取值范围：WHOLE类型的带宽ID 最大长度：36")
+    id: str = Field(
+        default=None,
+        description="功能说明：带宽ID，创建WHOLE类型带宽的弹性公网IP时可以指定之前的共享带宽创建 取值范围：WHOLE类型的带宽ID 最大长度：36",
+    )
 
-    ip_version: int = Field(default=4,
-                            description="功能说明：弹性公网IP的版本取值范围：4、6，ipv6表示开启NAT64能力 约束：必须是系统具体支持的类型  不填或空字符串时，默认创建ipv4")
+    ip_version: int = Field(
+        default=4,
+        description="功能说明：弹性公网IP的版本取值范围：4、6，ipv6表示开启NAT64能力 约束：必须是系统具体支持的类型  不填或空字符串时，默认创建ipv4",
+    )
 
-    alias: str = Field(default=None,
-                       description="弹性公网IP名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）  最大长度：64")
+    alias: str = Field(
+        default=None,
+        description="弹性公网IP名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）  最大长度：64",
+    )
 
 
 def create_client(region: str) -> EipClient:
@@ -140,7 +159,7 @@ def create_publicip(eipConfig: EipConfig) -> str:
             "status" : "PENDING_CREATE"
           }
         }
-      """
+    """
 
     client = create_client(eipConfig.region)
 
@@ -153,16 +172,17 @@ def create_publicip(eipConfig: EipConfig) -> str:
             eipConfig.id = None
 
         request = CreatePublicipRequest()
-        bandwidth = CreatePublicipBandwidthOption(charge_mode=eipConfig.charge_mode,
-                                                  id=eipConfig.id,
-                                                  name=eipConfig.name,
-                                                  share_type=eipConfig.share_type,
-                                                  size=eipConfig.size)
+        bandwidth = CreatePublicipBandwidthOption(
+            charge_mode=eipConfig.charge_mode,
+            id=eipConfig.id,
+            name=eipConfig.name,
+            share_type=eipConfig.share_type,
+            size=eipConfig.size,
+        )
 
         publicip = CreatePublicipOption(
-            type=eipConfig.type,
-            ip_version=eipConfig.ip_version,
-            alias=eipConfig.alias)
+            type=eipConfig.type, ip_version=eipConfig.ip_version, alias=eipConfig.alias
+        )
 
         body = CreatePublicipRequestBody(
             bandwidth=bandwidth,
@@ -184,15 +204,17 @@ def create_publicip(eipConfig: EipConfig) -> str:
 
 @tools.append
 def delete_publicip(
-        region: str = Field(default="cn-south-1",
-                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
-        publicip_id: str = Field(default="cn-south-1", description="弹性公网IP唯一标识")
+    region: str = Field(
+        default="cn-south-1",
+        description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3",
+    ),
+    publicip_id: str = Field(default="cn-south-1", description="弹性公网IP唯一标识"),
 ) -> str:
     """删除弹性公网IP
 
-       Args:
-        region: 地域，例如：北京四, 上海二, 香港
-        publicip_id: 弹性公网IP唯一标识。
+    Args:
+     region: 地域，例如：北京四, 上海二, 香港
+     publicip_id: 弹性公网IP唯一标识。
 
     """
 
@@ -212,51 +234,65 @@ def delete_publicip(
 
 @tools.append
 def list_public_ips(
-        region: str = Field(default="cn-south-1",
-                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
-        marker: str = Field(default=None,
-                            description="取值为上一页数据的最后一条记录的id，为空时为查询第一 最大长度：36"),
-        limit: int = Field(default=None,
-                           description="每页返回的个数, 取值范围：0~[2000]，其中2000为局点差异项，具体取值由局点决定最小值：0"),
-        ip_version: int = Field(default=None, description="IP地址版本信息，4：IPv4，6：开启NAT64能力"),
-        public_ip_address: List[str] = Field(default=None,
-                                             description='IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址'),
-        private_ip_address: List[str] = Field(default=None, description='关联端口的私有IP地址'),
-        id: List[str] = Field(default=None, description='弹性公网IP唯一标识')
+    region: str = Field(
+        default="cn-south-1",
+        description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3",
+    ),
+    marker: str = Field(
+        default=None,
+        description="取值为上一页数据的最后一条记录的id，为空时为查询第一 最大长度：36",
+    ),
+    limit: int = Field(
+        default=None,
+        description="每页返回的个数, 取值范围：0~[2000]，其中2000为局点差异项，具体取值由局点决定最小值：0",
+    ),
+    ip_version: int = Field(
+        default=None, description="IP地址版本信息，4：IPv4，6：开启NAT64能力"
+    ),
+    public_ip_address: List[str] = Field(
+        default=None,
+        description="IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址",
+    ),
+    private_ip_address: List[str] = Field(
+        default=None, description="关联端口的私有IP地址"
+    ),
+    id: List[str] = Field(default=None, description="弹性公网IP唯一标识"),
 ) -> str:
     """查询弹性公网IP列表
 
-           Args:
-                region: 地域，例如：北京四, 上海二, 香港
-                marker: 取值为上一页数据的最后一条记录的id，为空时为查询第一页。
-                limit: 每页返回的个数
-                ip_version: IP地址版本信息，4：IPv4，6：开启NAT64能力
-                public_ip_address: IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址
-                private_ip_address: 关联端口的私有IP地址
-                id: 弹性公网IP唯一标识
-           Return:
-                alias: 弹性公网IP名称
-                type: 弹性公网IP的类型
-                status: 弹性公网IP的状态
-                public_ip_address: Pv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址
-                private_ip_address 绑定弹性公网IP的私有IP地址
-                id: 弹性公网IP唯一标识
-                bandwidth_size: 带宽大小，单位为Mbit/s
-                bandwidth_share_type: 表示共享带宽或者独享带宽
-                bandwidth_name : 带宽名称
-                bandwidth_id : 弹性公网IP对应带宽ID
+    Args:
+         region: 地域，例如：北京四, 上海二, 香港
+         marker: 取值为上一页数据的最后一条记录的id，为空时为查询第一页。
+         limit: 每页返回的个数
+         ip_version: IP地址版本信息，4：IPv4，6：开启NAT64能力
+         public_ip_address: IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址
+         private_ip_address: 关联端口的私有IP地址
+         id: 弹性公网IP唯一标识
+    Return:
+         alias: 弹性公网IP名称
+         type: 弹性公网IP的类型
+         status: 弹性公网IP的状态
+         public_ip_address: Pv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址
+         private_ip_address 绑定弹性公网IP的私有IP地址
+         id: 弹性公网IP唯一标识
+         bandwidth_size: 带宽大小，单位为Mbit/s
+         bandwidth_share_type: 表示共享带宽或者独享带宽
+         bandwidth_name : 带宽名称
+         bandwidth_id : 弹性公网IP对应带宽ID
 
-        """
+    """
 
     client = create_client(region)
 
     try:
-        request = ListPublicipsRequest(marker=marker,
-                                       limit=limit,
-                                       ip_version=ip_version,
-                                       id=id,
-                                       private_ip_address=private_ip_address,
-                                       public_ip_address=public_ip_address)
+        request = ListPublicipsRequest(
+            marker=marker,
+            limit=limit,
+            ip_version=ip_version,
+            id=id,
+            private_ip_address=private_ip_address,
+            public_ip_address=public_ip_address,
+        )
         response = client.list_publicips(request)
         return response
 
@@ -271,11 +307,11 @@ def list_public_ips(
 def show_publicip(region_name: str, publicip_id: str) -> str:
     """查询弹性公网IP。
 
-          Args:
-           region_name: 地域，例如：北京四, 上海二, 香港
-           publicip_id: 弹性公网IP唯一标识 最大长度：36。
+      Args:
+       region_name: 地域，例如：北京四, 上海二, 香港
+       publicip_id: 弹性公网IP唯一标识 最大长度：36。
 
-        Return:
+    Return:
 
     """
     region = get_region(region_name)
