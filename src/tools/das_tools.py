@@ -27,13 +27,18 @@ def create_client(region: str) -> DasClient:
 
     return client
 
+
 @tools.append
 def list_health_report_task(
-        region: str = Field(default="cn-south-1",  description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
-        instance_id: str = Field(default="cn-south-1",  description="实例ID。标识实例的唯一标识。取值范围：只能由英文字母、数字组成，且长度为32个字符。"),
+        region: str = Field(default="cn-south-1",
+                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
+        instance_id: str = Field(default="cn-south-1",
+                                 description="实例ID。标识实例的唯一标识。取值范围：只能由英文字母、数字组成，且长度为32个字符。"),
         start_at: int = Field(description="开始时间（Unix timestamp），单位：毫秒。取值范围：[0, 2^31-1]，实际取决于查询。"),
-        end_at: int = Field(default=int(time.time() * 1000), description="结束时间Unix timestamp），单位：毫秒。取值范围：[0, 2^31-1]，实际取决于查询。"),
-        offset: int = Field(default=0, description="索引位置，偏移量。从第一条数据偏移offset条数据后开始查询。例如：该参数指定为1，limit指定为10，则只展示第2~11条数据。取值范围：[0, 5000] 默认取值：默认为0（偏移0条数据，表示从第一条数据开始查询）。")
+        end_at: int = Field(default=int(time.time() * 1000),
+                            description="结束时间Unix timestamp），单位：毫秒。取值范围：[0, 2^31-1]，实际取决于查询。"),
+        offset: int = Field(default=0,
+                            description="索引位置，偏移量。从第一条数据偏移offset条数据后开始查询。例如：该参数指定为1，limit指定为10，则只展示第2~11条数据。取值范围：[0, 5000] 默认取值：默认为0（偏移0条数据，表示从第一条数据开始查询）。")
 ) -> str:
     """查询实例健康诊断报告列表
 
@@ -47,9 +52,9 @@ def list_health_report_task(
            """
     client = create_client(region)
     try:
-         request = ListHealthReportTaskRequest(instance_id=instance_id, start_at=start_at, end_at=end_at, offset=offset)
-         response = client.list_health_report_task(request)
-         return response
+        request = ListHealthReportTaskRequest(instance_id=instance_id, start_at=start_at, end_at=end_at, offset=offset)
+        response = client.list_health_report_task(request)
+        return response
 
     except exceptions.ClientRequestException as e:
         msg = f"操作失败，{f'状态码：{e.status_code}', f'请求信息：{e.request_id}'}, \
@@ -58,12 +63,13 @@ def list_health_report_task(
         return msg
 
 
-
 @tools.append
 def list_cloud_dba_instances(
-        region: str = Field(default="cn-south-1",  description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
+        region: str = Field(default="cn-south-1",
+                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
         datastore_type: str = Field(default="mysql", description="数据库类型。mysql, oracle"),
-        offset: int = Field(default=0, description="索引位置，偏移量。从第一条数据偏移offset条数据后开始查询。例如：该参数指定为1，limit指定为10，则只展示第2~11条数据。取值范围：[0, 5000] 默认取值：默认为0（偏移0条数据，表示从第一条数据开始查询）。")
+        offset: int = Field(default=0,
+                            description="索引位置，偏移量。从第一条数据偏移offset条数据后开始查询。例如：该参数指定为1，limit指定为10，则只展示第2~11条数据。取值范围：[0, 5000] 默认取值：默认为0（偏移0条数据，表示从第一条数据开始查询）。")
 ) -> str:
     """获取DAS云DBA实例列表
 
@@ -75,9 +81,9 @@ def list_cloud_dba_instances(
            """
     client = create_client(region)
     try:
-         request = ListCloudDbaInstancesRequest(datastore_type, offset, None, None)
-         response = client.list_cloud_dba_instances(request)
-         return response
+        request = ListCloudDbaInstancesRequest(datastore_type, offset, None, None)
+        response = client.list_cloud_dba_instances(request)
+        return response
 
     except exceptions.ClientRequestException as e:
         msg = f"操作失败，{f'状态码：{e.status_code}', f'请求信息：{e.request_id}'}, \
@@ -88,9 +94,12 @@ def list_cloud_dba_instances(
 
 @tools.append
 def export_top_risk_instances(
-        region: str = Field(default="cn-south-1",  description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
-        start_at: int = Field(description="开始时间(Unix timestamp),单位:毫秒。1749089575000，时间控制在24小时内, start_at与end_at时间范围需要大于10分钟 非空"),
-        end_at: int = Field(default=int(time.time() * 1000), description="结束时间(Unix timestamp),单位:毫秒。1749089575000，时间控制在24小时内, start_at与end_at时间范围需要大于10分钟，非空"),
+        region: str = Field(default="cn-south-1",
+                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
+        start_at: int = Field(
+            description="开始时间(Unix timestamp),单位:毫秒。1749089575000，时间控制在24小时内, start_at与end_at时间范围需要大于10分钟 非空"),
+        end_at: int = Field(default=int(time.time() * 1000),
+                            description="结束时间(Unix timestamp),单位:毫秒。1749089575000，时间控制在24小时内, start_at与end_at时间范围需要大于10分钟，非空"),
         datastore_type: str = Field(default="mysql", description="数据库类型。mysql, oracle")
 ) -> str:
     """导出TOP风险实例列表
@@ -114,9 +123,9 @@ def export_top_risk_instances(
 
     client = create_client(region)
     try:
-         request = ExportTopRiskInstancesRequest(start_at=start_at, end_at=end_at, datastore_type=datastore_type)
-         response = client.export_top_risk_instances(request)
-         return response
+        request = ExportTopRiskInstancesRequest(start_at=start_at, end_at=end_at, datastore_type=datastore_type)
+        response = client.export_top_risk_instances(request)
+        return response
 
     except exceptions.ClientRequestException as e:
         msg = f"操作失败，{f'状态码：{e.status_code}', f'请求信息：{e.request_id}'}, \

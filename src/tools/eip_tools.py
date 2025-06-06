@@ -87,7 +87,8 @@ class EipConfig(BaseModel):
     ip_version: int = Field(default=4,
                             description="功能说明：弹性公网IP的版本取值范围：4、6，ipv6表示开启NAT64能力 约束：必须是系统具体支持的类型  不填或空字符串时，默认创建ipv4")
 
-    alias: str = Field(default=None, description="弹性公网IP名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）  最大长度：64")
+    alias: str = Field(default=None,
+                       description="弹性公网IP名称 取值范围：1-64个字符，支持数字、字母、中文、_(下划线)、-（中划线）、.（点）  最大长度：64")
 
 
 def create_client(region: str) -> EipClient:
@@ -183,7 +184,8 @@ def create_publicip(eipConfig: EipConfig) -> str:
 
 @tools.append
 def delete_publicip(
-        region: str = Field(default="cn-south-1", description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
+        region: str = Field(default="cn-south-1",
+                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
         publicip_id: str = Field(default="cn-south-1", description="弹性公网IP唯一标识")
 ) -> str:
     """删除弹性公网IP
@@ -210,11 +212,15 @@ def delete_publicip(
 
 @tools.append
 def list_public_ips(
-        region: str = Field(default="cn-south-1", description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
-        marker: str = Field(default=None, description="取值为上一页数据的最后一条记录的id，为空时为查询第一 最大长度：36"),
-        limit: int = Field(default=None, description="每页返回的个数, 取值范围：0~[2000]，其中2000为局点差异项，具体取值由局点决定最小值：0"),
+        region: str = Field(default="cn-south-1",
+                            description="购买的ecs所属区地域ID，默认是华南-广州;区域有-代表广州-cn-south-1 、华东-上海一cn-east-3"),
+        marker: str = Field(default=None,
+                            description="取值为上一页数据的最后一条记录的id，为空时为查询第一 最大长度：36"),
+        limit: int = Field(default=None,
+                           description="每页返回的个数, 取值范围：0~[2000]，其中2000为局点差异项，具体取值由局点决定最小值：0"),
         ip_version: int = Field(default=None, description="IP地址版本信息，4：IPv4，6：开启NAT64能力"),
-        public_ip_address: List[str] = Field(default=None, description='IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址'),
+        public_ip_address: List[str] = Field(default=None,
+                                             description='IPv4时是申请到的弹性公网IP地址，IPv6时是IPv6地址对应的IPv4地址'),
         private_ip_address: List[str] = Field(default=None, description='关联端口的私有IP地址'),
         id: List[str] = Field(default=None, description='弹性公网IP唯一标识')
 ) -> str:
