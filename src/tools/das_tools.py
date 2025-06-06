@@ -1,6 +1,6 @@
 import logging
 import time
-from pydantic import BaseModel, Field
+from pydantic import Field
 from tools.utils import get_aksk
 from huaweicloudsdkcore.auth.credentials import BasicCredentials
 from huaweicloudsdkdas.v3 import DasClient
