@@ -2,8 +2,12 @@ import logging
 import time
 from pydantic import Field
 import sys
-sys.path.append("C:\\kylecheng\\mcp-server")
-from assets.utils.sdk_utils import get_aksk
+from pathlib import Path
+# 获取assets目录
+target_dir = Path(__file__).resolve().parent.parent.parent.parent
+# 添加到系统路径
+sys.path.append(str(target_dir))
+from assets.utils import sdk_utils
 from huaweicloudsdkcore.auth.credentials import BasicCredentials
 from huaweicloudsdkdas.v3 import DasClient
 from huaweicloudsdkdas.v3 import ListCloudDbaInstancesRequest
@@ -15,9 +19,8 @@ from huaweicloudsdkcore.exceptions import exceptions
 logger = logging.getLogger(__name__)
 tools = []
 
-
 def create_client(region: str) -> DasClient:
-    ak, sk = get_aksk()
+    ak, sk = sdk_utils.get_aksk()
     credentials = BasicCredentials(ak, sk)
 
     client = (
@@ -26,7 +29,6 @@ def create_client(region: str) -> DasClient:
         .with_region(DasRegion.value_of(region))
         .build()
     )
-
     return client
 
 @tools.append
