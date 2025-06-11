@@ -17,6 +17,7 @@ wheels/
 
 # Virtual environments
 .venv
+logs
 
 # editor and IDE paraphernalia
 .idea
