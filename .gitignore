@@ -32,3 +32,4 @@ out/
 
 # OS Generated
 .DS_Store
+/huaweicloud_services_server/mcp_server_das/src/logs/
