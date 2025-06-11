@@ -7,7 +7,6 @@ from pathlib import Path
 target_dir = Path(__file__).resolve().parent.parent.parent.parent
 # 添加到系统路径
 sys.path.append(str(target_dir))
-#sys.path.append("C:\\kylecheng\\mcp-server")
 from assets.utils import sdk_utils
 from mcp_server_das import das_tools
 
