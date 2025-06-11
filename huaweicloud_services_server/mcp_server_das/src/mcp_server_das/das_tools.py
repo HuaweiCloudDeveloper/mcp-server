@@ -1,7 +1,9 @@
 import logging
 import time
 from pydantic import Field
-from tools.utils import get_aksk
+import sys
+sys.path.append("C:\\kylecheng\\mcp-server")
+from assets.utils.sdk_utils import get_aksk
 from huaweicloudsdkcore.auth.credentials import BasicCredentials
 from huaweicloudsdkdas.v3 import DasClient
 from huaweicloudsdkdas.v3 import ListCloudDbaInstancesRequest
@@ -26,7 +28,6 @@ def create_client(region: str) -> DasClient:
     )
 
     return client
-
 
 @tools.append
 def list_health_report_task(

@@ -1,8 +1,8 @@
 # coding: utf-8
 from mcp.server.fastmcp import FastMCP
 import logging
-from tools import utils
-from tools import ecs_tools
+from assets.utils.sdk_utils import utils
+from mcp_server_ecs.src.tools import ecs_tools
 from tools import obs_tools
 from tools import ocr_tools
 from tools import evs_tools
