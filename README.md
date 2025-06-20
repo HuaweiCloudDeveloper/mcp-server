@@ -31,7 +31,7 @@ Prepare AK and SK and set them to environment variables
 - ak environment variable name: HUAWEI_ACCESS_KEY
 
 - sk environment variable name: HUAWEI_SECRET_KEY
-- ![img.png](images/img_.png)
+- ![img.png](images/img.png)
 
 ### 3. Running method
 
