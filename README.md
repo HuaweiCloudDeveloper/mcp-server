@@ -57,7 +57,8 @@ Directly enter the directory path of the sub-project, such as the run.py file un
 ## Tools
 
 | Group Name | Product Name | Product Short |
-|------------|------------|------------|
+|----|-------|------------|
+| Cloud Store | Products and Orders | [Product&Order](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server)|
 | Operation | Customer Operation Capabilities | BSSINTL |
 | Middleware | Distributed Cache Service | [DCS](https://gitee.com/HuaweiCloudDeveloper/hwc-mcp-server/tree/master/huaweicloud_services_server/mcp_server_dcs) |
 | | Distributed Message Service for Kafka | [Kafka](https://gitee.com/HuaweiCloudDeveloper/hwc-mcp-server/tree/master/huaweicloud_services_server/mcp_server_kafka) |
