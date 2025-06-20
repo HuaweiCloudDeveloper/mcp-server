@@ -1,0 +1,1154 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VCM-长语音内容审核",
+    "title" : "VCM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "CheckAudioJobResponseBody" : {
+        "description" : "返回数据",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "作业ID."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "作业描述"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "作业状态:"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "作业名称."
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/AudioServiceConfig"
+          },
+          "input" : {
+            "type" : "object",
+            "description" : "音频数据的输入列表",
+            "properties" : {
+              "type" : {
+                "type" : "string",
+                "description" : "视频数据的输入类型:",
+                "enum" : [ "obs", "url" ]
+              },
+              "data" : {
+                "type" : "array",
+                "description" : "数据输入内容",
+                "items" : {
+                  "$ref" : "#/components/schemas/AudioInputData"
+                }
+              }
+            }
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/AudioResponseOutput"
+          },
+          "service_version" : {
+            "type" : "string",
+            "description" : "服务版本"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "修改时间"
+          }
+        },
+        "type" : "object"
+      },
+      "AudioResponseOutputHosting" : {
+        "description" : "托管输出位置",
+        "type" : "object",
+        "properties" : {
+          "obs" : {
+            "type" : "array",
+            "description" : "结果文件result.json的OBS信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/AudioOutputHostingObs"
+            }
+          },
+          "result_json_overdue_at" : {
+            "type" : "string",
+            "description" : "托管文件result.json的过期日期,文件默认保存48小时。"
+          },
+          "check_obs_after_end_state" : {
+            "type" : "boolean",
+            "description" : "True表示校验obs。"
+          }
+        }
+      },
+      "AudioServiceConfig" : {
+        "required" : [ "common" ],
+        "type" : "object",
+        "description" : "配置",
+        "properties" : {
+          "common" : {
+            "required" : [ "categories" ],
+            "type" : "object",
+            "description" : "检测场景",
+            "properties" : {
+              "categories" : {
+                "type" : "string",
+                "description" : "检测场景。"
+              }
+            }
+          }
+        }
+      },
+      "AudioInputData" : {
+        "type" : "object",
+        "description" : "音频数据输入列表",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "type为obs时输入参数"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "type为obs时输入参数"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "type为url时输入参数"
+          }
+        }
+      },
+      "AudioOutputObs" : {
+        "type" : "object",
+        "description" : "音频数据的输出列表",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "example" : "video-test",
+            "description" : "存储结果文件的OBS桶名。"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "output/",
+            "description" : "结果文件的OBS桶内路径,例如“output/”。"
+          }
+        }
+      },
+      "AudioResponseOutput" : {
+        "type" : "object",
+        "description" : "音频数据的输出列表",
+        "properties" : {
+          "obs" : {
+            "description" : "obs输出位置",
+            "type" : "object",
+            "$ref" : "#/components/schemas/AudioOutputObs"
+          },
+          "hosting" : {
+            "description" : "托管输出位置",
+            "type" : "object",
+            "$ref" : "#/components/schemas/AudioResponseOutputHosting"
+          }
+        }
+      },
+      "AudioOutputHostingObs" : {
+        "type" : "object",
+        "description" : "结果文件result.json的OBS信息。",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "obs桶名称",
+            "example" : "video-test"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "输出obs路径",
+            "example" : "output/"
+          }
+        }
+      },
+      "ErrorRsp" : {
+        "description" : "失败时返回的错误对象",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码",
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "error_msg" : {
+            "description" : "错误描述",
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "AudioOutput" : {
+        "type" : "object",
+        "description" : "音频数据的输出列表",
+        "properties" : {
+          "obs" : {
+            "description" : "obs输出位置",
+            "type" : "object",
+            "$ref" : "#/components/schemas/AudioOutputObs"
+          },
+          "hosting" : {
+            "description" : "托管输出位置",
+            "type" : "object",
+            "$ref" : "#/components/schemas/AudioOutputHosting"
+          }
+        }
+      },
+      "AudioOutputHosting" : {
+        "description" : "托管输出位置",
+        "type" : "object",
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/AudioOutputHostingObs"
+          },
+          "result_json_overdue_at" : {
+            "type" : "string",
+            "description" : "托管文件result.json的过期日期,文件默认保存48小时。"
+          },
+          "check_obs_after_end_state" : {
+            "type" : "boolean",
+            "description" : "True表示校验obs。"
+          }
+        }
+      },
+      "CreateAudioJobResponseBody" : {
+        "type" : "object",
+        "description" : "返回数据",
+        "items" : {
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "description" : "作业 ID。"
+            }
+          }
+        }
+      },
+      "CreateAudioJobRequestBody" : {
+        "required" : [ "name", "input", "output", "service_version" ],
+        "description" : "请求体",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "作业名称,只能由字母(a~zA~Z)、数字(0~9)、中划线(-)、下划线(_)组成,长度范围为[1,100]。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "作业描述信息,最大长度为500字符长度。"
+          },
+          "input" : {
+            "required" : [ "type", "data" ],
+            "type" : "object",
+            "description" : "音频数据的输入列表",
+            "properties" : {
+              "type" : {
+                "type" : "string",
+                "description" : "视频数据的输入类型:",
+                "enum" : [ "obs", "url" ]
+              },
+              "data" : {
+                "type" : "array",
+                "description" : "数据输入内容",
+                "items" : {
+                  "$ref" : "#/components/schemas/AudioInputData"
+                }
+              }
+            }
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/AudioOutput"
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/AudioServiceConfig"
+          },
+          "service_version" : {
+            "type" : "string",
+            "description" : "功能版本为“1.0”。"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoJobResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "作业ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "作业名称。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "作业描述信息,默认值为空。"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "作业状态: - PENDING:等待中 - RECOVERING :恢复中 - STARTING:启动中 - UPGRADING :更新中 - CREATE_FAILED:创建失败 - START_FAILED:启动失败 - RUNNING:运行中 - STOPPING:停止中 - STOPPED:已停止 - ABNORMAL:运行异常 - SUCCEEDED:运行成功 - FAILED:运行失败 - DELETING:删除中 - FREEZING :冻结中 - FROZEN :已冻结"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "作业创建时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "作业更新时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ。"
+          },
+          "input" : {
+            "type" : "object",
+            "description" : "数据输入列表,默认值为[]。"
+          },
+          "service_config" : {
+            "type" : "object",
+            "description" : "服务算法配置,字段结构跟服务相关。"
+          },
+          "output" : {
+            "type" : "object",
+            "description" : "数据输出列表,默认值为[]"
+          },
+          "hosting_result" : {
+            "type" : "object",
+            "description" : "hosting_result信息为可选,hosting输出类型的作业详情才会有这个信息,且该信息只出现在查询单个作业API中,不出现在查询作业列表API中",
+            "properties" : {
+              "data" : {
+                "type" : "string",
+                "description" : "结果文件result.json的具体内容。"
+              },
+              "obs" : {
+                "type" : "object",
+                "description" : "结果文件所在的OBS桶和result.json文件路径"
+              },
+              "status" : {
+                "type" : "string",
+                "description" : "result.json文件的状态: - NOT_GENERATED:文件未生成 - AVAILABLE:文件可获取 - EXCEED_IN_SIZE:文件超过最大规格 - OVERDUE:文件过期 - DELETED_MISTAKENLY:文件误删除"
+              },
+              "result_json_overdue_at" : {
+                "type" : "string",
+                "description" : "result.json文件的过期日期,文件默认保存48小时。"
+              }
+            }
+          },
+          "service_version" : {
+            "type" : "string",
+            "description" : "作业对应的服务版本。"
+          }
+        }
+      },
+      "DeleteJobResponseBody" : {
+        "description" : "返回结果",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "返回结果"
+          }
+        },
+        "type" : "object"
+      },
+      "ListAudioJobsResponseBody" : {
+        "description" : "作业列表",
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "number",
+            "format" : "integer",
+            "description" : "作业数量"
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "作业列表",
+            "items" : {
+              "$ref" : "#/components/schemas/CheckAudioJobResponseBody"
+            }
+          }
+        }
+      },
+      "Output" : {
+        "type" : "object",
+        "description" : "结果数据的输出列表",
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/OutputObs"
+          },
+          "hosting" : {
+            "description" : "托管输出位置",
+            "type" : "object",
+            "properties" : {
+              "obs" : {
+                "$ref" : "#/components/schemas/OutputHostingObs"
+              },
+              "result_json_overdue_at" : {
+                "type" : "string",
+                "description" : "托管文件result.json的过期日期,文件默认保存48小时。"
+              },
+              "check_obs_after_end_state" : {
+                "type" : "boolean",
+                "description" : "True表示校验obs。"
+              }
+            }
+          },
+          "dis" : {
+            "type" : "object",
+            "description" : "DIS通道配置。",
+            "properties" : {
+              "stream_name" : {
+                "type" : "string",
+                "description" : "DIS通道名。"
+              },
+              "data_category" : {
+                "type" : "string",
+                "description" : "作业输出数据类别的列表,默认值为[]。有这个列表时,表示希望这个输出结果中存放dataCategory列表内的数据。"
+              }
+            }
+          },
+          "webhook" : {
+            "type" : "object",
+            "description" : "Webhook地址配置。",
+            "properties" : {
+              "url" : {
+                "type" : "string",
+                "description" : "URL地址"
+              },
+              "headers" : {
+                "type" : "string",
+                "description" : "header参数设置(键值均为用户设置)。"
+              },
+              "data_category" : {
+                "type" : "string",
+                "description" : "作业输出数据类别的列表,默认值为[]。有这个列表时,表示希望这个输出结果中存放dataCategory列表内的数据。"
+              }
+            }
+          },
+          "localpath" : {
+            "type" : "object",
+            "description" : "LOCALPATH输出类型。",
+            "properties" : {
+              "mount_source_path" : {
+                "type" : "string",
+                "description" : "挂载源路径,存放作业运行结果的路径,必须为linux路径,且最大长度为255,例如“/home”。"
+              },
+              "data_category" : {
+                "type" : "string",
+                "description" : "作业输出数据类别的列表,默认值为[]。有这个列表时,表示希望这个输出结果中存放dataCategory列表内的数据。"
+              }
+            }
+          }
+        }
+      },
+      "ServiceConfig" : {
+        "description" : "服务算法配置",
+        "type" : "object",
+        "properties" : {
+          "common" : {
+            "type" : "object",
+            "description" : "服务算法配置",
+            "properties" : {
+              "frame_interval" : {
+                "type" : "integer",
+                "description" : "截帧时间间隔,单位为秒/帧。",
+                "example" : "5"
+              },
+              "categories" : {
+                "type" : "string",
+                "description" : "视频检测场景。",
+                "example" : "porn,politics"
+              },
+              "text_categories" : {
+                "type" : "string",
+                "description" : "语音或文字审核服务的检测场景,目前主要支持以下几种:",
+                "example" : "abuse,porn"
+              },
+              "use_sis" : {
+                "description" : "是否使用语音审核服务。",
+                "type" : "string",
+                "example" : "false"
+              },
+              "use_ocr" : {
+                "type" : "string",
+                "description" : "是否使用文字审核服务。",
+                "example" : "false"
+              },
+              "upload" : {
+                "description" : "是否使用问题场景图片上传服务。",
+                "type" : "string",
+                "example" : "false"
+              }
+            }
+          }
+        }
+      },
+      "InputVcn" : {
+        "type" : "object",
+        "description" : "当type是vcn是,vcn输入参数",
+        "properties" : {
+          "ip" : {
+            "type" : "string",
+            "description" : "vcn服务器的IP地址。"
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "vcn服务器的端口号。"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "vcn服务器的账号名。"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "vcn服务器与上述账号对应的密码。"
+          }
+        }
+      },
+      "CreateVideoJobReq" : {
+        "description" : "创建作业请求体",
+        "required" : [ "name", "input", "output", "service_version" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "作业名称,只能由中文、字母(a~zA~Z)、数字(0~9)、中划线(-)、下划线(_)组成,长度范围为[1,100]。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "作业描述信息,最大长度为500字符长度。"
+          },
+          "input" : {
+            "required" : [ "type", "data" ],
+            "type" : "object",
+            "description" : "视频数据的输入列表,目前只支持以下输入类型,且只支持一路输入,不支持多个OBS文件或URL:",
+            "properties" : {
+              "type" : {
+                "type" : "string",
+                "description" : "视频数据的输入类型:",
+                "enum" : [ "obs", "url", "edgecamera", "vis", "edgerestful", "vcn" ]
+              },
+              "data" : {
+                "type" : "array",
+                "description" : "数据输入内容",
+                "items" : {
+                  "$ref" : "#/components/schemas/InputData"
+                }
+              },
+              "vcn" : {
+                "$ref" : "#/components/schemas/InputVcn"
+              }
+            }
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/Output"
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/ServiceConfig"
+          },
+          "service_version" : {
+            "description" : "功能版本为“1.2”。",
+            "type" : "string",
+            "example" : "1.2"
+          }
+        },
+        "type" : "object"
+      },
+      "OutputHostingObs" : {
+        "type" : "object",
+        "description" : "结果文件result.json的OBS信息。",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "obs桶名称",
+            "example" : "video-test"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "输出obs路径",
+            "example" : "output/"
+          }
+        }
+      },
+      "CreateVideoJobResponseBody" : {
+        "type" : "object",
+        "description" : "创建作业返回数据",
+        "items" : {
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "description" : "作业ID"
+            }
+          }
+        }
+      },
+      "InputData" : {
+        "type" : "object",
+        "description" : "视频数据输入列表",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "type为obs时输入参数"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "type为obs时输入参数"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "type为url或edgerestful时输入参数"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "type为edgecamera时输入参数"
+          },
+          "stream_name" : {
+            "type" : "string",
+            "description" : "type为vis时输入参数"
+          },
+          "node_id" : {
+            "type" : "string",
+            "description" : "type为edgerestful或vcn时输入参数"
+          },
+          "certificate_check" : {
+            "type" : "boolean",
+            "description" : "type为edgerestful时输入参数"
+          },
+          "rtsp_path_in_response" : {
+            "type" : "string",
+            "description" : "type为edgerestful时输入参数"
+          },
+          "device_id" : {
+            "type" : "string",
+            "description" : "type为vcn时输入参数"
+          }
+        }
+      },
+      "OutputObs" : {
+        "description" : "obs输出位置",
+        "type" : "object",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "example" : "video-test",
+            "description" : "存储结果文件的OBS桶名。"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "output/",
+            "description" : "结果文件的OBS桶内路径,例如“output/”。"
+          }
+        }
+      },
+      "VideoJobsResponse" : {
+        "properties" : {
+          "tasks" : {
+            "description" : "任务列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/VideoJobResponse"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "符合查询条件的总条目数。"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CheckAudioJob" : {
+      "get" : {
+        "tags" : [ "长语音内容审核" ],
+        "summary" : "查询单个作业",
+        "description" : "该 API 用于查询并显示单个作业详情。",
+        "operationId" : "CheckAudioJob",
+        "responses" : {
+          "200" : {
+            "description" : "响应成功返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckAudioJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "响应失败返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckAudioJob",
+      "x-url" : "{endpoint}/v2/{project_id}/services/audio-moderation/tasks/{task_id}"
+    },
+    "/CreateAudioJob" : {
+      "post" : {
+        "tags" : [ "长语音内容审核" ],
+        "summary" : "创建作业",
+        "description" : "该接口用于创建语音内容审核的作业。",
+        "operationId" : "CreateAudioJob",
+        "responses" : {
+          "200" : {
+            "description" : "响应成功返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateAudioJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "响应失败返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateAudioJobRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAudioJob",
+      "x-url" : "{endpoint}/v2/{project_id}/services/audio-moderation/tasks"
+    },
+    "/CheckVideoJob" : {
+      "get" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "查询单个作业",
+        "description" : "该API用于查询并显示单个作业详情。",
+        "operationId" : "CheckVideoJob",
+        "responses" : {
+          "200" : {
+            "description" : "响应成功示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoJobResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "响应失败示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "作业ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "作业ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckVideoJob",
+      "x-url" : "{endpoint}/v2/{project_id}/services/video-moderation/tasks/{task_id}"
+    },
+    "/DeleteVideoJob" : {
+      "delete" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "删除作业",
+        "description" : "该API用于删除指定作业。",
+        "operationId" : "DeleteVideoJob",
+        "responses" : {
+          "202" : {
+            "description" : "响应成功示例"
+          },
+          "400" : {
+            "description" : "响应失败示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVideoJob",
+      "x-url" : "{endpoint}/v2/{project_id}/services/video-moderation/tasks/{task_id}"
+    },
+    "/DeleteDemoInfo" : {
+      "delete" : {
+        "tags" : [ "长语音内容审核" ],
+        "summary" : "删除语音作业",
+        "description" : "删除语音作业",
+        "operationId" : "DeleteDemoInfo",
+        "responses" : {
+          "202" : {
+            "description" : "响应成功返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "响应失败返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "作业ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDemoInfo",
+      "x-url" : "{endpoint}/v2/{project_id}/services/audio-moderation/tasks/{task_id}"
+    },
+    "/ListAudioJobs" : {
+      "get" : {
+        "tags" : [ "长语音内容审核" ],
+        "summary" : "查询作业列表",
+        "description" : "查询作业列表",
+        "operationId" : "ListAudioJobs",
+        "responses" : {
+          "200" : {
+            "description" : "响应成功返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListAudioJobsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "响应失败返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAudioJobs",
+      "x-url" : "{endpoint}/v2/{project_id}/services/audio-moderation/tasks"
+    },
+    "/CreateVideoJob" : {
+      "post" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "创建作业",
+        "description" : "该接口用于创建视频内容审核的作业。",
+        "operationId" : "CreateVideoJob",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateVideoJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateVideoJobReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVideoJob",
+      "x-url" : "{endpoint}/v2/{project_id}/services/video-moderation/tasks"
+    },
+    "/ListVideoJobs" : {
+      "get" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "查询作业列表",
+        "description" : "该API用于查询并显示视频内容审核的作业列表。",
+        "operationId" : "ListVideoJobs",
+        "responses" : {
+          "200" : {
+            "description" : "响应成功返回示例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoJobsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVideoJobs",
+      "x-url" : "{endpoint}/v2/{project_id}/services/video-moderation/tasks"
+    }
+  }
+}

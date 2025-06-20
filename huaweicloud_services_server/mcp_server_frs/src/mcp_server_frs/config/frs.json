@@ -1,0 +1,3492 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "FRS-静默活体检测",
+    "title" : "FRS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ErrorResp" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参考[错误码](https://support.huaweicloud.com/api-face/face_02_0045.html)。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "LiveDetectFaceResp" : {
+        "properties" : {
+          "result" : {
+            "description" : "静默活体检测结果,LivelessDetectResult结构见表[结构格式说明表](https://support.huaweicloud.com/api-face/face_02_0102.html#face_02_0102__table112325301714)。",
+            "type" : "object",
+            "properties" : {
+              "alive" : {
+                "description" : "是否是活体。",
+                "type" : "boolean"
+              },
+              "confidence" : {
+                "format" : "double",
+                "description" : "置信度,取值范围0~1。",
+                "type" : "number"
+              },
+              "picture" : {
+                "description" : "检测出最大人脸的图片base64字符串。",
+                "type" : "string"
+              }
+            }
+          },
+          "warning-list" : {
+            "description" : "警告信息列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WarningList"
+            }
+          }
+        },
+        "required" : [ "result", "warning-list" ],
+        "type" : "object"
+      },
+      "WarningList" : {
+        "properties" : {
+          "warningCode" : {
+            "description" : "警告ID。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "warningMsg" : {
+            "description" : "告警消息。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ActionsList" : {
+        "properties" : {
+          "confidence" : {
+            "format" : "double",
+            "description" : "置信度,取值范围0~1。",
+            "type" : "number"
+          },
+          "action" : {
+            "description" : "动作编号,取值范围:[1,2,3,4,5],其中:",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "actions", "confidence" ],
+        "type" : "object"
+      },
+      "LiveDetectResp" : {
+        "properties" : {
+          "video-result" : {
+            "description" : "活体检测结果,VideoDetectResult结构见[VideoDetectResult](https://support.huaweicloud.com/api-face/face_02_0010.html)。调用失败时无此字段。",
+            "properties" : {
+              "alive" : {
+                "description" : "是否是活体。",
+                "type" : "boolean"
+              },
+              "actions" : {
+                "description" : "动作列表。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ActionsList"
+                }
+              },
+              "picture" : {
+                "description" : "检测出最大人脸的图片base64。",
+                "type" : "string"
+              }
+            }
+          },
+          "warning-list" : {
+            "description" : "警告信息列表,WarningList结构见[WarningList](https://support.huaweicloud.com/api-face/face_02_0077.html)。调用失败时无此字段",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WarningList"
+            }
+          }
+        },
+        "required" : [ "video-result", "warning-list" ],
+        "type" : "object"
+      },
+      "BoundingBox" : {
+        "properties" : {
+          "width" : {
+            "description" : "矩形框宽度。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "top_left_y" : {
+            "description" : "矩形框左上角纵坐标。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "top_left_x" : {
+            "description" : "矩形框左上角横坐标。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "height" : {
+            "description" : "矩形框高度。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "top_left_x", "top_left_y", "width", "height" ],
+        "type" : "object"
+      },
+      "FaceSearchFaceIdReq" : {
+        "properties" : {
+          "filter" : {
+            "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+            "type" : "string"
+          },
+          "top_n" : {
+            "default" : 10,
+            "description" : "返回查询到的最相似的N张人脸,N默认为10。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "face_id" : {
+            "description" : "导入人脸时,系统返回的人脸编号,即人脸ID。",
+            "type" : "string"
+          },
+          "return_fields" : {
+            "description" : "指定返回的自定义字段。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "threshold" : {
+            "format" : "double",
+            "description" : "人脸相似度阈值,低于这个阈值则不返回,取值范围0~1,一般情况下建议取值0.93,默认为0。",
+            "type" : "number"
+          },
+          "sort" : {
+            "description" : "支持字段排序,参考[sort语法](https://support.huaweicloud.com/api-face/face_02_0013.html)。",
+            "type" : "array",
+            "items" : {
+              "additionalProperties" : {
+                "type" : "string"
+              },
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "face_id" ],
+        "type" : "object"
+      },
+      "FaceSearchResp" : {
+        "properties" : {
+          "faces" : {
+            "description" : "查找的人脸集合,详见[SearchFace](https://support.huaweicloud.com/api-face/face_02_0019.html)。调用失败时无此字段。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SearchFace",
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "faces" ],
+        "type" : "object"
+      },
+      "SearchFace" : {
+        "properties" : {
+          "bounding_box" : {
+            "description" : "人脸在图像中的位置。",
+            "$ref" : "#/components/schemas/BoundingBox",
+            "type" : "object"
+          },
+          "similarity" : {
+            "format" : "double",
+            "description" : "人脸搜索时用于被检索的相似度。",
+            "type" : "number"
+          },
+          "external_fields" : {
+            "description" : "用户添加的额外自定义字段。",
+            "type" : "object"
+          },
+          "external_image_id" : {
+            "description" : "人脸所在的外部图片ID。",
+            "type" : "string"
+          },
+          "face_id" : {
+            "description" : "人脸ID,由系统内部生成的唯一ID。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateFaceReq" : {
+        "properties" : {
+          "external_fields" : {
+            "description" : "Json字符串不校验重复性,自定义字段的key值长度范围为[1,36],string类型的value长度范围为[1,256],具体参见[自定义字段](https://support.huaweicloud.com/api-face/face_02_0012.html)。。这里是待修改的参数,external_image_id和external_fields至少选一个。",
+            "type" : "object"
+          },
+          "external_image_id" : {
+            "description" : "用户指定的图片外部ID,与当前图像绑定。用户没提供,系统会生成一个。该ID长度范围为1~36位,可以包含字母、数字、中划线或者下划线,不包含其他的特殊字符。",
+            "type" : "string"
+          },
+          "face_id" : {
+            "description" : "人脸库ID,由系统内部生成的唯一ID。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "face_id" ],
+        "type" : "object"
+      },
+      "UpdateFaceResp" : {
+        "properties" : {
+          "face_number" : {
+            "description" : "更新的人脸数量。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "face_set_id" : {
+            "description" : "人脸库ID。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "face_number" ],
+        "type" : "object"
+      },
+      "FaceCompareResp" : {
+        "properties" : {
+          "image1_face" : {
+            "description" : "第1幅图像中检测到的人脸,DetectFace结构见[DetectFace](https://support.huaweicloud.com/api-face/face_02_0017.html)。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/CompareFace",
+            "type" : "object"
+          },
+          "image2_face" : {
+            "description" : "第2幅图像中检测到的人脸,DetectFace结构见[DetectFace](https://support.huaweicloud.com/api-face/face_02_0017.html)。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/CompareFace",
+            "type" : "object"
+          },
+          "similarity" : {
+            "format" : "double",
+            "description" : "人脸相似度,1表示最大,0表示最小,值越大表示越相似。一般情况下超过0.93即可认为是同一个人。",
+            "type" : "number"
+          }
+        },
+        "required" : [ "image1_face", "image2_face", "similarity" ],
+        "type" : "object"
+      },
+      "CompareFace" : {
+        "properties" : {
+          "bounding_box" : {
+            "description" : "人脸在图像中的位置。",
+            "$ref" : "#/components/schemas/BoundingBox",
+            "type" : "object"
+          }
+        },
+        "required" : [ "bounding_box" ],
+        "type" : "object"
+      },
+      "DetectFace" : {
+        "properties" : {
+          "bounding_box" : {
+            "description" : "人脸在图像中的位置。",
+            "$ref" : "#/components/schemas/BoundingBox",
+            "type" : "object"
+          },
+          "attributes" : {
+            "description" : "人脸关键属性,比如性别、年龄、头部姿态等。",
+            "$ref" : "#/components/schemas/Attributes",
+            "type" : "object"
+          }
+        },
+        "required" : [ "bounding_box" ],
+        "type" : "object"
+      },
+      "FaceDetectResp" : {
+        "properties" : {
+          "faces" : {
+            "description" : "检测到的人脸。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DetectFace",
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "faces" ],
+        "type" : "object"
+      },
+      "Dress" : {
+        "properties" : {
+          "glass" : {
+            "description" : "是否带眼镜:",
+            "type" : "string"
+          },
+          "hat" : {
+            "description" : "是否戴帽子:",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "FaceQuality" : {
+        "properties" : {
+          "total_score" : {
+            "description" : "人脸质量总分,取值范围[0-1],分值越大质量越高。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "blur" : {
+            "description" : "模糊度,取值范围[0-1],分值越大模糊问题越严重。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "pose" : {
+            "description" : "姿态,取值范围[0-1],分值越大姿态问题越严重。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "occlusion" : {
+            "description" : "遮挡,取值范围[0-1],分值越大遮挡问题越严重。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "illumination" : {
+            "description" : "光照,取值范围[0-1],分值越大光照问题越严重。",
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "total_score", "blur", "pose", "occlusion", "illumination" ],
+        "type" : "object"
+      },
+      "Attributes" : {
+        "properties" : {
+          "gender" : {
+            "description" : "性别:",
+            "type" : "string"
+          },
+          "dress" : {
+            "description" : "包含glass和hat两个属性结果。",
+            "$ref" : "#/components/schemas/Dress"
+          },
+          "glass" : {
+            "description" : "是否带眼镜:",
+            "type" : "string"
+          },
+          "hat" : {
+            "description" : "是否戴帽子:",
+            "type" : "string"
+          },
+          "age" : {
+            "description" : "年龄。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mask" : {
+            "description" : "是否戴口罩:",
+            "type" : "string"
+          },
+          "beard" : {
+            "description" : "胡须:",
+            "type" : "string"
+          },
+          "phototype" : {
+            "description" : "图片类型:",
+            "type" : "string"
+          },
+          "quality" : {
+            "description" : "图片中人脸的遮挡度、模糊度、光照强度、姿态角度。",
+            "$ref" : "#/components/schemas/FaceQuality",
+            "type" : "object"
+          },
+          "hair" : {
+            "description" : "发型:",
+            "type" : "string"
+          },
+          "expression" : {
+            "description" : "人脸表情,包括中性、高兴、害怕、惊讶、伤心、生气、厌恶。",
+            "properties" : {
+              "type" : {
+                "description" : "人脸表情类型:",
+                "type" : "string"
+              },
+              "probability" : {
+                "description" : "表情置信度,取值范围[0-1]。",
+                "type" : "number",
+                "format" : "double"
+              }
+            },
+            "type" : "object"
+          },
+          "face_angle" : {
+            "description" : "人脸图片旋转角(顺时针偏转角度),支持0°、90°、180°和270°图片旋转。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "gender", "age", "dress", "glass", "hat", "mask", "beard", "phototype", "quality", "hair", "expression", "face_angle" ],
+        "type" : "object"
+      },
+      "FaceSetInfo" : {
+        "properties" : {
+          "face_number" : {
+            "description" : "人脸库当中的人脸数量。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "external_fields" : {
+            "description" : "用户的自定义字段。",
+            "type" : "object"
+          },
+          "face_set_id" : {
+            "description" : "人脸库ID,随机生成的包含八个字符的字符串。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          },
+          "create_date" : {
+            "description" : "创建时间。",
+            "type" : "string"
+          },
+          "face_set_capacity" : {
+            "description" : "人脸库最大的容量。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "create_date", "face_set_capacity", "face_number", "external_fields" ],
+        "type" : "object"
+      },
+      "ShowFaceSetsResp" : {
+        "properties" : {
+          "face_sets_info" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FaceSetInfo"
+            },
+            "description" : "人脸库信息,详见[FaceSetInfo](https://support.huaweicloud.com/api-face/face_02_0020.html)。调用失败时无此字段。"
+          }
+        },
+        "required" : [ "face_sets_info" ],
+        "type" : "object"
+      },
+      "ShowFaceSetResp" : {
+        "properties" : {
+          "face_set_info" : {
+            "$ref" : "#/components/schemas/FaceSetInfo",
+            "description" : "人脸库信息,详见[FaceSetInfo](https://support.huaweicloud.com/api-face/face_02_0020.html)。调用失败时无此字段。"
+          }
+        },
+        "required" : [ "face_set_info" ],
+        "type" : "object"
+      },
+      "FaceDetectUrlReq" : {
+        "properties" : {
+          "image_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。",
+            "type" : "string"
+          },
+          "attributes" : {
+            "description" : "是否返回人脸属性,希望获取的属性列表,多个属性间使用逗号(,)隔开。目前支持的属性有:",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image_url" ],
+        "type" : "object"
+      },
+      "LiveDetectUrlReq" : {
+        "properties" : {
+          "video_url" : {
+            "description" : "视频的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。",
+            "type" : "string"
+          },
+          "actions" : {
+            "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+            "type" : "string"
+          },
+          "action_time" : {
+            "description" : "该参数为动作时间数组拼接的字符串,数组的长度和actions的数量一致,每一项代表了对应次序动作的起始时间和结束时间,单位为距视频开始的毫秒数。",
+            "type" : "string"
+          },
+          "nod_threshold" : {
+            "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "video_url", "actions" ],
+        "type" : "object"
+      },
+      "FaceSetFace" : {
+        "properties" : {
+          "bounding_box" : {
+            "description" : "人脸在图像中的位置。BoundingBox结构见[BoundingBox](https://support.huaweicloud.com/api-face/face_02_0021.html)。",
+            "$ref" : "#/components/schemas/BoundingBox",
+            "type" : "object"
+          },
+          "external_fields" : {
+            "description" : "用户添加的额外字段。",
+            "type" : "object"
+          },
+          "external_image_id" : {
+            "description" : "人脸所在的外部图片ID。",
+            "type" : "string"
+          },
+          "face_id" : {
+            "description" : "人脸ID,由系统内部生成的唯一ID。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "bounding_box", "face_id", "external_image_id", "external_fields" ],
+        "type" : "object"
+      },
+      "AddFacesResp" : {
+        "properties" : {
+          "face_set_id" : {
+            "description" : "人脸库ID。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          },
+          "faces" : {
+            "description" : "人脸库当中的人脸结构,详见[FaceSetFace](https://support.huaweicloud.com/api-face/face_02_0018.html)。调用失败时无此字段。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FaceSetFace",
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "faces" ],
+        "type" : "object"
+      },
+      "AddFacesBase64Req" : {
+        "properties" : {
+          "image_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          },
+          "external_fields" : {
+            "description" : "根据用户自定义数据类型,填入相应的数值。创建faceset时定义该字段,Json字符串不校验重复性,参考[自定义字段](https://support.huaweicloud.com/api-face/face_02_0012.html)。",
+            "type" : "object"
+          },
+          "external_image_id" : {
+            "description" : "用户指定的图片外部ID,与当前图像绑定。用户没提供,系统会生成一个。",
+            "type" : "string"
+          },
+          "single" : {
+            "description" : "是否将图片中的最大人脸添加至人脸库。可选值包括:",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "image_base64" ],
+        "type" : "object"
+      },
+      "FaceCompareUrlReq" : {
+        "properties" : {
+          "image1_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。与image1_file、image1_base64三选一",
+            "type" : "string"
+          },
+          "image2_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。与image2_file、image2_base64三选一",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image1_url", "image2_url" ],
+        "type" : "object"
+      },
+      "ShowFacesResp" : {
+        "properties" : {
+          "face_set_id" : {
+            "description" : "人脸库ID,随机生成的包含八个字符的字符串。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          },
+          "faces" : {
+            "description" : "人脸库当中的人脸结构,详见[FaceSetFace](https://support.huaweicloud.com/api-face/face_02_0018.html)。调用失败时无此字段。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FaceSetFace",
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "faces" ],
+        "type" : "object"
+      },
+      "DeleteFaceResp" : {
+        "properties" : {
+          "face_number" : {
+            "description" : "删除的人脸数量。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "face_set_id" : {
+            "description" : "人脸库ID。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "face_number" ],
+        "type" : "object"
+      },
+      "DeleteFaceSetResp" : {
+        "properties" : {
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "face_set_name" ],
+        "type" : "object"
+      },
+      "LiveDetectFaceUrlReq" : {
+        "properties" : {
+          "image_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image_url" ],
+        "type" : "object"
+      },
+      "AddFacesUrlReq" : {
+        "properties" : {
+          "image_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。",
+            "type" : "string"
+          },
+          "external_fields" : {
+            "description" : "根据用户自定义数据类型,填入相应的数值。",
+            "type" : "object"
+          },
+          "external_image_id" : {
+            "description" : "用户指定的图片外部ID,与当前图像绑定。用户没提供,系统会生成一个。",
+            "type" : "string"
+          },
+          "single" : {
+            "description" : "是否将图片中的最大人脸添加至人脸库。可选值包括:",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "image_url" ],
+        "type" : "object"
+      },
+      "TypeInfo" : {
+        "properties" : {
+          "type" : {
+            "description" : "数据类型:string,integer,double,long等。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateFaceSetReq" : {
+        "properties" : {
+          "external_fields" : {
+            "description" : "用户自定义数据,自定义字段不能以系统保留字段vector、bounding_box、external_image_id、face_id、create_time、_id、_all、_source等字段命名。Json字符串不校验重复性,自定义字段的key值长度范围为[1,36],string类型的value长度范围为[1,256],具体参见[自定义字段](https://support.huaweicloud.com/api-face/face_02_0012.html)。",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/TypeInfo"
+            },
+            "type" : "object"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          },
+          "face_set_capacity" : {
+            "description" : "人脸库最大的容量,填写1万整数倍的数字,例如:30000。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "face_set_name" ],
+        "type" : "object"
+      },
+      "CreateFaceSetResp" : {
+        "properties" : {
+          "face_set_info" : {
+            "description" : "人脸库信息,详见[FaceSetInfo](https://support.huaweicloud.com/api-face/face_02_0020.html)。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/FaceSetInfo",
+            "type" : "object"
+          }
+        },
+        "required" : [ "face_set_info" ],
+        "type" : "object"
+      },
+      "LiveDetectBase64Req" : {
+        "properties" : {
+          "video_base64" : {
+            "description" : "视频数据,Base64编码,要求:",
+            "type" : "string"
+          },
+          "actions" : {
+            "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+            "type" : "string"
+          },
+          "action_time" : {
+            "description" : "该参数为动作时间数组拼接的字符串,数组的长度和actions的数量一致,每一项代表了对应次序动作的起始时间和结束时间,单位为距视频开始的毫秒数。",
+            "type" : "string"
+          },
+          "nod_threshold" : {
+            "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "video_base64", "actions" ],
+        "type" : "object"
+      },
+      "LiveDetectFaceBase64Req" : {
+        "properties" : {
+          "image_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image_base64" ],
+        "type" : "object"
+      },
+      "FaceSearchBase64Req" : {
+        "properties" : {
+          "filter" : {
+            "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+            "type" : "string"
+          },
+          "top_n" : {
+            "default" : 10,
+            "description" : "返回查询到的最相似的N张人脸,N默认为10。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "image_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          },
+          "return_fields" : {
+            "description" : "指定返回的自定义字段。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "threshold" : {
+            "format" : "double",
+            "description" : "人脸相似度阈值,低于这个阈值则不返回,取值范围0~1,一般情况下建议取值0.93,默认为0。",
+            "type" : "number"
+          },
+          "sort" : {
+            "description" : "支持字段排序,参考[sort语法](https://support.huaweicloud.com/api-face/face_02_0013.html)。",
+            "type" : "array",
+            "items" : {
+              "additionalProperties" : {
+                "type" : "string"
+              },
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "image_base64" ],
+        "type" : "object"
+      },
+      "DeleteFacesBatchResp" : {
+        "properties" : {
+          "face_number" : {
+            "description" : "删除的人脸数量。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "face_set_id" : {
+            "description" : "人脸库ID。",
+            "type" : "string"
+          },
+          "face_set_name" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "face_set_name", "face_set_id", "face_number" ],
+        "type" : "object"
+      },
+      "DeleteFacesBatchReq" : {
+        "properties" : {
+          "filter" : {
+            "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "filter" ],
+        "type" : "object"
+      },
+      "FaceSearchUrlReq" : {
+        "properties" : {
+          "filter" : {
+            "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+            "type" : "string"
+          },
+          "top_n" : {
+            "default" : 10,
+            "description" : "返回查询到的最相似的N张人脸,N默认为10。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "image_url" : {
+            "description" : "图片的URL路径,目前仅支持华为云上OBS的URL,且人脸识别服务有权限读取该OBS桶的数据。开通读取权限的操作请参见[服务授权](https://support.huaweicloud.com/api-face/face_02_0006.html)。",
+            "type" : "string"
+          },
+          "return_fields" : {
+            "description" : "指定返回的自定义字段。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "threshold" : {
+            "format" : "double",
+            "description" : "人脸相似度阈值,低于这个阈值则不返回,取值范围0~1,一般情况下建议取值0.93,默认为0。",
+            "type" : "number"
+          },
+          "sort" : {
+            "description" : "支持字段排序,参考[sort语法](https://support.huaweicloud.com/api-face/face_02_0013.html)。",
+            "type" : "array",
+            "items" : {
+              "additionalProperties" : {
+                "type" : "string"
+              },
+              "type" : "object"
+            }
+          }
+        },
+        "required" : [ "image_url" ],
+        "type" : "object"
+      },
+      "FaceDetectBase64Req" : {
+        "properties" : {
+          "image_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          },
+          "attributes" : {
+            "description" : "是否返回人脸属性,希望获取的属性列表,多个属性间使用逗号(,)隔开。目前支持的属性有:",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image_base64" ],
+        "type" : "object"
+      },
+      "FaceCompareBase64Req" : {
+        "properties" : {
+          "image2_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          },
+          "image1_base64" : {
+            "description" : "图像数据,Base64编码,要求:",
+            "type" : "string"
+          }
+        },
+        "required" : [ "image1_base64", "image2_base64" ],
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DetectLiveFaceByFile" : {
+      "post" : {
+        "tags" : [ "静默活体检测" ],
+        "summary" : "静默活体检测",
+        "description" : "静默活体检测是基于人脸图片中可能存在的畸变、摩尔纹、反光、倒影、边框等信息,判断图片中的人脸是否来自于真人活体,有效抵御纸质翻拍照、电子翻拍照以及视频翻拍等各种攻击方式。静默活体检测支持单张图片,不支持多人脸图片。",
+        "operationId" : "DetectLiveFaceByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image_file",
+          "in" : "formData",
+          "description" : "本地图片文件。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveFaceByFile",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect-face"
+    },
+    "/DetectLiveByFile" : {
+      "post" : {
+        "tags" : [ "动作活体检测" ],
+        "summary" : "动作活体检测",
+        "description" : "动作活体检测是通过判断视频中的人物动作与传入动作列表是否一致来识别视频中人物是否为活体。如果有多张人脸出现,则选取最大的人脸进行判定。",
+        "operationId" : "DetectLiveByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_file",
+          "in" : "formData",
+          "description" : "本地视频文件。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地视频文件。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "actions",
+          "in" : "formData",
+          "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+          "required" : true,
+          "schema" : {
+            "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "action_time",
+          "in" : "formData",
+          "description" : "该参数为动作时间数组拼接的字符串,数组的长度和actions的数量一致,每一项代表了对应次序动作的起始时间和结束时间,单位为距视频开始的毫秒数。",
+          "schema" : {
+            "description" : "该参数为动作时间数组拼接的字符串,数组的长度和actions的数量一致,每一项代表了对应次序动作的起始时间和结束时间,单位为距视频开始的毫秒数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "nod_threshold",
+          "in" : "formData",
+          "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+          "schema" : {
+            "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+            "type" : "number",
+            "format" : "double"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveByFile",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect"
+    },
+    "/SearchFaceByFaceId" : {
+      "post" : {
+        "tags" : [ "人脸搜索" ],
+        "summary" : "人脸搜索",
+        "description" : "人脸搜索是指在已有的人脸库中,查询与目标人脸相似的一张或者多张人脸,并返回相应的置信度。",
+        "operationId" : "SearchFaceByFaceId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceSearchResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "showFaceSet",
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceSearchFaceIdReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchFaceByFaceId",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/search"
+    },
+    "/UpdateFace" : {
+      "put" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "更新人脸",
+        "description" : "根据人脸ID(face_id)更新单张人脸信息。",
+        "operationId" : "UpdateFace",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateFaceReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateFace",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/CompareFaceByFile" : {
+      "post" : {
+        "tags" : [ "人脸比对" ],
+        "summary" : "人脸比对",
+        "description" : "人脸比对是将两个人脸进行比对,来判断是否为同一个人,返回比对置信度。如果传入的图片中包含多个人脸,选取最大的人脸进行比对。",
+        "operationId" : "CompareFaceByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceCompareResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image1_file",
+          "in" : "formData",
+          "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "image2_file",
+          "in" : "formData",
+          "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CompareFaceByFile",
+      "x-url" : "{endpoint}/v2/{project_id}/face-compare"
+    },
+    "/DetectFaceByFile" : {
+      "post" : {
+        "tags" : [ "人脸检测" ],
+        "summary" : "人脸检测",
+        "description" : "人脸检测是对输入图片进行人脸检测和分析,输出人脸在图像中的位置、人脸关键点位置和人脸关键属性。",
+        "operationId" : "DetectFaceByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image_file",
+          "in" : "formData",
+          "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件,图片不能超过8MB。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "attributes",
+          "in" : "formData",
+          "description" : "是否返回人脸属性,希望获取的属性列表,多个属性间使用逗号(,)隔开。目前支持的属性有:",
+          "schema" : {
+            "description" : "是否返回人脸属性,希望获取的属性列表,多个属性间使用逗号(,)隔开。目前支持的属性有:",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectFaceByFile",
+      "x-url" : "{endpoint}/v2/{project_id}/face-detect"
+    },
+    "/ShowAllFaceSets" : {
+      "get" : {
+        "tags" : [ "人脸库资源管理" ],
+        "summary" : "查询所有人脸库",
+        "description" : "查询当前用户所有人脸库的状态信息。",
+        "operationId" : "ShowAllFaceSets",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFaceSetsResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAllFaceSets",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets"
+    },
+    "/ShowFaceSet" : {
+      "get" : {
+        "tags" : [ "人脸库资源管理" ],
+        "summary" : "查询人脸库",
+        "description" : "查询人脸库当前的状态。",
+        "operationId" : "ShowFaceSet",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFaceSetResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFaceSet",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}"
+    },
+    "/DetectFaceByUrl" : {
+      "post" : {
+        "tags" : [ "人脸检测" ],
+        "summary" : "人脸检测",
+        "description" : "人脸检测是对输入图片进行人脸检测和分析,输出人脸在图像中的位置、人脸关键点位置和人脸关键属性。",
+        "operationId" : "DetectFaceByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceDetectUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectFaceByUrl",
+      "x-url" : "{endpoint}/v2/{project_id}/face-detect"
+    },
+    "/DetectLiveByUrl" : {
+      "post" : {
+        "tags" : [ "动作活体检测" ],
+        "summary" : "动作活体检测",
+        "description" : "动作活体检测是通过判断视频中的人物动作与传入动作列表是否一致来识别视频中人物是否为活体。如果有多张人脸出现,则选取最大的人脸进行判定。",
+        "operationId" : "DetectLiveByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LiveDetectUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveByUrl",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect"
+    },
+    "/AddFacesByBase64" : {
+      "post" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "添加人脸",
+        "description" : "添加人脸到人脸库中。将单张图片中的人脸添加至人脸库中,支持添加最大人脸或所有人脸。",
+        "operationId" : "AddFacesByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddFacesResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddFacesBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddFacesByBase64",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/CompareFaceByUrl" : {
+      "post" : {
+        "tags" : [ "人脸比对" ],
+        "summary" : "人脸比对",
+        "description" : "人脸比对是将两个人脸进行比对,来判断是否为同一个人,返回比对置信度。如果传入的图片中包含多个人脸,选取最大的人脸进行比对。",
+        "operationId" : "CompareFaceByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceCompareResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceCompareUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CompareFaceByUrl",
+      "x-url" : "{endpoint}/v2/{project_id}/face-compare"
+    },
+    "/AddFacesByFile" : {
+      "post" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "添加人脸",
+        "description" : "添加人脸到人脸库中。将单张图片中的人脸添加至人脸库中,支持添加最大人脸或所有人脸。",
+        "operationId" : "AddFacesByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddFacesResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image_file",
+          "in" : "formData",
+          "description" : "本地图片文件,图片不能超过8MB,建议小于1MB。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件,图片不能超过8MB,建议小于1MB。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "external_image_id",
+          "in" : "formData",
+          "description" : "用户指定的图片外部ID,与当前图像绑定。用户没提供,系统会生成一个。",
+          "schema" : {
+            "description" : "用户指定的图片外部ID,与当前图像绑定。用户没提供,系统会生成一个。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "external_fields",
+          "in" : "formData",
+          "description" : "根据用户自定义数据类型,填入相应的数值。创建faceset时定义该字段,Json字符串不校验重复性,参考[自定义字段](https://support.huaweicloud.com/api-face/face_02_0012.html)。",
+          "schema" : {
+            "description" : "根据用户自定义数据类型,填入相应的数值。创建faceset时定义该字段,Json字符串不校验重复性,参考[自定义字段](https://support.huaweicloud.com/api-face/face_02_0012.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "single",
+          "in" : "formData",
+          "description" : "是否将图片中的最大人脸添加至人脸库。可选值包括:",
+          "schema" : {
+            "description" : "是否将图片中的最大人脸添加至人脸库。可选值包括:",
+            "type" : "boolean"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddFacesByFile",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/ShowFacesByLimit" : {
+      "get" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "查询人脸",
+        "description" : "查询指定人脸库中人脸信息。",
+        "operationId" : "ShowFacesByLimit",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFacesResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "从第几条数据读起,默认为0。",
+          "required" : true,
+          "schema" : {
+            "description" : "从第几条数据读起,默认为0。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "读取多少条,默认为5。",
+          "required" : true,
+          "schema" : {
+            "description" : "读取多少条,默认为5。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFacesByLimit",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/DeleteFaceByFaceId" : {
+      "delete" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "删除人脸",
+        "description" : "根据face_id删除人脸。",
+        "operationId" : "DeleteFaceByFaceId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_id",
+          "in" : "query",
+          "description" : "人脸ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFaceByFaceId",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/DeleteFaceByExternalImageId" : {
+      "delete" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "删除人脸",
+        "description" : "根据external_image_id删除人脸。",
+        "operationId" : "DeleteFaceByExternalImageId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "external_image_id",
+          "in" : "query",
+          "description" : "external_image_id。",
+          "required" : true,
+          "schema" : {
+            "description" : "external_image_id。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFaceByExternalImageId",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/DeleteFaceSet" : {
+      "delete" : {
+        "tags" : [ "人脸库资源管理" ],
+        "summary" : "删除人脸库",
+        "description" : "删除人脸库以及其中所有的人脸。",
+        "operationId" : "DeleteFaceSet",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteFaceSetResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFaceSet",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}"
+    },
+    "/ShowFacesByFaceId" : {
+      "get" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "查询人脸",
+        "description" : "查询指定人脸库中人脸信息。",
+        "operationId" : "ShowFacesByFaceId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFacesResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_id",
+          "in" : "query",
+          "description" : "人脸ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFacesByFaceId",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/DetectLiveFaceByUrl" : {
+      "post" : {
+        "tags" : [ "静默活体检测" ],
+        "summary" : "静默活体检测",
+        "description" : "静默活体检测是基于人脸图片中可能存在的畸变、摩尔纹、反光、倒影、边框等信息,判断图片中的人脸是否来自于真人活体,有效抵御纸质翻拍照、电子翻拍照以及视频翻拍等各种攻击方式。静默活体检测支持单张图片,不支持多人脸图片。",
+        "operationId" : "DetectLiveFaceByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LiveDetectFaceUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveFaceByUrl",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect-face"
+    },
+    "/AddFacesByUrl" : {
+      "post" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "添加人脸",
+        "description" : "添加人脸到人脸库中。将单张图片中的人脸添加至人脸库中,支持添加最大人脸或所有人脸。",
+        "operationId" : "AddFacesByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddFacesResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddFacesUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddFacesByUrl",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces"
+    },
+    "/CreateFaceSet" : {
+      "post" : {
+        "tags" : [ "人脸库资源管理" ],
+        "summary" : "创建人脸库",
+        "description" : "创建用于存储人脸特征的人脸库。您最多可以创建10个人脸库,每个人脸库最大容量为10万个人脸特征。如有更大规格的需求请联系客服。",
+        "operationId" : "CreateFaceSet",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateFaceSetResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateFaceSetReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFaceSet",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets"
+    },
+    "/DetectLiveByBase64" : {
+      "post" : {
+        "tags" : [ "动作活体检测" ],
+        "summary" : "动作活体检测",
+        "description" : "动作活体检测是通过判断视频中的人物动作与传入动作列表是否一致来识别视频中人物是否为活体。如果有多张人脸出现,则选取最大的人脸进行判定。",
+        "operationId" : "DetectLiveByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LiveDetectBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveByBase64",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect"
+    },
+    "/DetectLiveFaceByBase64" : {
+      "post" : {
+        "tags" : [ "静默活体检测" ],
+        "summary" : "静默活体检测",
+        "description" : "静默活体检测是基于人脸图片中可能存在的畸变、摩尔纹、反光、倒影、边框等信息,判断图片中的人脸是否来自于真人活体,有效抵御纸质翻拍照、电子翻拍照以及视频翻拍等各种攻击方式。静默活体检测支持单张图片,不支持多人脸图片。",
+        "operationId" : "DetectLiveFaceByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LiveDetectFaceResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LiveDetectFaceBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectLiveFaceByBase64",
+      "x-url" : "{endpoint}/v1/{project_id}/live-detect-face"
+    },
+    "/SearchFaceByBase64" : {
+      "post" : {
+        "tags" : [ "人脸搜索" ],
+        "summary" : "人脸搜索",
+        "description" : "人脸搜索是指在已有的人脸库中,查询与目标人脸相似的一张或者多张人脸,并返回相应的置信度。",
+        "operationId" : "SearchFaceByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceSearchResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "showFaceSet",
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceSearchBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchFaceByBase64",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/search"
+    },
+    "/BatchDeleteFaces" : {
+      "delete" : {
+        "tags" : [ "人脸资源管理" ],
+        "summary" : "批量删除人脸",
+        "description" : "自定义筛选条件,批量删除人脸库中的符合指定条件的多张人脸。",
+        "operationId" : "BatchDeleteFaces",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteFacesBatchResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteFacesBatchReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteFaces",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/faces/batch"
+    },
+    "/SearchFaceByUrl" : {
+      "post" : {
+        "tags" : [ "人脸搜索" ],
+        "summary" : "人脸搜索",
+        "description" : "人脸搜索是指在已有的人脸库中,查询与目标人脸相似的一张或者多张人脸,并返回相应的置信度。",
+        "operationId" : "SearchFaceByUrl",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceSearchResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "showFaceSet",
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceSearchUrlReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchFaceByUrl",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/search"
+    },
+    "/DetectFaceByBase64" : {
+      "post" : {
+        "tags" : [ "人脸检测" ],
+        "summary" : "人脸检测",
+        "description" : "人脸检测是对输入图片进行人脸检测和分析,输出人脸在图像中的位置、人脸关键点位置和人脸关键属性。",
+        "operationId" : "DetectFaceByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceDetectResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceDetectBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectFaceByBase64",
+      "x-url" : "{endpoint}/v2/{project_id}/face-detect"
+    },
+    "/CompareFaceByBase64" : {
+      "post" : {
+        "tags" : [ "人脸比对" ],
+        "summary" : "人脸比对",
+        "description" : "人脸比对是将两个人脸进行比对,来判断是否为同一个人,返回比对置信度。如果传入的图片中包含多个人脸,选取最大的人脸进行比对。",
+        "operationId" : "CompareFaceByBase64",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceCompareResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FaceCompareBase64Req"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CompareFaceByBase64",
+      "x-url" : "{endpoint}/v2/{project_id}/face-compare"
+    },
+    "/SearchFaceByFile" : {
+      "post" : {
+        "tags" : [ "人脸搜索" ],
+        "summary" : "人脸搜索",
+        "description" : "人脸搜索是指在已有的人脸库中,查询与目标人脸相似的一张或者多张人脸,并返回相应的置信度。",
+        "operationId" : "SearchFaceByFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FaceSearchResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,获取方法请参见[获取项目ID/账号租户名/AK/SK](https://support.huaweicloud.com/api-face/face_02_0056.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "face_set_name",
+          "in" : "path",
+          "description" : "人脸库名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "showFaceSet",
+            "description" : "人脸库名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-face/face_02_0004.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。FRS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。当前仅支持按需计费模式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image_file",
+          "in" : "formData",
+          "description" : "本地图片文件,图片不能超过8MB,建议小于1MB。上传文件时,请求格式为multipart。",
+          "required" : true,
+          "schema" : {
+            "description" : "本地图片文件,图片不能超过8MB,建议小于1MB。上传文件时,请求格式为multipart。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "top_n",
+          "in" : "formData",
+          "description" : "返回查询到的最相似的N张人脸,N默认为10。",
+          "schema" : {
+            "description" : "返回查询到的最相似的N张人脸,N默认为10。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        }, {
+          "name" : "threshold",
+          "in" : "formData",
+          "description" : "人脸相似度阈值,低于这个阈值则不返回,取值范围0~1,一般情况下建议取值0.93,默认为0。",
+          "schema" : {
+            "description" : "人脸相似度阈值,低于这个阈值则不返回,取值范围0~1,一般情况下建议取值0.93,默认为0。",
+            "type" : "number",
+            "format" : "double",
+            "default" : 0
+          }
+        }, {
+          "name" : "sort",
+          "in" : "formData",
+          "description" : "支持字段排序,参考[sort语法](https://support.huaweicloud.com/api-face/face_02_0013.html)。",
+          "schema" : {
+            "description" : "支持字段排序,参考[sort语法](https://support.huaweicloud.com/api-face/face_02_0013.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "formData",
+          "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+          "schema" : {
+            "description" : "过滤条件,参考[filter语法](https://support.huaweicloud.com/api-face/face_02_0014.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "return_fields",
+          "in" : "formData",
+          "description" : "指定返回的自定义字段。",
+          "schema" : {
+            "description" : "指定返回的自定义字段。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchFaceByFile",
+      "x-url" : "{endpoint}/v2/{project_id}/face-sets/{face_set_name}/search"
+    }
+  }
+}

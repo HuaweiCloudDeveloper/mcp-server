@@ -1,0 +1,2484 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "MSSI-连接",
+    "title" : "MSSI",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "SuccessInfo" : {
+        "title" : "SuccessInfo",
+        "type" : "object",
+        "properties" : {
+          "res_code" : {
+            "type" : "integer",
+            "description" : "状态码",
+            "format" : "int32",
+            "example" : 200
+          },
+          "res_log" : {
+            "type" : "string",
+            "description" : "成功信息",
+            "example" : "success"
+          },
+          "res_msg" : {
+            "type" : "string",
+            "description" : "成功信息",
+            "example" : "success"
+          }
+        },
+        "description" : "通用的成功提示"
+      },
+      "ErrorInfo" : {
+        "title" : "ErrorInfo",
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码",
+            "example" : "500"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误信息",
+            "example" : "failed"
+          }
+        },
+        "description" : "通用的错误提示'"
+      },
+      "ConnectionInfo" : {
+        "title" : "ConnectionInfo",
+        "type" : "object",
+        "properties" : {
+          "auth_config" : {
+            "type" : "object"
+          },
+          "auth_config_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "auth_dynamic" : {
+            "type" : "object"
+          },
+          "auth_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "auth_info" : {
+            "type" : "object"
+          },
+          "auth_key" : {
+            "maxLength" : 255,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "auth_name" : {
+            "maxLength" : 255,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "auth_prop" : {
+            "type" : "object"
+          },
+          "auth_type" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "cdm_params_config" : {
+            "type" : "object"
+          },
+          "connection_name" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "connector_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "connector_name" : {
+            "type" : "string"
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "created_by" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "domain_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "host_config" : {
+            "type" : "object"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "is_open" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "logo" : {
+            "type" : "string"
+          },
+          "project_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "status" : {
+            "maxLength" : 16,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_by" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          }
+        },
+        "description" : "连接配置内容"
+      },
+      "ConnectorList" : {
+        "title" : "ConnectorList",
+        "type" : "object",
+        "properties" : {
+          "connector_infos" : {
+            "type" : "array",
+            "description" : "连接器列表",
+            "example" : "[]",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectorInfo0"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "连接器数量",
+            "format" : "int64",
+            "example" : 50
+          }
+        },
+        "description" : "连接器列表"
+      },
+      "ConnectorInfo0" : {
+        "title" : "ConnectorInfo0",
+        "type" : "object",
+        "properties" : {
+          "authContent" : {
+            "description" : "认证方式",
+            "$ref" : "#/components/schemas/AuthConfigA"
+          },
+          "authId" : {
+            "type" : "string",
+            "description" : "认证id"
+          },
+          "auth_type" : {
+            "type" : "string",
+            "description" : "判断方式"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "内置连接器查询"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "definitionRef" : {
+            "type" : "string",
+            "description" : "连接器"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "连接器描述",
+            "example" : "快速接入ERP系统,创建订单等"
+          },
+          "icon" : {
+            "type" : "string",
+            "description" : "logo base64编码",
+            "example" : "iVBORw0KGgoAAAANSUhEUgAAAOcAAADnCAMAAADSKrESAAAAM1BMVEUAeNTA3vSAvOpgq+QQgNdA\nmt8gidn////w9/zg7/qgze8wkdzQ5vdws+dQouGw1fKQxOwHmhDdAAAACXBIWXMAAAsSAAALEgHS\n3X78AAAFZUlEQVR4nO2c2ZarIBBFgwpXjdP/f+1diSCTyiAQ7XX2a9uRgkNVUYAvAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5IbSsVqhtPmbvU0r0v3TaEk1/S1jm3r+dwAZ\n2Q0amAR6aOQKqf+Aka+6O7fyQ1c9Xb8+Vn5oH20pHWyDyBfb/G66QYOjaBZjHlbTW/4Oo9Xc6n9/\npkei6pi1/e5w0UV76IlDOqojdeJRaa882JdsYQoapfX9+/wHmfLs8Cx31EgHRKj7cSYjbOfolFsh\nzWw9cwA5mdvnGCrNJN4ylM75MYZKM8eQf5vahxlKRHs9ZqbKW2j3Gc6ojx6WTQhDnpYlpb6gvs3Q\n5c4Wfnm3VybZZujtM6Phmi9pRDfddYq+x54oaXkfm5MLPcyJ25eCpjZWHt/EZokbUjG/A511ft69\nbSQ3dYxRH88Bu3tZScmBkes0iygTiCl6p6oRc5S4PpYG/+h0uwEdjxSrqTd4ppF7DSjTJTssFf0y\nVbNe/pkDnS/lP5ir4WFQZTDb3qiss1EtgYWKl3fgLVxuLc3o6j1vw1Q/HCZePqB3qKLUipVHzzRV\nrHhXMbRpmnoFaeZp5FCncIh4+c//PMvdzBxcSc+kuCR/8Tb3EC7dxOhOA+LEu8blH4dQJhyMX3+H\nipeNs3TWwzz+rIxCgswMEy8bd7ZeIpcEFxlDzfQXr1acV/GpAieGRa0QdfHuTuumtrfXJKT0mPLU\nPbgop4nXjhhscSXLS9Eag/C14d2ridfYBJycCx+fIJYSrr/w5ZaZ+UvxNqbv6Zb6Ox8ZrRctTy6X\nOLx5SyL/ndriNesR7aIPteaBi63V+qvvqxSrCHvVRj1id6tU2f8vZCgvalxJVLQahOF7DrdK5Yq+\nTICpU/Qq3T+Eclo2Y2JIy+wyrWNxuYpc2TGEOHzMtkNepMywtu/yOsKsn5m+ZxdhaJSrD4N724vu\nfbJqoX7zQBiaX7k8tb0iWytYrqr1WbCJXSZy4fV+9FdnyPsoUT+vS3BEap3d566Ci96dtILleJ7z\nWoyFBnTtz6BjBxvMdLLfYGmkDS54v+Q+IRcvG3NluQVLzfU6xcvjd+797kg7G/N4qhYsd3LeY9Zn\ncxeOouw0V5Z2sAwQ71hEuBF2msFyt3jvL162PpM5nQ+10wqW/dH/eot3fS5zZTfMTjNYttWZ3DzF\nu/5m5sgSYqfXylLFT7x8gsZa4Id3/NwPli58xEtL2OmZDx0GSydu8Rax02dynAdLF07x8iVT3hqn\ne73iDpYuHOKlJezkLzkcIK9g6eRUvEV0e1pP8A+WLs7EW8bO4/qQGSy702DpQhOvFpDWqZN7S/+o\n3mduAV2/A6iJVwlKRfIEsaGurxfMYNl6BUsXmnjlHtI60NkPItv1ePN6Z9zpxT1U8YoLImXy+M0N\niAG1guWcdKtntMTL99zyX7lT98uYYwvoOur9ra94124tUKuW+59msByigqXzfYqHa+ta6eXMcOu6\nVMHSyc6p0BI3RZn11qvB0kVjFn3LHJ6vTCvzX5g3LkAXOnyivTRNsHSied4SL1TPg6UMli4U8Ra7\nxz1tLrbkURfh3ks4W47/ec1kNCLtKnqcXH4yoFDvvrd9+7JfH5CGHp+nTkhV+ByGxHk+PuW7ZE5S\n/rLHpHh6675DQlj1i3NSCkwP3p/7K6lfQcde+2DGj256WJlRXoaffQCFnd6iS0zBuGlzfl8wIT//\nms3x/c+EzHe4g7V7nzchQ9ZVXxjG/exUtGSp/8wH4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAABieb1e/wE4ZWrI3FCGAgAAAABJRU5ErkJggg=="
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "连接器ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "连接器名称",
+            "example" : "ERP连接器"
+          },
+          "needAuth" : {
+            "type" : "boolean",
+            "description" : "是否需要验证",
+            "example" : false
+          },
+          "operations" : {
+            "type" : "array",
+            "description" : "视图数据",
+            "example" : "json",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "provider" : {
+            "type" : "string",
+            "description" : "供应商"
+          },
+          "swagger" : {
+            "type" : "string",
+            "description" : "swagger文档,大文本",
+            "example" : "json"
+          },
+          "triggers" : {
+            "type" : "array",
+            "description" : "操作json",
+            "example" : "json",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "连接器类型",
+            "example" : "custom"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          }
+        },
+        "description" : "Connector元数据"
+      },
+      "AuthConfigA" : {
+        "title" : "AuthConfig",
+        "type" : "object",
+        "properties" : {
+          "auth_config" : {
+            "type" : "object"
+          },
+          "auth_dynamic" : {
+            "type" : "object"
+          },
+          "auth_info" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "auth_prop" : {
+            "type" : "object"
+          },
+          "auth_type" : {
+            "type" : "string"
+          },
+          "cdm_params_config" : {
+            "type" : "object"
+          },
+          "host_config" : {
+            "type" : "object"
+          }
+        }
+      },
+      "Tag" : {
+        "title" : "Tag",
+        "type" : "object",
+        "properties" : {
+          "tagKey" : {
+            "type" : "string",
+            "description" : "标签key"
+          },
+          "tagValue" : {
+            "type" : "string",
+            "description" : "标签value"
+          }
+        },
+        "description" : "标签信息"
+      },
+      "FlowMeta" : {
+        "title" : "FlowMeta",
+        "type" : "object",
+        "properties" : {
+          "apic_id" : {
+            "type" : "string",
+            "description" : "发布到apic的api id",
+            "example" : "297e5dcc7c885182017c885186e20012"
+          },
+          "apic_release_status" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "发布到apic的状态",
+            "example" : "released"
+          },
+          "apig_url" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "pattern" : "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%$#_]*)?|",
+            "type" : "string",
+            "description" : "api流注册到apig的url",
+            "example" : "URL"
+          },
+          "connectors" : {
+            "type" : "array",
+            "description" : "连接器",
+            "example" : "connectors in json",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "connectors_latest" : {
+            "type" : "array",
+            "description" : "连接器最新版本",
+            "example" : "connectors in json",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "creatd_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "流的描述信息",
+            "example" : "每天通过电子邮件给我发送天气预报"
+          },
+          "dev_status" : {
+            "maxLength" : 16,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "开发状态",
+            "example" : "草稿"
+          },
+          "domain_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "租户ID",
+            "example" : "domainId001"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目id"
+          },
+          "enterprise_project_name" : {
+            "type" : "string",
+            "description" : "企业项目名称"
+          },
+          "extend_configs" : {
+            "type" : "object",
+            "description" : "流/流模板扩展配置列表"
+          },
+          "flow_source_type" : {
+            "type" : "string",
+            "description" : "流来源: inner: 公共流模板; custom: 我的流模板"
+          },
+          "functions" : {
+            "type" : "object",
+            "description" : "流/流模板函数列表"
+          },
+          "graph" : {
+            "type" : "object",
+            "description" : "流的编排数据(大josn)",
+            "example" : "flowGraph in json"
+          },
+          "his_transfer_status" : {
+            "type" : "string"
+          },
+          "icon" : {
+            "type" : "string",
+            "description" : "logo base64编码",
+            "example" : "theme/default/images/embed-connector/default.svg"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "installed_connector" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "已部署的connector id",
+            "example" : "297e5dcc7c885182017c885186222000,297e5dcc7c885182333c885186e20000"
+          },
+          "is_valid" : {
+            "type" : "boolean",
+            "example" : false
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 60,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "流的名称",
+            "example" : "每天给我发送天气预报"
+          },
+          "notice_status" : {
+            "type" : "string"
+          },
+          "project_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "用户项目ID",
+            "example" : "projectId001"
+          },
+          "schemaVersion" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "schema版本",
+            "example" : "1.0"
+          },
+          "status" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "流的状态",
+            "example" : "URL"
+          },
+          "steps" : {
+            "type" : "array",
+            "description" : "流的编排数据(大josn)",
+            "example" : "steps in json",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "object"
+              }
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表",
+            "example" : "[]",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "template_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "模板ID",
+            "example" : "297e5dcc7c885182017c885186e20012"
+          },
+          "template_name" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "模板名称",
+            "example" : "模板名称"
+          },
+          "test_result" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "测试结果",
+            "example" : "success"
+          },
+          "type" : {
+            "maxLength" : 16,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "类型",
+            "example" : "api流"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          },
+          "user_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "账号(所有者)",
+            "example" : "userId001"
+          },
+          "version" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "流的版本号",
+            "example" : "1.0"
+          },
+          "webhook" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "pattern" : "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%$#_]*)?|",
+            "type" : "string",
+            "description" : "webhook触发url的ID",
+            "example" : "URL"
+          }
+        },
+        "description" : "编排的Flow元数据"
+      },
+      "FlowList" : {
+        "title" : "FlowList",
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "string",
+            "description" : "流的数量",
+            "example" : "50"
+          },
+          "flow_metas" : {
+            "type" : "array",
+            "description" : "流列表",
+            "example" : "[]",
+            "items" : {
+              "$ref" : "#/components/schemas/FlowMeta"
+            }
+          }
+        },
+        "description" : "流列表"
+      },
+      "ConnectorInfo" : {
+        "title" : "ConnectorInfo",
+        "type" : "object",
+        "properties" : {
+          "action_count" : {
+            "type" : "integer",
+            "description" : "执行动作数量",
+            "format" : "int32",
+            "example" : 4
+          },
+          "actions" : {
+            "type" : "array",
+            "description" : "触发事件数量",
+            "items" : {
+              "$ref" : "#/components/schemas/ActionBaseInfo"
+            }
+          },
+          "auth_content" : {
+            "type" : "object",
+            "description" : "安全认证配置内容"
+          },
+          "auth_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "认证配置ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "category" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器种类(连接器市场的tab分类)"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "description" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器描述",
+            "example" : "快速接入ERP系统,创建订单等"
+          },
+          "favorite" : {
+            "type" : "boolean",
+            "description" : "是否收藏",
+            "example" : false
+          },
+          "icon" : {
+            "type" : "string",
+            "description" : "logo base64编码",
+            "example" : "base64"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器名称",
+            "example" : "ERP连接器"
+          },
+          "need_auth" : {
+            "type" : "boolean",
+            "description" : "是否需要验证",
+            "example" : false
+          },
+          "provider_name" : {
+            "type" : "string",
+            "description" : "服务提供商"
+          },
+          "release_version" : {
+            "type" : "string",
+            "description" : "发布版本"
+          },
+          "runtime_permissions" : {
+            "type" : "array",
+            "description" : "权限",
+            "items" : {
+              "$ref" : "#/components/schemas/RuntimePermission"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "状态(dev:草稿、released:已发布、onboard:已上架)"
+          },
+          "swagger" : {
+            "type" : "object",
+            "description" : "swagger文档(只包含基本信息+认证信息)",
+            "example" : "json"
+          },
+          "swagger_version_id" : {
+            "type" : "string",
+            "description" : "版本id"
+          },
+          "trigger_count" : {
+            "type" : "integer",
+            "description" : "触发事件数量",
+            "format" : "int32",
+            "example" : 4
+          },
+          "triggers" : {
+            "type" : "array",
+            "description" : "触发事件数量",
+            "items" : {
+              "$ref" : "#/components/schemas/TriggerBaseInfo"
+            }
+          },
+          "type" : {
+            "maxLength" : 16,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器类型",
+            "example" : "custom"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          },
+          "version" : {
+            "type" : "object",
+            "description" : "版本号"
+          }
+        },
+        "description" : "Connector元数据"
+      },
+      "RuntimePermission" : {
+        "title" : "RuntimePermission",
+        "type" : "object",
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "动作列表",
+            "example" : "xxx连接器"
+          },
+          "action_list" : {
+            "type" : "array",
+            "description" : "动作列表",
+            "example" : "xxx连接器",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "权限名称",
+            "example" : "java.util.PropertyPermission"
+          },
+          "permission_name" : {
+            "type" : "string",
+            "description" : "权限名称",
+            "example" : "文件权限"
+          },
+          "permission_type" : {
+            "type" : "string",
+            "description" : "权限类型",
+            "example" : "java.util.PropertyPermission"
+          }
+        }
+      },
+      "ActionBaseInfo" : {
+        "title" : "ActionBaseInfo",
+        "type" : "object",
+        "properties" : {
+          "action_type" : {
+            "type" : "object",
+            "description" : "执行动作的类型",
+            "example" : "api"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "分类"
+          },
+          "connector_action_html" : {
+            "type" : "string"
+          },
+          "connector_created_type" : {
+            "type" : "string"
+          },
+          "connector_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "connector_version" : {
+            "type" : "string",
+            "description" : "连接器版本",
+            "example" : "1"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "definition" : {
+            "type" : "object",
+            "description" : "操作or触发器的详细定义",
+            "example" : "json"
+          },
+          "description" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "描述",
+            "example" : "快速接入ERP系统,创建订单等"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "执行动作ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "执行动作名称",
+            "example" : "ERP连接器"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "执行动作ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "swagger" : {
+            "type" : "object",
+            "description" : "swagger文档",
+            "example" : "json"
+          },
+          "test_result" : {
+            "type" : "string",
+            "description" : "最近一次测试结果",
+            "example" : "OK、NG"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          },
+          "visibility" : {
+            "type" : "string",
+            "description" : "标记动作在流编排是否可见"
+          }
+        },
+        "description" : "Connector执行动作基本数据"
+      },
+      "TriggerBaseInfo" : {
+        "title" : "TriggerBaseInfo",
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string",
+            "description" : "分类"
+          },
+          "connector_action_html" : {
+            "type" : "string"
+          },
+          "connector_created_type" : {
+            "type" : "string"
+          },
+          "connector_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "connector_version" : {
+            "type" : "string",
+            "description" : "连接器版本",
+            "example" : "1"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "definition" : {
+            "type" : "object",
+            "description" : "操作or触发器的详细定义",
+            "example" : "json"
+          },
+          "description" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "描述",
+            "example" : "快速接入ERP系统,创建订单等"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "触发事件ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "执行动作名称",
+            "example" : "ERP连接器"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "执行动作ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "swagger" : {
+            "type" : "object",
+            "description" : "swagger文档",
+            "example" : "json"
+          },
+          "test_result" : {
+            "type" : "string",
+            "description" : "最近一次测试结果",
+            "example" : "OK、NG"
+          },
+          "trigger_type" : {
+            "type" : "object",
+            "description" : "触发事件的类型",
+            "example" : "polling"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "类型",
+            "example" : "trigger/operation"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          }
+        },
+        "description" : "Connector触发事件基本数据"
+      },
+      "ConnectorInfoListV2" : {
+        "title" : "ConnectorInfoListV2",
+        "type" : "object",
+        "properties" : {
+          "connectors" : {
+            "type" : "array",
+            "description" : "连接器列表",
+            "example" : "[]",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectorInfo"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "连接器数量",
+            "format" : "int64",
+            "example" : 50
+          }
+        },
+        "description" : "连接器列表"
+      },
+      "TemplateMessage" : {
+        "title" : "TemplateMessage",
+        "required" : [ "template_label", "template_name" ],
+        "type" : "object",
+        "properties" : {
+          "template_description" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "模板描述",
+            "example" : "模板描述"
+          },
+          "template_label" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "模板标签",
+            "example" : "模板标签"
+          },
+          "template_name" : {
+            "maxLength" : 60,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "模板名称",
+            "example" : "模板名称"
+          }
+        }
+      },
+      "FlowBasic" : {
+        "title" : "FlowBasic",
+        "type" : "object",
+        "properties" : {
+          "apig_url" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "pattern" : "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%$#_]*)?|",
+            "type" : "string",
+            "description" : "api流注册到apig的url",
+            "example" : "URL"
+          },
+          "flow_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "steps" : {
+            "type" : "array",
+            "description" : "函数连接器对应functionId",
+            "example" : "URL",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "webhook" : {
+            "maxLength" : 256,
+            "minLength" : 0,
+            "pattern" : "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\\\+&amp;%$#_]*)?|",
+            "type" : "string",
+            "description" : "webhook触发url的ID",
+            "example" : "URL"
+          }
+        },
+        "description" : "编排的Flow元数据"
+      },
+      "ApiConfig" : {
+        "title" : "ApiConfig",
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "资产名称"
+          }
+        }
+      },
+      "ConnectorBaseInfo" : {
+        "title" : "ConnectorBaseInfo",
+        "type" : "object",
+        "properties" : {
+          "connector_version_id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器版本ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "创建时间",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器ID",
+            "example" : "297e5dcc7c885182017c885186e20000"
+          },
+          "name" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "自定义连接器名称",
+            "example" : "ERP连接器"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "修改时间",
+            "format" : "date-time"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Connector基本数据"
+      },
+      "CustomConnectorInfoV2" : {
+        "title" : "CustomConnectorInfoV2",
+        "type" : "object",
+        "properties" : {
+          "api_config" : {
+            "description" : "导入api资产参数,只在从api中心导入连接器传",
+            "$ref" : "#/components/schemas/ApiConfig"
+          },
+          "auth_content" : {
+            "description" : "安全认证配置内容,导入swagger创建场景不传",
+            "$ref" : "#/components/schemas/AuthConfigA"
+          },
+          "connector_created_type" : {
+            "type" : "string"
+          },
+          "connector_type" : {
+            "type" : "string"
+          },
+          "icon" : {
+            "type" : "string",
+            "description" : "logo base64编码",
+            "example" : "base64"
+          },
+          "swagger" : {
+            "type" : "object",
+            "description" : "swagger文档,大文本",
+            "example" : "json"
+          }
+        },
+        "description" : "CustomConnector元数据"
+      },
+      "BaseConnectionInfo" : {
+        "title" : "BaseConnectionInfo",
+        "type" : "object",
+        "properties" : {
+          "auth_config" : {
+            "type" : "object"
+          },
+          "auth_config_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "auth_dynamic" : {
+            "type" : "object"
+          },
+          "auth_info" : {
+            "type" : "object"
+          },
+          "auth_prop" : {
+            "type" : "object"
+          },
+          "auth_type" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "cdm_params_config" : {
+            "type" : "object"
+          },
+          "connection_name" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "connector_id" : {
+            "maxLength" : 64,
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "host_config" : {
+            "type" : "object"
+          }
+        },
+        "description" : "连接配置内容"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/UpdateConnectionInfo" : {
+      "put" : {
+        "tags" : [ "连接" ],
+        "summary" : "修改连接配置内容",
+        "operationId" : "UpdateConnectionInfo",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "connect_id",
+          "in" : "path",
+          "description" : "ID of Connection",
+          "required" : true,
+          "schema" : {
+            "description" : "ID of Connection",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConnectionInfo"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateConnectionInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connect_id}"
+    },
+    "/DeleteCustomConnector" : {
+      "delete" : {
+        "tags" : [ "连接器" ],
+        "summary" : "删除自定义连接器",
+        "description" : "删除自定义连接器",
+        "operationId" : "DeleteCustomConnector",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "ID of CustomConnector",
+          "required" : true,
+          "schema" : {
+            "description" : "ID of CustomConnector",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCustomConnector",
+      "x-url" : "{endpoint}/v2/{project_id}/connectors/custom-connectors/{connector_id}"
+    },
+    "/ShowCustomConnectors" : {
+      "get" : {
+        "tags" : [ "连接器" ],
+        "summary" : "查询CustomConnector列表",
+        "description" : "查询CustomConnector列表",
+        "operationId" : "ShowCustomConnectors",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功,返回CustomConnector列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : true,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : true,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "CustomConnectors的名字",
+          "required" : false,
+          "schema" : {
+            "description" : "CustomConnectors的名字",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCustomConnectors",
+      "x-url" : "{endpoint}/v2/{project_id}/connectors/custom-connectors"
+    },
+    "/ShowCustomConnector" : {
+      "post" : {
+        "tags" : [ "连接器" ],
+        "summary" : "发布连接器",
+        "description" : "发布连接器",
+        "operationId" : "ShowCustomConnector",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCustomConnector",
+      "x-url" : "{endpoint}/v2/{project_id}/connectors/custom-connectors/{connector_id}/release"
+    },
+    "/ShowSingleConnection" : {
+      "get" : {
+        "tags" : [ "连接" ],
+        "summary" : "查询单个Connection",
+        "description" : "查询单个连接",
+        "operationId" : "ShowSingleConnection",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectionInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "connect_id",
+          "in" : "path",
+          "description" : "ID of Connection",
+          "required" : true,
+          "schema" : {
+            "description" : "ID of Connection",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSingleConnection",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connect_id}"
+    },
+    "/ShowAllFlows" : {
+      "get" : {
+        "tags" : [ "流" ],
+        "summary" : "查询所有Flow",
+        "description" : "查询所有Flow",
+        "operationId" : "ShowAllFlows",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功,返回符合要求的流",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : true,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量,limit大于等于1",
+          "required" : true,
+          "schema" : {
+            "description" : "每页显示的条目数量,limit大于等于1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "类型",
+          "required" : false,
+          "schema" : {
+            "description" : "类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "流名称,支持模糊查询",
+          "required" : false,
+          "schema" : {
+            "description" : "流名称,支持模糊查询",
+            "type" : "string"
+          }
+        }, {
+          "name" : "have_child_flow",
+          "in" : "query",
+          "description" : "是否包含子流程",
+          "required" : false,
+          "schema" : {
+            "description" : "是否包含子流程",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ids",
+          "in" : "query",
+          "description" : "ids",
+          "required" : false,
+          "schema" : {
+            "description" : "ids",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAllFlows",
+      "x-url" : "{endpoint}/v1/{project_id}/flows"
+    },
+    "/SearchFlowById" : {
+      "get" : {
+        "tags" : [ "流" ],
+        "summary" : "查询特定flow",
+        "description" : "查询特定flow",
+        "operationId" : "SearchFlowById",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功,返回Flow元数据",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowMeta"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "flow_id",
+          "in" : "path",
+          "description" : "flow_id",
+          "required" : true,
+          "schema" : {
+            "description" : "flow_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "version",
+          "in" : "query",
+          "description" : "流版本",
+          "required" : false,
+          "schema" : {
+            "description" : "流版本",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchFlowById",
+      "x-url" : "{endpoint}/v2/{project_id}/flows/{flow_id}"
+    },
+    "/ShowConnectors" : {
+      "get" : {
+        "tags" : [ "连接器" ],
+        "summary" : "查询Connector列表",
+        "description" : "查询Connector列表",
+        "operationId" : "ShowConnectors",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功,返回CustomConnector列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorInfoListV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : true,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : true,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "scope",
+          "in" : "query",
+          "description" : "连接器分类:onboard:查询所有的上架的、custom:自己创建的连接器",
+          "required" : false,
+          "schema" : {
+            "description" : "连接器分类:onboard:查询所有的上架的、custom:自己创建的连接器",
+            "type" : "string"
+          }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "连接器种类(连接器市场的tab分类)",
+          "required" : false,
+          "schema" : {
+            "description" : "连接器种类(连接器市场的tab分类)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "CustomConnectors的名字",
+          "required" : false,
+          "schema" : {
+            "description" : "CustomConnectors的名字",
+            "type" : "string"
+          }
+        }, {
+          "name" : "operation_type",
+          "in" : "query",
+          "description" : "operation条件过滤",
+          "required" : false,
+          "schema" : {
+            "description" : "operation条件过滤",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowConnectors",
+      "x-url" : "{endpoint}/v2/{project_id}/connectors"
+    },
+    "/CreateFlowTemplateFromFlow" : {
+      "post" : {
+        "tags" : [ "流模板" ],
+        "summary" : "根据流创建Flow模板",
+        "operationId" : "CreateFlowTemplateFromFlow",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "flow_id",
+          "in" : "path",
+          "description" : "ID of flow",
+          "required" : true,
+          "schema" : {
+            "description" : "ID of flow",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TemplateMessage"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFlowTemplateFromFlow",
+      "x-url" : "{endpoint}/v1/{project_id}/flows/{flow_id}/templates"
+    },
+    "/CreateFlow" : {
+      "post" : {
+        "tags" : [ "流" ],
+        "summary" : "创建flow",
+        "description" : "创建flow",
+        "operationId" : "CreateFlow",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FlowMeta"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFlow",
+      "x-url" : "{endpoint}/v1/{project_id}/flows"
+    },
+    "/ShowAllConnections" : {
+      "get" : {
+        "tags" : [ "连接" ],
+        "summary" : "查询Connection列表",
+        "description" : "查询所有连接",
+        "operationId" : "ShowAllConnections",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功,返回Connection列表"
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于1",
+          "required" : true,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : true,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "模糊查询参数",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查询参数",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目Id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目Id",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAllConnections",
+      "x-url" : "{endpoint}/v1/{project_id}/connections"
+    },
+    "/CreateCustomConnectorFromOpenapi" : {
+      "post" : {
+        "tags" : [ "连接器" ],
+        "summary" : "新建自定义连接器(导入swagger方式)",
+        "description" : "新建自定义连接器(导入swagger方式)",
+        "operationId" : "CreateCustomConnectorFromOpenapi",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorBaseInfo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorBaseInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CustomConnectorInfoV2"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCustomConnectorFromOpenapi",
+      "x-url" : "{endpoint}/v2/{project_id}/connectors/custom-connectors"
+    },
+    "/CreateConnectionInfo" : {
+      "post" : {
+        "tags" : [ "连接" ],
+        "summary" : "新建Connection",
+        "description" : "新建连接",
+        "operationId" : "CreateConnectionInfo",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BaseConnectionInfo"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateConnectionInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/connections"
+    },
+    "/DeleteConnectionInfo" : {
+      "delete" : {
+        "tags" : [ "连接" ],
+        "summary" : "删除Connection",
+        "description" : "删除Connection",
+        "operationId" : "DeleteConnectionInfo",
+        "responses" : {
+          "200" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "操作失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "connect_id",
+          "in" : "path",
+          "description" : "ID of Connection",
+          "required" : true,
+          "schema" : {
+            "description" : "ID of Connection",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteConnectionInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connect_id}"
+    },
+    "/DeleteFlow" : {
+      "delete" : {
+        "tags" : [ "流" ],
+        "summary" : "删除Flow",
+        "description" : "删除Flow",
+        "operationId" : "DeleteFlow",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "flow_id",
+          "in" : "path",
+          "description" : "删除flow的id",
+          "required" : true,
+          "schema" : {
+            "description" : "删除flow的id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFlow",
+      "x-url" : "{endpoint}/v1/{project_id}/flows/{flow_id}"
+    },
+    "/UpdateFlow" : {
+      "put" : {
+        "tags" : [ "流" ],
+        "summary" : "更新flow",
+        "description" : "更新flow",
+        "operationId" : "UpdateFlow",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlowBasic"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "操作失败,返回错误信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorInfo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "flow_id",
+          "in" : "path",
+          "description" : "flow_id",
+          "required" : true,
+          "schema" : {
+            "description" : "flow_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FlowMeta"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "X-Auth-Token" : [ ]
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateFlow",
+      "x-url" : "{endpoint}/v1/{project_id}/flows/{flow_id}"
+    }
+  }
+}

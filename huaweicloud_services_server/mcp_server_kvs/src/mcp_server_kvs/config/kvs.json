@@ -1,0 +1,1930 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "KVS-KV接口",
+    "title" : "KVS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "composed_expression" : {
+        "required" : [ "expressions" ],
+        "type" : "object",
+        "properties" : {
+          "logic" : {
+            "type" : "string",
+            "description" : "逻辑关系,取值如\"$and\", \"$or\", \"$nor\"。"
+          },
+          "expressions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/expression"
+            },
+            "description" : "多个相同优先级且相同逻辑的单字段或多字段条件。"
+          }
+        }
+      },
+      "ErrorResp" : {
+        "required" : [ "error_code", "error_msg" ],
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "example" : "KVS.00000001",
+            "description" : "请求返回的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "example" : "系统遇到内部错误,请重试。",
+            "description" : "请求返回的错误信息。"
+          }
+        }
+      },
+      "DeleteKvRequestBody" : {
+        "required" : [ "table_name", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          },
+          "condition_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "条件表达式,参见conditional小节。"
+          }
+        }
+      },
+      "single_field_expression" : {
+        "required" : [ "field", "func" ],
+        "type" : "object",
+        "properties" : {
+          "field" : {
+            "type" : "string",
+            "description" : "条件字段。"
+          },
+          "func" : {
+            "type" : "string",
+            "description" : "条件函数,取值如\"$gt\", $lt\",\"$gte\", $lte\" \"$eq\", \"$ne\", \"$prefix\", \"$exists\"。"
+          },
+          "value" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "value和value_array二选一。"
+          },
+          "value_array" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "bson-document"
+            },
+            "description" : "\"value\"和\"value_array\"二选一。"
+          }
+        }
+      },
+      "expression" : {
+        "type" : "object",
+        "properties" : {
+          "single_field_expression" : {
+            "$ref" : "#/components/schemas/single_field_expression",
+            "description" : "单字段条件。"
+          },
+          "multi_field_expression" : {
+            "$ref" : "#/components/schemas/multi_field_expression",
+            "description" : "多字段条件,多个相同优先级的单字段条件。"
+          },
+          "composed_expression" : {
+            "$ref" : "#/components/schemas/composed_expression",
+            "description" : "组合条件, 逐层同级的子表达式嵌套。"
+          }
+        }
+      },
+      "multi_field_expression" : {
+        "required" : [ "expressions" ],
+        "type" : "object",
+        "properties" : {
+          "logic" : {
+            "type" : "string",
+            "description" : "多字段条件,多个相同优先级的单字段条件。"
+          },
+          "expressions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/single_field_expression"
+            },
+            "description" : "多个相同逻辑操作的单字段条件。"
+          }
+        }
+      },
+      "single_kv_expression" : {
+        "required" : [ "func" ],
+        "type" : "object",
+        "properties" : {
+          "func" : {
+            "type" : "string",
+            "description" : "取值:\"is_doc\", \"is_blob\", \"is_exist\", \"not_exist\"。"
+          }
+        }
+      },
+      "condition_expression" : {
+        "type" : "object",
+        "properties" : {
+          "single_field_expression" : {
+            "$ref" : "#/components/schemas/single_field_expression",
+            "description" : "单字段条件。"
+          },
+          "multi_field_expression" : {
+            "$ref" : "#/components/schemas/multi_field_expression",
+            "description" : "多字段条件,多个相同优先级的单字段条件。"
+          },
+          "composed_expression" : {
+            "$ref" : "#/components/schemas/composed_expression",
+            "description" : "组合条件, 逐层同级的子表达式嵌套。"
+          },
+          "single_kv_expression" : {
+            "$ref" : "#/components/schemas/single_kv_expression",
+            "description" : "文档表达式。"
+          }
+        }
+      },
+      "PutKvRequestBody" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "condition_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "条件表达式,参见conditional小节。"
+          },
+          "kv_doc" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户文档。"
+          }
+        }
+      },
+      "ListStoreRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "cursor_name" : {
+            "type" : "string",
+            "description" : "上次返回的游标位置,本次响应包含该仓名。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "响应返回的仓个数。"
+          }
+        }
+      },
+      "ListStoreResponseBody" : {
+        "required" : [ "cursor_name", "stores" ],
+        "type" : "object",
+        "properties" : {
+          "cursor_name" : {
+            "type" : "string",
+            "description" : "本次响应后的游标位置,下次请求时携带。 - 长度:[16,52] - 取值字符限制:[a-z0-9-]+ > 如果为空,表示后面无更多仓名。"
+          },
+          "stores" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "返回的仓名列表。"
+          }
+        }
+      },
+      "secondary_index" : {
+        "required" : [ "index_name", "sort_key_fields" ],
+        "type" : "object",
+        "description" : "二级索引定义,元素key为数组下标。",
+        "properties" : {
+          "index_name" : {
+            "type" : "string",
+            "description" : "二级索引名称,表内唯一。"
+          },
+          "sort_key_fields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/field"
+            },
+            "description" : "排序键字段名数组,顺序组合。"
+          },
+          "abstract_fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "摘要字段名数组。"
+          }
+        }
+      },
+      "global_secondary_index" : {
+        "required" : [ "index_name", "shard_key_fields" ],
+        "type" : "object",
+        "properties" : {
+          "index_name" : {
+            "type" : "string",
+            "description" : "二级索引名称,表内唯一。"
+          },
+          "shard_key_fields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/field"
+            },
+            "description" : "分区键字段名数组,顺序组合。"
+          },
+          "shard_mode" : {
+            "type" : "string",
+            "description" : "分区模式。"
+          },
+          "sort_key_fields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/field"
+            },
+            "description" : "排序键字段名数组,顺序组合。"
+          },
+          "abstract_fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "摘要字段名数组。"
+          },
+          "provisioned_throughput" : {
+            "$ref" : "#/components/schemas/provisioned_throughput",
+            "description" : "预置吞吐读写请求单元数,在bill_mode=\"provisioned\"有效"
+          }
+        }
+      },
+      "DeleteTableResponseBody" : {
+        "required" : [ "table_name", "primary_key_schema", "runtime_info" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名。"
+          },
+          "primary_key_schema" : {
+            "$ref" : "#/components/schemas/primary_key_schema",
+            "description" : "主键模板, 最多1个,必须指定主键schema。"
+          },
+          "local_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/secondary_index"
+            },
+            "description" : "本地二级索引模板,可以多个。"
+          },
+          "global_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/global_secondary_index"
+            },
+            "description" : "全局二级索引模板。"
+          },
+          "run_time_info" : {
+            "$ref" : "#/components/schemas/run_time_info",
+            "description" : "运行信息。"
+          },
+          "ttl_specification" : {
+            "$ref" : "#/components/schemas/ttl_specification",
+            "description" : "TTL信息。"
+          }
+        }
+      },
+      "global_secondary_index_info" : {
+        "required" : [ "index_name", "index_status" ],
+        "type" : "object",
+        "properties" : {
+          "index_name" : {
+            "type" : "string",
+            "description" : "二级索引名称。"
+          },
+          "index_status" : {
+            "type" : "string",
+            "description" : "二级索引名称。"
+          }
+        }
+      },
+      "secondary_index_info" : {
+        "required" : [ "index_name", "index_status" ],
+        "type" : "object",
+        "properties" : {
+          "index_name" : {
+            "type" : "string",
+            "description" : "索引状态。"
+          },
+          "index_status" : {
+            "type" : "string",
+            "description" : "索引状态。"
+          }
+        }
+      },
+      "ttl_specification" : {
+        "required" : [ "enable" ],
+        "type" : "object",
+        "description" : "TTL设置。非必填项,默认不启用TTL。",
+        "properties" : {
+          "enable" : {
+            "type" : "boolean",
+            "description" : "TTL开关",
+            "default" : false
+          },
+          "expire_after_seconds" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "生存时间,以秒为单位"
+          },
+          "field_name" : {
+            "type" : "string",
+            "description" : "文档中记录TTL过期时间的字段名,字段值为UTC时间,单位秒"
+          }
+        }
+      },
+      "provisioned_throughput" : {
+        "required" : [ "rcu", "wcu" ],
+        "type" : "object",
+        "properties" : {
+          "rcu" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "预置表级读请求单元数",
+            "default" : 0
+          },
+          "wcu" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "预置表级写请求单元数",
+            "default" : 0
+          }
+        }
+      },
+      "DeleteTableRequestBody" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名。"
+          }
+        }
+      },
+      "field" : {
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "字段名。"
+          },
+          "order" : {
+            "type" : "boolean",
+            "description" : "bool值预留无意义。"
+          }
+        }
+      },
+      "table_info" : {
+        "type" : "object",
+        "properties" : {
+          "table_status" : {
+            "type" : "string",
+            "description" : "表状态。"
+          }
+        }
+      },
+      "run_time_info" : {
+        "required" : [ "table_info" ],
+        "type" : "object",
+        "properties" : {
+          "table_info" : {
+            "$ref" : "#/components/schemas/table_info",
+            "description" : "表信息。"
+          },
+          "local_secondary_index_infos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/secondary_index_info"
+            },
+            "description" : "索引状态。"
+          },
+          "global_secondary_index_infos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/global_secondary_index_info"
+            },
+            "description" : "全局二级索引运行态。"
+          }
+        }
+      },
+      "primary_key_schema" : {
+        "required" : [ "shard_key_fields" ],
+        "type" : "object",
+        "properties" : {
+          "shard_key_fields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/field"
+            },
+            "description" : "分区键字段名数组,顺序组合。"
+          },
+          "shard_mode" : {
+            "type" : "string",
+            "description" : "分区模式。"
+          },
+          "sort_key_fields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/field"
+            },
+            "description" : "排序键字段名数组,顺序组合。"
+          }
+        }
+      },
+      "returned_kv_items_of_table" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "returned_kv_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/returned_kv_item",
+              "description" : "返回的kv列表,与scan_kv的kv_array相同。"
+            }
+          }
+        }
+      },
+      "returned_kv_item" : {
+        "type" : "object",
+        "properties" : {
+          "kv_doc" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "对kv_doc有效。"
+          }
+        },
+        "description" : "kv元素。"
+      },
+      "BatchGetKvResponseBody" : {
+        "required" : [ "exception_opers" ],
+        "type" : "object",
+        "properties" : {
+          "exception_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/exception_opers_of_table"
+            },
+            "description" : "异常处理的操作,按照table分类组织。"
+          },
+          "returned_kv_items_of_all" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/returned_kv_items_of_table"
+            },
+            "description" : "返回的kvdoc列表,按照table分类组织。"
+          }
+        }
+      },
+      "exception_opers_of_table" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "unprocessed_opers" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "description" : "未处理的操作列表。"
+          },
+          "failed_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/fail"
+            },
+            "description" : "失败的操作列表,可以是多个。"
+          }
+        }
+      },
+      "BatchGetKvRequestBody" : {
+        "required" : [ "batch_get_kv_opers" ],
+        "type" : "object",
+        "properties" : {
+          "batch_get_kv_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/batch_get_kv_of_table"
+            },
+            "description" : "按照table分类组织的get操作。"
+          }
+        }
+      },
+      "fail" : {
+        "required" : [ "oper_id", "status" ],
+        "type" : "object",
+        "properties" : {
+          "oper_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "失败的操作标识,1个或多个。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "处理失败操作提示。"
+          }
+        },
+        "description" : "失败的操作指示。"
+      },
+      "batch_get_kv_of_table" : {
+        "required" : [ "table_name", "get_kv_opers" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "get_kv_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/get_oper"
+            },
+            "description" : "行操作数组,行操作类型可以是多个文档的get。"
+          }
+        },
+        "description" : "单个表的所有kv操作。"
+      },
+      "get_oper" : {
+        "type" : "object",
+        "properties" : {
+          "get_kv" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/get_kv"
+          }
+        }
+      },
+      "get_kv" : {
+        "required" : [ "oper_id", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "oper_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "请求内的操作编码,未成功的操作返回该标识。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          }
+        }
+      },
+      "pre_split_key_options" : {
+        "type" : "object",
+        "description" : "按照设定的键值前缀进行预分裂。",
+        "properties" : {
+          "range_split_points" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "bson-document"
+            },
+            "description" : "在range分区模式有效,最大10个。"
+          }
+        }
+      },
+      "CreateTableRequestBody" : {
+        "required" : [ "table_name", "primary_key_schema" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "bill_mode" : {
+            "type" : "string",
+            "description" : "表计费模式,可为\"provisioned\"或\"on_demand\"",
+            "default" : "on_demand"
+          },
+          "provisioned_throughput" : {
+            "$ref" : "#/components/schemas/provisioned_throughput",
+            "description" : "预置吞吐读写请求单元数,在bill_mode=\"provisioned\"有效"
+          },
+          "primary_key_schema" : {
+            "$ref" : "#/components/schemas/primary_key_schema",
+            "description" : "主键模板, 最多1个,必须指定主键schema。"
+          },
+          "local_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/secondary_index"
+            },
+            "description" : "本地二级索引模板,可以多个。"
+          },
+          "global_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/global_secondary_index"
+            },
+            "description" : "全局二级索引模板。"
+          },
+          "pre_split_key_options" : {
+            "$ref" : "#/components/schemas/pre_split_key_options",
+            "description" : "按照设定的分裂键值或者键值前缀进行预分裂."
+          },
+          "ttl_specification" : {
+            "$ref" : "#/components/schemas/ttl_specification",
+            "description" : "设置表或行级TTL。"
+          },
+          "sse_specification" : {
+            "$ref" : "#/components/schemas/sse_specification",
+            "description" : "用户数据静态加密设置。非必填项,默认不启用静态加密。"
+          }
+        }
+      },
+      "sse_specification" : {
+        "type" : "object",
+        "description" : "用户数据静态加密设置。非必填项,默认不启用静态加密。",
+        "required" : [ "enable" ],
+        "properties" : {
+          "enable" : {
+            "type" : "boolean",
+            "description" : "启用静态加密。"
+          },
+          "sse_type" : {
+            "type" : "string",
+            "description" : "加密类型,支持SSE-KMS-S和SSE-KMS-C。"
+          },
+          "sse_algorithm" : {
+            "type" : "string",
+            "description" : "加密算法,支持AES256_GCM。"
+          },
+          "cmk_id" : {
+            "type" : "string",
+            "description" : "KMS中的用户主密钥ID。非必填项,仅当加密类型是SSE-KMS-C时需要填写该字段。"
+          }
+        }
+      },
+      "CreateTableResponseBody" : {
+        "required" : [ "table_name", "primary_key_schema" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "bill_mode" : {
+            "type" : "string",
+            "description" : "计费模式,可为\"provisioned\"或\"on_demand\""
+          },
+          "provisioned_throughput" : {
+            "$ref" : "#/components/schemas/provisioned_throughput",
+            "description" : "预置吞吐读写请求单元数,在bill_mode=\"provisioned\"有效"
+          },
+          "primary_key_schema" : {
+            "$ref" : "#/components/schemas/primary_key_schema",
+            "description" : "主键模板, 最多1个,必须指定主键schema。"
+          },
+          "local_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/secondary_index"
+            },
+            "description" : "本地二级索引模板,可以多个。"
+          },
+          "global_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/global_secondary_index"
+            },
+            "description" : "全局二级索引模板。"
+          },
+          "pre_split_key_options" : {
+            "$ref" : "#/components/schemas/pre_split_key_options",
+            "description" : "按照设定的分裂键值或者键值前缀进行预分裂."
+          },
+          "ttl_specification" : {
+            "$ref" : "#/components/schemas/ttl_specification",
+            "description" : "设置表或行级TTL。"
+          },
+          "sse_specification" : {
+            "$ref" : "#/components/schemas/sse_specification",
+            "description" : "用户数据静态加密设置。非必填项,默认不启用静态加密。"
+          }
+        }
+      },
+      "DescribeTableResponseBody" : {
+        "required" : [ "table_name", "primary_key_schema", "runtime_info" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名。"
+          },
+          "primary_key_schema" : {
+            "$ref" : "#/components/schemas/primary_key_schema",
+            "description" : "主键模板, 最多1个,必须指定主键schema。"
+          },
+          "local_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/secondary_index"
+            },
+            "description" : "本地二级索引模板,可以多个。"
+          },
+          "global_secondary_index_schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/global_secondary_index"
+            },
+            "description" : "全局二级索引模板。"
+          },
+          "run_time_info" : {
+            "$ref" : "#/components/schemas/run_time_info",
+            "description" : "运行信息。"
+          },
+          "ttl_specification" : {
+            "$ref" : "#/components/schemas/ttl_specification",
+            "description" : "TTL信息。"
+          },
+          "sse_specification" : {
+            "$ref" : "#/components/schemas/sse_specification",
+            "description" : "用户数据静态加密设置。非必填项,默认不启用静态加密。"
+          }
+        }
+      },
+      "DescribeTableRequestBody" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名。"
+          }
+        }
+      },
+      "GetKvRequestBody" : {
+        "required" : [ "table_name", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          }
+        }
+      },
+      "GetKvResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "kv_doc" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "对kv_doc有效。"
+          }
+        }
+      },
+      "table_batch" : {
+        "required" : [ "table_name", "kv_opers" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "kv_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/oper_item"
+            },
+            "description" : "kv操作数组。"
+          }
+        },
+        "description" : "单个表的所有kv操作。"
+      },
+      "BatchWriteKvRequestBody" : {
+        "required" : [ "table_opers" ],
+        "type" : "object",
+        "properties" : {
+          "table_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/table_batch"
+            },
+            "description" : "行操作数组,可以是多个表的操作。"
+          }
+        }
+      },
+      "update_kv" : {
+        "required" : [ "oper_id", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "oper_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "请求内的操作编码,未成功的操作返回该标识。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          },
+          "update_fields" : {
+            "$ref" : "#/components/schemas/update_fields",
+            "description" : "对kv_doc有效。"
+          },
+          "condition_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "条件表达式,参见conditional小节。"
+          }
+        }
+      },
+      "kv_blob" : {
+        "required" : [ "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          },
+          "xblob" : {
+            "type" : "string",
+            "format" : "bson-binary",
+            "description" : "属性信息,最大2kb。"
+          },
+          "xattr" : {
+            "type" : "string",
+            "format" : "bson-binary",
+            "description" : "非结构化数据内容。"
+          }
+        }
+      },
+      "update_fields" : {
+        "type" : "object",
+        "properties" : {
+          "upsert" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "文档不存在时,插入该完整文档。"
+          },
+          "set" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "新增或覆盖更新1个或多个字段的值。"
+          },
+          "add" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "对1个或多个字段做加法运算,并更新为运算后的值。"
+          },
+          "rmv" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "删除1个或多个字段。"
+          },
+          "insert" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "插入元素到数组中"
+          },
+          "delete" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "从数组中删除某个元素"
+          },
+          "update_blob" : {
+            "$ref" : "#/components/schemas/update_blob",
+            "description" : "对kv_blob有效,修改局部数据。"
+          }
+        }
+      },
+      "table_oper_ids" : {
+        "required" : [ "table_name", "kv_oper_ids" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "kv_oper_ids" : {
+            "$ref" : "#/components/schemas/kv_oper_ids",
+            "description" : "kv操作数组。"
+          }
+        },
+        "description" : "某个表的行操作数组, 可以是多个文档的put_kv或delete_kv。"
+      },
+      "put_kv" : {
+        "required" : [ "oper_id" ],
+        "type" : "object",
+        "properties" : {
+          "oper_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "请求内的操作编码,未成功的操作返回该标识。"
+          },
+          "kv_doc" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户文档。"
+          },
+          "kv_blob" : {
+            "$ref" : "#/components/schemas/kv_blob",
+            "description" : "用户非结构化数据。"
+          },
+          "condition_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "条件表达式,参见conditional小节。"
+          }
+        }
+      },
+      "kv_oper_ids" : {
+        "type" : "object",
+        "properties" : {
+          "put_kv_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "description" : "上传kv操作, \"oper_id\"数组。"
+          },
+          "delete_kv_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "description" : "请求内的操作编码,未成功的操作返回该标识。 - 数组元素:请求内的操作编码,未成功的操作返回该标识。"
+          },
+          "update_kv_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "description" : "请求内的操作编码,未成功的操作返回该标识。 - 数组元素:请求内的操作编码,未成功的操作返回该标识。"
+          }
+        }
+      },
+      "oper_item" : {
+        "type" : "object",
+        "properties" : {
+          "put_kv" : {
+            "$ref" : "#/components/schemas/put_kv",
+            "description" : "上传kv操作。"
+          },
+          "delete_kv" : {
+            "$ref" : "#/components/schemas/delete_kv",
+            "description" : "删除kv操作。"
+          },
+          "update_kv" : {
+            "$ref" : "#/components/schemas/update_kv",
+            "description" : "更新kv操作。"
+          }
+        },
+        "description" : "put_kv或delete_kv或update_kv操作。"
+      },
+      "BatchWriteKvResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "unprocessed_opers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/table_oper_ids"
+            },
+            "description" : "未处理的操作列表。"
+          }
+        }
+      },
+      "delete_kv" : {
+        "required" : [ "oper_id", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "oper_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "请求内的操作编码,未成功的操作返回该标识。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          }
+        }
+      },
+      "update_blob" : {
+        "type" : "object",
+        "properties" : {
+          "xattr" : {
+            "type" : "string",
+            "format" : "bson-binary",
+            "description" : "属性信息。"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "value部分的偏移位置。"
+          },
+          "len" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "更新内容长度。"
+          },
+          "blob_data" : {
+            "type" : "string",
+            "format" : "bson-binary",
+            "description" : "二进制内容。"
+          }
+        }
+      },
+      "ListTableRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "cursor_name" : {
+            "type" : "string",
+            "description" : "上次返回游标位置,本次响应包含该table,空表示遍历完。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "响应返回的表个数。"
+          }
+        }
+      },
+      "ListTableResponseBody" : {
+        "required" : [ "cursor_name", "table_names" ],
+        "type" : "object",
+        "properties" : {
+          "cursor_name" : {
+            "type" : "string",
+            "description" : "本次响应后的游标位置,下次请求时携带,如果为空,表示后面无更多。"
+          },
+          "table_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "返回的表名列表。"
+          }
+        }
+      },
+      "ScanSkeyKvRequestBody" : {
+        "required" : [ "table_name", "shard_key" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "hint_index_name" : {
+            "type" : "string",
+            "description" : "create_table时指定的索引名。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 100,
+            "description" : "数据量不超过1MB时,返回的文档个数,最大100个,默认1MB或者100个文档。"
+          },
+          "shard_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "要遍历的指定分区键下的kv。"
+          },
+          "start_sort_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "起始排序键值,默认空表示从头遍历,左闭。"
+          },
+          "end_sort_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "终止主键或索引键值,默认空表示直到最后,右开。"
+          },
+          "filter_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "过滤表达式,同condition_expression语法。"
+          },
+          "return_count_only" : {
+            "type" : "boolean",
+            "description" : "返回查询条件对应的KV总数."
+          }
+        }
+      },
+      "ScanSkeyKvResponseBody" : {
+        "required" : [ "returned_count", "filtered_count" ],
+        "type" : "object",
+        "properties" : {
+          "returned_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "返回的文档数量,为0不表示结束。"
+          },
+          "filtered_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "被过滤掉的文档数量。"
+          },
+          "cursor_sort_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "下次请求时的start_key。"
+          },
+          "returned_kv_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/returned_kv_item"
+            },
+            "description" : "返回的kv列表,与scan_kv的kv_array相同。"
+          }
+        }
+      },
+      "UpdateKvRequestBody" : {
+        "required" : [ "table_name", "primary_key" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "primary_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "用户自定义的主键名及值。"
+          },
+          "condition_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "条件表达式,参见conditional小节,禁止携带主键字段。"
+          },
+          "update_fields" : {
+            "$ref" : "#/components/schemas/update_fields",
+            "description" : "对kv_doc有效。"
+          }
+        }
+      },
+      "ScanKvRequestBody" : {
+        "required" : [ "table_name" ],
+        "type" : "object",
+        "properties" : {
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名,仓内唯一。"
+          },
+          "hint_index_name" : {
+            "type" : "string",
+            "description" : "create_table时指定的索引名,默认空表示主索引。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 100,
+            "description" : "数据量不超过1MB时,返回的文档个数,最大100个,默认1MB或者100个文档。"
+          },
+          "start_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "起始主键或索引键值。"
+          },
+          "end_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "终止主键或索引键值。"
+          },
+          "filter_expression" : {
+            "$ref" : "#/components/schemas/condition_expression",
+            "description" : "过滤表达式,同condition_expression。"
+          },
+          "sample_segments_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 10000,
+            "description" : "对表进行采样,尽最大努力保证返回的段列表均分整张表。举例:sample_segments_count=4,返回的段列表[MinKey, KV1)、[KV1,KV2)、[KV2,KV3)和[KV3,MaxKey)。用户可以使用scan-kv对这四个分区执行并发扫描,提高遍历效率。"
+          },
+          "return_count_only" : {
+            "type" : "boolean",
+            "description" : "返回查询条件对应的KV总数."
+          }
+        }
+      },
+      "returned_segment_item" : {
+        "type" : "object",
+        "properties" : {
+          "segment_min_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "采样段区间起始值。"
+          },
+          "segment_max_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "采样段区间终止值。"
+          }
+        },
+        "description" : "采样段的起始终止主键对。"
+      },
+      "ScanKvResponseBody" : {
+        "required" : [ "returned_count", "filtered_count" ],
+        "type" : "object",
+        "properties" : {
+          "returned_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "返回的文档数量,为0不表示结束。"
+          },
+          "filtered_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "被过滤掉的文档数量。"
+          },
+          "cursor_key" : {
+            "type" : "string",
+            "format" : "bson-document",
+            "description" : "下次请求时的start_key,该值为空时,表示指定范围或者指定filter条件所有kv已经返回。"
+          },
+          "returned_kv_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/returned_kv_item"
+            },
+            "description" : "返回的kv数据。"
+          },
+          "returned_segment_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/returned_segment_item"
+            },
+            "description" : "采样段区间列表。"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DeleteKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "删除单个kv",
+        "description" : "指定表,指定主键,删除该文档;允许指定条件执行。",
+        "operationId" : "DeleteKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示删除单个kv请求成功"
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteKv",
+      "x-url" : "{endpoint}/v1/delete-kv"
+    },
+    "/PutKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "上传单个kv",
+        "description" : "指定表,新建kv或覆盖已有kv,且满足表的key schema描述;允许指定条件执行。",
+        "operationId" : "PutKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示上传单个kv请求成功"
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PutKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "PutKv",
+      "x-url" : "{endpoint}/v1/put-kv"
+    },
+    "/ListStore" : {
+      "post" : {
+        "tags" : [ "仓接口" ],
+        "summary" : "列举仓",
+        "description" : "一个账户下可以创建最多25个仓,每个仓可以创建最多100个store,响应中一次性返回所有仓名称。",
+        "operationId" : "ListStore",
+        "responses" : {
+          "200" : {
+            "description" : "表示列举仓成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListStoreResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListStoreRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStore",
+      "x-url" : "{endpoint}/v1/list-store"
+    },
+    "/DeleteTable" : {
+      "post" : {
+        "tags" : [ "表接口" ],
+        "summary" : "删除表",
+        "description" : "删除指定表及所有kv文档,表标记为删除后,空间不会立刻释放,并发的读写访问仍需继续完成。",
+        "operationId" : "DeleteTable",
+        "responses" : {
+          "200" : {
+            "description" : "表示删除表请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteTableResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteTableRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTable",
+      "x-url" : "{endpoint}/v1/delete-table"
+    },
+    "/BatchGetKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "批量读请求",
+        "description" : "批量读请求,其中可以携带一或多个表的不同kv的查询操作。",
+        "operationId" : "BatchGetKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示批量读请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchGetKvResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名",
+          "schema" : {
+            "description" : "仓名",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchGetKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchGetKv",
+      "x-url" : "{endpoint}/v1/batch-get-kv"
+    },
+    "/CreateTable" : {
+      "post" : {
+        "tags" : [ "仓接口" ],
+        "summary" : "创建表",
+        "description" : "在指定仓内创建表,表名在仓内唯一;创建表时,指定主键模板及本地二级索引模板及全局二级索引模板。创建表时,如果仓不存在,将会自动创建仓。",
+        "operationId" : "CreateTable",
+        "responses" : {
+          "200" : {
+            "description" : "表示创建表成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTableResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "表已存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTableRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTable",
+      "x-url" : "{endpoint}/v1/create-table"
+    },
+    "/DescribeTable" : {
+      "post" : {
+        "tags" : [ "表接口" ],
+        "summary" : "查询表",
+        "description" : "指定仓查询表属性,如容量,规模,配额。",
+        "operationId" : "DescribeTable",
+        "responses" : {
+          "200" : {
+            "description" : "表示查询表请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DescribeTableResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DescribeTableRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DescribeTable",
+      "x-url" : "{endpoint}/v1/describe-table"
+    },
+    "/GetKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "查询单个kv",
+        "description" : "下载一个kv文档的全部内容,或者部分字段的内容。",
+        "operationId" : "GetKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示查询单个kv请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetKvResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GetKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "GetKv",
+      "x-url" : "{endpoint}/v1/get-kv"
+    },
+    "/BatchWriteKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "批量写请求",
+        "description" : "批量写请求,其中可以携带一或多个表的不同kv的写操作,上传kv/删除kv。",
+        "operationId" : "BatchWriteKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示批量写请求请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchWriteKvResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BatchExceedLimit"
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchWriteKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchWriteKv",
+      "x-url" : "{endpoint}/v1/batch-write-kv"
+    },
+    "/ListTable" : {
+      "post" : {
+        "tags" : [ "仓接口" ],
+        "summary" : "列举表",
+        "description" : "指定仓列举创建的所有表。",
+        "operationId" : "ListTable",
+        "responses" : {
+          "200" : {
+            "description" : "表示列举表请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTableResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListTableRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTable",
+      "x-url" : "{endpoint}/v1/list-table"
+    },
+    "/ScanSkeyKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "扫描分区键内kv",
+        "description" : "指定表及分区键,携带条件查询kv;允许指定过滤条件。",
+        "operationId" : "ScanSkeyKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示扫描分区键内kv请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScanSkeyKvResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScanSkeyKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ScanSkeyKv",
+      "x-url" : "{endpoint}/v1/scan-skey-kv"
+    },
+    "/UpdateKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "更新单个kv",
+        "description" : "指定表,指定主键,指定更新文档的部分内容,如果是自描述文档,指定字段名;如果是二进制文档,指定偏移位置和长度;允许指定条件执行。",
+        "operationId" : "UpdateKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示更新单个kv请求成功"
+          },
+          "400" : {
+            "description" : "BadRequest",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateKv",
+      "x-url" : "{endpoint}/v1/update-kv"
+    },
+    "/ScanKv" : {
+      "post" : {
+        "tags" : [ "KV接口" ],
+        "summary" : "扫描所有kv",
+        "description" : "指定表,扫描表下所有kv;允许指定过滤条件。",
+        "operationId" : "ScanKv",
+        "responses" : {
+          "200" : {
+            "description" : "表示扫描所有kv请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScanKvResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "parameters" : [ {
+          "name" : "store_name",
+          "in" : "query",
+          "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+          "schema" : {
+            "description" : "仓名,全域唯一,不同租户的仓名不能相同。 ",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/bson" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScanKvRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ScanKv",
+      "x-url" : "{endpoint}/v1/scan-kv"
+    }
+  }
+}

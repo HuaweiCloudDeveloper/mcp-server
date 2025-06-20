@@ -1,0 +1,757 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "SMNGLOBAL-订阅用户",
+    "title" : "SMNGLOBAL",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : {
+      "X-Auth-Token" : {
+        "name" : "X-Auth-Token",
+        "in" : "header",
+        "description" : "用户Token。",
+        "required" : true,
+        "schema" : {
+          "description" : "用户Token。",
+          "type" : "string"
+        },
+        "type" : "object"
+      }
+    },
+    "schemas" : {
+      "UpdateSubscriptionUserRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "SubscriptionUserName",
+            "description" : "订阅用户名称。",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "pattern" : "^[^+]+$"
+          },
+          "group" : {
+            "type" : "array",
+            "description" : "订阅用户分组。每个订阅分组只能包含小写英文字母([a-z])、数字([0-9])、下划线(_),下划线不能出现在开始或结尾,下划线不能连续出现,长度为1到32个字符。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 32,
+              "pattern" : "^[a-z0-9](?!.*?_{2,})([a-z0-9_]{0,30}[a-z0-9])?$"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        }
+      },
+      "FailedResponse" : {
+        "type" : "object",
+        "required" : [ "error_code", "error_msg", "request_id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "47e870bb4c6a4766a5c67d15b639c573",
+            "description" : "请求的唯一标示ID。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "example" : "SMN.00020001",
+            "description" : "返回信息对应的代码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "example" : "Error",
+            "description" : "服务异常错误信息描述。"
+          }
+        }
+      },
+      "UpdateSubscriptionUserResponseBody" : {
+        "type" : "object",
+        "required" : [ "request_id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "d143bb992f4e489ca847db86a6bc02f9",
+            "description" : "请求的唯一标识ID。"
+          }
+        }
+      },
+      "CreateSubscriptionUserRequestEmailEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。必须是邮件地址。"
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "CreateSubscriptionUserResponseBody" : {
+        "type" : "object",
+        "required" : [ "request_id", "id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "4143732b537348ecb69688da56d629c4",
+            "description" : "请求的唯一标识ID。"
+          },
+          "id" : {
+            "type" : "string",
+            "example" : "e08d1d82a57a4772b353d85445cefd7b",
+            "description" : "订阅用户ID。"
+          }
+        }
+      },
+      "CreateSubscriptionUserRequestHttpEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。必须以“http://”开头。"
+          },
+          "header" : {
+            "type" : "object",
+            "description" : "http协议订阅用户的自定义请求头。http协议订阅用户可以自定义请求头。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "CreateSubscriptionUserRequestSmsEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。必须是一个电话号码。"
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "CreateSubscriptionUserRequestBody" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "SubscriptionUserName",
+            "description" : "订阅用户名称。",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "pattern" : "^[^+]+$"
+          },
+          "group" : {
+            "type" : "array",
+            "description" : "订阅用户分组。每个订阅分组只能包含中英文、数字([0-9])、下划线(_),下划线不能出现在开始或结尾,下划线不能连续出现,长度为1到32个字符。",
+            "items" : {
+              "type" : "string",
+              "example" : "分组1",
+              "minLength" : 1,
+              "maxLength" : 32,
+              "pattern" : "^[a-z0-9](?!.*?_{2,})([a-z0-9_]{0,30}[a-z0-9])?$"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          },
+          "http" : {
+            "description" : "http协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/CreateSubscriptionUserRequestHttpEndpointInfo"
+          },
+          "https" : {
+            "description" : "https协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/CreateSubscriptionUserRequestHttpsEndpointInfo"
+          },
+          "sms" : {
+            "description" : "sms协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/CreateSubscriptionUserRequestSmsEndpointInfo"
+          },
+          "email" : {
+            "description" : "email协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/CreateSubscriptionUserRequestEmailEndpointInfo"
+          }
+        }
+      },
+      "CreateSubscriptionUserRequestHttpsEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。必须以“https://”开头。"
+          },
+          "header" : {
+            "type" : "object",
+            "description" : "https协议订阅用户的自定义请求头。https协议订阅用户可以自定义请求头。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "ListSubscriptionUserResponseEmailEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。"
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "ListSubscriptionUserResponseHttpEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。"
+          },
+          "header" : {
+            "type" : "object",
+            "description" : "http协议订阅用户的自定义请求头。http协议订阅用户可以自定义请求头。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "ListSubscriptionUserResponseBody" : {
+        "type" : "object",
+        "required" : [ "request_id", "count", "subscription_users" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "922a1e7af7ad49e5b3ad455306bbddef",
+            "description" : "请求的唯一标识ID。"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "订阅用户数量。"
+          },
+          "subscription_users" : {
+            "type" : "array",
+            "description" : "订阅用户信息列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ListSubscriptionUserResponseItemInfo"
+            }
+          }
+        }
+      },
+      "ListSubscriptionUserResponseSmsEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。"
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "ListSubscriptionUserResponseHttpsEndpointInfo" : {
+        "type" : "object",
+        "properties" : {
+          "endpoint" : {
+            "type" : "string",
+            "description" : "终端地址。"
+          },
+          "header" : {
+            "type" : "object",
+            "description" : "https协议订阅用户的自定义请求头。https协议订阅用户可以自定义请求头。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "endpoint" ]
+      },
+      "ListSubscriptionUserResponseItemInfo" : {
+        "type" : "object",
+        "required" : [ "id", "domain_id", "name", "status", "group", "create_time", "update_time" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "e08d1d82a57a4772b353d85445cefd7b",
+            "description" : "订阅用户ID。"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "example" : "f7c690ceb6ef4846b897fde2af08befa",
+            "description" : "租户账号ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "SubscriptionUserName",
+            "description" : "订阅用户名称。"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "CONFIRMED",
+            "description" : "订阅用户状态。"
+          },
+          "group" : {
+            "type" : "array",
+            "description" : "订阅用户分组。",
+            "items" : {
+              "type" : "string",
+              "example" : "分组1"
+            }
+          },
+          "create_time" : {
+            "type" : "string",
+            "example" : "2022-10-10T09:00:00Z",
+            "description" : "创建时间。时间格式为UTC时间,YYYY-MM-DDTHH:MM:SSZ。"
+          },
+          "update_time" : {
+            "type" : "string",
+            "example" : "2022-10-10T09:00:00Z",
+            "description" : "更新时间。时间格式为UTC时间,YYYY-MM-DDTHH:MM:SSZ。"
+          },
+          "http" : {
+            "description" : "http协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/ListSubscriptionUserResponseHttpEndpointInfo"
+          },
+          "https" : {
+            "description" : "https协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/ListSubscriptionUserResponseHttpsEndpointInfo"
+          },
+          "sms" : {
+            "description" : "sms协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/ListSubscriptionUserResponseSmsEndpointInfo"
+          },
+          "email" : {
+            "description" : "email协议订阅用户终端地址。",
+            "$ref" : "#/components/schemas/ListSubscriptionUserResponseEmailEndpointInfo"
+          }
+        }
+      },
+      "DeleteSubscriptionUserResponseBody" : {
+        "type" : "object",
+        "required" : [ "request_id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "a54f3afad138425c864aed783803da32",
+            "description" : "请求的唯一标识ID。"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/UpdateSubscriptionUser" : {
+      "put" : {
+        "tags" : [ "订阅用户" ],
+        "summary" : "更新订阅用户",
+        "description" : "更新订阅用户。",
+        "operationId" : "UpdateSubscriptionUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateSubscriptionUserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户账号ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户账号ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "订阅用户ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "订阅用户ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateSubscriptionUserRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateSubscriptionUser",
+      "x-url" : "{endpoint}/v2/{domain_id}/subscription-users/{id}"
+    },
+    "/CreateSubscriptionUser" : {
+      "post" : {
+        "tags" : [ "订阅用户" ],
+        "summary" : "添加订阅用户",
+        "description" : "添加订阅用户。如果订阅用户的状态为未确认,则会向订阅用户发送一条确认订阅消息。订阅用户点击订阅链接确认订阅后,则订阅用户的状态变更为已确认,同时会向订阅用户发送一条取消订阅消息,便于订阅用户随时可以取消订阅。订阅用户点击取消订阅链接后,则订阅用户的状态变更为已取消,同时会向订阅用户发送一条重新订阅消息,便于订阅用户可以重新订阅。",
+        "operationId" : "CreateSubscriptionUser",
+        "responses" : {
+          "201" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateSubscriptionUserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户账号ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户账号ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateSubscriptionUserRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSubscriptionUser",
+      "x-url" : "{endpoint}/v2/{domain_id}/subscription-users"
+    },
+    "/ListSubscriptionUser" : {
+      "get" : {
+        "tags" : [ "订阅用户" ],
+        "summary" : "查询订阅用户列表",
+        "description" : "查询订阅用户列表。",
+        "operationId" : "ListSubscriptionUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSubscriptionUserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户账号ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户账号ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "订阅用户名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "订阅用户名称。",
+            "type" : "string",
+            "maxLength" : 128
+          }
+        }, {
+          "name" : "protocol",
+          "in" : "query",
+          "description" : "协议。",
+          "required" : false,
+          "schema" : {
+            "description" : "协议。",
+            "type" : "string",
+            "enum" : [ "http", "https", "sms", "email" ]
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "订阅用户状态。",
+          "required" : false,
+          "schema" : {
+            "description" : "订阅用户状态。",
+            "type" : "string",
+            "enum" : [ "UNCONFIRMED", "CONFIRMED", "CANCELLED" ]
+          }
+        }, {
+          "name" : "group",
+          "in" : "query",
+          "description" : "订阅用户分组。",
+          "required" : false,
+          "schema" : {
+            "description" : "订阅用户分组。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。偏移量为一个大于0小于资源总个数的整数,表示查询该偏移量后面的所有的资源,默认值为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。偏移量为一个大于0小于资源总个数的整数,表示查询该偏移量后面的所有的资源,默认值为0。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询数量限制。取值范围:1~100,取值一般为10,20,50。功能说明:每页返回的资源个数。默认值为100。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询数量限制。取值范围:1~100,取值一般为10,20,50。功能说明:每页返回的资源个数。默认值为100。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSubscriptionUser",
+      "x-url" : "{endpoint}/v2/{domain_id}/subscription-users"
+    },
+    "/DeleteSubscriptionUser" : {
+      "delete" : {
+        "tags" : [ "订阅用户" ],
+        "summary" : "删除订阅用户",
+        "description" : "删除订阅用户。",
+        "operationId" : "DeleteSubscriptionUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteSubscriptionUserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户账号ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户账号ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "订阅用户ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "订阅用户ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSubscriptionUser",
+      "x-url" : "{endpoint}/v2/{domain_id}/subscription-users/{id}"
+    }
+  }
+}

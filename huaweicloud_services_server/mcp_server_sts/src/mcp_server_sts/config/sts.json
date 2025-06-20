@@ -1,0 +1,76 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "STS-鉴权结果查询",
+    "title" : "STS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DecodeAuthorizationMessage" : {
+      "post" : {
+        "tags" : [ "AuthorizationResult" ],
+        "summary" : "解密鉴权失败的原因",
+        "description" : "解密鉴权失败的原因。",
+        "operationId" : "DecodeAuthorizationMessage",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          },
+          "400" : {
+            "description" : "请求体异常。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "500" : {
+            "description" : "服务端异常。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeySignature" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DecodeAuthorizationMessage",
+      "x-url" : "{endpoint}/v5/decode-authorization-message"
+    },
+    "/GetCallerIdentity" : {
+      "get" : {
+        "tags" : [ "Caller" ],
+        "summary" : "获取调用者身份信息",
+        "description" : "获取调用者(华为云用户,代理等)身份信息。",
+        "operationId" : "GetCallerIdentity",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          },
+          "500" : {
+            "description" : "服务端异常。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeySignature" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "GetCallerIdentity",
+      "x-url" : "{endpoint}/v5/caller-identity"
+    }
+  }
+}

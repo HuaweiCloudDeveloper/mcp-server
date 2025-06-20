@@ -1,0 +1,6298 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CAE-组件",
+    "title" : "CAE",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : {
+      "param_header_x_auth_token" : {
+        "name" : "X-Auth-Token",
+        "in" : "header",
+        "description" : "用户Token。    ",
+        "required" : true,
+        "schema" : {
+          "description" : "用户Token。    ",
+          "type" : "string",
+          "maxLength" : 16384
+        },
+        "type" : "object"
+      },
+      "param_header_x_environment_id" : {
+        "name" : "X-Environment-ID",
+        "in" : "header",
+        "description" : "环境ID。     ",
+        "required" : true,
+        "schema" : {
+          "description" : "环境ID。     ",
+          "type" : "string",
+          "pattern" : "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$"
+        },
+        "type" : "object"
+      },
+      "param_path_project_id" : {
+        "name" : "project_id",
+        "in" : "path",
+        "description" : "项目ID,获取项目ID请参见[获取项目ID](https://support.huaweicloud.com/api-cae/cae_06_0021.html)。",
+        "required" : true,
+        "schema" : {
+          "description" : "项目ID,获取项目ID请参见[获取项目ID](https://support.huaweicloud.com/api-cae/cae_06_0021.html)。",
+          "type" : "string"
+        },
+        "type" : "object"
+      },
+      "param_header_x_enterprise_project_id" : {
+        "name" : "X-Enterprise-Project-ID",
+        "in" : "header",
+        "description" : "企业项目ID。 ",
+        "required" : false,
+        "schema" : {
+          "description" : "企业项目ID。 ",
+          "type" : "string",
+          "pattern" : "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$|^0$"
+        },
+        "type" : "object"
+      }
+    },
+    "schemas" : {
+      "ComponentConfigurationKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“ComponentConfiguration”,该值不可修改。",
+        "enum" : [ "ComponentConfiguration" ]
+      },
+      "ApiVersionObj" : {
+        "type" : "object",
+        "description" : "API版本,固定值“v1”,该值不可修改。",
+        "enum" : [ "v1" ]
+      },
+      "ListInstancesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentConfigurationKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "组件实例列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Instance"
+            }
+          }
+        }
+      },
+      "Instance" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "实例ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "实例名称。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "实例状态。",
+            "enum" : [ "creating", "running", "abnormal", "failed", "terminating" ]
+          }
+        }
+      },
+      "VpcEgressResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/VpcEgressKindObj"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/VpcEgressResponseBodySpec"
+          }
+        }
+      },
+      "VpcEgressRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/VpcEgressKindObj"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/VpcEgressRequestBodySpec"
+          }
+        }
+      },
+      "VpcEgressKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“VpcEgress”,该值不可修改。",
+        "enum" : [ "VpcEgress" ]
+      },
+      "VpcEgressRequestBodySpec" : {
+        "type" : "object",
+        "description" : "创建CAE环境访问VPC配置。",
+        "required" : [ "cidrs" ],
+        "properties" : {
+          "cidrs" : {
+            "type" : "array",
+            "description" : "CAE环境访问VPC配置。",
+            "items" : {
+              "$ref" : "#/components/schemas/EgressCidr"
+            }
+          }
+        }
+      },
+      "VpcEgressResponseBodySpec" : {
+        "type" : "object",
+        "description" : "创建CAE环境访问VPC配置。",
+        "properties" : {
+          "vpc_id" : {
+            "type" : "string",
+            "description" : "CAE环境VPCID。"
+          },
+          "subnet_id" : {
+            "type" : "string",
+            "description" : "CAE环境子网ID。"
+          },
+          "cidrs" : {
+            "type" : "array",
+            "description" : "CAE环境访问VPC配置。",
+            "items" : {
+              "$ref" : "#/components/schemas/EgressCidr"
+            }
+          }
+        }
+      },
+      "EgressCidr" : {
+        "type" : "object",
+        "description" : "CAE环境访问VPC配置。",
+        "required" : [ "cidr", "route_table_id" ],
+        "properties" : {
+          "cidr" : {
+            "type" : "string",
+            "description" : "目的网络Cidr。"
+          },
+          "route_table_id" : {
+            "type" : "string",
+            "description" : "目的网络所属CAE环境VPC的路由表ID。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "CAE环境访问VPC配置ID。"
+          }
+        }
+      },
+      "UpdateSpecCert" : {
+        "type" : "object",
+        "required" : [ "crt", "key" ],
+        "properties" : {
+          "crt" : {
+            "type" : "string",
+            "description" : "证书内容。"
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "私钥内容。"
+          }
+        }
+      },
+      "CertificateKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Certificate”,该值不可修改。",
+        "enum" : [ "Certificate" ]
+      },
+      "UpdateCertReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/CertificateKindObj"
+          },
+          "spec" : {
+            "description" : "修改证书请求规格信息。",
+            "$ref" : "#/components/schemas/UpdateSpecCert"
+          }
+        }
+      },
+      "MonitorSystemRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/MonitorSystemKindObj"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/MonitorSystemRequestBodySpec"
+          }
+        }
+      },
+      "MonitorSystemRequestBodySpec" : {
+        "type" : "object",
+        "description" : "创建或更新监控系统配置。",
+        "required" : [ "type", "instrumentation", "apm_application", "version", "image_pull_policy" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "采集方式。",
+            "enum" : [ "opentelemetry", "apm2" ]
+          },
+          "instrumentation" : {
+            "type" : "string",
+            "description" : "探针注入方式。",
+            "enum" : [ "manual", "automatic" ]
+          },
+          "access_key" : {
+            "type" : "string",
+            "description" : "apm2访问密钥Key。"
+          },
+          "access_value" : {
+            "type" : "string",
+            "description" : "apm2访问密钥value。"
+          },
+          "access_token" : {
+            "type" : "string",
+            "description" : "apm2 opentelemetry接入token。"
+          },
+          "apm_application" : {
+            "type" : "string",
+            "description" : "apm2应用。"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "增强型探针/opentelemetry探针版本。"
+          },
+          "image_pull_policy" : {
+            "type" : "string",
+            "description" : "探针镜像更新策略。",
+            "enum" : [ "Always", "IfNotPresent" ]
+          }
+        }
+      },
+      "MonitorSystemKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“MonitorSystem”,该值不可修改。",
+        "enum" : [ "MonitorSystem" ]
+      },
+      "AccessConfigurationPort" : {
+        "type" : "object",
+        "description" : "访问方式配置端口、协议、证书等信息。",
+        "properties" : {
+          "operator" : {
+            "type" : "string",
+            "description" : "配置模式。"
+          },
+          "uid" : {
+            "type" : "string",
+            "description" : "端口配置的uid。"
+          },
+          "target_port" : {
+            "type" : "integer",
+            "description" : "监听端口。"
+          },
+          "port" : {
+            "type" : "integer",
+            "description" : "访问端口。"
+          },
+          "protocol" : {
+            "type" : "string",
+            "description" : "协议,负载均衡支持TCP,负载均衡与路由配置支持HTTP、HTTPS。",
+            "enum" : [ "TCP", "HTTP", "HTTPS" ]
+          },
+          "default_certificate" : {
+            "type" : "string",
+            "description" : "默认证书,访问方式配置为转发策略且协议为HTTPS时配置,未配置域名证书对时使用默认证书。"
+          },
+          "certificate" : {
+            "type" : "string",
+            "description" : "证书。"
+          },
+          "policy" : {
+            "type" : "string",
+            "description" : "安全策略。",
+            "enum" : [ "tls-1-2-strict", "tls-1-2", "tls-1-1", "tls-1-0" ]
+          },
+          "paths" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AccessConfigurationHttpPath"
+            }
+          },
+          "elb_id" : {
+            "type" : "string",
+            "description" : "用户选择的elb的ID。"
+          }
+        }
+      },
+      "CreateComponentConfigurationRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "items" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentConfigurationKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "配置项列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ConfigurationItem"
+            }
+          }
+        }
+      },
+      "VolumeConfigurationMountInfo" : {
+        "type" : "object",
+        "description" : "云存储配置挂载信息。",
+        "properties" : {
+          "path" : {
+            "type" : "string",
+            "description" : "容器挂载路径。"
+          },
+          "sub_path" : {
+            "type" : "string",
+            "description" : "子路径。"
+          },
+          "access_mode" : {
+            "type" : "string",
+            "description" : "读写权限。",
+            "enum" : [ "ReadWriteMany", "ReadOnlyMany" ]
+          }
+        }
+      },
+      "HealthCheckConfigurationLivenessProbe" : {
+        "type" : "object",
+        "description" : "组件健康检查配置的存活探针配置。",
+        "properties" : {
+          "periodSeconds" : {
+            "type" : "integer",
+            "description" : "检测周期,单位为s。"
+          },
+          "initialDelaySeconds" : {
+            "type" : "integer",
+            "description" : "延迟时间,单位为s。"
+          },
+          "timeoutSeconds" : {
+            "type" : "integer",
+            "description" : "超时时间,单位为s。"
+          },
+          "successThreshold" : {
+            "type" : "integer",
+            "description" : "成功阈值。"
+          },
+          "failureThreshold" : {
+            "type" : "integer",
+            "description" : "最大失败次数。"
+          },
+          "httpGet" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationHttpGet"
+          },
+          "tcpSocket" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationTcpSocket"
+          },
+          "exec" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationExec"
+          }
+        }
+      },
+      "EnvConfigurationDataAnnotations" : {
+        "type" : "object",
+        "description" : "环境变量配置。",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "AccessConfigurationDataItems" : {
+        "type" : "object",
+        "description" : "访问方式配置项。",
+        "properties" : {
+          "operator" : {
+            "type" : "string",
+            "description" : "配置模式。"
+          },
+          "uid" : {
+            "type" : "string",
+            "description" : "访问方式的uid。"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/AccessConfigurationMetadata"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "访问方式类型。",
+            "enum" : [ "ClusterIP", "LoadBalancer", "Ingress" ]
+          },
+          "domain_names" : {
+            "type" : "array",
+            "description" : "内网访问方式域名。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "access_control" : {
+            "$ref" : "#/components/schemas/AccessControl"
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "访问方式配置端口、协议、证书、URL路径等信息列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/AccessConfigurationPort"
+            }
+          },
+          "elb_id" : {
+            "type" : "string",
+            "description" : "用户选择的elb的ID。"
+          },
+          "public_ip" : {
+            "type" : "string",
+            "description" : "响应体参数,用户选择的elb的公网ip。"
+          },
+          "private_ip" : {
+            "type" : "string",
+            "description" : "响应体参数,用户选择的elb的私网ip。"
+          }
+        }
+      },
+      "HealthCheckConfigurationHttpGet" : {
+        "type" : "object",
+        "description" : "健康检查配置中HTTP请求检查信息。",
+        "properties" : {
+          "path" : {
+            "type" : "string",
+            "description" : "URL路径。"
+          },
+          "port" : {
+            "type" : "integer",
+            "description" : "端口。"
+          },
+          "scheme" : {
+            "type" : "string",
+            "description" : "协议。",
+            "enum" : [ "HTTP", "HTTPS" ]
+          }
+        }
+      },
+      "VolumeConfigurationDataVolume" : {
+        "type" : "object",
+        "description" : "云存储配置数据。",
+        "properties" : {
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云存储ID。"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "云存储名称。"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "云存储类型。",
+            "enum" : [ "obs", "sfs" ]
+          },
+          "resource_sub_type" : {
+            "type" : "string",
+            "description" : "云存储子类型。",
+            "enum" : [ "object_bucket", "parallel_file_system", "sfs3.0" ]
+          },
+          "umask" : {
+            "type" : "string",
+            "description" : "设置目录或文件缺省权限,默认值0027,sfs3.0类型的云存储不支持配置此参数。"
+          },
+          "mount_info" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/VolumeConfigurationMountInfo"
+            }
+          }
+        }
+      },
+      "LifeCycleConfigurationExec" : {
+        "type" : "object",
+        "description" : "执行命令。",
+        "properties" : {
+          "command" : {
+            "type" : "array",
+            "description" : "shell语句。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "AccessConfigurationMetadata" : {
+        "type" : "object",
+        "description" : "访问方式配置元数据。",
+        "properties" : {
+          "annotations" : {
+            "type" : "object",
+            "description" : "附加参数。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "AccessConfigurationHttpPath" : {
+        "type" : "object",
+        "description" : "匹配路径和域名信息。",
+        "properties" : {
+          "hostname" : {
+            "type" : "string",
+            "description" : "域名/不填,不填时表示使用IP。"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "URL路径。"
+          },
+          "url_match_mode" : {
+            "type" : "string",
+            "description" : "URL路径匹配模式,支持前缀匹配、正则匹配、精准匹配。",
+            "enum" : [ "STARTS_WITH", "REGEX", "EQUAL_TO" ]
+          }
+        }
+      },
+      "HealthCheckConfigurationExec" : {
+        "type" : "object",
+        "description" : "健康检查配置中执行命令检查。",
+        "properties" : {
+          "command" : {
+            "type" : "array",
+            "description" : "shell语句。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ConfigurationItem" : {
+        "type" : "object",
+        "required" : [ "type", "data" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "组件配置类型。",
+            "enum" : [ "rds", "cse", "env", "access", "scaling", "volume", "healthCheck", "lifecycle", "apm2", "log", "customMetric" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ConfigurationData"
+          }
+        }
+      },
+      "HealthCheckConfigurationStartupProbe" : {
+        "type" : "object",
+        "description" : "组件健康检查配置的启动探针配置。",
+        "properties" : {
+          "periodSeconds" : {
+            "type" : "integer",
+            "description" : "检测周期,单位为s。"
+          },
+          "initialDelaySeconds" : {
+            "type" : "integer",
+            "description" : "延迟时间,单位为s。"
+          },
+          "timeoutSeconds" : {
+            "type" : "integer",
+            "description" : "超时时间,单位为s。"
+          },
+          "successThreshold" : {
+            "type" : "integer",
+            "description" : "成功阈值。"
+          },
+          "failureThreshold" : {
+            "type" : "integer",
+            "description" : "最大失败次数。"
+          },
+          "httpGet" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationHttpGet"
+          },
+          "tcpSocket" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationTcpSocket"
+          },
+          "exec" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationExec"
+          }
+        }
+      },
+      "CloudStorageLogPathInfo" : {
+        "type" : "object",
+        "description" : "云存储日志扫描路径信息。",
+        "properties" : {
+          "dir_path" : {
+            "type" : "string",
+            "description" : "容器挂载路径。"
+          },
+          "file_name_pattern" : {
+            "type" : "string",
+            "description" : "日志文件名匹配模式。"
+          }
+        }
+      },
+      "ConfigurationRequestDataSpec" : {
+        "type" : "object",
+        "description" : "组件配置数据规格详情。",
+        "properties" : {
+          "rds_id" : {
+            "type" : "string",
+            "description" : "RDS数据库实例ID。"
+          },
+          "rds_db_name" : {
+            "type" : "string",
+            "description" : "RDS数据库名称。"
+          },
+          "rds_address" : {
+            "type" : "string",
+            "description" : "RDS数据库地址。"
+          },
+          "rds_username" : {
+            "type" : "string",
+            "description" : "RDS数据库用户名称。"
+          },
+          "rds_password" : {
+            "type" : "string",
+            "description" : "RDS数据库密码。"
+          },
+          "rds_port" : {
+            "type" : "string",
+            "description" : "RDS数据库端口。"
+          },
+          "config_center_addr" : {
+            "type" : "string",
+            "description" : "CSE配置中心地址。"
+          },
+          "service_center_addr" : {
+            "type" : "string",
+            "description" : "CSE服务注册发现地址。"
+          },
+          "cse_id" : {
+            "type" : "string",
+            "description" : "CSE引擎ID。"
+          },
+          "envs" : {
+            "description" : "环境变量配置。",
+            "$ref" : "#/components/schemas/EnvConfigurationDataAnnotations"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "弹性公网IP,响应体参数,未配置域名时返回此参数。"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "访问方式配置列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/AccessConfigurationDataItems"
+            }
+          },
+          "scale_strategy" : {
+            "type" : "string",
+            "description" : "伸缩策略配置策略类型。",
+            "enum" : [ "metric", "time", "mix" ]
+          },
+          "max_replica_count" : {
+            "type" : "integer",
+            "description" : "伸缩策略配置最大伸缩个数。"
+          },
+          "min_replica_count" : {
+            "type" : "integer",
+            "description" : "伸缩策略配置最小伸缩个数。"
+          },
+          "advanced" : {
+            "type" : "object",
+            "description" : "伸缩策略高级配置。",
+            "$ref" : "#/components/schemas/ScaleConfigurationDataAdvanced"
+          },
+          "triggers" : {
+            "type" : "array",
+            "description" : "伸缩策略配置触发器列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScaleConfigurationDataTrigger"
+            }
+          },
+          "volumes" : {
+            "type" : "array",
+            "description" : "云存储配置列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/VolumeConfigurationDataVolume"
+            }
+          },
+          "livenessProbe" : {
+            "description" : "组件健康检查配置的存活探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationLivenessProbe"
+          },
+          "startupProbe" : {
+            "description" : "组件健康检查配置的启动探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationStartupProbe"
+          },
+          "readinessProbe" : {
+            "description" : "组件健康检查配置的就绪探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationReadinessProbe"
+          },
+          "postStart" : {
+            "type" : "object",
+            "description" : "生命周期管理组件配置启动后处理。",
+            "properties" : {
+              "exec" : {
+                "$ref" : "#/components/schemas/LifeCycleConfigurationExec"
+              }
+            }
+          },
+          "preStop" : {
+            "type" : "object",
+            "description" : "生命周期管理组件配置停止前处理。",
+            "properties" : {
+              "exec" : {
+                "$ref" : "#/components/schemas/LifeCycleConfigurationExec"
+              }
+            }
+          },
+          "log_paths" : {
+            "type" : "array",
+            "description" : "自定义本地磁盘日志路径数组。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "cloud_storage_log_paths" : {
+            "type" : "array",
+            "description" : "自定义云存储日志路径数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/CloudStorageLogPathInfo"
+            }
+          },
+          "instrumentation" : {
+            "type" : "string",
+            "description" : "探针注入方式。"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "自定义监控指标配置采集路径。"
+          },
+          "port" : {
+            "type" : "integer",
+            "description" : "自定义监控指标配置采集端口。"
+          },
+          "metrics" : {
+            "type" : "array",
+            "description" : "自定义监控指标配置指标名称。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ScaleConfigurationDataTrigger" : {
+        "type" : "object",
+        "description" : "伸缩策略触发器。",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "指标类型。",
+            "enum" : [ "cpu", "memory", "cron" ]
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/ScalingTriggerMeta"
+          }
+        }
+      },
+      "ConfigurationDataMetadata" : {
+        "type" : "object",
+        "description" : "组件配置元数据。",
+        "properties" : {
+          "annotations" : {
+            "type" : "object",
+            "description" : "附加参数。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ScaleConfigurationDataAdvanced" : {
+        "type" : "object",
+        "description" : "伸缩策略高级配置。",
+        "properties" : {
+          "scaledown_stabilization_seconds" : {
+            "type" : "integer",
+            "description" : "缩容冷却时间窗。"
+          },
+          "scaledown_rate" : {
+            "type" : "integer",
+            "description" : "缩容步长。"
+          },
+          "scaleup_stabilization_seconds" : {
+            "type" : "integer",
+            "description" : "扩容冷却时间窗。"
+          },
+          "scaleup_rate" : {
+            "type" : "integer",
+            "description" : "扩容步长。"
+          },
+          "disable_scaledown" : {
+            "type" : "boolean",
+            "description" : "是否禁用自动缩容。"
+          }
+        }
+      },
+      "AccessControl" : {
+        "type" : "object",
+        "description" : "访问控制配置,允许配置黑名单、白名单。",
+        "properties" : {
+          "black" : {
+            "type" : "array",
+            "description" : "黑名单数组。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "white" : {
+            "type" : "array",
+            "description" : "白名单数组。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "HealthCheckConfigurationTcpSocket" : {
+        "type" : "object",
+        "description" : "健康检查配置中TCP端口检查信息。",
+        "properties" : {
+          "port" : {
+            "type" : "integer",
+            "description" : "端口。"
+          }
+        }
+      },
+      "ConfigurationData" : {
+        "type" : "object",
+        "description" : "组件配置数据。",
+        "properties" : {
+          "spec" : {
+            "$ref" : "#/components/schemas/ConfigurationRequestDataSpec"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/ConfigurationDataMetadata"
+          }
+        }
+      },
+      "ScalingTriggerMeta" : {
+        "type" : "object",
+        "description" : "trigger元数据。",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "数据类型,当前只支持利用率,默认值为Utilization。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "触发指标的阈值。"
+          },
+          "period_type" : {
+            "type" : "string",
+            "description" : "生效周期。",
+            "enum" : [ "day", "week", "month" ]
+          },
+          "schedulers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CronTriggerScheduler"
+            },
+            "description" : "每个周期内触发的时间点和实例数。"
+          }
+        }
+      },
+      "CronTriggerScheduler" : {
+        "type" : "object",
+        "properties" : {
+          "cron" : {
+            "type" : "string",
+            "description" : "触发时间点,以五位cron表达式表示。"
+          },
+          "target_replica" : {
+            "type" : "integer",
+            "description" : "要求达到的实例数。"
+          }
+        }
+      },
+      "HealthCheckConfigurationReadinessProbe" : {
+        "type" : "object",
+        "description" : "组件健康检查配置的就绪探针配置。",
+        "properties" : {
+          "periodSeconds" : {
+            "type" : "integer",
+            "description" : "检测周期,单位为s。"
+          },
+          "initialDelaySeconds" : {
+            "type" : "integer",
+            "description" : "延迟时间,单位为s。"
+          },
+          "timeoutSeconds" : {
+            "type" : "integer",
+            "description" : "超时时间,单位为s。"
+          },
+          "successThreshold" : {
+            "type" : "integer",
+            "description" : "成功阈值。"
+          },
+          "failureThreshold" : {
+            "type" : "integer",
+            "description" : "最大失败次数。"
+          },
+          "httpGet" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationHttpGet"
+          },
+          "tcpSocket" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationTcpSocket"
+          },
+          "exec" : {
+            "$ref" : "#/components/schemas/HealthCheckConfigurationExec"
+          }
+        }
+      },
+      "SecretDetail" : {
+        "type" : "object",
+        "required" : [ "id", "name", "if_update_available", "secret_status", "status", "version_id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "凭据ID",
+            "example" : "xxx"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "凭证名字。",
+            "example" : "password"
+          },
+          "if_update_available" : {
+            "type" : "boolean",
+            "description" : "当前凭据是否有更新版本。"
+          },
+          "secret_status" : {
+            "type" : "string",
+            "description" : "凭据在DEW的状态。",
+            "example" : "normal"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "凭据在CAE使用状态。",
+            "example" : "free"
+          },
+          "version_id" : {
+            "type" : "string",
+            "description" : "当前使用的凭证版本号。",
+            "example" : "v1"
+          },
+          "modified_time" : {
+            "type" : "integer",
+            "description" : "当前版本凭证在dew的创建时间。",
+            "example" : 1706062589000
+          }
+        }
+      },
+      "CreateOrUpdateSecretReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "资源种类。",
+            "example" : "Secret"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/CreateOrUpdateSecretDetail"
+          }
+        }
+      },
+      "CreateOrUpdateSecretDetail" : {
+        "type" : "object",
+        "required" : [ "name", "version_id" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "凭证名字。",
+            "example" : "password"
+          },
+          "version_id" : {
+            "type" : "string",
+            "description" : "当前使用的凭证版本号。",
+            "example" : "v1"
+          }
+        }
+      },
+      "CreateOrUpdateSecretResp" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。",
+            "example" : "v1"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "资源种类。",
+            "example" : "Secret"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/SecretDetail"
+          }
+        }
+      },
+      "DomainItem" : {
+        "type" : "object",
+        "properties" : {
+          "metadata" : {
+            "type" : "object",
+            "description" : "响应数据。",
+            "$ref" : "#/components/schemas/MetaDomain"
+          }
+        }
+      },
+      "MetaDomain" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "域名ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "域名名称。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DomainInfo" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "域名列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/DomainItem"
+            }
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“Domain”,该值不可修改。"
+          }
+        }
+      },
+      "GetJobDetailResponse" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/JobKindObj"
+          },
+          "spec" : {
+            "description" : "job规格信息。",
+            "$ref" : "#/components/schemas/JobSpec"
+          }
+        }
+      },
+      "JobSpec" : {
+        "type" : "object",
+        "properties" : {
+          "progress" : {
+            "type" : "number",
+            "description" : "任务进度。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "任务状态。"
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "子任务。",
+            "items" : {
+              "$ref" : "#/components/schemas/Task"
+            }
+          }
+        }
+      },
+      "JobKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Job”,该值不可修改。",
+        "enum" : [ "Job" ]
+      },
+      "Task" : {
+        "type" : "object",
+        "properties" : {
+          "index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "任务序号。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "任务名称。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "任务状态。"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "任务详情。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "AgencyKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Agency”,该值不可修改。",
+        "enum" : [ "Agency" ]
+      },
+      "Agency" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/AgencyKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "请求数据。",
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "description" : "委托名称,固定值“cae_trust”,该值不可修改。"
+              },
+              "enum" : [ "cae_trust" ]
+            },
+            "required" : [ "name" ]
+          }
+        },
+        "required" : [ "api_version", "kind", "metadata" ]
+      },
+      "MetadataResponse" : {
+        "type" : "object",
+        "description" : "响应数据。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          },
+          "annotations" : {
+            "type" : "object",
+            "description" : "组件附加属性。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。",
+            "format" : "date-time"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间。",
+            "format" : "date-time"
+          }
+        }
+      },
+      "Repo" : {
+        "type" : "object",
+        "description" : "源码仓库信息。",
+        "properties" : {
+          "auth_name" : {
+            "type" : "string",
+            "description" : "授权名称。"
+          },
+          "branch" : {
+            "type" : "string",
+            "description" : "分支。"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "命名空间,需填写命名空间的Base64编码。"
+          }
+        }
+      },
+      "ComponentKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Component”,该值不可修改。",
+        "enum" : [ "Component" ]
+      },
+      "Parameters" : {
+        "type" : "object",
+        "description" : "构建附加参数。",
+        "additionalProperties" : {
+          "type" : "string"
+        },
+        "example" : {
+          "base_image" : "openjdk:8u181-jdk-alpine",
+          "build_cmd" : "mvn clean package"
+        }
+      },
+      "Source" : {
+        "type" : "object",
+        "description" : "源信息。",
+        "required" : [ "type", "url" ],
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/Repo"
+          },
+          "type" : {
+            "description" : "源类型。",
+            "type" : "string",
+            "enum" : [ "image", "code", "softwarePackage" ]
+          },
+          "sub_type" : {
+            "description" : "源子类型。",
+            "type" : "string",
+            "enum" : [ "BinObs", "BinDevCloud", "GitLab", "GitHub", "DevCloud", "Gitee", "Bitbucket" ]
+          },
+          "url" : {
+            "description" : "url地址。",
+            "type" : "string"
+          }
+        }
+      },
+      "Archive" : {
+        "type" : "object",
+        "description" : "构建产物纳管。",
+        "properties" : {
+          "artifact_namespace" : {
+            "description" : "产物纳管SWR组织。",
+            "type" : "string"
+          }
+        }
+      },
+      "ResourceLimit" : {
+        "type" : "object",
+        "description" : "实例规格。",
+        "required" : [ "cpu_limit", "memory_limit" ],
+        "properties" : {
+          "cpu_limit" : {
+            "type" : "string",
+            "description" : "cpu限额。",
+            "enum" : [ "500m", "1000m", "2000m" ]
+          },
+          "memory_limit" : {
+            "type" : "string",
+            "description" : "内存限额。",
+            "enum" : [ "1Gi", "2Gi", "4Gi" ]
+          }
+        }
+      },
+      "CreateComponentSpec" : {
+        "type" : "object",
+        "description" : "组件规格。",
+        "properties" : {
+          "runtime" : {
+            "type" : "string",
+            "description" : "语言/运行时。",
+            "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+          },
+          "env_id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实例个数。"
+          },
+          "source" : {
+            "$ref" : "#/components/schemas/Source"
+          },
+          "build" : {
+            "$ref" : "#/components/schemas/Build"
+          },
+          "resource_limit" : {
+            "$ref" : "#/components/schemas/ResourceLimit"
+          },
+          "available_replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "可用实例个数。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "组件状态。"
+          }
+        }
+      },
+      "CreateComponentResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/MetadataResponse"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/CreateComponentSpec"
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "id" : "xxx",
+            "name" : "xxx",
+            "annotations" : {
+              "log_group_id" : "862d70a3-e8d7-4d97-943d-fd9851799f46",
+              "log_stream_id" : "e938cda5-6b09-487b-9cca-8d712d2ac15f",
+              "version" : "1.0.0"
+            },
+            "created_at" : "2022-06-24T07:01:14.960324Z",
+            "updated_at" : "2022-06-24T07:01:14.960324Z"
+          },
+          "spec" : {
+            "runtime" : "Java8",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : "openjdk:8u181-jdk-alpine"
+              }
+            },
+            "source" : {
+              "type" : "softwarePackage",
+              "sub_type" : "BinObs",
+              "url" : "xxx"
+            },
+            "image_url" : "xxx/demo:1.0",
+            "available_replica" : 1,
+            "replica" : 2
+          }
+        }
+      },
+      "Build" : {
+        "type" : "object",
+        "description" : "构建信息。",
+        "required" : [ "archive", "parameters" ],
+        "properties" : {
+          "archive" : {
+            "$ref" : "#/components/schemas/Archive"
+          },
+          "parameters" : {
+            "$ref" : "#/components/schemas/Parameters"
+          }
+        }
+      },
+      "CreateComponentRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "请求数据。",
+            "required" : [ "name", "annotations" ],
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "description" : "组件名称。"
+              },
+              "annotations" : {
+                "type" : "object",
+                "description" : "创建组件请求体附加参数,当前只支持version参数,此参数必填。",
+                "additionalProperties" : {
+                  "type" : "string"
+                },
+                "example" : {
+                  "version" : "1.0.0"
+                }
+              }
+            }
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "组件规格信息。",
+            "required" : [ "runtime", "replica", "resource_limit", "source" ],
+            "properties" : {
+              "runtime" : {
+                "type" : "string",
+                "description" : "语言/运行时。",
+                "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+              },
+              "replica" : {
+                "type" : "integer",
+                "description" : "实例个数。"
+              },
+              "build" : {
+                "$ref" : "#/components/schemas/Build"
+              },
+              "source" : {
+                "$ref" : "#/components/schemas/Source"
+              },
+              "resource_limit" : {
+                "$ref" : "#/components/schemas/ResourceLimit"
+              },
+              "image_url" : {
+                "description" : "镜像地址。",
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "name" : "demo-src",
+            "annotations" : {
+              "version" : "1.0.0"
+            }
+          },
+          "spec" : {
+            "runtime" : "Java8",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : "openjdk:8u181-jdk-alpine"
+              }
+            },
+            "source" : {
+              "type" : "code",
+              "sub_type" : "GitLab",
+              "url" : "https://xxx:8090/xxx/cae-frontend.git",
+              "code" : {
+                "branch" : "master",
+                "auth_name" : "gitlab-xxx",
+                "namespace" : "em1n"
+              }
+            },
+            "resource_limit" : {
+              "cpu_limit" : "500m",
+              "memory_limit" : "1Gi"
+            },
+            "replica" : 2
+          }
+        }
+      },
+      "ListVolumeResp" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/VolumeKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "云存储列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Volume"
+            }
+          }
+        }
+      },
+      "VolumeKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Volume”,该值不可修改。",
+        "enum" : [ "Volume" ]
+      },
+      "Volume" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云存储ID。"
+          },
+          "resource_info" : {
+            "type" : "object",
+            "description" : "存储资源详情。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "云存储名称。"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型,当前只支持“obs”和“sfs”。"
+          },
+          "resource_sub_type" : {
+            "type" : "string",
+            "description" : "存储资源子类型。",
+            "enum" : [ "parallel_file_system", "object_bucket", "sfs3.0" ]
+          },
+          "access" : {
+            "type" : "string",
+            "description" : "用户access key。"
+          },
+          "time" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          }
+        }
+      },
+      "DeleteComponentResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          }
+        }
+      },
+      "UpdateEipRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/EipKindObj"
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "修改出入网公网IP带宽信息。",
+            "properties" : {
+              "egress" : {
+                "type" : "object",
+                "description" : "出网IP信息。",
+                "properties" : {
+                  "bandwidth_size" : {
+                    "type" : "integer",
+                    "description" : "出网IP带宽。"
+                  },
+                  "enabled" : {
+                    "type" : "boolean",
+                    "description" : "是否关闭出网IP。"
+                  }
+                }
+              },
+              "ingress" : {
+                "type" : "object",
+                "description" : "入网IP信息。",
+                "properties" : {
+                  "bandwidth_size" : {
+                    "type" : "integer",
+                    "description" : "入网IP带宽。"
+                  },
+                  "enabled" : {
+                    "type" : "boolean",
+                    "description" : "是否关闭入网IP。"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "EipKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Eip”,该值不可修改。",
+        "enum" : [ "Eip" ]
+      },
+      "MetaCert" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "证书ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "证书名称。"
+          }
+        }
+      },
+      "CertInfo" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/CertificateKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "证书列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/CertItem"
+            }
+          }
+        }
+      },
+      "CertItem" : {
+        "type" : "object",
+        "properties" : {
+          "metadata" : {
+            "type" : "object",
+            "description" : "响应数据。",
+            "$ref" : "#/components/schemas/MetaCert"
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "响应数据。",
+            "$ref" : "#/components/schemas/SpecCert"
+          }
+        }
+      },
+      "SpecCert" : {
+        "type" : "object",
+        "properties" : {
+          "crt" : {
+            "type" : "string",
+            "description" : "证书内容。"
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "私钥内容。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。",
+            "format" : "date-time"
+          }
+        }
+      },
+      "ComponentList" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "组件列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ComponentItem"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "分页总数。"
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "items" : [ {
+            "id" : "610fb1de-5ac6-424e-b910-d7be902575d0",
+            "name" : "demo-xxx",
+            "annotations" : {
+              "description" : "",
+              "version" : "1.0.0",
+              "enterprise_project_id" : ""
+            },
+            "created_at" : "2022-06-09T07:01:05.323979Z",
+            "updated_at" : "2022-06-09T07:01:05.323979Z",
+            "spec" : {
+              "runtime" : "Docker",
+              "env_id" : "50d18173-5df0-4db4-a2b6-8a428d42146b",
+              "replica" : 1,
+              "source" : {
+                "type" : "image",
+                "url" : "xxx/demo-jar:v2"
+              },
+              "build" : {
+                "archive" : {
+                  "artifact_namespace" : "xxx"
+                },
+                "parameters" : {
+                  "base_image" : ""
+                }
+              },
+              "image_url" : "xxx/demo-jar:v2",
+              "available_replica" : 1,
+              "job_id" : "251b7d84-c353-416a-864f-5878a94c3d28",
+              "status" : "running"
+            }
+          } ],
+          "total_count" : 1
+        }
+      },
+      "Access" : {
+        "type" : "object",
+        "description" : "访问方式。",
+        "properties" : {
+          "address" : {
+            "type" : "string",
+            "description" : "访问地址。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "访问方式类型。",
+            "enum" : [ "LoadBalancer", "Ingress" ]
+          }
+        }
+      },
+      "ComponentItem" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          },
+          "annotations" : {
+            "description" : "附加信息。",
+            "$ref" : "#/components/schemas/Annotations",
+            "example" : {
+              "version" : "1.0.0",
+              "enterprise_project_id" : ""
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "更新时间。"
+          },
+          "spec" : {
+            "description" : "组件规格。",
+            "$ref" : "#/components/schemas/ComponentSpec"
+          }
+        }
+      },
+      "ComponentSpec" : {
+        "type" : "object",
+        "description" : "组件规格。",
+        "properties" : {
+          "runtime" : {
+            "type" : "string",
+            "description" : "语言/运行时。",
+            "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+          },
+          "env_id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实例个数。"
+          },
+          "source" : {
+            "$ref" : "#/components/schemas/Source"
+          },
+          "build" : {
+            "$ref" : "#/components/schemas/Build"
+          },
+          "resource_limit" : {
+            "$ref" : "#/components/schemas/ResourceLimit"
+          },
+          "access_info" : {
+            "$ref" : "#/components/schemas/AccessInfo"
+          },
+          "image_url" : {
+            "description" : "镜像地址。",
+            "type" : "string"
+          },
+          "available_replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "可用实例个数。"
+          },
+          "job_id" : {
+            "description" : "任务ID。",
+            "type" : "string"
+          },
+          "build_id" : {
+            "type" : "string",
+            "description" : "构建任务ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "组件状态。",
+            "enum" : [ "created", "running", "paused", "notReady" ]
+          },
+          "build_log_id" : {
+            "type" : "string",
+            "description" : "构建日志ID。"
+          },
+          "configuration_operation_id" : {
+            "type" : "string",
+            "description" : "组件最新配置的操作ID。"
+          }
+        }
+      },
+      "Annotations" : {
+        "type" : "object",
+        "description" : "资源信息。",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "AccessInfo" : {
+        "type" : "object",
+        "description" : "访问方式列表。",
+        "items" : {
+          "$ref" : "#/components/schemas/Access"
+        }
+      },
+      "CreateComponentWithConfigurationResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/MetadataResponse"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/CreateComponentSpec"
+          },
+          "configurations" : {
+            "type" : "array",
+            "description" : "配置项列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ConfigurationItem"
+            }
+          },
+          "status" : {
+            "type" : "object",
+            "properties" : {
+              "job_id" : {
+                "type" : "string",
+                "description" : "任务ID。"
+              }
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "name" : "demo-src",
+            "id" : "xxxx",
+            "annotations" : {
+              "version" : "1.0.0"
+            }
+          },
+          "spec" : {
+            "runtime" : "Java8",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : "openjdk:8u181-jdk-alpine"
+              }
+            },
+            "source" : {
+              "type" : "code",
+              "sub_type" : "GitLab",
+              "url" : "https://xxx:8090/xxx/cae-frontend.git",
+              "code" : {
+                "branch" : "master",
+                "auth_name" : "gitlab-xxx",
+                "namespace" : "em1n"
+              }
+            },
+            "resource_limit" : {
+              "cpu_limit" : "500m",
+              "memory_limit" : "1Gi"
+            },
+            "replica" : 2
+          },
+          "configurations" : [ {
+            "type" : "rds",
+            "data" : {
+              "spec" : {
+                "rds_id" : "a5fdee4cf88c4277a68688a014f444bdin01",
+                "rds_db_name" : "cae",
+                "rds_address" : "100.xx.xx.xxx",
+                "rds_username" : "cae",
+                "rds_password" : "xxx",
+                "rds_port" : "3306"
+              }
+            }
+          } ],
+          "status" : {
+            "job_id" : "xxx"
+          }
+        }
+      },
+      "CreateComponentWithConfigurationRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "请求数据。",
+            "required" : [ "name", "annotations" ],
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "description" : "组件名称。"
+              },
+              "annotations" : {
+                "type" : "object",
+                "description" : "创建组件请求体附加参数,当前只支持version参数,此参数必填。",
+                "additionalProperties" : {
+                  "type" : "string"
+                },
+                "example" : {
+                  "version" : "1.0.0"
+                }
+              }
+            }
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "组件规格信息。",
+            "required" : [ "runtime", "replica", "resource_limit", "source" ],
+            "properties" : {
+              "runtime" : {
+                "type" : "string",
+                "description" : "语言/运行时。",
+                "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+              },
+              "replica" : {
+                "type" : "integer",
+                "description" : "实例个数。"
+              },
+              "build" : {
+                "$ref" : "#/components/schemas/Build"
+              },
+              "source" : {
+                "$ref" : "#/components/schemas/Source"
+              },
+              "resource_limit" : {
+                "$ref" : "#/components/schemas/ResourceLimit"
+              },
+              "image_url" : {
+                "description" : "镜像地址。",
+                "type" : "string"
+              }
+            }
+          },
+          "configurations" : {
+            "type" : "array",
+            "description" : "配置项列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ConfigurationItem"
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "name" : "demo-src",
+            "annotations" : {
+              "version" : "1.0.0"
+            }
+          },
+          "spec" : {
+            "runtime" : "Java8",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : "openjdk:8u181-jdk-alpine"
+              }
+            },
+            "source" : {
+              "type" : "code",
+              "sub_type" : "GitLab",
+              "url" : "https://xxx:8090/xxx/cae-frontend.git",
+              "code" : {
+                "branch" : "master",
+                "auth_name" : "gitlab-xxx",
+                "namespace" : "em1n"
+              }
+            },
+            "resource_limit" : {
+              "cpu_limit" : "500m",
+              "memory_limit" : "1Gi"
+            },
+            "replica" : 2
+          },
+          "configurations" : [ {
+            "type" : "rds",
+            "data" : {
+              "spec" : {
+                "rds_id" : "a5fdee4cf88c4277a68688a014f444bdin01",
+                "rds_db_name" : "cae",
+                "rds_address" : "100.xx.xx.xxx",
+                "rds_username" : "cae",
+                "rds_password" : "xxx",
+                "rds_port" : "3306"
+              }
+            }
+          } ]
+        }
+      },
+      "ShowMonitorSystemResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/MonitorSystemKindObj"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/ShowMonitorSystemResponseBodySpec"
+          }
+        }
+      },
+      "ShowMonitorSystemResponseBodySpec" : {
+        "type" : "object",
+        "description" : "查询监控系统详情。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "监控系统id。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "采集方式。",
+            "enum" : [ "opentelemetry", "apm2" ]
+          },
+          "instrumentation" : {
+            "type" : "string",
+            "description" : "探针注入方式。",
+            "enum" : [ "manual", "automatic" ]
+          },
+          "access_key" : {
+            "type" : "string",
+            "description" : "apm2访问密钥Key。"
+          },
+          "access_value" : {
+            "type" : "string",
+            "description" : "apm2访问密钥value。"
+          },
+          "access_token" : {
+            "type" : "string",
+            "description" : "apm2 opentelemetry接入token。"
+          },
+          "master_address" : {
+            "type" : "string",
+            "description" : "探针接入点。"
+          },
+          "apm_application" : {
+            "type" : "string",
+            "description" : "apm2应用。"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "增强型探针/opentelemetry探针版本。"
+          },
+          "image_pull_policy" : {
+            "type" : "string",
+            "description" : "探针镜像更新策略。",
+            "enum" : [ "Always", "IfNotPresent" ]
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "ComponentInfo" : {
+        "type" : "object",
+        "properties" : {
+          "component_id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "component_name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          }
+        }
+      },
+      "CreateTimerRuleReq" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/TimeRuleKindObj"
+          },
+          "spec" : {
+            "description" : "启停规则规格信息。",
+            "$ref" : "#/components/schemas/UpdateTimerRuleDetails"
+          }
+        }
+      },
+      "AppInfo" : {
+        "type" : "object",
+        "properties" : {
+          "app_id" : {
+            "type" : "string",
+            "description" : "应用ID。"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称。"
+          }
+        }
+      },
+      "CreateTimerRuleResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/TimeRuleKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TimerRuleDetails"
+            }
+          }
+        }
+      },
+      "TimeRuleKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“TimerRule”,该值不可修改。",
+        "enum" : [ "TimerRule" ]
+      },
+      "TimerRuleDetails" : {
+        "type" : "object",
+        "description" : "启停规则列表。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "定时启停规则ID,在创建定时启停规则时会忽略。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "定时启停规则名称。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "定时启停规则的类型:stop/start。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "定时启停规则状态(是否开启):on/off。"
+          },
+          "env_id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "apps" : {
+            "type" : "array",
+            "description" : "定时启停规则所包含的所有应用,只在生效范围为application的时候需要填写。",
+            "items" : {
+              "$ref" : "#/components/schemas/AppInfo"
+            }
+          },
+          "components" : {
+            "type" : "array",
+            "description" : "在定时启停规则所包含的所有组件,只在生效范围为component的时候需要填写。",
+            "items" : {
+              "$ref" : "#/components/schemas/ComponentInfo"
+            }
+          },
+          "component_number" : {
+            "type" : "integer",
+            "description" : "定时启停规则包含的组件个数,在创建定时启停规则时会忽略。"
+          },
+          "cron" : {
+            "type" : "string",
+            "description" : "cron表达式。"
+          },
+          "effective_range" : {
+            "type" : "string",
+            "description" : "定时启停规则生效范围: component/application/environment。"
+          },
+          "effective_policy" : {
+            "type" : "string",
+            "description" : "定时启停规则的定时类别: onetime/periodic。"
+          },
+          "last_execution_status" : {
+            "type" : "string",
+            "description" : "上次执行的状态:abnormal/normal/executing,在创建定时启停规则时会忽略。"
+          }
+        }
+      },
+      "UpdateTimerRuleDetails" : {
+        "type" : "object",
+        "required" : [ "name", "type", "status", "cron", "effective_policy", "effective_range" ],
+        "description" : "修改启停规则规格信息",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "定时启停规则名称。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "定时启停规则的类型:stop/start。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "定时启停规则状态(是否开启):on/off。"
+          },
+          "apps" : {
+            "type" : "array",
+            "description" : "定时启停规则所包含的所有应用,只在生效范围为application的时候需要填写。",
+            "items" : {
+              "$ref" : "#/components/schemas/AppInfo"
+            }
+          },
+          "components" : {
+            "type" : "array",
+            "description" : "在定时启停规则所包含的所有组件,只在生效范围为component的时候需要填写。",
+            "items" : {
+              "$ref" : "#/components/schemas/ComponentInfo"
+            }
+          },
+          "cron" : {
+            "type" : "string",
+            "description" : "cron表达式。"
+          },
+          "effective_range" : {
+            "type" : "string",
+            "description" : "定时启停规则生效范围: component/application/environment。"
+          },
+          "effective_policy" : {
+            "type" : "string",
+            "description" : "定时启停规则的定时类别: onetime/periodic。"
+          }
+        }
+      },
+      "EnvironmentKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Environment”,该值不可修改。",
+        "enum" : [ "Environment" ]
+      },
+      "EnvironmentList" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/EnvironmentKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "环境列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/EnvironmentItem"
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Environment",
+          "items" : [ {
+            "id" : "5d3d1e90-2f5d-4ef1-958b-3fc1ed0b0898",
+            "name" : "test",
+            "version" : "1.2.0",
+            "job_id" : "15cbf4ff-e6a8-4504-a5e0-574b9c21493a",
+            "status" : "finish",
+            "annotations" : {
+              "cluster_id" : "2177808d-a78e-11ed-be73-0255ac100b0a",
+              "description" : "",
+              "enterprise_project_id" : "0",
+              "group_name" : "xxx",
+              "inbound_eip_addr" : "100.xx.xx.xxx",
+              "namespace" : "79c4xxxf5f3a4xxxda92601xxx64b1e8c-test",
+              "public_elb_id" : "da9e107e-bd25-412f-9546-563ed11ae34c",
+              "type" : "exclusive",
+              "vpc_id" : "09902850-9454-4715-9764-018f0c3701fd"
+            },
+            "created_at" : "2023-02-08T08:49:34.000737Z",
+            "updated_at" : "2023-02-08T08:49:34.000737Z"
+          } ]
+        }
+      },
+      "EnvironmentItem" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "环境名称。"
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "环境状态。",
+            "enum" : [ "creating", "finish", "deleting", "freeze", "police_freeze", "delete_failed" ]
+          },
+          "annotations" : {
+            "type" : "object",
+            "description" : "环境附加属性。",
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "example" : {
+              "cluster_id" : "2177808d-a78e-11ed-be73-0255ac100b0a",
+              "description" : "",
+              "enterprise_project_id" : "0",
+              "group_name" : "xxx",
+              "inbound_eip_addr" : "100.xx.xx.xxx",
+              "namespace" : "79c4xxxf5f3a4xxxda92601xxx64b1e8c-test",
+              "public_elb_id" : "da9e107e-bd25-412f-9546-563ed11ae34c",
+              "type" : "exclusive",
+              "vpc_id" : "09902850-9454-4715-9764-018f0c3701fd"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "UpdateNoticeRuleReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“NoticeRule”,该值不可修改。"
+          },
+          "spec" : {
+            "description" : "请求数据。",
+            "$ref" : "#/components/schemas/UpdateNoticeRuleItem"
+          }
+        }
+      },
+      "UpdateNoticeRuleItem" : {
+        "type" : "object",
+        "required" : [ "scope", "trigger_policy" ],
+        "properties" : {
+          "event_name" : {
+            "type" : "string",
+            "description" : "触发事件名称,支持实例调度成功、实例调度失败、健康检查成功、健康检查失败、镜像拉取成功、镜像拉取失败、容器启动成功、容器启动失败、卷挂载成功、卷挂载失败。",
+            "enum" : [ "Scheduled", "FailedScheduling", "Healthy", "Unhealthy", "Pulled", "FailedPullImage", "Started", "BackOffStart", "SuccessfulMountVolume", "FailedMount" ]
+          },
+          "scope" : {
+            "description" : "生效的通知规则范围。",
+            "$ref" : "#/components/schemas/NoticeRuleScope"
+          },
+          "trigger_policy" : {
+            "description" : "触发策略。",
+            "$ref" : "#/components/schemas/TriggerPolicy"
+          },
+          "enable" : {
+            "description" : "是否启用。",
+            "type" : "boolean"
+          }
+        }
+      },
+      "NoticeRuleScope" : {
+        "type" : "object",
+        "required" : [ "type" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "生效范围的类型。包括environments(对指定环境下所有组件生效),applications(对指定应用下所有组件生效),components(对指定的组件生效)。",
+            "enum" : [ "environments", "applications", "components" ]
+          },
+          "environments" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "生效的环境id列表。"
+          },
+          "applications" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "生效的应用id列表。"
+          },
+          "components" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "生效的组件id列表。"
+          }
+        }
+      },
+      "CreateNoticeRuleResp" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“NoticeRule”,该值不可修改。"
+          },
+          "spec" : {
+            "description" : "请求数据。",
+            "$ref" : "#/components/schemas/CreateNoticeRuleRespItem"
+          }
+        }
+      },
+      "NoticeRuleNotification" : {
+        "type" : "object",
+        "required" : [ "protocol", "endpoint" ],
+        "properties" : {
+          "protocol" : {
+            "type" : "string",
+            "description" : "通知的协议类型,包括短信,邮件,企业微信群消息等。",
+            "enum" : [ "email", "sms", "wechat" ]
+          },
+          "endpoint" : {
+            "type" : "string",
+            "description" : "通知的终端地址。"
+          },
+          "template" : {
+            "type" : "string",
+            "description" : "通知的模板语言。",
+            "enum" : [ "ZH", "EN" ]
+          }
+        }
+      },
+      "CreateNoticeRuleRespItem" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "通知规则的唯一标识。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "通知名称。"
+          },
+          "event_name" : {
+            "type" : "string",
+            "description" : "触发事件名称。"
+          },
+          "scope" : {
+            "description" : "生效的通知规则范围。",
+            "$ref" : "#/components/schemas/NoticeRuleScope"
+          },
+          "trigger_policy" : {
+            "description" : "触发策略。",
+            "$ref" : "#/components/schemas/TriggerPolicy"
+          },
+          "notification" : {
+            "description" : "通知的机制。",
+            "$ref" : "#/components/schemas/NoticeRuleNotification"
+          },
+          "enable" : {
+            "type" : "boolean",
+            "description" : "是否启用。"
+          }
+        }
+      },
+      "TriggerPolicy" : {
+        "type" : "object",
+        "required" : [ "trigger_type" ],
+        "properties" : {
+          "trigger_type" : {
+            "type" : "string",
+            "description" : "触发类型,accumulative: 累计触发,immediately: 立即触发。",
+            "enum" : [ "accumulative", "immediately" ]
+          },
+          "period" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "触发周期,选择累计触发时需设置该参数,默认单位为s,支持5分钟、20分钟、1小时、4小时、24小时。",
+            "enum" : [ 300, 1200, 3600, 14400, 86400 ]
+          },
+          "operator" : {
+            "type" : "string",
+            "description" : "比较符,支持'>'和'>='。",
+            "enum" : [ ">", ">=" ]
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "触发次数,选择累计触发时需设置该参数。"
+          }
+        }
+      },
+      "ListTimerRulesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/TimeRuleKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TimerRuleDetails"
+            }
+          }
+        }
+      },
+      "AgencyItem" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "委托名称,固定值“cae_trust”,该值不可修改。",
+            "enum" : [ "cae_trust" ]
+          }
+        }
+      },
+      "AgencyResponse" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/AgencyKindObj"
+          },
+          "agencies" : {
+            "type" : "array",
+            "description" : "委托列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/AgencyItem"
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Agency",
+          "items" : [ {
+            "name" : "cae_trust"
+          } ]
+        }
+      },
+      "GetSecretsResp" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "items" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。",
+            "example" : "v1"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "资源种类。",
+            "example" : "Secret"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "定时启停规则所包含的所有应用,只在生效范围为application的时候需要填写。",
+            "items" : {
+              "$ref" : "#/components/schemas/SecretDetail"
+            }
+          }
+        }
+      },
+      "ApplicationItem" : {
+        "type" : "object",
+        "description" : "应用信息。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "应用ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "应用名称。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "ApplicationList" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ApplicationKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "应用列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ApplicationItem"
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Application",
+          "items" : [ {
+            "id" : "88275aa8-38ae-4428-a269-6c5f41d91491",
+            "name" : "test",
+            "annotations" : {
+              "description" : ""
+            },
+            "created_at" : "2022-05-30T15:09:25.642149Z",
+            "updated_at" : "2022-05-30T15:09:25.642149Z"
+          } ]
+        }
+      },
+      "ApplicationKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Application”,该值不可修改。",
+        "enum" : [ "Application" ]
+      },
+      "ListEipResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/EipKindObj"
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "出入网公网IP信息。",
+            "properties" : {
+              "egress" : {
+                "type" : "object",
+                "description" : "出网IP信息。",
+                "properties" : {
+                  "bandwidth_size" : {
+                    "type" : "integer",
+                    "description" : "出网IP带宽。"
+                  },
+                  "enabled" : {
+                    "type" : "boolean",
+                    "description" : "是否关闭出网IP。"
+                  },
+                  "ip_list" : {
+                    "type" : "array",
+                    "description" : "出网IP列表。",
+                    "items" : {
+                      "type" : "string",
+                      "description" : "出网IP。"
+                    }
+                  }
+                }
+              },
+              "ingress" : {
+                "type" : "object",
+                "description" : "入网IP信息。",
+                "properties" : {
+                  "bandwidth_size" : {
+                    "type" : "integer",
+                    "description" : "入网IP带宽"
+                  },
+                  "enabled" : {
+                    "type" : "boolean",
+                    "description" : "是否关闭入网IP。"
+                  },
+                  "ip_list" : {
+                    "type" : "array",
+                    "description" : "入网IP列表",
+                    "items" : {
+                      "type" : "string",
+                      "description" : "入网IP。"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateNoticeRuleItem" : {
+        "type" : "object",
+        "required" : [ "name", "scope", "trigger_policy", "notification" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "通知名称。"
+          },
+          "event_name" : {
+            "type" : "string",
+            "description" : "触发事件名称,支持实例调度成功、实例调度失败、健康检查成功、健康检查失败、镜像拉取成功、镜像拉取失败、容器启动成功、容器启动失败、卷挂载成功、卷挂载失败。",
+            "enum" : [ "Scheduled", "FailedScheduling", "Healthy", "Unhealthy", "Pulled", "FailedPullImage", "Started", "BackOffStart", "SuccessfulMountVolume", "FailedMount" ]
+          },
+          "scope" : {
+            "description" : "生效的通知规则范围。",
+            "$ref" : "#/components/schemas/NoticeRuleScope"
+          },
+          "trigger_policy" : {
+            "description" : "触发策略。",
+            "$ref" : "#/components/schemas/TriggerPolicy"
+          },
+          "notification" : {
+            "description" : "通知的机制。",
+            "$ref" : "#/components/schemas/NoticeRuleNotification"
+          },
+          "enable" : {
+            "description" : "是否启用。",
+            "type" : "boolean"
+          }
+        }
+      },
+      "CreateNoticeRuleReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“NoticeRule”,该值不可修改。"
+          },
+          "spec" : {
+            "description" : "请求数据。",
+            "$ref" : "#/components/schemas/CreateNoticeRuleItem"
+          }
+        }
+      },
+      "UpdateTimerRuleReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/TimeRuleKindObj"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/UpdateTimerRuleDetails"
+          }
+        }
+      },
+      "MountComponent" : {
+        "type" : "object",
+        "properties" : {
+          "env_id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "env_name" : {
+            "type" : "string",
+            "description" : "环境名称。"
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "应用ID。"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称。"
+          },
+          "component_id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "component_name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          }
+        }
+      },
+      "MountComponentResp" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "挂载组件列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/MountComponent"
+            }
+          }
+        }
+      },
+      "CreateEnvironmentResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          }
+        }
+      },
+      "CreateEnvironmentRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/EnvironmentKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "请求数据。",
+            "required" : [ "name", "type" ],
+            "properties" : {
+              "annotations" : {
+                "$ref" : "#/components/schemas/CreateEnvRequestAnnotations"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "环境名称。"
+              }
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Environment",
+          "metadata" : {
+            "annotations" : {
+              "vpc_id" : "xxx",
+              "group_name" : "xxx",
+              "type" : "exclusive"
+            },
+            "name" : "demo"
+          }
+        }
+      },
+      "CreateEnvRequestAnnotations" : {
+        "type" : "object",
+        "description" : "创建环境请求体附加参数。",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "CreateVolumeReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/VolumeKindObj"
+          },
+          "spec" : {
+            "description" : "volume规格信息。",
+            "$ref" : "#/components/schemas/VolumeSpec"
+          }
+        }
+      },
+      "ResourcesCredential" : {
+        "type" : "object",
+        "properties" : {
+          "access" : {
+            "type" : "string",
+            "description" : "用户access key,当前access key应该包含访问授权云存储的权限。"
+          },
+          "secret" : {
+            "type" : "string",
+            "description" : "用户secret key,当前secret key应该包含访问授权云存储的权限。"
+          }
+        }
+      },
+      "VolumeSpec" : {
+        "type" : "object",
+        "required" : [ "resources", "resource_type", "resource_sub_type" ],
+        "properties" : {
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型,当前只支持“obs”和“sfs”。",
+            "enum" : [ "sfs", "obs" ]
+          },
+          "resource_sub_type" : {
+            "type" : "string",
+            "description" : "对象存储类型。",
+            "enum" : [ "object_bucket", "parallel_file_system", "sfs3.0" ]
+          },
+          "resources" : {
+            "type" : "array",
+            "description" : "云存储名称。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "resources_credentials" : {
+            "type" : "array",
+            "description" : "云存储和授权凭证,获取环境列表接口响应中env_category字段为v2时需添加该字段的值。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourcesCredential"
+            }
+          }
+        }
+      },
+      "Application" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ApplicationKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "响应数据。",
+            "properties" : {
+              "id" : {
+                "type" : "string",
+                "description" : "应用ID。"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "应用名称。"
+              },
+              "created_at" : {
+                "type" : "string",
+                "description" : "创建时间。"
+              },
+              "updated_at" : {
+                "type" : "string",
+                "description" : "更新时间。"
+              }
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Application",
+          "metadata" : {
+            "id" : "xxx",
+            "name" : "xxx",
+            "annotations" : {
+              "description" : "demo",
+              "enterprise_project_id" : ""
+            },
+            "created_at" : "2022-06-10T06:49:24.836171213Z",
+            "updated_at" : "2022-06-10T06:49:24.836171213Z"
+          }
+        }
+      },
+      "CreateApplicationRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ApplicationKindObj"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "请求数据。",
+            "required" : [ "name" ],
+            "properties" : {
+              "name" : {
+                "type" : "string",
+                "description" : "应用名称。"
+              }
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Application",
+          "metadata" : {
+            "name" : "test"
+          }
+        }
+      },
+      "ResourceLimitForUpgrade" : {
+        "type" : "object",
+        "properties" : {
+          "cpu_limit" : {
+            "type" : "string",
+            "description" : "cpu限额。",
+            "enum" : [ "500m", "1000m", "2000m" ]
+          },
+          "memory_limit" : {
+            "type" : "string",
+            "description" : "内存限额。",
+            "enum" : [ "1Gi", "2Gi", "4Gi" ]
+          }
+        }
+      },
+      "ActionKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Action”,该值不可修改。",
+        "enum" : [ "Action" ]
+      },
+      "ActionOnComponentSource" : {
+        "type" : "object",
+        "description" : "源信息。",
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/Repo"
+          },
+          "type" : {
+            "description" : "源类型。",
+            "type" : "string",
+            "enum" : [ "image", "code", "softwarePackage" ]
+          },
+          "sub_type" : {
+            "description" : "源子类型。",
+            "type" : "string",
+            "enum" : [ "BinObs", "BinDevCloud", "GitLab", "GitHub", "DevCloud", "Gitee", "Bitbucket" ]
+          },
+          "url" : {
+            "description" : "url地址。",
+            "type" : "string"
+          }
+        }
+      },
+      "ExecuteActionRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ActionKindObj"
+          },
+          "metadata" : {
+            "description" : "请求数据。",
+            "required" : [ "name" ],
+            "properties" : {
+              "annotations" : {
+                "$ref" : "#/components/schemas/Annotations"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "action名称。",
+                "enum" : [ "deploy", "upgrade", "configure", "scale", "restart", "start", "stop", "rollback" ]
+              }
+            },
+            "example" : {
+              "name" : "deploy",
+              "annotations" : {
+                "version" : "1.0.0"
+              }
+            }
+          },
+          "spec" : {
+            "description" : "action规格信息。",
+            "$ref" : "#/components/schemas/ActionOnComponentSpec"
+          }
+        }
+      },
+      "OperationResponse" : {
+        "type" : "object",
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          }
+        }
+      },
+      "ActionOnComponentSpec" : {
+        "type" : "object",
+        "properties" : {
+          "snapshot_index" : {
+            "type" : "integer",
+            "description" : "快照序号。"
+          },
+          "replica" : {
+            "type" : "integer",
+            "description" : "实例个数。"
+          },
+          "source" : {
+            "$ref" : "#/components/schemas/ActionOnComponentSource",
+            "description" : "源数据。"
+          },
+          "resource_limit" : {
+            "$ref" : "#/components/schemas/ResourceLimitForUpgrade",
+            "description" : "实例规格。"
+          },
+          "build" : {
+            "description" : "构建数据。",
+            "$ref" : "#/components/schemas/ActionOnComponentBuild"
+          }
+        }
+      },
+      "ActionOnComponentBuild" : {
+        "type" : "object",
+        "description" : "构建信息。",
+        "properties" : {
+          "archive" : {
+            "$ref" : "#/components/schemas/Archive"
+          },
+          "parameters" : {
+            "$ref" : "#/components/schemas/Parameters"
+          }
+        }
+      },
+      "ShowComponentResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/MetadataResponse"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/ComponentSpec"
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "id" : "xxx",
+            "name" : "xxx",
+            "annotations" : {
+              "log_group_id" : "862d70a3-e8d7-4d97-943d-fd9851799f46",
+              "log_stream_id" : "e938cda5-6b09-487b-9cca-8d712d2ac15f",
+              "version" : "1.0.0"
+            },
+            "created_at" : "2022-06-24T07:01:14.960324Z",
+            "updated_at" : "2022-06-24T07:01:14.960324Z"
+          },
+          "spec" : {
+            "runtime" : "Java8",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : "openjdk:8u181-jdk-alpine"
+              }
+            },
+            "source" : {
+              "type" : "softwarePackage",
+              "sub_type" : "BinObs",
+              "url" : "xxx"
+            },
+            "image_url" : "xxx/demo:1.0",
+            "available_replica" : 1,
+            "replica" : 2,
+            "configuration_operation_id" : "xxx"
+          }
+        }
+      },
+      "TimerRuleExecutionResp" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/TimeRuleKindObj"
+          },
+          "spec" : {
+            "description" : "启停规则执行信息。",
+            "$ref" : "#/components/schemas/ExecutionDetails"
+          }
+        }
+      },
+      "ExecutionDetails" : {
+        "type" : "object",
+        "properties" : {
+          "last_execution_time" : {
+            "type" : "string",
+            "description" : "启停策略执行时间。"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "组件启停规则执行结果列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ComponentExecutionResult"
+            }
+          }
+        }
+      },
+      "ComponentExecutionResult" : {
+        "type" : "object",
+        "properties" : {
+          "component_name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          },
+          "component_id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "组件执行启停的结果:failed/success。"
+          },
+          "error_message" : {
+            "type" : "string",
+            "description" : "组件执行启停的错误信息,如果执行结果为成功,则为空。"
+          }
+        }
+      },
+      "CreateDomainReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/DomainKindObj"
+          },
+          "metadata" : {
+            "description" : "请求数据。",
+            "$ref" : "#/components/schemas/CreateMetaDomain"
+          }
+        }
+      },
+      "CreateMetaDomain" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "域名名称。"
+          }
+        }
+      },
+      "DomainKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“Domain”,该值不可修改。",
+        "enum" : [ "Domain" ]
+      },
+      "CertReq" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/CertificateKindObj"
+          },
+          "metadata" : {
+            "description" : "创建证书请求数据。",
+            "$ref" : "#/components/schemas/CreateMetaCert"
+          },
+          "spec" : {
+            "description" : "创建证书请求规格信息。",
+            "$ref" : "#/components/schemas/CreateSpecCert"
+          }
+        }
+      },
+      "CreateMetaCert" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "证书名称。"
+          }
+        }
+      },
+      "CreateSpecCert" : {
+        "type" : "object",
+        "required" : [ "crt", "key" ],
+        "properties" : {
+          "crt" : {
+            "type" : "string",
+            "description" : "证书内容。"
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "私钥内容。"
+          }
+        }
+      },
+      "UpdateComponentRequestBody" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "metadata", "spec" ],
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentKindObj"
+          },
+          "metadata" : {
+            "description" : "请求数据。",
+            "$ref" : "#/components/schemas/UpdateComponentRequestMetadata"
+          },
+          "spec" : {
+            "description" : "组件规格。",
+            "$ref" : "#/components/schemas/UpdateComponentRequestSpec"
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "Component",
+          "metadata" : {
+            "name" : "demo-src",
+            "annotations" : {
+              "version" : "1.0.0"
+            }
+          },
+          "spec" : {
+            "runtime" : "Docker",
+            "build" : {
+              "archive" : {
+                "artifact_namespace" : "xxx"
+              },
+              "parameters" : {
+                "base_image" : ""
+              }
+            },
+            "source" : {
+              "type" : "image",
+              "url" : "xxx/cae9056:v1"
+            },
+            "resource_limit" : {
+              "cpu_limit" : "500m",
+              "memory_limit" : "1Gi"
+            },
+            "replica" : 2
+          }
+        }
+      },
+      "UpdateComponentRequestSpec" : {
+        "type" : "object",
+        "required" : [ "resource_limit" ],
+        "properties" : {
+          "runtime" : {
+            "type" : "string",
+            "description" : "语言/运行时。",
+            "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+          },
+          "source" : {
+            "description" : "源信息。",
+            "$ref" : "#/components/schemas/Source"
+          },
+          "build" : {
+            "description" : "构建信息。",
+            "$ref" : "#/components/schemas/Build"
+          },
+          "resource_limit" : {
+            "description" : "实例规格。",
+            "$ref" : "#/components/schemas/ResourceLimit"
+          },
+          "replica" : {
+            "type" : "integer",
+            "description" : "实例个数。"
+          }
+        }
+      },
+      "UpdateComponentRequestMetadata" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          },
+          "annotations" : {
+            "type" : "object",
+            "description" : "更新组件请求体附加参数,当前只支持version参数,此参数必填。",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : {
+                "version" : "1.0.0"
+              }
+            }
+          }
+        }
+      },
+      "DeleteEnvResponse" : {
+        "type" : "object",
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          }
+        }
+      },
+      "ComponentSnapshotItem" : {
+        "type" : "object",
+        "properties" : {
+          "component_id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "快照索引。"
+          },
+          "context" : {
+            "description" : "上下文信息。",
+            "$ref" : "#/components/schemas/ComponentSnapshotContext"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "ComponentSnapshotList" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "$ref" : "#/components/schemas/ApiVersionObj"
+          },
+          "kind" : {
+            "$ref" : "#/components/schemas/ComponentSnapshotKindObj"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "快照列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ComponentSnapshotItem"
+            }
+          }
+        },
+        "example" : {
+          "api_version" : "v1",
+          "kind" : "ComponentSnapshot",
+          "items" : [ {
+            "component_id" : "79229698-e2ec-47db-81df-599b59a9fc17",
+            "index" : 1,
+            "context" : {
+              "app_id" : "d65fd1d7-9df8-424f-ba4d-44b1bb7cfc05",
+              "available_replica" : 1,
+              "build" : "{\"archive\":{\"artifact_namespace\":\"cae-test\"},\"parameters\":{\"base_image\":\"\"}}",
+              "env_id" : "7eb2f920-e183-4d4e-9b9d-fffb875ae520",
+              "id" : "79229698-e2ec-47db-81df-599b59a9fc17",
+              "image_url" : "nginx:stable-alpine-perl",
+              "job_id" : "4681ac3f-5771-4d98-97ad-9e25171b26b8",
+              "log_group_id" : "96fe4c34-578a-4ea8-8e77-ee59bf8a0fd1",
+              "log_stream_id" : "9c024ad2-5c80-45ee-8651-5f2bd89d3c7e",
+              "name" : "test",
+              "operation" : "deploy",
+              "operation_status" : "started",
+              "project_id" : "196e2e151e7946ff870a911a6204dc3e",
+              "replica" : 1,
+              "resource_limit" : "{\"cpu_limit\":\"500m\",\"memory_limit\":\"1Gi\"}",
+              "runtime" : "Docker",
+              "source" : "{\"type\":\"image\",\"url\":\"nginx:stable-alpine-perl\"}",
+              "status" : "running",
+              "version" : "1.0.0",
+              "created_at" : "2023-02-27T06:22:46.812877Z",
+              "updated_at" : "2023-02-27T06:22:46.812877Z"
+            },
+            "created_at" : "2023-02-27T08:26:39.362226Z",
+            "updated_at" : "2023-02-27T08:26:39.362226Z"
+          } ]
+        }
+      },
+      "ComponentSnapshotContext" : {
+        "type" : "object",
+        "properties" : {
+          "app_id" : {
+            "type" : "string",
+            "description" : "应用ID。"
+          },
+          "available_replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "可用实例个数。"
+          },
+          "build" : {
+            "type" : "string",
+            "description" : "组件构建信息。"
+          },
+          "build_id" : {
+            "type" : "string",
+            "description" : "构建任务ID。"
+          },
+          "build_log_id" : {
+            "type" : "string",
+            "description" : "构建日志ID。"
+          },
+          "env_id" : {
+            "type" : "string",
+            "description" : "环境ID。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "组件ID。"
+          },
+          "image_url" : {
+            "description" : "镜像地址。",
+            "type" : "string"
+          },
+          "job_id" : {
+            "description" : "任务ID。",
+            "type" : "string"
+          },
+          "log_group_id" : {
+            "type" : "string",
+            "description" : "LTS日志组的ID。"
+          },
+          "log_stream_id" : {
+            "type" : "string",
+            "description" : "LTS日志流的ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "组件名称。"
+          },
+          "operation" : {
+            "type" : "string",
+            "description" : "组件操作。"
+          },
+          "operation_status" : {
+            "type" : "string",
+            "description" : "组件操作状态。"
+          },
+          "replica" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实例个数。"
+          },
+          "resource_limit" : {
+            "type" : "string",
+            "description" : "组件规格。"
+          },
+          "runtime" : {
+            "type" : "string",
+            "description" : "语言/运行时。",
+            "enum" : [ "Docker", "Java8", "Java11", "Java17", "Java21", "Tomcat8", "Tomcat9", "Python3", "Nodejs8", "Nodejs14", "Nodejs16", "Php7", "Php8", "Dotnet6", "Dotnet7", "Dotnet8" ]
+          },
+          "source" : {
+            "type" : "string",
+            "description" : "组件源信息。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "组件状态。"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "组件版本。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间。"
+          }
+        }
+      },
+      "ComponentSnapshotKindObj" : {
+        "type" : "object",
+        "description" : "API类型,固定值“ComponentSnapshot”,该值不可修改。",
+        "enum" : [ "ComponentSnapshot" ]
+      },
+      "ListComponentConfigurationsResponseData" : {
+        "type" : "object",
+        "description" : "组件配置数据。",
+        "properties" : {
+          "spec" : {
+            "$ref" : "#/components/schemas/ConfigurationResponseDataSpec"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/ConfigurationDataMetadata"
+          }
+        }
+      },
+      "ConfigurationResponseDataSpec" : {
+        "type" : "object",
+        "description" : "组件配置数据规格详情。",
+        "properties" : {
+          "rds_id" : {
+            "type" : "string",
+            "description" : "RDS数据库实例ID。"
+          },
+          "rds_db_name" : {
+            "type" : "string",
+            "description" : "RDS数据库名称。"
+          },
+          "rds_address" : {
+            "type" : "string",
+            "description" : "RDS数据库地址。"
+          },
+          "rds_username" : {
+            "type" : "string",
+            "description" : "RDS数据库用户名称。"
+          },
+          "rds_password" : {
+            "type" : "string",
+            "description" : "RDS数据库密码。"
+          },
+          "rds_port" : {
+            "type" : "string",
+            "description" : "RDS数据库端口。"
+          },
+          "config_center_addr" : {
+            "type" : "string",
+            "description" : "CSE配置中心地址。"
+          },
+          "service_center_addr" : {
+            "type" : "string",
+            "description" : "CSE服务注册发现地址。"
+          },
+          "cse_id" : {
+            "type" : "string",
+            "description" : "CSE引擎ID。"
+          },
+          "envs" : {
+            "description" : "环境变量配置。",
+            "$ref" : "#/components/schemas/EnvConfigurationDataAnnotations"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "弹性公网IP,响应体参数,未配置域名时返回此参数。"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "访问方式配置列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/AccessConfigurationDataItems"
+            }
+          },
+          "scale_strategy" : {
+            "type" : "string",
+            "description" : "伸缩策略配置策略类型。",
+            "enum" : [ "metric", "time", "mix" ]
+          },
+          "max_replica_count" : {
+            "type" : "integer",
+            "description" : "伸缩策略配置最大伸缩个数。"
+          },
+          "min_replica_count" : {
+            "type" : "integer",
+            "description" : "伸缩策略配置最小伸缩个数。"
+          },
+          "advanced" : {
+            "type" : "object",
+            "description" : "伸缩策略高级配置。",
+            "$ref" : "#/components/schemas/ScaleConfigurationDataAdvanced"
+          },
+          "triggers" : {
+            "type" : "array",
+            "description" : "伸缩策略配置触发器列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScaleConfigurationDataTrigger"
+            }
+          },
+          "volumes" : {
+            "type" : "array",
+            "description" : "云存储配置列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/VolumeConfigurationDataVolume"
+            }
+          },
+          "livenessProbe" : {
+            "description" : "组件健康检查配置的存活探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationLivenessProbe"
+          },
+          "startupProbe" : {
+            "description" : "组件健康检查配置的启动探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationStartupProbe"
+          },
+          "readinessProbe" : {
+            "description" : "组件健康检查配置的就绪探针配置。",
+            "$ref" : "#/components/schemas/HealthCheckConfigurationReadinessProbe"
+          },
+          "postStart" : {
+            "type" : "object",
+            "description" : "生命周期管理组件配置启动后处理。",
+            "properties" : {
+              "exec" : {
+                "$ref" : "#/components/schemas/LifeCycleConfigurationExec"
+              }
+            }
+          },
+          "preStop" : {
+            "type" : "object",
+            "description" : "生命周期管理组件配置停止前处理。",
+            "properties" : {
+              "exec" : {
+                "$ref" : "#/components/schemas/LifeCycleConfigurationExec"
+              }
+            }
+          },
+          "log_paths" : {
+            "type" : "array",
+            "description" : "自定义本地磁盘日志路径数组。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "cloud_storage_log_paths" : {
+            "type" : "array",
+            "description" : "自定义云存储日志路径数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/CloudStorageLogPathInfo"
+            }
+          },
+          "instrumentation" : {
+            "type" : "string",
+            "description" : "探针注入方式。"
+          },
+          "apm_application" : {
+            "type" : "string",
+            "description" : "apm2应用。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "监控系统类别,包括apm2和opentelemetry。"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "apm2组件。"
+          },
+          "instance_name" : {
+            "type" : "string",
+            "description" : "apm2实例。"
+          },
+          "env_name" : {
+            "type" : "string",
+            "description" : "apm2环境。"
+          },
+          "image_pull_policy" : {
+            "type" : "string",
+            "description" : "探针镜像更新策略,已废弃,迁移到监控系统。"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "增强型探针/opentelemetry探针版本,已废弃,迁移到监控系统。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "description" : "apm2访问密钥Key,已废弃,迁移到监控系统。"
+          },
+          "access_value" : {
+            "type" : "string",
+            "description" : "apm2访问密钥value,已废弃,迁移到监控系统。"
+          },
+          "business" : {
+            "type" : "string",
+            "description" : "apm2应用,同apm_application,已废弃。"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "自定义监控指标配置采集路径。"
+          },
+          "port" : {
+            "type" : "integer",
+            "description" : "自定义监控指标配置采集端口。"
+          },
+          "metrics" : {
+            "type" : "array",
+            "description" : "自定义监控指标配置指标名称。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ListConfigurationsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“ComponentConfiguration”,该值不可修改。"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "组件配置列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Configuration"
+            }
+          }
+        }
+      },
+      "Configuration" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/ListComponentConfigurationsResponseData"
+          },
+          "operated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "操作时间。"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "操作ID。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "组件配置类型。",
+            "enum" : [ "rds", "cse", "env", "access", "scaling", "volume", "healthCheck", "lifecycle", "apm2", "log", "customMetric" ]
+          },
+          "is_activated" : {
+            "type" : "boolean",
+            "description" : "配置是否生效过。"
+          },
+          "is_using" : {
+            "type" : "boolean",
+            "description" : "配置是否正在使用。"
+          }
+        }
+      },
+      "ListNoticeRulesResp" : {
+        "type" : "object",
+        "required" : [ "api_version", "kind", "items" ],
+        "properties" : {
+          "api_version" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改。"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“NoticeRule”,该值不可修改。"
+          },
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/CreateNoticeRuleRespItem"
+            },
+            "description" : "请求数据。",
+            "type" : "array"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListComponentInstances" : {
+      "get" : {
+        "tags" : [ "Component" ],
+        "summary" : "获取组件实例列表",
+        "description" : "获取组件实例列表。",
+        "operationId" : "ListComponentInstances",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListInstancesResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListComponentInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/instances"
+    },
+    "/CreateVpcEgress" : {
+      "post" : {
+        "tags" : [ "VpcEgress" ],
+        "summary" : "创建CAE环境访问VPC配置",
+        "description" : "创建CAE环境访问VPC配置。",
+        "operationId" : "CreateVpcEgress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VpcEgressResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VpcEgressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpcEgress",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/vpc-egress"
+    },
+    "/UpdateCertificate" : {
+      "put" : {
+        "tags" : [ "Certificate" ],
+        "summary" : "修改证书",
+        "description" : "修改证书。",
+        "operationId" : "UpdateCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCertReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/certificates/{certificate_id}"
+    },
+    "/RetryJob" : {
+      "post" : {
+        "tags" : [ "Job" ],
+        "summary" : "重试任务",
+        "description" : "重试任务。",
+        "operationId" : "RetryJob",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "任务ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RetryJob",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/jobs/{job_id}"
+    },
+    "/CreateMonitorSystem" : {
+      "post" : {
+        "tags" : [ "MonitorSystem" ],
+        "summary" : "创建监控系统配置",
+        "description" : "创建监控系统配置。",
+        "operationId" : "CreateMonitorSystem",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MonitorSystemRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateMonitorSystem",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/monitor-system"
+    },
+    "/CreateComponentConfiguration" : {
+      "post" : {
+        "tags" : [ "ComponentConfiguration" ],
+        "summary" : "创建组件配置",
+        "description" : "创建组件配置。",
+        "operationId" : "CreateComponentConfiguration",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateComponentConfigurationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateComponentConfiguration",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/configurations"
+    },
+    "/CreateSecret" : {
+      "post" : {
+        "tags" : [ "Secret" ],
+        "summary" : "关联租户已注册的凭据。",
+        "description" : "关联租户已注册的凭据。",
+        "operationId" : "CreateSecret",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateOrUpdateSecretResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateOrUpdateSecretReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/dew-secrets"
+    },
+    "/ListDomains" : {
+      "get" : {
+        "tags" : [ "Domain" ],
+        "summary" : "获取域名列表",
+        "description" : "获取域名列表。",
+        "operationId" : "ListDomains",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DomainInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDomains",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/domains"
+    },
+    "/DeleteVpcEgress" : {
+      "delete" : {
+        "tags" : [ "VpcEgress" ],
+        "summary" : "删除CAE环境访问VPC配置",
+        "description" : "删除CAE环境访问VPC配置。",
+        "operationId" : "DeleteVpcEgress",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "vpc_egress_id",
+          "in" : "path",
+          "description" : "CAE环境访问VPC配置ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "CAE环境访问VPC配置ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpcEgress",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/vpc-egress/{vpc_egress_id}"
+    },
+    "/ShowJob" : {
+      "get" : {
+        "tags" : [ "Job" ],
+        "summary" : "获取任务详情",
+        "description" : "获取任务详情。",
+        "operationId" : "ShowJob",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetJobDetailResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "任务ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJob",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/jobs/{job_id}"
+    },
+    "/UpdateSecret" : {
+      "put" : {
+        "tags" : [ "Secret" ],
+        "summary" : "修改用户已在DEW服务上注册的凭据版本。",
+        "description" : "修改用户已在DEW服务上注册的凭据版本。",
+        "operationId" : "UpdateSecret",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateOrUpdateSecretResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "secret_id",
+          "in" : "path",
+          "description" : "凭据ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "凭据ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateOrUpdateSecretReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/dew-secrets/{secret_id}"
+    },
+    "/CreateAgency" : {
+      "post" : {
+        "tags" : [ "Agency" ],
+        "summary" : "创建委托",
+        "description" : "创建委托。",
+        "operationId" : "CreateAgency",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Agency"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAgency",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/agencies"
+    },
+    "/CreateComponent" : {
+      "post" : {
+        "tags" : [ "Component" ],
+        "summary" : "创建组件",
+        "description" : "创建组件。",
+        "operationId" : "CreateComponent",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateComponentResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateComponentRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateComponent",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components"
+    },
+    "/DeleteSecret" : {
+      "delete" : {
+        "tags" : [ "Secret" ],
+        "summary" : "删除用户已在DEW服务上注册的凭据。",
+        "description" : "删除用户已在DEW服务上注册的凭据。",
+        "operationId" : "DeleteSecret",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "secret_id",
+          "in" : "path",
+          "description" : "凭据ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "凭据ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/dew-secrets/{secret_id}"
+    },
+    "/ListVolumes" : {
+      "get" : {
+        "tags" : [ "Volume" ],
+        "summary" : "获取云存储列表",
+        "description" : "获取云存储列表。",
+        "operationId" : "ListVolumes",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListVolumeResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "resource_type",
+          "in" : "query",
+          "description" : "资源类型,当前只支持“obs”和“sfs”。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型,当前只支持“obs”和“sfs”。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVolumes",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/volumes"
+    },
+    "/DeleteComponent" : {
+      "delete" : {
+        "tags" : [ "Component" ],
+        "summary" : "删除组件",
+        "description" : "删除组件。",
+        "operationId" : "DeleteComponent",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteComponentResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteComponent",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}"
+    },
+    "/UpdateEip" : {
+      "put" : {
+        "tags" : [ "Eip" ],
+        "summary" : "修改出入网带宽以及开闭状态",
+        "description" : "修改出入网带宽以及开闭状态。",
+        "operationId" : "UpdateEip",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEipRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEip",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/eips"
+    },
+    "/ListCertificates" : {
+      "get" : {
+        "tags" : [ "Certificate" ],
+        "summary" : "获取证书列表",
+        "description" : "获取证书列表。",
+        "operationId" : "ListCertificates",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CertInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificates",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/certificates"
+    },
+    "/ListComponents" : {
+      "get" : {
+        "tags" : [ "Component" ],
+        "summary" : "获取组件列表",
+        "description" : "获取组件列表。",
+        "operationId" : "ListComponents",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ComponentList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "限制本次返回结果的条数。",
+          "schema" : {
+            "description" : "限制本次返回结果的条数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页偏移位,查询起始位置。",
+          "schema" : {
+            "description" : "分页偏移位,查询起始位置。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序字段。",
+          "schema" : {
+            "description" : "排序字段。",
+            "type" : "string",
+            "enum" : [ "created_at", "updated_at" ]
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "升降序规则。",
+          "schema" : {
+            "description" : "升降序规则。",
+            "type" : "string",
+            "enum" : [ "asc", "desc" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListComponents",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components"
+    },
+    "/CreateComponentWithConfiguration" : {
+      "post" : {
+        "tags" : [ "Component" ],
+        "summary" : "创建、生效配置并部署组件",
+        "description" : "创建、生效配置并部署组件。",
+        "operationId" : "CreateComponentWithConfiguration",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateComponentWithConfigurationResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateComponentWithConfigurationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateComponentWithConfiguration",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/component-with-configurations"
+    },
+    "/UpdateMonitorSystem" : {
+      "put" : {
+        "tags" : [ "MonitorSystem" ],
+        "summary" : "更新监控系统配置",
+        "description" : "更新监控系统配置。",
+        "operationId" : "UpdateMonitorSystem",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "monitor_system_id",
+          "in" : "path",
+          "description" : "监控系统配置ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "监控系统配置ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MonitorSystemRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateMonitorSystem",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/monitor-system/{monitor_system_id}"
+    },
+    "/ShowMonitorSystem" : {
+      "get" : {
+        "tags" : [ "MonitorSystem" ],
+        "summary" : "获取监控系统配置",
+        "description" : "获取监控系统配置。",
+        "operationId" : "ShowMonitorSystem",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowMonitorSystemResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowMonitorSystem",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/monitor-system"
+    },
+    "/CreateTimerRule" : {
+      "post" : {
+        "tags" : [ "timer-rules" ],
+        "summary" : "创建定时启停规则",
+        "description" : "创建定时启停规则。",
+        "operationId" : "CreateTimerRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTimerRuleResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTimerRuleReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTimerRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/timer-rules"
+    },
+    "/ListEnvironments" : {
+      "get" : {
+        "tags" : [ "Environment" ],
+        "summary" : "获取环境列表",
+        "description" : "获取环境列表。",
+        "operationId" : "ListEnvironments",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EnvironmentList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEnvironments",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/environments"
+    },
+    "/UpdateNoticeRule" : {
+      "put" : {
+        "tags" : [ "NoticeRule" ],
+        "summary" : "修改事件通知规则。",
+        "description" : "修改事件通知规则。",
+        "operationId" : "UpdateNoticeRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateNoticeRuleResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateNoticeRuleReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNoticeRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/notice-rules/{rule_id}"
+    },
+    "/DeleteNoticeRule" : {
+      "delete" : {
+        "tags" : [ "NoticeRule" ],
+        "summary" : "删除事件通知规则。",
+        "description" : "删除事件通知规则。",
+        "operationId" : "DeleteNoticeRule",
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteNoticeRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/notice-rules/{rule_id}"
+    },
+    "/ListTimerRules" : {
+      "get" : {
+        "tags" : [ "timer-rules" ],
+        "summary" : "获取定时启停规则列表",
+        "description" : "获取定时启停规则列表。",
+        "operationId" : "ListTimerRules",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTimerRulesResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTimerRules",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/timer-rules"
+    },
+    "/ListAgencies" : {
+      "get" : {
+        "tags" : [ "Agency" ],
+        "summary" : "获取委托列表",
+        "description" : "获取委托列表。",
+        "operationId" : "ListAgencies",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AgencyResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAgencies",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/agencies"
+    },
+    "/ListEffectiveComponents" : {
+      "get" : {
+        "tags" : [ "Secret" ],
+        "summary" : "获取当前正在使用对应凭据组件列表。",
+        "description" : "获取当前正在使用的对应凭据组件列表。",
+        "operationId" : "ListEffectiveComponents",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetSecretsResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "secret_id",
+          "in" : "path",
+          "description" : "凭据ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "凭据ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEffectiveComponents",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/dew-secrets/{secret_id}/effective-components"
+    },
+    "/DeleteTimerRule" : {
+      "delete" : {
+        "tags" : [ "timer-rules" ],
+        "summary" : "删除定时启停规则",
+        "description" : "删除定时启停规则。",
+        "operationId" : "DeleteTimerRule",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "timer_rule_id",
+          "in" : "path",
+          "description" : "定时启停规则ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "定时启停规则ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTimerRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/timer-rules/{timer_rule_id}"
+    },
+    "/ListApplications" : {
+      "get" : {
+        "tags" : [ "Application" ],
+        "summary" : "获取应用列表",
+        "description" : "获取应用列表。",
+        "operationId" : "ListApplications",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApplicationList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApplications",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications"
+    },
+    "/ListEips" : {
+      "get" : {
+        "tags" : [ "Eip" ],
+        "summary" : "获取集群节点弹性公网IP列表",
+        "description" : "获取集群节点弹性公网IP列表。",
+        "operationId" : "ListEips",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListEipResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEips",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/eips"
+    },
+    "/CreateNoticeRule" : {
+      "post" : {
+        "tags" : [ "NoticeRule" ],
+        "summary" : "创建事件通知规则。",
+        "description" : "创建事件通知规则。",
+        "operationId" : "CreateNoticeRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateNoticeRuleResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateNoticeRuleReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNoticeRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/notice-rules"
+    },
+    "/DeleteDomain" : {
+      "delete" : {
+        "tags" : [ "Domain" ],
+        "summary" : "删除域名",
+        "description" : "删除域名。",
+        "operationId" : "DeleteDomain",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "域名ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "域名ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDomain",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/domains/{domain_id}"
+    },
+    "/UpdateTimerRule" : {
+      "put" : {
+        "tags" : [ "timer-rules" ],
+        "summary" : "修改定时启停规则",
+        "description" : "修改定时启停规则。",
+        "operationId" : "UpdateTimerRule",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "timer_rule_id",
+          "in" : "path",
+          "description" : "定时启停规则ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "定时启停规则ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTimerRuleReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTimerRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/timer-rules/{timer_rule_id}"
+    },
+    "/DeleteCertificate" : {
+      "delete" : {
+        "tags" : [ "Certificate" ],
+        "summary" : "删除证书",
+        "description" : "删除证书。",
+        "operationId" : "DeleteCertificate",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/certificates/{certificate_id}"
+    },
+    "/DeleteVolume" : {
+      "delete" : {
+        "tags" : [ "Volume" ],
+        "summary" : "解绑云存储",
+        "description" : "解绑云存储。",
+        "operationId" : "DeleteVolume",
+        "responses" : {
+          "200" : {
+            "description" : "返回{}表示成功,返回组件信息,表明这些组件挂载了当前云存储,当前云存储不能解绑。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MountComponentResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "云存储ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云存储ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVolume",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/volumes/{id}"
+    },
+    "/CreateEnvironment" : {
+      "post" : {
+        "tags" : [ "Environment" ],
+        "summary" : "创建环境",
+        "description" : "创建环境。",
+        "operationId" : "CreateEnvironment",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateEnvironmentResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateEnvironmentRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEnvironment",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/environments"
+    },
+    "/DeleteApplication" : {
+      "delete" : {
+        "tags" : [ "Application" ],
+        "summary" : "删除应用",
+        "description" : "删除应用。",
+        "operationId" : "DeleteApplication",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteApplication",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}"
+    },
+    "/CreateVolume" : {
+      "post" : {
+        "tags" : [ "Volume" ],
+        "summary" : "授权云存储",
+        "description" : "授权云存储。",
+        "operationId" : "CreateVolume",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateVolumeReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVolume",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/volumes"
+    },
+    "/ShowApplication" : {
+      "get" : {
+        "tags" : [ "Application" ],
+        "summary" : "获取应用详情",
+        "description" : "获取应用详情。",
+        "operationId" : "ShowApplication",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Application"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApplication",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}"
+    },
+    "/CreateApplication" : {
+      "post" : {
+        "tags" : [ "Application" ],
+        "summary" : "创建应用",
+        "description" : "创建应用。",
+        "operationId" : "CreateApplication",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Application"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateApplicationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateApplication",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications"
+    },
+    "/ExecuteAction" : {
+      "post" : {
+        "tags" : [ "Component" ],
+        "summary" : "操作组件",
+        "description" : "对组件执行指定操作,如部署、升级、重启、停止、启动、伸缩、配置、回滚。",
+        "operationId" : "ExecuteAction",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExecuteActionRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteAction",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/action"
+    },
+    "/ListVpcEgress" : {
+      "get" : {
+        "tags" : [ "VpcEgress" ],
+        "summary" : "获取CAE环境访问VPC配置",
+        "description" : "获取CAE环境访问VPC配置。",
+        "operationId" : "ListVpcEgress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VpcEgressResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpcEgress",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/vpc-egress"
+    },
+    "/ShowComponent" : {
+      "get" : {
+        "tags" : [ "Component" ],
+        "summary" : "获取组件详情",
+        "description" : "获取组件详情。",
+        "operationId" : "ShowComponent",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowComponentResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowComponent",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}"
+    },
+    "/ShowExecutionResult" : {
+      "get" : {
+        "tags" : [ "timer-rules" ],
+        "summary" : "获取上次定时启停规则的执行情况",
+        "description" : "获取上次定时启停规则的执行情况。",
+        "operationId" : "ShowExecutionResult",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TimerRuleExecutionResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "timer_rule_id",
+          "in" : "path",
+          "description" : "定时启停规则ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "定时启停规则ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowExecutionResult",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/timer-rules/{timer_rule_id}/execution-results"
+    },
+    "/CreateDomain" : {
+      "post" : {
+        "tags" : [ "Domain" ],
+        "summary" : "创建域名",
+        "description" : "创建域名。",
+        "operationId" : "CreateDomain",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DomainInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDomainReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDomain",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/domains"
+    },
+    "/ListSecrets" : {
+      "get" : {
+        "tags" : [ "Secret" ],
+        "summary" : "获取用户现有的凭据。",
+        "description" : "获取用户现有的凭据。",
+        "operationId" : "ListSecrets",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetSecretsResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSecrets",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/dew-secrets"
+    },
+    "/ShowNoticeRule" : {
+      "get" : {
+        "tags" : [ "NoticeRule" ],
+        "summary" : "查询事件通知规则。",
+        "description" : "查询事件通知规则。",
+        "operationId" : "ShowNoticeRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateNoticeRuleResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowNoticeRule",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/notice-rules/{rule_id}"
+    },
+    "/CreateCertificate" : {
+      "post" : {
+        "tags" : [ "Certificate" ],
+        "summary" : "创建证书",
+        "description" : "创建证书。",
+        "operationId" : "CreateCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CertInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CertReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/certificates"
+    },
+    "/UpdateComponent" : {
+      "put" : {
+        "tags" : [ "Component" ],
+        "summary" : "更新组件",
+        "description" : "更新组件。",
+        "operationId" : "UpdateComponent",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateComponentRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateComponent",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}"
+    },
+    "/DeleteComponentConfiguration" : {
+      "delete" : {
+        "tags" : [ "ComponentConfiguration" ],
+        "summary" : "删除组件配置",
+        "description" : "删除组件配置。",
+        "operationId" : "DeleteComponentConfiguration",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteComponentConfiguration",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/configurations"
+    },
+    "/DeleteEnvironment" : {
+      "delete" : {
+        "tags" : [ "Environment" ],
+        "summary" : "删除环境",
+        "description" : "删除环境。",
+        "operationId" : "DeleteEnvironment",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteEnvResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "environment_id",
+          "in" : "path",
+          "description" : "环境ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "环境ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEnvironment",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/environments/{environment_id}"
+    },
+    "/ListComponentSnapshots" : {
+      "get" : {
+        "tags" : [ "Component" ],
+        "summary" : "获取组件快照列表",
+        "description" : "获取组件快照列表。",
+        "operationId" : "ListComponentSnapshots",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ComponentSnapshotList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListComponentSnapshots",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/snapshots"
+    },
+    "/ListComponentConfigurations" : {
+      "get" : {
+        "tags" : [ "ComponentConfiguration" ],
+        "summary" : "获取组件配置列表",
+        "description" : "获取组件配置列表。",
+        "operationId" : "ListComponentConfigurations",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListConfigurationsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "description" : "应用ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "应用ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "component_id",
+          "in" : "path",
+          "description" : "组件ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "组件ID。",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_environment_id"
+        }, {
+          "name" : "displayMode",
+          "in" : "query",
+          "description" : "显示模式,当前只支持“latestEffective”,即只显示最后一次生效配置。",
+          "required" : false,
+          "schema" : {
+            "description" : "显示模式,当前只支持“latestEffective”,即只显示最后一次生效配置。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListComponentConfigurations",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/applications/{application_id}/components/{component_id}/configurations"
+    },
+    "/ListNoticeRules" : {
+      "get" : {
+        "tags" : [ "NoticeRule" ],
+        "summary" : "查询事件通知规则列表。",
+        "description" : "查询事件通知规则列表。",
+        "operationId" : "ListNoticeRules",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListNoticeRulesResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/param_path_project_id"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_auth_token"
+        }, {
+          "$ref" : "#/components/parameters/param_header_x_enterprise_project_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNoticeRules",
+      "x-url" : "{endpoint}/v1/{project_id}/cae/notice-rules"
+    }
+  }
+}

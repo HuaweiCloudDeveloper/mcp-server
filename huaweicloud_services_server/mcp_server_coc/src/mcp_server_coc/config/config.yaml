@@ -1,0 +1,6 @@
+service_code: coc
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8021 # sse 模式需要设定端口
+
+ 
+# 配置文件

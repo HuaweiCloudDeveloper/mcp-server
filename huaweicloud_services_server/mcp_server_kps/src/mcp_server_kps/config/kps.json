@@ -1,0 +1,2137 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "KPS-密钥对管理",
+    "title" : "KPS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "CreateKeypairAction" : {
+        "required" : [ "name" ],
+        "description" : "创建密钥对请求体请求参数",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称。",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "SSH密钥对的类型。ssh或x509。",
+            "enum" : [ "ssh", "x509" ]
+          },
+          "public_key" : {
+            "type" : "string",
+            "description" : "导入公钥的字符串信息。",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "scope" : {
+            "type" : "string",
+            "description" : "租户级或者用户级。domain或user。",
+            "enum" : [ "domain", "user" ]
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "SSH密钥对所属的用户信息",
+            "pattern" : "^[0-9a-zA-Z]{1,64}$"
+          },
+          "key_protection" : {
+            "$ref" : "#/components/schemas/KeyProtection"
+          }
+        },
+        "type" : "object"
+      },
+      "KeyProtection" : {
+        "description" : "SSH密钥对私钥托管与保护。",
+        "properties" : {
+          "private_key" : {
+            "type" : "string",
+            "description" : "导入SSH密钥对的私钥。",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "encryption" : {
+            "$ref" : "#/components/schemas/Encryption"
+          }
+        },
+        "type" : "object",
+        "required" : [ "encryption" ]
+      },
+      "CreateKeypairResp" : {
+        "description" : "SSH密钥对信息详情",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "SSH密钥对的类型。ssh或x509。",
+            "enum" : [ "ssh", "x509" ]
+          },
+          "public_key" : {
+            "type" : "string",
+            "description" : "SSH密钥对对应的publicKey信息",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "private_key" : {
+            "type" : "string",
+            "description" : "SSH密钥对对应的privateKey信息",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "fingerprint" : {
+            "type" : "string",
+            "description" : "SSH密钥对应指纹信息",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "SSH密钥对所属的用户信息",
+            "pattern" : "^[0-9a-zA-Z]{1,64}$"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateKeypairRequestBody" : {
+        "required" : [ "keypair" ],
+        "description" : "创建密钥对请求体",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/CreateKeypairAction"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateKeypairResponseBody" : {
+        "description" : "SSH密钥对的详情",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/CreateKeypairResp"
+          }
+        },
+        "type" : "object"
+      },
+      "ErrorRsp" : {
+        "description" : "失败时返回的错误对象",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码",
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "error_msg" : {
+            "description" : "错误描述",
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "Encryption" : {
+        "description" : "对私钥进行加密存储的方式。",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "取值范围:“kms”或“default”。",
+            "enum" : [ "default", "kms" ]
+          },
+          "kms_key_name" : {
+            "type" : "string",
+            "description" : "kms密钥的名称。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "kms_key_id" : {
+            "type" : "string",
+            "description" : "kms密钥的ID。",
+            "pattern" : "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$",
+            "minLength" : 36,
+            "maxLength" : 36
+          }
+        },
+        "type" : "object",
+        "required" : [ "type" ]
+      },
+      "ListFailedTaskResponseBody" : {
+        "description" : "查询失败任务响应信息。",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "description" : "失败任务总数。"
+          },
+          "tasks" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "失败的任务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/FailedTasks"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "FailedTasks" : {
+        "description" : "失败的任务详细信息。",
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "虚拟机ID",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "operate_type" : {
+            "type" : "string",
+            "description" : "任务的操作类型。",
+            "enum" : [ "FAILED_RESET", "FAILED_REPLACE", "FAILED_UNBIND" ]
+          },
+          "task_time" : {
+            "type" : "string",
+            "description" : "任务时间",
+            "minLength" : 0,
+            "maxLength" : 13
+          },
+          "task_error_code" : {
+            "type" : "string",
+            "description" : "任务失败错误码",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "task_error_msg" : {
+            "type" : "string",
+            "description" : "任务失败错误码",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "server_name" : {
+            "type" : "string",
+            "description" : "虚拟机名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "虚拟机ID",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "keypair_name" : {
+            "type" : "string",
+            "description" : "密钥对名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          }
+        },
+        "type" : "object"
+      },
+      "KeypairBean" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对名称。",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "ExportPrivateKeyResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/ExportPrivateKeyKeypairBean"
+          }
+        },
+        "description" : "导出私钥响应体。",
+        "required" : [ "keypair" ]
+      },
+      "ExportPrivateKeyKeypairBean" : {
+        "type" : "object",
+        "required" : [ "name", "private_key" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称。",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "private_key" : {
+            "type" : "string",
+            "description" : "SSH密钥对的私钥",
+            "minLength" : 0,
+            "maxLength" : 65535
+          }
+        }
+      },
+      "ExportPrivateKeyRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/KeypairBean"
+          }
+        },
+        "description" : "导出私钥请求体",
+        "required" : [ "keypair" ]
+      },
+      "TaskResponseBody" : {
+        "description" : "任务响应。",
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务下发成功返回的ID。",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "绑定的虚拟机id。",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "任务下发的状态。SUCCESS或FAILED。",
+            "enum" : [ "SUCCESS", "FAILED" ]
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "任务下发失败返回的错误码。",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "任务下发失败返回的错误信息。",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "Auth" : {
+        "description" : "可选字段,鉴权认证类型。替换时需要该参数,重置时不需要该参数。",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "取值为枚举类型。password或keypair。",
+            "enum" : [ "password", "keypair" ]
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "- type为枚举值password时,key表示密码;",
+            "minLength" : 0,
+            "maxLength" : 65535
+          }
+        },
+        "type" : "object"
+      },
+      "EcsServerInfo" : {
+        "required" : [ "id" ],
+        "description" : "需要绑定密钥对的虚拟机信息。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "需要绑定(替换或重置)SSH密钥对的虚拟机id",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "auth" : {
+            "$ref" : "#/components/schemas/Auth"
+          },
+          "disable_password" : {
+            "type" : "boolean",
+            "description" : "- true:禁用虚拟机的ssh登录。"
+          },
+          "port" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "SSH监听端口。",
+            "example" : 22,
+            "minimum" : 1,
+            "maximum" : 65535
+          }
+        },
+        "type" : "object"
+      },
+      "AssociateKeypairRequestBody" : {
+        "required" : [ "keypair_name", "server" ],
+        "description" : "绑定密钥对请求体。",
+        "properties" : {
+          "keypair_name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "server" : {
+            "$ref" : "#/components/schemas/EcsServerInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchAssociateKeypairRequestBody" : {
+        "type" : "object",
+        "required" : [ "batch_keypairs" ],
+        "properties" : {
+          "batch_keypairs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AssociateKeypairRequestBody"
+            },
+            "description" : "最多可同时选择10个弹性云服务器绑定密钥对。",
+            "minItems" : 0,
+            "maxItems" : 10
+          }
+        }
+      },
+      "BatchTaskResponseBody" : {
+        "description" : "批量绑定密钥对任务的响应。",
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "description" : "批量绑定密钥对任务。",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/TaskResponseBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateKeypairDescriptionReq" : {
+        "required" : [ "description" ],
+        "description" : "更新SSH密钥对描述消息体",
+        "properties" : {
+          "description" : {
+            "type" : "string",
+            "description" : "描述信息",
+            "minLength" : 0,
+            "maxLength" : 255
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateKeypairDescriptionRequestBody" : {
+        "required" : [ "keypair" ],
+        "description" : "更新SSH密钥对描述",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/UpdateKeypairDescriptionReq"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskInfoResponseBody" : {
+        "description" : "任务响应信息。",
+        "properties" : {
+          "server_id" : {
+            "type" : "string",
+            "description" : "租户虚拟机ID",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务下发成功返回的ID",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "task_status" : {
+            "type" : "string",
+            "description" : "密钥对正在处理的状态。",
+            "enum" : [ "READY_RESET", "RUNNING_RESET", "FAILED_RESET", "SUCCESS_RESET", "READY_REPLACE", "RUNNING_REPLACE", "READY_UNBIND", "RUNNING_UNBIND", "FAILED_UNBIND", "SUCCESS_UNBIND" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ImportPrivateKeyRequestBody" : {
+        "type" : "object",
+        "required" : [ "keypair" ],
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/ImportPrivateKeyKeypairBean"
+          }
+        },
+        "description" : "导入私钥请求体"
+      },
+      "ImportPrivateKeyKeypairBean" : {
+        "type" : "object",
+        "required" : [ "name", "key_protection" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称。 - 新创建的密钥对名称不能和已有密钥对的名称相同。 - SSH密钥对名称由英文字母、数字、下划线、中划线组成,长度不能超过64个字节",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "SSH密钥对所属的用户信息",
+            "pattern" : "^[0-9a-zA-Z]{1,64}$"
+          },
+          "key_protection" : {
+            "$ref" : "#/components/schemas/ImportPrivateKeyProtection"
+          }
+        }
+      },
+      "ImportPrivateKeyProtection" : {
+        "description" : "SSH密钥对私钥托管与保护。",
+        "properties" : {
+          "private_key" : {
+            "type" : "string",
+            "description" : "导入SSH密钥对的私钥。",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "encryption" : {
+            "$ref" : "#/components/schemas/Encryption"
+          }
+        },
+        "type" : "object",
+        "required" : [ "private_key", "encryption" ]
+      },
+      "ImportPrivateKeyResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "keypair" : {
+            "required" : true,
+            "$ref" : "#/components/schemas/ImportPrivateKeyAction"
+          }
+        },
+        "description" : "导入私钥响应体"
+      },
+      "ImportPrivateKeyAction" : {
+        "type" : "object",
+        "required" : [ "name", "key_protection" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称。 - 新创建的密钥对名称不能和已有密钥对的名称相同。 - SSH密钥对名称由英文字母、数字、下划线、中划线组成,长度不能超过64个字节。",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "SSH密钥对所属的用户信息",
+            "pattern" : "^[0-9a-zA-Z]{1,64}$"
+          },
+          "key_protection" : {
+            "$ref" : "#/components/schemas/KeyProtection"
+          }
+        }
+      },
+      "FailedKeypair" : {
+        "type" : "object",
+        "required" : [ "keypair_name", "failed_reason" ],
+        "properties" : {
+          "keypair_name" : {
+            "type" : "string",
+            "description" : "SSH密钥对名称",
+            "minLength" : 2,
+            "maxLength" : 255
+          },
+          "failed_reason" : {
+            "type" : "string",
+            "description" : "导入失败的原因",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        }
+      },
+      "BatchImportKeypairResponseBody" : {
+        "type" : "object",
+        "required" : [ "failed_keypairs", "succeeded_keypairs" ],
+        "properties" : {
+          "failed_keypairs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FailedKeypair"
+            },
+            "description" : "导入失败的SSH密钥对信息及导入失败的原因"
+          },
+          "succeeded_keypairs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateKeypairResponseBody"
+            },
+            "description" : "成功导入的SSH密钥对信息"
+          }
+        }
+      },
+      "DisassociateKeypairRequestBody" : {
+        "required" : [ "server" ],
+        "description" : "解绑密钥对描述消息体",
+        "properties" : {
+          "server" : {
+            "$ref" : "#/components/schemas/DisassociateEcsServerInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "DisassociateEcsServerInfo" : {
+        "required" : [ "id" ],
+        "description" : "需要绑定密钥对的虚拟机信息。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "需要绑定(替换或重置)SSH密钥对的虚拟机id",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "auth" : {
+            "$ref" : "#/components/schemas/Auth"
+          }
+        },
+        "type" : "object"
+      },
+      "PageInfo" : {
+        "description" : "分页信息",
+        "properties" : {
+          "next_marker" : {
+            "type" : "string",
+            "description" : "返回下一页的查询地址",
+            "pattern" : "^[a-zA-Z0-9._-]{1,64}$"
+          },
+          "previous_marker" : {
+            "type" : "string",
+            "description" : "返回上一页的查询地址",
+            "pattern" : "^[a-zA-Z0-9._-]{1,64}$"
+          },
+          "current_count" : {
+            "format" : "int32",
+            "type" : "integer",
+            "description" : "返回条目数量",
+            "minimum" : 0,
+            "maximum" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "ListKeypairs" : {
+        "required" : [ "keypairs" ],
+        "type" : "object",
+        "minItems" : 0,
+        "maxItems" : 1000,
+        "description" : "SSH密钥对信息列表",
+        "items" : {
+          "$ref" : "#/components/schemas/Keypairs"
+        }
+      },
+      "Keypairs" : {
+        "required" : [ "keypair" ],
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/Keypair"
+          }
+        },
+        "type" : "object"
+      },
+      "ListKeypairsResponseBody" : {
+        "description" : "SSH密钥对信息列表",
+        "required" : [ "keypairs" ],
+        "properties" : {
+          "keypairs" : {
+            "$ref" : "#/components/schemas/ListKeypairs"
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "Keypair" : {
+        "description" : "密钥对信息",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "SSH密钥对的类型,值为“ssh”或“x509”",
+            "enum" : [ "ssh", "x509" ]
+          },
+          "scope" : {
+            "type" : "string",
+            "description" : "租户级或者用户级。domain或user。",
+            "enum" : [ "domain", "user" ]
+          },
+          "public_key" : {
+            "type" : "string",
+            "description" : "SSH密钥对对应的publicKey信息",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "fingerprint" : {
+            "type" : "string",
+            "description" : "SSH密钥对应指纹信息",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "is_key_protection" : {
+            "type" : "boolean",
+            "description" : "是否托管密钥"
+          },
+          "frozen_state" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "冻结状态"
+          }
+        },
+        "type" : "object"
+      },
+      "ListKeypairDetailResponseBody" : {
+        "description" : "SSH密钥对详情信息",
+        "properties" : {
+          "keypair" : {
+            "$ref" : "#/components/schemas/KeypairDetail"
+          }
+        },
+        "type" : "object"
+      },
+      "KeypairDetail" : {
+        "description" : "密钥对详细信息",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "SSH密钥对的名称",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "SSH密钥对的ID",
+            "minimum" : 0,
+            "maximum" : 1000000000
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "SSH密钥对的类型。ssh或x509。",
+            "enum" : [ "ssh", "x509" ]
+          },
+          "scope" : {
+            "type" : "string",
+            "description" : "租户级或者用户级。domain或user。",
+            "enum" : [ "domain", "user" ]
+          },
+          "public_key" : {
+            "type" : "string",
+            "description" : "SSH密钥对对应的publicKey信息",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "fingerprint" : {
+            "type" : "string",
+            "description" : "SSH密钥对应指纹信息",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "is_key_protection" : {
+            "type" : "boolean",
+            "description" : "是否托管密钥"
+          },
+          "deleted" : {
+            "type" : "boolean",
+            "description" : "SSH密钥对删除的标记"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "SSH密钥对的描述信息",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "SSH密钥对所属的用户信息",
+            "pattern" : "^[0-9a-zA-Z]{1,64}$"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 10000000000000,
+            "description" : "SSH密钥对创建的时间,时间戳,即从1970年1月1日至该时间的总秒数"
+          },
+          "delete_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 10000000000000,
+            "description" : "SSH密钥对删除的时间,时间戳,即从1970年1月1日至该时间的总秒数"
+          },
+          "update_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 10000000000000,
+            "description" : "SSH密钥对的更新时间,时间戳,即从1970年1月1日至该时间的总秒数"
+          },
+          "frozen_state" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 64,
+            "description" : "冻结状态"
+          },
+          "key_id" : {
+            "type" : "string",
+            "description" : "密钥ID。",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "algorithm" : {
+            "type" : "string",
+            "description" : "生成算法。",
+            "minLength" : 0,
+            "maxLength" : 32
+          }
+        },
+        "type" : "object"
+      },
+      "ListRunningTaskResponseBody" : {
+        "description" : "查询正在处理的任务响应信息。",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "description" : "正在处理的任务总数。"
+          },
+          "tasks" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "正在处理的任务列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/RunningTasks"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RunningTasks" : {
+        "description" : "正在处理的任务详细信息。",
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "虚拟机ID",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "operate_type" : {
+            "type" : "string",
+            "description" : "操作类型。",
+            "enum" : [ "FAILED_RESET", "FAILED_REPLACE", "FAILED_UNBIND" ]
+          },
+          "task_time" : {
+            "type" : "string",
+            "description" : "任务时间",
+            "minLength" : 0,
+            "maxLength" : 13
+          },
+          "server_name" : {
+            "type" : "string",
+            "description" : "虚拟机名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "虚拟机ID",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "keypair_name" : {
+            "type" : "string",
+            "description" : "密钥对名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateKeypair" : {
+      "post" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "创建和导入SSH密钥对",
+        "description" : "创建和导入SSH密钥对",
+        "operationId" : "CreateKeypair",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateKeypairResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateKeypairRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs"
+    },
+    "/ListFailedTask" : {
+      "get" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "查询失败的任务信息",
+        "description" : "查询绑定、解绑等操作失败的任务信息。",
+        "operationId" : "ListFailedTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListFailedTaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量。默认值1000。",
+          "required" : false,
+          "schema" : {
+            "example" : "1000",
+            "description" : "每页显示的条目数量。默认值1000。",
+            "type" : "integer",
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "失败的任务信息列表的偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "失败的任务信息列表的偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 100000,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFailedTask",
+      "x-url" : "{endpoint}/v3/{project_id}/failed-tasks"
+    },
+    "/ClearPrivateKey" : {
+      "delete" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "清除私钥",
+        "description" : "清除SSH密钥对私钥。",
+        "operationId" : "ClearPrivateKey",
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在,资源未找到",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "keypair_name",
+          "in" : "path",
+          "description" : "密钥对名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "keyalias",
+            "description" : "密钥对名称。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ClearPrivateKey",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/{keypair_name}/private-key"
+    },
+    "/DeleteFailedTask" : {
+      "delete" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "删除失败的任务",
+        "description" : "删除失败的任务。",
+        "operationId" : "DeleteFailedTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "1f48bb43-1730-4f09-9457-f18faae68c24",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFailedTask",
+      "x-url" : "{endpoint}/v3/{project_id}/failed-tasks/{task_id}"
+    },
+    "/ExportPrivateKey" : {
+      "post" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "导出私钥",
+        "description" : "导出指定密钥对的私钥。",
+        "operationId" : "ExportPrivateKey",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportPrivateKeyResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExportPrivateKeyRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportPrivateKey",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/private-key/export"
+    },
+    "/AssociateKeypair" : {
+      "post" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "绑定SSH密钥对",
+        "description" : "给指定的虚拟机绑定(替换或重置,替换需提供虚拟机已配置的SSH密钥对私钥;重置不需要提供虚拟机的SSH密钥对私钥)新的SSH密钥对。",
+        "operationId" : "AssociateKeypair",
+        "responses" : {
+          "202" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AssociateKeypairRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/associate"
+    },
+    "/BatchAssociateKeypair" : {
+      "post" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "批量绑定SSH密钥对",
+        "description" : "给指定的虚拟机批量绑定新的SSH密钥对。",
+        "operationId" : "BatchAssociateKeypair",
+        "responses" : {
+          "202" : {
+            "description" : "请求已成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchAssociateKeypairRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAssociateKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/batch-associate"
+    },
+    "/UpdateKeypairDescription" : {
+      "put" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "更新SSH密钥对描述",
+        "description" : "更新SSH密钥对描述。",
+        "operationId" : "UpdateKeypairDescription",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "keypair_name",
+          "in" : "path",
+          "description" : "密钥对名称",
+          "required" : true,
+          "schema" : {
+            "example" : "keyalias",
+            "description" : "密钥对名称",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateKeypairDescriptionRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateKeypairDescription",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/{keypair_name}"
+    },
+    "/ListKeypairTask" : {
+      "get" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "查询任务信息",
+        "description" : "根据SSH密钥对接口返回的task_id,查询SSH密钥对当前任务的执行状态。",
+        "operationId" : "ListKeypairTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "1f48bb43-1730-4f09-9457-f18faae68c24",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListKeypairTask",
+      "x-url" : "{endpoint}/v3/{project_id}/tasks/{task_id}"
+    },
+    "/ImportPrivateKey" : {
+      "post" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "导入私钥",
+        "description" : "导入私钥到指定密钥对。",
+        "operationId" : "ImportPrivateKey",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImportPrivateKeyResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImportPrivateKeyRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportPrivateKey",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/private-key/import"
+    },
+    "/BatchImportKeypair" : {
+      "post" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "批量导入SSH密钥对",
+        "description" : "批量导入SSH密钥对,单次批量导入不得超过10条记录。",
+        "operationId" : "BatchImportKeypair",
+        "responses" : {
+          "200" : {
+            "description" : "批量导入SSH密钥对响应信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchImportKeypairResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "BatchImportKeypairRequestBody" : {
+                    "description" : "待批量导入的密钥对列表",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/CreateKeypairRequestBody"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchImportKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/batch-import"
+    },
+    "/DeleteKeypair" : {
+      "delete" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "删除SSH密钥对",
+        "description" : "删除SSH密钥对。",
+        "operationId" : "DeleteKeypair",
+        "responses" : {
+          "204" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "keypair_name",
+          "in" : "path",
+          "description" : "密钥对名称",
+          "required" : true,
+          "schema" : {
+            "example" : "keyalias",
+            "description" : "密钥对名称",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/{keypair_name}"
+    },
+    "/DisassociateKeypair" : {
+      "post" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "解绑SSH密钥对",
+        "description" : "给指定的虚拟机解除绑定SSH密钥对并恢复SSH密码登录。",
+        "operationId" : "DisassociateKeypair",
+        "responses" : {
+          "202" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DisassociateKeypairRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateKeypair",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/disassociate"
+    },
+    "/ListKeypairs" : {
+      "get" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "查询SSH密钥对列表",
+        "description" : "查询SSH密钥对列表",
+        "operationId" : "ListKeypairs",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListKeypairsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页返回的个数。",
+          "schema" : {
+            "example" : "50",
+            "description" : "每页返回的个数。",
+            "type" : "string",
+            "maxLength" : 4,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页查询起始的资源id,为空时为查询第一页",
+          "schema" : {
+            "example" : "keypair-0307",
+            "description" : "分页查询起始的资源id,为空时为查询第一页",
+            "type" : "string",
+            "pattern" : "^[A-Za-z0-9_-]{1,255}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListKeypairs",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs"
+    },
+    "/BatchExportPrivateKey" : {
+      "post" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "批量导出密钥对私钥",
+        "description" : "批量导出密钥对私钥,单次最多导出10条数据",
+        "operationId" : "BatchExportPrivateKey",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "BatchExportPrivateKeyRequestBody" : {
+                    "description" : "待导出的密钥列表",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/Keypairs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchExportPrivateKey",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/private-key/batch-export"
+    },
+    "/ListKeypairDetail" : {
+      "get" : {
+        "tags" : [ "密钥对管理" ],
+        "summary" : "查询SSH密钥对详细信息",
+        "description" : "查询SSH密钥对详细信息",
+        "operationId" : "ListKeypairDetail",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListKeypairDetailResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "keypair_name",
+          "in" : "path",
+          "description" : "密钥对名称",
+          "required" : true,
+          "schema" : {
+            "example" : "keyalias",
+            "description" : "密钥对名称",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListKeypairDetail",
+      "x-url" : "{endpoint}/v3/{project_id}/keypairs/{keypair_name}"
+    },
+    "/DeleteAllFailedTask" : {
+      "delete" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "删除所有失败的任务",
+        "description" : "删除操作失败的任务信息。",
+        "operationId" : "DeleteAllFailedTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAllFailedTask",
+      "x-url" : "{endpoint}/v3/{project_id}/failed-tasks"
+    },
+    "/ListRunningTask" : {
+      "get" : {
+        "tags" : [ "密钥对任务管理" ],
+        "summary" : "查询正在处理的任务信息",
+        "description" : "查询正在处理的任务信息。",
+        "operationId" : "ListRunningTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRunningTaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量。默认值1000。",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "每页显示的条目数量。默认值1000。",
+            "type" : "integer",
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "首个展示的正在处理任务信息的偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "首个展示的正在处理任务信息的偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 100000,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRunningTask",
+      "x-url" : "{endpoint}/v3/{project_id}/running-tasks"
+    }
+  }
+}

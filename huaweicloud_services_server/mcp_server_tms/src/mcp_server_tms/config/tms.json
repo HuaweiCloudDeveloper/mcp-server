@@ -1,0 +1,3279 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "TMS-预定义标签操作",
+    "title" : "TMS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "RespError" : {
+        "required" : [ "error" ],
+        "properties" : {
+          "error" : {
+            "description" : "响应错误信息",
+            "$ref" : "#/components/schemas/RespErrorMessage"
+          }
+        },
+        "description" : "错误码信息",
+        "type" : "object"
+      },
+      "ReqCreatePredefineTag" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识(区分大小写):create(创建)",
+            "enum" : [ "create" ]
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PredefineTagRequest"
+            }
+          }
+        },
+        "description" : "创建预定义标签请求",
+        "type" : "object"
+      },
+      "PredefineTagRequest" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。最大长度36个字符。字符集:A-Z,a-z , 0-9,‘-’,‘_’,UNICODE字符(\\u4E00-\\u9FFF)。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。每个值最大长度43个字符,可以为空字符串。字符集:AZ,a-z , 0-9,‘.’,‘-’,‘_’,UNICODE字符(\\u4E00-\\u9FFF)。"
+          }
+        },
+        "description" : "标签详情。",
+        "type" : "object"
+      },
+      "RespErrorMessage" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "请求错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误信息"
+          }
+        },
+        "description" : "响应错误信息",
+        "type" : "object"
+      },
+      "Version" : {
+        "required" : [ "version" ],
+        "properties" : {
+          "version" : {
+            "description" : "版本详情",
+            "$ref" : "#/components/schemas/VersionDetail"
+          }
+        },
+        "description" : "版本",
+        "type" : "object"
+      },
+      "Link" : {
+        "required" : [ "href", "rel" ],
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "description" : "API的URL地址。"
+          },
+          "rel" : {
+            "type" : "string",
+            "description" : "self"
+          }
+        },
+        "description" : "API的URL地址。",
+        "type" : "object"
+      },
+      "VersionDetail" : {
+        "required" : [ "id", "links", "min_version", "status", "updated", "version" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "版本ID(版本号),如v1.0。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "API的URL地址。",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "若该版本API支持微版本,则返回支持的最新微版本号,如果不支持微版本,则返回空。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "版本状态,为如下3种:",
+            "enum" : [ "CURRENT", "SUPPORTED", "DEPRECATED" ]
+          },
+          "updated" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "版本发布时间,采用UTC时间表示。如v1.0发布的时间2016-12-09T00:00:00Z。"
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "若该版本API 支持微版本,则返回支持的最早微版本号, 如果不支持微版本,则返回空。"
+          }
+        },
+        "description" : "版本详情",
+        "type" : "object"
+      },
+      "ReqDeletePredefineTag" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识(区分大小写):delete(删除)",
+            "enum" : [ "delete" ]
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PredefineTagRequest"
+            }
+          }
+        },
+        "description" : "删除预定义标签请求",
+        "type" : "object"
+      },
+      "ReqDeleteTag" : {
+        "required" : [ "tags", "resources" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID,resource_type为region级别服务时为必选项。"
+          },
+          "resources" : {
+            "type" : "array",
+            "maxLength" : 20,
+            "minLength" : 1,
+            "description" : "资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTagBody"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "maxLength" : 10,
+            "minLength" : 1,
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/DeleteTagRequest"
+            }
+          }
+        },
+        "description" : "删除标签请求",
+        "type" : "object"
+      },
+      "ResourceTagBody" : {
+        "required" : [ "resource_id", "resource_type" ],
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          }
+        },
+        "type" : "object"
+      },
+      "TagDeleteResponseItem" : {
+        "required" : [ "resource_id", "resource_type", "error_code", "error_msg" ],
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID。"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          }
+        },
+        "type" : "object"
+      },
+      "DeleteTagRequest" : {
+        "required" : [ "key" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。"
+          }
+        },
+        "type" : "object"
+      },
+      "TagDeleteResponse" : {
+        "properties" : {
+          "failed_resources" : {
+            "type" : "array",
+            "description" : "查询标签下的资源",
+            "items" : {
+              "$ref" : "#/components/schemas/TagDeleteResponseItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ModifyPrefineTag" : {
+        "required" : [ "new_tag", "old_tag" ],
+        "properties" : {
+          "new_tag" : {
+            "description" : "修改后的标签",
+            "$ref" : "#/components/schemas/PredefineTagRequest"
+          },
+          "old_tag" : {
+            "description" : "修改前的标签",
+            "$ref" : "#/components/schemas/PredefineTagRequest"
+          }
+        },
+        "description" : "修改预定义标签",
+        "type" : "object"
+      },
+      "Versions" : {
+        "required" : [ "versions" ],
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "版本列表",
+            "items" : {
+              "$ref" : "#/components/schemas/VersionDetail"
+            }
+          }
+        },
+        "description" : "版本列表。",
+        "type" : "object"
+      },
+      "CreateTagRequest" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。"
+          }
+        },
+        "description" : "标签详情。",
+        "type" : "object"
+      },
+      "Tag" : {
+        "required" : [ "key", "values" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。"
+          },
+          "values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "值列表。"
+          }
+        },
+        "description" : "标签列表。",
+        "type" : "object"
+      },
+      "Resources" : {
+        "required" : [ "project_id", "project_name", "resource_id", "resource_name", "resource_type" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "ProjectID"
+          },
+          "project_name" : {
+            "type" : "string",
+            "description" : "Project名称"
+          },
+          "resource_detail" : {
+            "type" : "object",
+            "description" : "资源详情"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "资源名称"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTagRequest"
+            }
+          }
+        },
+        "description" : "资源列表",
+        "type" : "object"
+      },
+      "Errors" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "ProjectID"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          }
+        },
+        "description" : "错误列表",
+        "type" : "object"
+      },
+      "RespTagResourceList" : {
+        "required" : [ "errors", "resources", "total_count" ],
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "description" : "资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Resources"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "description" : "查询标签下的资源",
+            "items" : {
+              "$ref" : "#/components/schemas/Errors"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "标签下的资源总数"
+          }
+        },
+        "description" : "标签下的资源",
+        "type" : "object"
+      },
+      "ResqTagResource" : {
+        "required" : [ "resource_types", "tags" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID,resource_type为region级别服务时为必选项。"
+          },
+          "resource_types" : {
+            "type" : "array",
+            "maxLength" : 10,
+            "minLength" : 1,
+            "description" : "资源类型, 此参数为可输入的值(区分大小写)。例如:ecs,scaling_group, images, disk,vpcs,security-groups, shared_bandwidth,eip, cdn等,具体请参见“附录-标签支持的资源类型”章节。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "maxLength" : 10,
+            "minLength" : 0,
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "without_any_tag" : {
+            "type" : "boolean",
+            "description" : "是否仅查询未带标签的资源。该字段为true时查询不带标签的资源。"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "索引位置, 从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询记录数,不传默认为200,limit最多为200, 最小值为1。"
+          }
+        },
+        "description" : "获取标签下资源请求",
+        "type" : "object"
+      },
+      "RespTagList" : {
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "description" : "资源标签",
+              "$ref" : "#/components/schemas/TagVo"
+            },
+            "description" : "资源标签列表"
+          }
+        },
+        "type" : "object"
+      },
+      "TagVo" : {
+        "required" : [ "key" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。 最大长度43个字符,可以为空字符串。 字符集:A-Z,a-z , 0-9,‘.’,‘-’,‘_’,UNICODE字符(\\u4E00-\\u9FFF)。"
+          }
+        },
+        "description" : "标签对象。",
+        "type" : "object"
+      },
+      "RespTagValues" : {
+        "required" : [ "values", "page_info" ],
+        "properties" : {
+          "values" : {
+            "type" : "array",
+            "description" : "查询到的标签值列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfoTagValues",
+            "description" : "分页信息"
+          }
+        },
+        "description" : "标签key查询响应",
+        "type" : "object"
+      },
+      "PageInfoTagValues" : {
+        "required" : [ "next_marker", "current_count" ],
+        "properties" : {
+          "next_marker" : {
+            "type" : "string",
+            "description" : "分页位置标识(索引)"
+          },
+          "current_count" : {
+            "type" : "integer",
+            "description" : "当前页标签值的数量"
+          }
+        },
+        "type" : "object"
+      },
+      "ProviderListResponse" : {
+        "required" : [ "providers", "total_count" ],
+        "properties" : {
+          "providers" : {
+            "type" : "array",
+            "description" : "云服务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ProviderResponseBody"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前支持的云服务总数"
+          }
+        },
+        "type" : "object"
+      },
+      "ResourceTypeBody" : {
+        "required" : [ "resource_type", "resource_type_i18n_display_name", "regions", "global" ],
+        "properties" : {
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          },
+          "resource_type_i18n_display_name" : {
+            "type" : "string",
+            "description" : "资源类型显示名称,可以通过参数中“locale”设置语言。"
+          },
+          "regions" : {
+            "type" : "array",
+            "description" : "支持的region列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "global" : {
+            "type" : "boolean",
+            "format" : "int32",
+            "description" : "是否是全局类型的资源"
+          }
+        },
+        "type" : "object"
+      },
+      "ProviderResponseBody" : {
+        "required" : [ "provider", "provider_i18n_display_name", "resource_types" ],
+        "properties" : {
+          "provider" : {
+            "type" : "string",
+            "description" : "云服务名称"
+          },
+          "provider_i18n_display_name" : {
+            "type" : "string",
+            "description" : "服务显示名称,可以通过参数中“locale”设置语言。"
+          },
+          "resource_types" : {
+            "type" : "array",
+            "description" : "资源类型列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTypeBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RespTagKeys" : {
+        "required" : [ "keys", "page_info" ],
+        "properties" : {
+          "keys" : {
+            "type" : "array",
+            "description" : "标签键列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfoTagKeys",
+            "description" : "分页信息"
+          }
+        },
+        "description" : "标签建查询响应",
+        "type" : "object"
+      },
+      "PageInfoTagKeys" : {
+        "required" : [ "next_marker", "current_count" ],
+        "properties" : {
+          "next_marker" : {
+            "type" : "string",
+            "description" : "分页位置标识(索引)"
+          },
+          "current_count" : {
+            "type" : "integer",
+            "description" : "当前页标签键的数量"
+          }
+        },
+        "type" : "object"
+      },
+      "RespPredefineTag" : {
+        "required" : [ "marker", "tags", "total_count" ],
+        "properties" : {
+          "marker" : {
+            "type" : "string",
+            "description" : "分页位置标识(索引)。"
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询到的标签总数"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "查询到的标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PredefineTag"
+            }
+          }
+        },
+        "description" : "预定义标签查询响应",
+        "type" : "object"
+      },
+      "PredefineTag" : {
+        "required" : [ "key", "update_time", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。"
+          },
+          "update_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2016-12-09T00:00:00Z",
+            "description" : "更新时间,采用UTC时间表示。2016-12-09T00:00:00Z"
+          }
+        },
+        "description" : "标签列表。",
+        "type" : "object"
+      },
+      "TagQuota" : {
+        "required" : [ "quota_key", "quota_limit", "unit", "used" ],
+        "properties" : {
+          "quota_key" : {
+            "type" : "string",
+            "description" : "配额键"
+          },
+          "quota_limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "配额值"
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已使用"
+          },
+          "unit" : {
+            "type" : "string",
+            "description" : "单位"
+          }
+        },
+        "description" : "配额",
+        "type" : "object"
+      },
+      "Quotas" : {
+        "properties" : {
+          "quotas" : {
+            "type" : "array",
+            "description" : "配额列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/TagQuota"
+            }
+          }
+        },
+        "description" : "配额",
+        "type" : "object"
+      },
+      "ReqCreateTag" : {
+        "required" : [ "tags", "resources" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID,resource_type为region级别服务时为必选项。"
+          },
+          "resources" : {
+            "type" : "array",
+            "maxLength" : 20,
+            "minLength" : 1,
+            "description" : "资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTagBody"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "maxLength" : 10,
+            "minLength" : 1,
+            "description" : "标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTagRequest"
+            }
+          }
+        },
+        "description" : "创建标签请求",
+        "type" : "object"
+      },
+      "TagCreateResponse" : {
+        "properties" : {
+          "failed_resources" : {
+            "type" : "array",
+            "description" : "查询标签下的资源",
+            "items" : {
+              "$ref" : "#/components/schemas/TagCreateResponseItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TagCreateResponseItem" : {
+        "required" : [ "resource_id", "resource_type", "error_code", "error_msg" ],
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID。"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreatePredefineTags" : {
+      "post" : {
+        "tags" : [ "预定义标签操作" ],
+        "summary" : "创建预定义标签",
+        "description" : "用于创建预定标签。用户创建预定义标签后,可以使用预定义标签来给资源创建标签。该接口支持幂等特性和处理批量数据。",
+        "operationId" : "CreatePredefineTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReqCreatePredefineTag"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreatePredefineTags",
+      "x-url" : "{endpoint}/v1.0/predefine_tags/action"
+    },
+    "/ShowApiVersion" : {
+      "get" : {
+        "tags" : [ "查询版本操作" ],
+        "summary" : "查询API版本号详情",
+        "description" : "查询指定的标签管理服务API版本号详情。",
+        "operationId" : "ShowApiVersion",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Version"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "api_version",
+          "in" : "path",
+          "description" : "API版本号。",
+          "required" : true,
+          "schema" : {
+            "description" : "API版本号。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApiVersion",
+      "x-url" : "{endpoint}/{api_version}"
+    },
+    "/DeletePredefineTags" : {
+      "post" : {
+        "tags" : [ "预定义标签操作" ],
+        "summary" : "删除预定义标签",
+        "description" : "用于删除预定标签。",
+        "operationId" : "DeletePredefineTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReqDeletePredefineTag"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeletePredefineTags",
+      "x-url" : "{endpoint}/v1.0/predefine_tags/action"
+    },
+    "/DeleteResourceTag" : {
+      "post" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "批量移除标签",
+        "description" : "用于批量移除云服务多个资源的标签,每个资源最多支持移除10个标签,每次最多支持批量操作20个资源。",
+        "operationId" : "DeleteResourceTag",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TagDeleteResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReqDeleteTag"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteResourceTag",
+      "x-url" : "{endpoint}/v1.0/resource-tags/batch-delete"
+    },
+    "/UpdatePredefineTags" : {
+      "put" : {
+        "tags" : [ "预定义标签操作" ],
+        "summary" : "修改预定义标签",
+        "description" : "修改预定义标签。",
+        "operationId" : "UpdatePredefineTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ModifyPrefineTag"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdatePredefineTags",
+      "x-url" : "{endpoint}/v1.0/predefine_tags"
+    },
+    "/ListApiVersions" : {
+      "get" : {
+        "tags" : [ "查询版本操作" ],
+        "summary" : "查询API版本列表",
+        "description" : "查询标签管理服务的API版本列表。",
+        "operationId" : "ListApiVersions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Versions"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApiVersions",
+      "x-url" : "{endpoint}/"
+    },
+    "/ListResource" : {
+      "post" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "根据标签过滤资源",
+        "description" : "根据标签过滤资源。",
+        "operationId" : "ListResource",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespTagResourceList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResqTagResource"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResource",
+      "x-url" : "{endpoint}/v1.0/resource-instances/filter"
+    },
+    "/ShowResourceTag" : {
+      "get" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "查询资源标签",
+        "description" : "查询单个资源上的标签。",
+        "operationId" : "ShowResourceTag",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespTagList"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "query",
+          "description" : "项目ID,region级资源必选。",
+          "required" : false,
+          "schema" : {
+            "description" : "项目ID,region级资源必选。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "query",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResourceTag",
+      "x-url" : "{endpoint}/v2.0/resources/{resource_id}/tags"
+    },
+    "/ListTagValues" : {
+      "get" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "查询标签值列表",
+        "description" : "查询指定区域的标签键下的所有标签值。",
+        "operationId" : "ListTagValues",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespTagValues"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "region_id",
+          "in" : "query",
+          "description" : "区域ID",
+          "required" : false,
+          "schema" : {
+            "description" : "区域ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 200,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页位置标识(索引)。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页位置标识(索引)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "key",
+          "in" : "query",
+          "description" : "标签键",
+          "required" : true,
+          "schema" : {
+            "description" : "标签键",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTagValues",
+      "x-url" : "{endpoint}/v1.0/tag-values"
+    },
+    "/ListProviders" : {
+      "get" : {
+        "tags" : [ "查询标签管理支持的服务" ],
+        "summary" : "查询标签管理支持的服务",
+        "description" : "查询标签管理支持的服务。",
+        "operationId" : "ListProviders",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProviderListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "locale",
+          "in" : "query",
+          "description" : "指定显示语言",
+          "required" : false,
+          "schema" : {
+            "description" : "指定显示语言",
+            "type" : "string",
+            "default" : "zh-cn",
+            "enum" : [ "zh-cn", "en-us" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数默认为10,limit最多为200,最小值为1。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数默认为10,limit最多为200,最小值为1。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "provider",
+          "in" : "query",
+          "description" : "云服务名称",
+          "required" : false,
+          "schema" : {
+            "description" : "云服务名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProviders",
+      "x-url" : "{endpoint}/v1.0/tms/providers"
+    },
+    "/ListTagKeys" : {
+      "get" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "查询标签键列表",
+        "description" : "查询指定区域的所有标签键.",
+        "operationId" : "ListTagKeys",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespTagKeys"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "region_id",
+          "in" : "query",
+          "description" : "区域ID",
+          "required" : false,
+          "schema" : {
+            "description" : "区域ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 200,
+            "maximum" : 200,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页位置标识(索引)。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页位置标识(索引)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTagKeys",
+      "x-url" : "{endpoint}/v1.0/tag-keys"
+    },
+    "/ListPredefineTags" : {
+      "get" : {
+        "tags" : [ "预定义标签操作" ],
+        "summary" : "查询预定义标签列表",
+        "description" : "用于查询预定义标签列表。",
+        "operationId" : "ListPredefineTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespPredefineTag"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "key",
+          "in" : "query",
+          "description" : "键,支持模糊查询,不区分大小写,如果包含“non-URL-safe”的字符,需要进行“urlencoded”。",
+          "required" : false,
+          "schema" : {
+            "description" : "键,支持模糊查询,不区分大小写,如果包含“non-URL-safe”的字符,需要进行“urlencoded”。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "value",
+          "in" : "query",
+          "description" : "值,支持模糊查询,不区分大小写,如果包含“non-URL-safe”的字符,需要进行“urlencoded”。",
+          "required" : false,
+          "schema" : {
+            "description" : "值,支持模糊查询,不区分大小写,如果包含“non-URL-safe”的字符,需要进行“urlencoded”。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页位置标识(索引)。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页位置标识(索引)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_field",
+          "in" : "query",
+          "description" : "排序字段:",
+          "required" : false,
+          "schema" : {
+            "description" : "排序字段:",
+            "type" : "string",
+            "default" : "update_time"
+          }
+        }, {
+          "name" : "order_method",
+          "in" : "query",
+          "description" : "order_field字段的排序方法。",
+          "required" : false,
+          "schema" : {
+            "description" : "order_field字段的排序方法。",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPredefineTags",
+      "x-url" : "{endpoint}/v1.0/predefine_tags"
+    },
+    "/ShowTagQuota" : {
+      "get" : {
+        "tags" : [ "配额" ],
+        "summary" : "查询标签配额",
+        "description" : "查询标签的配额信息。",
+        "operationId" : "ShowTagQuota",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Quotas"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTagQuota",
+      "x-url" : "{endpoint}/v1.0/tms/quotas"
+    },
+    "/CreateResourceTag" : {
+      "post" : {
+        "tags" : [ "资源标签" ],
+        "summary" : "批量添加标签",
+        "description" : "用于给云服务的多个资源添加标签,每个资源最多可添加10个标签,每次最多支持批量操作20个资源。",
+        "operationId" : "CreateResourceTag",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TagCreateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于TMS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReqCreateTag"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateResourceTag",
+      "x-url" : "{endpoint}/v1.0/resource-tags/batch-create"
+    }
+  }
+}

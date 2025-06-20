@@ -1,0 +1,1129 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "ImageSearch-删除数据",
+    "title" : "ImageSearch",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "DeleteDataResponse" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "删除数据完成返回success。"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/DeleteRestInfo",
+            "description" : "删除数据的相关信息,仅在条件删除时存在该字段。"
+          }
+        }
+      },
+      "ErrorResponse" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "请求失败时的错误编码,请求成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "请求失败时的错误信息,请求成功时无此字段。"
+          }
+        }
+      },
+      "RangeParam" : {
+        "type" : "object",
+        "description" : "数值范围参数结构体。",
+        "properties" : {
+          "from" : {
+            "type" : "number",
+            "description" : "数值下界,默认包含该下界。",
+            "format" : "double"
+          },
+          "to" : {
+            "type" : "number",
+            "description" : "数值上界,默认包含该上界。",
+            "format" : "double"
+          }
+        }
+      },
+      "DeleteRestInfo" : {
+        "type" : "object",
+        "description" : "删除数据的相关信息。",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "description" : "删除数据列表。",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "数据唯一ID。"
+                }
+              }
+            }
+          },
+          "delete_info" : {
+            "$ref" : "#/components/schemas/DeleteInfo"
+          }
+        }
+      },
+      "DeleteInfo" : {
+        "type" : "object",
+        "description" : "删除结果的相关信息。",
+        "properties" : {
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "符合条件的结果总数。"
+          },
+          "delete_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "本次删除的结果总数,目前一次请求最多删除100条结果。"
+          }
+        }
+      },
+      "DeleteParam" : {
+        "type" : "object",
+        "properties" : {
+          "force" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "是否幂等删除数据,默认为false。仅对指定ID删除生效。"
+          },
+          "item_id" : {
+            "type" : "string",
+            "description" : "数据的服务实例级唯一标识,字符长度范围为[1, 256]。",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "自定义字符标签,用于对服务实例中的数据进行条件删除。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "自定义字符标签值",
+                "minLength" : 1,
+                "maxLength" : 64
+              },
+              "minItems" : 1,
+              "maxItems" : 32
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "自定义数值标签,用于对服务实例中的数据进行custom_num_tags条件删除。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/RangeParam"
+            }
+          }
+        }
+      },
+      "UpdateParam" : {
+        "type" : "object",
+        "required" : [ "item_id" ],
+        "properties" : {
+          "item_id" : {
+            "type" : "string",
+            "description" : "数据的服务实例级唯一标识,字符长度范围为[1, 256]。",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "desc" : {
+            "type" : "string",
+            "description" : "数据的描述信息,字符长度范围为[1, 2048]。",
+            "minLength" : 1,
+            "maxLength" : 2048
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "数据的自定义字符标签,用于进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "数据的自定义数值标签,用于进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "number",
+              "format" : "double"
+            }
+          }
+        }
+      },
+      "UpdateDataResponse" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "更新数据完成返回success。"
+          }
+        }
+      },
+      "AddDataRestInfo" : {
+        "type" : "object",
+        "description" : "添加数据的相关信息。",
+        "properties" : {
+          "image_info" : {
+            "description" : "添加图像数据的相关信息,不同服务类型返回信息不同,具体可参见服务类型说明。",
+            "properties" : {
+              "objects" : {
+                "type" : "array",
+                "description" : "添加的主体列表。",
+                "items" : {
+                  "properties" : {
+                    "box" : {
+                      "type" : "string",
+                      "description" : "主体目标框。"
+                    },
+                    "category" : {
+                      "type" : "integer",
+                      "format" : "int32",
+                      "description" : "主体类目序号。"
+                    },
+                    "category_name" : {
+                      "type" : "string",
+                      "description" : "主体类目名称。"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AddDataParam" : {
+        "type" : "object",
+        "required" : [ "item_id" ],
+        "properties" : {
+          "force" : {
+            "type" : "boolean",
+            "description" : "是否强制添加数据,默认为false。",
+            "default" : false
+          },
+          "item_id" : {
+            "type" : "string",
+            "description" : "数据的服务实例级唯一标识,字符长度范围为[1, 256]。",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "desc" : {
+            "type" : "string",
+            "description" : "数据的描述信息,字符长度范围为[1, 2048]。",
+            "minLength" : 1,
+            "maxLength" : 2048
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "数据的自定义字符标签,用于进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "数据的自定义数值标签,用于进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "number",
+              "format" : "double"
+            }
+          },
+          "image_base64" : {
+            "type" : "string",
+            "description" : "图像文件的base64字符串,图像入库时,与image_url二选一。要求如下:"
+          },
+          "image_url" : {
+            "type" : "string",
+            "description" : "图像文件的服务可访问URL,字符长度范围为[1, 4096]。图像入库时,与image_base64二选一。",
+            "minLength" : 1,
+            "maxLength" : 4096
+          },
+          "keywords" : {
+            "type" : "array",
+            "description" : "关键词列表,关键词数量范围为[1, 100],关键词字符长度范围为[1, 64]。支持关键词搜索的服务实例添加数据时,如给定此参数,则直接使用给定的keywords作为关键词,否则会自动生成对应的keywords。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            },
+            "minItems" : 1,
+            "maxItems" : 100
+          },
+          "optional_params" : {
+            "$ref" : "#/components/schemas/AddDataOptionalParam"
+          }
+        }
+      },
+      "AddDataOptionalParam" : {
+        "type" : "object",
+        "description" : "添加数据的可选参数,其中每个参数仅对部分服务类型生效,具体可参见服务类型说明。",
+        "properties" : {
+          "do_det" : {
+            "type" : "boolean",
+            "description" : "是否进行目标检测,默认为true。",
+            "default" : true
+          },
+          "box" : {
+            "type" : "string",
+            "description" : "目标矩形框坐标,如给定则不进行目标检测,直接使用该box作为目标。格式为“x1,y1,x2,y2”(无空格),x1/y1为目标左上角坐标,x2/y2为目标右下角坐标,具体要求如下:"
+          },
+          "do_cls" : {
+            "type" : "boolean",
+            "description" : "是否进行对象分类,默认为true。",
+            "default" : true
+          },
+          "category" : {
+            "type" : "integer",
+            "description" : "对象类目,如给定则不进行对象分类,直接使用该category作为类目。具体类目信息可参见对应的服务类型说明。",
+            "format" : "int32"
+          }
+        }
+      },
+      "AddDataResponse" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "添加数据完成返回success。"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/AddDataRestInfo"
+          }
+        }
+      },
+      "SearchRestInfo" : {
+        "type" : "object",
+        "description" : "搜索的相关信息。",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "description" : "搜索结果列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/SearchItem"
+            }
+          },
+          "search_info" : {
+            "$ref" : "#/components/schemas/SearchInfo"
+          },
+          "image_info" : {
+            "description" : "搜索图像的相关信息,不同服务类型返回信息不同,具体可参见服务类型说明。",
+            "properties" : {
+              "box" : {
+                "type" : "string",
+                "description" : "用于搜索的主体目标框。"
+              },
+              "category" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "用于搜索的主体类目序号。"
+              },
+              "category_name" : {
+                "type" : "string",
+                "description" : "用于搜索的主体类目名称。"
+              },
+              "objects" : {
+                "type" : "array",
+                "description" : "搜索图像中的所有主体列表。",
+                "items" : {
+                  "properties" : {
+                    "box" : {
+                      "type" : "string",
+                      "description" : "主体目标框。"
+                    },
+                    "category" : {
+                      "type" : "integer",
+                      "format" : "int32",
+                      "description" : "主体类目序号。"
+                    },
+                    "category_name" : {
+                      "type" : "string",
+                      "description" : "主体类目名称。"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SearchAfterParam" : {
+        "type" : "object",
+        "description" : "最后一个结果的排序信息,用于全量召回场景。",
+        "properties" : {
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "结果的得分。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "结果的唯一ID。"
+          }
+        }
+      },
+      "ItemSource" : {
+        "type" : "object",
+        "description" : "数据的元信息,不同数据包含的字段可能不同。",
+        "properties" : {
+          "desc" : {
+            "type" : "string",
+            "description" : "数据描述信息。"
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "数据自定义字符标签。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "数据自定义数值标签。",
+            "additionalProperties" : {
+              "type" : "number",
+              "format" : "double"
+            }
+          },
+          "keywords" : {
+            "type" : "array",
+            "description" : "数据关键词列表。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "SearchResponse" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "搜索完成返回success。"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/SearchRestInfo"
+          }
+        }
+      },
+      "SearchItem" : {
+        "type" : "object",
+        "description" : "搜索结果参数结构体。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "数据唯一ID。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "数据匹配分数。"
+          },
+          "source" : {
+            "$ref" : "#/components/schemas/ItemSource"
+          }
+        }
+      },
+      "SearchOptionalParam" : {
+        "type" : "object",
+        "description" : "搜索的可选参数,其中每个参数仅对部分服务类型生效,具体可参见服务类型说明。",
+        "properties" : {
+          "do_det" : {
+            "type" : "boolean",
+            "description" : "是否进行目标检测,默认为true。",
+            "default" : true
+          },
+          "box" : {
+            "type" : "string",
+            "description" : "目标矩形框坐标,如给定则不进行目标检测,直接使用该box作为目标。格式为“x1,y1,x2,y2”(无空格),x1/y1为目标左上角坐标,x2/y2为目标右下角坐标,具体要求如下:"
+          },
+          "do_cls" : {
+            "type" : "boolean",
+            "description" : "是否进行对象分类,默认为true。",
+            "default" : true
+          },
+          "category" : {
+            "type" : "integer",
+            "description" : "对象类目,如给定则不进行对象分类,直接使用该category作为类目。具体类目信息可参见对应的服务类型说明。",
+            "format" : "int32"
+          },
+          "collapse_key" : {
+            "type" : "string",
+            "description" : "去重标签名,必须为服务实例custom_tags中已存在的key。"
+          },
+          "max_scan_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "扫描节点上限。值越大精度越高,查询速度变慢。默认值为10000。",
+            "minimum" : 1000,
+            "maximum" : 100000,
+            "default" : 10000
+          },
+          "nprobe" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询考察中心点的数目。值越大精度越高,查询速度变慢。默认值为100。",
+            "minimum" : 1,
+            "maximum" : 100000,
+            "default" : 100
+          },
+          "text_lang" : {
+            "type" : "string",
+            "description" : "文本字符串的语言类型枚举值。",
+            "example" : "zh",
+            "enum" : [ "ar", "de", "ru", "fr", "ko", "pt", "ja", "th", "tr", "es", "en", "vi", "zh", "zhTW" ],
+            "default" : "zh"
+          }
+        }
+      },
+      "SearchInfo" : {
+        "type" : "object",
+        "description" : "搜索结果的相关信息。",
+        "properties" : {
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "搜索结果总数。"
+          },
+          "return_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回结果总数。"
+          },
+          "search_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "搜索过程耗时,单位为毫秒。"
+          },
+          "last_item" : {
+            "$ref" : "#/components/schemas/SearchAfterParam",
+            "description" : "最后一个搜索结果的排序信息。仅对全量召回生效,非全量召回场景返回null。"
+          }
+        }
+      },
+      "SearchParam" : {
+        "type" : "object",
+        "required" : [ "search_type" ],
+        "properties" : {
+          "search_type" : {
+            "type" : "string",
+            "description" : "搜索类型,必须为服务实例支持的搜索类型。服务实例的搜索类型列表可在创建服务实例时进行配置。",
+            "enum" : [ "IMAGE", "KEYWORD", "TEXT", "CATEGORY" ]
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回搜索结果的数量,默认为10,取值范围为[1, 1000]。",
+            "minimum" : 1,
+            "maximum" : 1000,
+            "default" : 10
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回搜索结果的偏移量,即返回序号在[offset, offset+limit]内的搜索结果。默认为0,取值范围为[0, N]。",
+            "minimum" : 0,
+            "default" : 0
+          },
+          "last_item" : {
+            "$ref" : "#/components/schemas/SearchAfterParam",
+            "description" : "前一次搜索的最后一个搜索结果的排序信息。仅对全量召回场景生效,可将上一次搜索返回结果中的last_item字段直接用于此处。"
+          },
+          "min_score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "返回搜索结果的最小得分,用于对搜索结果进行score过滤,取值范围为[0, 1]。",
+            "minimum" : 0,
+            "maximum" : 1
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "自定义字符标签,用于对搜索结果进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "自定义字符标签值",
+                "minLength" : 1,
+                "maxLength" : 64
+              },
+              "minItems" : 1,
+              "maxItems" : 32
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "自定义数值标签,用于对搜索结果进行条件过滤。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/RangeParam"
+            }
+          },
+          "image_base64" : {
+            "type" : "string",
+            "description" : "图像文件的base64字符串,基于图像搜索时,与image_url二选一。要求如下:"
+          },
+          "image_url" : {
+            "type" : "string",
+            "description" : "图像文件的服务可访问URL,字符长度范围为[1, 4096]。基于图像搜索时,与image_base64二选一。",
+            "minLength" : 1,
+            "maxLength" : 4096
+          },
+          "keywords" : {
+            "type" : "array",
+            "description" : "关键词列表,搜索时关键词数量范围为[1, 10],关键词字符长度范围为[1, 64]。使用KEYWORD搜索类型进行搜索时,必须提供该参数。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            },
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "文本字符串,字符长度范围为[1, 512]。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "optional_params" : {
+            "$ref" : "#/components/schemas/SearchOptionalParam"
+          }
+        }
+      },
+      "CheckRestInfo" : {
+        "type" : "object",
+        "description" : "检查数据的相关信息。",
+        "properties" : {
+          "existed" : {
+            "type" : "boolean",
+            "description" : "数据是否存在,存在返回true,不存在返回false。仅在指定ID检查时包含该字段。"
+          },
+          "item_info" : {
+            "$ref" : "#/components/schemas/ItemSource",
+            "description" : "数据的元信息,仅在指定ID检查时包含该字段。"
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "检查结果列表,仅在条件检查时包含该字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/SearchItem"
+            }
+          },
+          "check_info" : {
+            "$ref" : "#/components/schemas/CheckInfo",
+            "description" : "检查结果的相关信息,仅在条件检查时包含该字段。"
+          }
+        }
+      },
+      "CheckDataResponse" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "检查数据完成返回success。"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CheckRestInfo"
+          }
+        }
+      },
+      "CheckInfo" : {
+        "type" : "object",
+        "description" : "检查结果的相关信息。",
+        "properties" : {
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "符合条件的结果总数。"
+          },
+          "return_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回的结果总数。"
+          },
+          "last_item" : {
+            "$ref" : "#/components/schemas/SearchAfterParam",
+            "description" : "最后一个检查结果的排序信息。"
+          }
+        }
+      },
+      "CheckParam" : {
+        "type" : "object",
+        "properties" : {
+          "item_id" : {
+            "type" : "string",
+            "description" : "数据的服务实例级唯一标识,字符长度范围为[1, 256]。",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回检查结果的数量,默认为10,取值范围为[1, 100]。仅对条件检查生效。",
+            "minimum" : 1,
+            "maximum" : 100,
+            "default" : 10
+          },
+          "last_item" : {
+            "$ref" : "#/components/schemas/SearchAfterParam",
+            "description" : "前一次检查的最后一个检查结果的排序信息。仅对条件检查生效,可将上一次检查返回结果中的last_item字段直接用于此处。"
+          },
+          "custom_tags" : {
+            "type" : "object",
+            "description" : "自定义字符标签,用于对服务实例中的数据进行条件查找。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "自定义字符标签值",
+                "minLength" : 1,
+                "maxLength" : 64
+              },
+              "minItems" : 1,
+              "maxItems" : 32
+            }
+          },
+          "custom_num_tags" : {
+            "type" : "object",
+            "description" : "自定义数值标签,用于对服务实例中的数据进行条件查找。格式为键值对{key:value}。",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/RangeParam"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/RunDeleteData" : {
+      "post" : {
+        "tags" : [ "删除数据" ],
+        "summary" : "删除数据",
+        "description" : "删除指定服务实例中的对应数据,支持指定ID删除和条件删除。",
+        "operationId" : "RunDeleteData",
+        "responses" : {
+          "200" : {
+            "description" : "删除数据的响应body参数。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteDataResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BAD REQUEST",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "INTERNAL SERVER ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务实例的名称,用户创建服务实例时指定。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例的名称,用户创建服务实例时指定。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteParam"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunDeleteData",
+      "x-url" : "{endpoint}/v2/{project_id}/mms/{service_name}/data/delete"
+    },
+    "/RunUpdateData" : {
+      "post" : {
+        "tags" : [ "更新数据" ],
+        "summary" : "更新数据",
+        "description" : "更新指定服务实例中的对应数据。",
+        "operationId" : "RunUpdateData",
+        "responses" : {
+          "200" : {
+            "description" : "更新数据的响应body参数。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateDataResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BAD REQUEST",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "INTERNAL SERVER ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务实例的名称,用户创建服务实例时指定。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例的名称,用户创建服务实例时指定。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateParam"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunUpdateData",
+      "x-url" : "{endpoint}/v2/{project_id}/mms/{service_name}/data/update"
+    },
+    "/RunAddData" : {
+      "post" : {
+        "tags" : [ "添加数据" ],
+        "summary" : "添加数据",
+        "description" : "添加数据到指定服务实例中。",
+        "operationId" : "RunAddData",
+        "responses" : {
+          "200" : {
+            "description" : "添加数据的响应body参数。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddDataResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BAD REQUEST",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "INTERNAL SERVER ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务实例的名称,用户创建服务实例时指定。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例的名称,用户创建服务实例时指定。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddDataParam"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunAddData",
+      "x-url" : "{endpoint}/v2/{project_id}/mms/{service_name}/data/add"
+    },
+    "/RunSearch" : {
+      "post" : {
+        "tags" : [ "搜索" ],
+        "summary" : "搜索",
+        "description" : "从指定服务实例中进行搜索。",
+        "operationId" : "RunSearch",
+        "responses" : {
+          "200" : {
+            "description" : "搜索的响应body参数。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BAD REQUEST",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "INTERNAL SERVER ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务实例的名称,用户创建服务实例时指定。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例的名称,用户创建服务实例时指定。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SearchParam"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSearch",
+      "x-url" : "{endpoint}/v2/{project_id}/mms/{service_name}/search"
+    },
+    "/RunCheckData" : {
+      "post" : {
+        "tags" : [ "检查数据" ],
+        "summary" : "检查数据",
+        "description" : "检查指定服务实例中的对应数据,支持指定ID检查和条件检查。",
+        "operationId" : "RunCheckData",
+        "responses" : {
+          "200" : {
+            "description" : "检查数据的响应body参数。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckDataResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "BAD REQUEST",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "INTERNAL SERVER ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例所属的项目ID,登陆华为云->用户中心->我的凭证->API凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务实例的名称,用户创建服务实例时指定。",
+          "required" : true,
+          "schema" : {
+            "description" : "服务实例的名称,用户创建服务实例时指定。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckParam"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCheckData",
+      "x-url" : "{endpoint}/v2/{project_id}/mms/{service_name}/data/check"
+    }
+  }
+}

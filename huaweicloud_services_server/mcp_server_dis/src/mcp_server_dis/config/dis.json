@@ -1,0 +1,4223 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "DIS-通道管理",
+    "title" : "DIS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "CreatePolicyRuleRequest" : {
+        "required" : [ "stream_id", "principal_name", "action_type", "effect" ],
+        "properties" : {
+          "stream_id" : {
+            "type" : "string",
+            "description" : "通道唯一标识符。"
+          },
+          "principal_name" : {
+            "type" : "string",
+            "example" : "principalName",
+            "description" : "授权用户。"
+          },
+          "action_type" : {
+            "type" : "string",
+            "example" : "putRecords",
+            "description" : "授权操作类型。",
+            "enum" : [ "putRecords", "getRecords" ]
+          },
+          "effect" : {
+            "type" : "string",
+            "example" : "accept",
+            "description" : "授权影响类型。",
+            "enum" : [ "accept" ]
+          }
+        },
+        "xml" : {
+          "name" : "PrincipalRule"
+        },
+        "type" : "object"
+      },
+      "PutRecordsRequestEntry" : {
+        "required" : [ "data" ],
+        "properties" : {
+          "data" : {
+            "type" : "string",
+            "example" : "ZGF0YQ==",
+            "description" : "需要上传的数据。"
+          },
+          "explicit_hash_key" : {
+            "type" : "string",
+            "description" : "用于明确数据需要写入分区的哈希值,此哈希值将覆盖“partition_key”的哈希值。"
+          },
+          "partition_id" : {
+            "type" : "string",
+            "example" : "shardId-0000000000",
+            "description" : "通道的分区标识符。"
+          },
+          "partition_key" : {
+            "type" : "string",
+            "description" : "数据将写入的分区。"
+          }
+        },
+        "xml" : {
+          "name" : "PutRecordsRequestEntry"
+        },
+        "type" : "object"
+      },
+      "PutRecordsResultEntry" : {
+        "type" : "object",
+        "properties" : {
+          "partition_id" : {
+            "type" : "string",
+            "description" : "数据上传到的分区ID。"
+          },
+          "sequence_number" : {
+            "type" : "string",
+            "description" : "数据上传到的序列号。序列号是每个记录的唯一标识符。序列号由DIS在数据生产者调用PutRecords操作以添加数据到DIS数据通道时DIS服务自动分配的。同一分区键的序列号通常会随时间变化增加。PutRecords请求之间的时间段越长,序列号越大。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码。"
+          },
+          "error_message" : {
+            "type" : "string",
+            "description" : "错误消息。"
+          }
+        },
+        "xml" : {
+          "name" : "PutRecordsResultEntry"
+        }
+      },
+      "PutRecordsRequest" : {
+        "type" : "object",
+        "required" : [ "stream_name", "records" ],
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "maxLength" : 60,
+            "description" : "已创建的通道名称。"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "description" : "通道唯一标识符。"
+          },
+          "records" : {
+            "type" : "array",
+            "description" : "待上传的记录列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PutRecordsRequestEntry",
+              "type" : "object"
+            }
+          }
+        },
+        "xml" : {
+          "name" : "PutRecordsRequest"
+        }
+      },
+      "PutRecordsResult" : {
+        "type" : "object",
+        "properties" : {
+          "failed_record_count" : {
+            "type" : "integer",
+            "description" : "上传失败的数据数量。"
+          },
+          "records" : {
+            "type" : "array",
+            "description" : "上传结果列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PutRecordsResultEntry",
+              "type" : "object"
+            }
+          }
+        },
+        "xml" : {
+          "name" : "PutRecordsResult"
+        }
+      },
+      "BatchStartTransferTaskReq" : {
+        "required" : [ "action", "tasks" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "转储任务操作,目前支持:",
+            "enum" : [ "start" ]
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "待操作的转储任务列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/BatchTransferTask"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "BatchTransferTask" : {
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "转储任务ID"
+          }
+        },
+        "type" : "object"
+      },
+      "Tag" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "example" : "key1",
+            "description" : "键。",
+            "minLength" : 1,
+            "maxLength" : 36
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "value1",
+            "description" : "值。",
+            "minLength" : 0,
+            "maxLength" : 43
+          }
+        },
+        "description" : "标签对象。",
+        "type" : "object"
+      },
+      "BatchDeleteTagsReq" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识:仅限于delete",
+            "enum" : [ "delete" ]
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowResourceTagsResult" : {
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ListAppResult" : {
+        "properties" : {
+          "has_more_app" : {
+            "type" : "boolean",
+            "description" : "是否还有更多满足条件的App。"
+          },
+          "apps" : {
+            "type" : "array",
+            "description" : "AppEntry list that meets the current request.",
+            "items" : {
+              "$ref" : "#/components/schemas/DescribeAppResult"
+            }
+          },
+          "total_number" : {
+            "type" : "integer",
+            "description" : "满足条件的App总数。",
+            "format" : "int32"
+          }
+        },
+        "type" : "object"
+      },
+      "DescribeAppResult" : {
+        "properties" : {
+          "app_name" : {
+            "type" : "string",
+            "description" : "App的名称。",
+            "format" : "int32"
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "App的唯一标识符。",
+            "format" : "int32"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "App创建的时间,单位毫秒。",
+            "format" : "int64"
+          },
+          "commit_checkpoint_stream_names" : {
+            "type" : "array",
+            "description" : "关联通道列表。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdatePartitionCount" : {
+        "properties" : {
+          "create_timestamp" : {
+            "type" : "integer",
+            "description" : "扩缩容操作执行时间戳,13位时间戳。",
+            "format" : "int64"
+          },
+          "src_partition_count" : {
+            "type" : "integer",
+            "description" : "扩缩容操作前分区数量。"
+          },
+          "target_partition_count" : {
+            "type" : "integer",
+            "description" : "扩缩容操作后分区数量。"
+          },
+          "result_code" : {
+            "type" : "integer",
+            "description" : "扩缩容操作响应码。"
+          },
+          "result_msg" : {
+            "type" : "integer",
+            "description" : "扩缩容操作响应信息。"
+          },
+          "auto_scale" : {
+            "type" : "boolean",
+            "description" : "本次扩缩容操作是否为自动扩缩容。"
+          }
+        },
+        "type" : "object"
+      },
+      "SysTag" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "example" : "_sys_enterprise_project_id",
+            "description" : "键。",
+            "enum" : [ "_sys_enterprise_project_id" ]
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description" : "值。"
+          }
+        },
+        "type" : "object"
+      },
+      "CSVProperties" : {
+        "properties" : {
+          "delimiter" : {
+            "type" : "string",
+            "example" : ",",
+            "description" : "数据分隔符。"
+          }
+        },
+        "description" : "CSV 格式数据的相关属性,比如分隔符 delimiter",
+        "type" : "object"
+      },
+      "DescribeStreamResult" : {
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "description" : "通道名称。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "通道创建的时间,13位时间戳。"
+          },
+          "last_modified_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "通道最近一次修改的时间,13位时间戳。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "通道的当前状态。",
+            "enum" : [ "CREATING", "RUNNING", "TERMINATING", "FROZEN" ],
+            "format" : "int32"
+          },
+          "stream_type" : {
+            "type" : "string",
+            "description" : "通道类型。",
+            "enum" : [ "COMMON", "ADVANCED" ]
+          },
+          "partitions" : {
+            "type" : "array",
+            "description" : "通道的分区列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PartitionResult"
+            }
+          },
+          "has_more_partitions" : {
+            "type" : "boolean",
+            "description" : "是否还有更多满足请求条件的分区。"
+          },
+          "retention_period" : {
+            "type" : "integer",
+            "description" : "数据保留时长,单位是小时。",
+            "format" : "int32"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "description" : "通道唯一标示符。"
+          },
+          "data_type" : {
+            "type" : "string",
+            "description" : "源数据类型。",
+            "enum" : [ "BLOB", "JSON", "CSV" ],
+            "format" : "int32"
+          },
+          "data_schema" : {
+            "type" : "string",
+            "description" : "用于描述用户JSON、CSV格式的源数据结构,采用Avro Schema的语法描述。Avro介绍您也可以点击[这里](http://avro.apache.org/docs/current/#schemas)查看。",
+            "format" : "int32"
+          },
+          "compression_format" : {
+            "type" : "string",
+            "description" : "数据的压缩类型,目前支持:",
+            "enum" : [ "snappy", "gzip", "zip" ],
+            "format" : "int32"
+          },
+          "csv_properties" : {
+            "$ref" : "#/components/schemas/CSVProperties"
+          },
+          "writable_partition_count" : {
+            "type" : "integer",
+            "description" : "可写分区总数量(只包含ACTIVE状态的分区)。"
+          },
+          "readable_partition_count" : {
+            "type" : "integer",
+            "description" : "可读分区总数量(包含ACTIVE与DELETED状态的分区)。"
+          },
+          "update_partition_counts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdatePartitionCount"
+            },
+            "description" : "扩缩容操作记录列表。"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "通道的标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "sys_tags" : {
+            "type" : "array",
+            "description" : "通道的企业项目。",
+            "items" : {
+              "$ref" : "#/components/schemas/SysTag"
+            }
+          },
+          "auto_scale_enabled" : {
+            "type" : "boolean",
+            "description" : "是否开启自动扩缩容。"
+          },
+          "auto_scale_min_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动缩容的最小分片数。"
+          },
+          "auto_scale_max_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动扩容的最大分片数。"
+          }
+        },
+        "xml" : {
+          "name" : "DescribeStreamResult"
+        },
+        "type" : "object"
+      },
+      "PartitionResult" : {
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "分区的当前状态。",
+            "enum" : [ "CREATING", "ACTIVE", "DELETED", "EXPIRED" ]
+          },
+          "partition_id" : {
+            "type" : "string",
+            "description" : "分区的唯一标识符。"
+          },
+          "hash_range" : {
+            "type" : "string",
+            "description" : "分区的可能哈希键值范围。"
+          },
+          "sequence_number_range" : {
+            "type" : "string",
+            "description" : "分区的序列号范围。"
+          },
+          "parent_partitions" : {
+            "type" : "string",
+            "description" : "父分区。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTagReq" : {
+        "required" : [ "tag" ],
+        "properties" : {
+          "tag" : {
+            "$ref" : "#/components/schemas/Tag"
+          }
+        },
+        "type" : "object"
+      },
+      "ListStreamsResult" : {
+        "type" : "object",
+        "properties" : {
+          "total_number" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "当前租户所有通道数量。"
+          },
+          "stream_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "满足当前请求条件的通道名称的列表。"
+          },
+          "has_more_streams" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "是否还有更多满足条件的通道。"
+          },
+          "stream_info_list" : {
+            "type" : "array",
+            "description" : "通道列表详情。",
+            "items" : {
+              "$ref" : "#/components/schemas/StreamInfo",
+              "type" : "object"
+            }
+          }
+        },
+        "xml" : {
+          "name" : "ListStreamsResult"
+        }
+      },
+      "StreamInfo" : {
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "description" : "通道名称。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "通道创建的时间,13位时间戳。",
+            "format" : "int64"
+          },
+          "retention_period" : {
+            "type" : "integer",
+            "description" : "数据保留时长,单位是小时。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "通道的当前状态。",
+            "enum" : [ "CREATING", "RUNNING", "TERMINATING", "FROZEN" ],
+            "format" : "int32"
+          },
+          "stream_type" : {
+            "type" : "string",
+            "description" : "通道类型。",
+            "enum" : [ "COMMON", "ADVANCED" ]
+          },
+          "data_type" : {
+            "type" : "string",
+            "description" : "源数据类型。",
+            "enum" : [ "BLOB", "JSON", "CSV" ]
+          },
+          "partition_count" : {
+            "type" : "integer",
+            "description" : "分区数量。"
+          },
+          "auto_scale_enabled" : {
+            "type" : "boolean",
+            "description" : "是否开启自动扩缩容。",
+            "default" : false
+          },
+          "auto_scale_min_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动缩容的最小分片数。",
+            "minimum" : 1
+          },
+          "auto_scale_max_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动扩容的最大分片数。"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "通道标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "sys_tags" : {
+            "type" : "array",
+            "description" : "通道企业项目列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/SysTag"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Metrics" : {
+        "description" : "数据对象。",
+        "properties" : {
+          "dataPoints" : {
+            "type" : "array",
+            "description" : "监控数据。",
+            "items" : {
+              "$ref" : "#/components/schemas/DataPoint"
+            }
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "监控指标。"
+          }
+        },
+        "type" : "object"
+      },
+      "DataPoint" : {
+        "description" : "监控数据。",
+        "properties" : {
+          "timestamp" : {
+            "type" : "integer",
+            "description" : "时间戳。",
+            "format" : "int64"
+          },
+          "value" : {
+            "type" : "integer",
+            "description" : "时间戳对应的监控值。",
+            "format" : "int64"
+          }
+        },
+        "type" : "object"
+      },
+      "GetPartitionMetricsResult" : {
+        "properties" : {
+          "metrics" : {
+            "$ref" : "#/components/schemas/Metrics"
+          }
+        },
+        "type" : "object"
+      },
+      "GetRecordsResult" : {
+        "type" : "object",
+        "properties" : {
+          "records" : {
+            "type" : "array",
+            "description" : "下载的记录列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Record",
+              "type" : "object"
+            }
+          },
+          "next_partition_cursor" : {
+            "type" : "string",
+            "description" : "下一个迭代器。"
+          }
+        },
+        "xml" : {
+          "name" : "GetRecordsResult"
+        }
+      },
+      "Record" : {
+        "properties" : {
+          "partition_key" : {
+            "type" : "string",
+            "description" : "用户上传数据时设置的partition_key。"
+          },
+          "sequence_number" : {
+            "type" : "string",
+            "description" : "该条数据的序列号。"
+          },
+          "data" : {
+            "type" : "string",
+            "description" : "下载的数据。"
+          },
+          "timestamp" : {
+            "type" : "integer",
+            "description" : "记录写入DIS的时间戳。",
+            "format" : "int64"
+          },
+          "timestamp_type" : {
+            "type" : "string",
+            "description" : "时间戳类型。",
+            "default" : "CreateTime",
+            "format" : "int64"
+          }
+        },
+        "xml" : {
+          "name" : "Record"
+        },
+        "type" : "object"
+      },
+      "CreateAppReq" : {
+        "type" : "object",
+        "required" : [ "app_name" ],
+        "properties" : {
+          "app_name" : {
+            "type" : "string",
+            "example" : "new-app",
+            "description" : "APP的名称,用户数据消费程序的唯一标识符。",
+            "maxLength" : 200,
+            "minLength" : 1,
+            "format" : "int32"
+          }
+        },
+        "xml" : {
+          "name" : "CreateAppReq"
+        }
+      },
+      "UpdatePartitionCountReq" : {
+        "required" : [ "stream_name", "target_partition_count" ],
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "example" : "new-stream",
+            "description" : "需要变更分区数量的通道名称。",
+            "maxLength" : 64
+          },
+          "target_partition_count" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "变更的目标分区数量。",
+            "minimum" : 0,
+            "exclusiveMinimum" : true
+          }
+        },
+        "type" : "object"
+      },
+      "ProcessingSchema" : {
+        "required" : [ "timestamp_name", "timestamp_type" ],
+        "properties" : {
+          "timestamp_name" : {
+            "type" : "string",
+            "description" : "源数据时间戳的属性名称。",
+            "format" : "int32"
+          },
+          "timestamp_type" : {
+            "type" : "string",
+            "description" : "源数据时间戳的类型。",
+            "format" : "int32"
+          },
+          "timestamp_format" : {
+            "type" : "string",
+            "description" : "源数据时间戳的类型为String时必选,用于根据时间戳格式生成OBS的时间目录。",
+            "format" : "int32"
+          }
+        },
+        "description" : "根据源数据的时间戳和已配置的\"partition_format\"生成对应的转储时间目录。将源数据的时间戳使用“yyyy/MM/dd/HH/mm”格式生成分区字符串,用来定义写到OBS的Object文件所在的目录层次结构。",
+        "type" : "object"
+      },
+      "OpenTSDBValue" : {
+        "required" : [ "type", "value" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "通道内用户JSON数据对应JSON属性的类型名称。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "常量或通道内用户数据的JSON属性名称。"
+          }
+        },
+        "description" : "CloudTable集群OpenTSDB 数据value的Schema配置,用于将通道内的JSON数据进行格式转换生成OpenTSDB 数据的value。",
+        "type" : "object"
+      },
+      "Options" : {
+        "properties" : {
+          "fill_missing_fields" : {
+            "type" : "string",
+            "description" : "数据入库时,数据源文件中某行的最后一个字段缺失时,请选择是直接将字段设为Null,还是在错误表中报错提示。",
+            "enum" : [ "true/on", "false/off" ]
+          },
+          "ignore_extra_data" : {
+            "type" : "string",
+            "description" : "数据源文件中的字段比外表定义列数多时,是否忽略多出的列。该参数只在数据导入过程中使用。",
+            "enum" : [ "true/on", "false/off" ]
+          },
+          "compatible_illegal_chars" : {
+            "type" : "string",
+            "description" : "导入非法字符容错参数。是将非法字符按照转换规则转换后入库,还是报错中止导入。",
+            "enum" : [ "true/on", "false/off" ]
+          },
+          "reject_limit" : {
+            "type" : "string",
+            "description" : "指定本次数据导入允许出现的数据格式错误个数,当导入过程中出现的数据格式错误未达到限定值时,本次数据导入可以成功。"
+          },
+          "error_table_name" : {
+            "type" : "string",
+            "description" : "用于记录数据格式错误信息的错误表表名。并行导入结束后查询此错误信息表,能够获取详细的错误信息。"
+          }
+        },
+        "xml" : {
+          "name" : "Options"
+        },
+        "description" : "DWS容错性选项(用于指定外表数据的各类参数)。",
+        "type" : "object"
+      },
+      "CloudtableSchema" : {
+        "properties" : {
+          "row_key" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RowKey"
+            },
+            "description" : "CloudTable集群HBase数据rowkey的Schema配置,用于将通道内的JSON数据生成HBase数据的rowkey。"
+          },
+          "columns" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Column"
+            },
+            "description" : "CloudTable集群HBase数据列的Schema配置,用于将通道内的JSON数据生成HBase数据的列。"
+          }
+        },
+        "xml" : {
+          "name" : "CloudtableSchema"
+        },
+        "required" : [ "row_key", "columns" ],
+        "description" : "转储HBase时必选,与“opentsdb_schema”二选一,表示CloudTable集群HBase数据的Schema配置。用于将通道内的JSON数据进行格式转换并导入Cloudtable的HBase表中。",
+        "type" : "object"
+      },
+      "CloudtableDestinationDescriptorRequest" : {
+        "xml" : {
+          "name" : "CloudtableDestinationDescriptorRequest"
+        },
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonDestinationDescriptor"
+        }, {
+          "type" : "object",
+          "required" : [ "cloudtable_cluster_name", "cloudtable_cluster_id" ],
+          "properties" : {
+            "cloudtable_cluster_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的CloudTable集群名称。"
+            },
+            "cloudtable_cluster_id" : {
+              "type" : "string",
+              "description" : "存储该通道数据的CloudTable集群ID。"
+            },
+            "cloudtable_table_name" : {
+              "type" : "string",
+              "description" : "转储HBase时必选,表示存储该通道数据的CloudTable集群HBase表名称。"
+            },
+            "cloudtable_schema" : {
+              "$ref" : "#/components/schemas/CloudtableSchema"
+            },
+            "opentsdb_schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/OpenTSDBSchema"
+              },
+              "description" : "转储OpenTSDB时必选,与“cloudtable_schema”二选一,表示CloudTable集群OpenTSDB数据的Schema配置。用于将通道内的JSON数据进行格式转换并导入Cloudtable的OpenTSDB。"
+            },
+            "cloudtable_row_key_delimiter" : {
+              "type" : "string",
+              "description" : "转储HBase的rowkey分隔符,用于分隔生成rowKey的用户数据。取值范围:”, ”、 ”. ”、 ”|”、 ”; ”、 ”\\”、 ”-”、 ”_”、 ”~”"
+            },
+            "obs_backup_bucket_path" : {
+              "type" : "string",
+              "description" : "用户数据转储CloudTable服务失败时,可选择将转储失败的数据备份至OBS服务,此参数为OBS服务的桶名称。"
+            },
+            "backup_file_prefix" : {
+              "type" : "string",
+              "description" : "用户数据转储CloudTable服务失败时,可选择将转储失败的数据备份至OBS服务,此参数为OBS桶下的自定义目录,多级目录可用“/”进行分隔,不可以“/”开头。"
+            },
+            "retry_duration" : {
+              "type" : "string",
+              "description" : "用户数据导入CloudTable服务失败的失效重试时间。超出此时效,转储CloudTable失败的数据将备份至“OBS桶/ backup_file_prefix /cloudtable_error”或“OBS桶/ backup_file_prefix /opentsdb_error”目录下。"
+            }
+          }
+        } ],
+        "description" : "转储目的地为CloudTable的参数列表。",
+        "type" : "object"
+      },
+      "OpenTSDBMetric" : {
+        "required" : [ "type", "value" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "- Constant表示metric为常量value的值。",
+            "enum" : [ "Constant", "String" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "常量或通道内用户数据的JSON属性名称。"
+          }
+        },
+        "type" : "object"
+      },
+      "RowKey" : {
+        "required" : [ "value", "type" ],
+        "properties" : {
+          "value" : {
+            "type" : "string",
+            "description" : "通道内JSON数据的JSON属性名,用于生成HBase数据的rowkey。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "通道内JSON数据的JSON属性的类型名称。",
+            "enum" : [ "Bigint", "Double", "Boolean", "Timestamp", "String", "Decimal" ]
+          }
+        },
+        "type" : "object"
+      },
+      "MRSDestinationDescriptorRequest" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonDestinationDescriptor"
+        }, {
+          "type" : "object",
+          "required" : [ "mrs_cluster_name", "mrs_cluster_id", "mrs_hdfs_path", "obs_bucket_path" ],
+          "properties" : {
+            "mrs_cluster_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的MRS集群名称。"
+            },
+            "mrs_cluster_id" : {
+              "type" : "string",
+              "description" : "存储该通道数据的MRS集群ID。"
+            },
+            "mrs_hdfs_path" : {
+              "type" : "string",
+              "description" : "存储该通道数据的MRS集群的HDFS路径。"
+            },
+            "file_prefix" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶下的自定义目录,多级目录可用“/”进行分隔,不可以“/”开头。"
+            },
+            "hdfs_prefix_folder" : {
+              "type" : "string",
+              "description" : "在MRS集群HDFS中存储通道文件的自定义目录,多级目录可用\"/\"进行分隔。"
+            },
+            "obs_bucket_path" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶名称。"
+            },
+            "retry_duration" : {
+              "type" : "string",
+              "description" : "用户数据转储失败的失效重试时间。重试时间超过该配置项配置的值,则将转储失败的数据备份至“OBS桶/"
+            }
+          }
+        } ],
+        "description" : "转储目的地为MRS的参数列表。",
+        "type" : "object"
+      },
+      "DWSDestinationDescriptorRequest" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonDestinationDescriptor"
+        }, {
+          "type" : "object",
+          "required" : [ "dws_cluster_name", "dws_cluster_id", "dws_database_name", "dws_schema", "dws_table_name", "dws_delimiter", "user_name", "user_password", "kms_user_key_name", "kms_user_key_id", "obs_bucket_path" ],
+          "properties" : {
+            "dws_cluster_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS集群名称。"
+            },
+            "dws_cluster_id" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS集群ID。"
+            },
+            "dws_database_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS数据库名称。"
+            },
+            "dws_schema" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS数据库模式。"
+            },
+            "dws_table_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS数据库模式下的数据表。"
+            },
+            "dws_delimiter" : {
+              "type" : "string",
+              "description" : "用户数据的字段分隔符,根据此分隔符分隔用户数据插入DWS数据表的相应列。"
+            },
+            "user_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS数据库的用户名。"
+            },
+            "user_password" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DWS数据库的密码。"
+            },
+            "kms_user_key_name" : {
+              "type" : "string",
+              "description" : "用户在密钥管理服务(简称KMS)创建的用户主密钥名称,用于加密存储DWS数据库的密码。"
+            },
+            "kms_user_key_id" : {
+              "type" : "string",
+              "description" : "用户在密钥管理服务(简称KMS)创建的用户主密钥ID,用于加密存储DWS数据库的密码。"
+            },
+            "obs_bucket_path" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶名称。"
+            },
+            "file_prefix" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶下的自定义目录,多级目录可用“/”进行分隔,不可以“/”开头。"
+            },
+            "retry_duration" : {
+              "type" : "string",
+              "description" : "用户数据导入DWS集群失败的重试失效时间。超出此配置项配置的时间,转储DWS失败的数据将备份至“OBS桶/ file_prefix/dws_error”目录下。"
+            },
+            "dws_table_columns" : {
+              "type" : "string",
+              "description" : "指定要转储到DWS表中的列,为null或者为空则默认全列。比如“c1,c2”表示将Schema中c1和c2这两列转储到DWS。",
+              "example" : "c1,c2,c3"
+            },
+            "options" : {
+              "$ref" : "#/components/schemas/Options"
+            }
+          }
+        } ],
+        "description" : "转储目的地为DWS的参数列表。",
+        "type" : "object"
+      },
+      "DescribeTransferTaskResult" : {
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "description" : "该转储任务所属通道名称。",
+            "format" : "int64"
+          },
+          "task_name" : {
+            "type" : "string",
+            "description" : "转储任务名称。",
+            "format" : "int64"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "转储任务状态。",
+            "enum" : [ "ERROR", "STARTING", "PAUSED", "RUNNING", "DELETE", "ABNORMAL" ],
+            "format" : "int32",
+            "example" : "RUNNING"
+          },
+          "destination_type" : {
+            "type" : "string",
+            "description" : "转储任务类型。",
+            "enum" : [ "OBS", "MRS", "DLI", "CLOUDTABLE", "DWS" ],
+            "format" : "int32",
+            "example" : "OBS"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "转储任务创建时间。",
+            "format" : "int64"
+          },
+          "last_transfer_timestamp" : {
+            "type" : "integer",
+            "description" : "转储任务最近一次转储时间。",
+            "format" : "int64"
+          },
+          "partitions" : {
+            "type" : "array",
+            "description" : "分区转储详情列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PartitionResult"
+            }
+          },
+          "obs_destination_description" : {
+            "$ref" : "#/components/schemas/OBSDestinationDescriptorRequest"
+          },
+          "dws_destination_descripton" : {
+            "$ref" : "#/components/schemas/DWSDestinationDescriptorRequest"
+          },
+          "mrs_destination_description" : {
+            "$ref" : "#/components/schemas/MRSDestinationDescriptorRequest"
+          },
+          "dli_destination_description" : {
+            "$ref" : "#/components/schemas/DliDestinationDescriptorRequest"
+          },
+          "cloudtable_destination_descripton" : {
+            "$ref" : "#/components/schemas/CloudtableDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "OpenTSDBTimestamp" : {
+        "required" : [ "type", "value", "format" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "- Timestamp类型表示通道内用户数据对应JSON属性的取值为Timestamp类型,不需要进行数据格式转换就可以生成OpenTSDB的timestamp。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "通道内用户数据的JSON属性名称。"
+          },
+          "format" : {
+            "type" : "string",
+            "description" : "“type”为“String”类型时必选。表示通道内用户数据对应JSON属性的取值为Date格式,需要根据format字段进行数据格式转换生成OpenTSDB的timestamp。"
+          }
+        },
+        "description" : "CloudTable集群OpenTSDB 数据timestamp的Schema配置,用于将通道内的JSON数据进行格式转换生成OpenTSDB数据的timestamp。",
+        "type" : "object"
+      },
+      "OpenTSDBSchema" : {
+        "properties" : {
+          "metric" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/OpenTSDBMetric"
+            },
+            "description" : "CloudTable集群OpenTSDB数据metric的Schema配置,用于将通道内的JSON数据进行格式转换生成OpenTSDB数据的metric。"
+          },
+          "timestamp" : {
+            "$ref" : "#/components/schemas/OpenTSDBTimestamp"
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/OpenTSDBValue"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/OpenTSDBTags"
+            },
+            "description" : "CloudTable集群OpenTSDB数据tags的Schema配置,用于将通道内的JSON数据进行格式转换生成OpenTSDB数据的tags。"
+          }
+        },
+        "xml" : {
+          "name" : "OpenTSDBSchema"
+        },
+        "required" : [ "metric", "timestamp", "value", "tags" ],
+        "description" : "转储OpenTSDB时必选,与“cloudtable_schema”二选一,表示CloudTable集群OpenTSDB数据的Schema配置。用于将通道内的JSON数据进行格式转换并导入Cloudtable的OpenTSDB。",
+        "type" : "object"
+      },
+      "CommonDestinationDescriptor" : {
+        "description" : "转储任务请求体公共部分。",
+        "required" : [ "task_name", "agency_name", "deliver_time_interval" ],
+        "properties" : {
+          "task_name" : {
+            "type" : "string",
+            "description" : "转储任务的名称。  任务名称由英文字母、数字、中划线和下划线组成。长度为1~64个字符。"
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "在统一身份认证服务(IAM)中创建委托的名称,DIS需要获取IAM委托信息去访问您指定的资源。创建委托的参数设置如下:",
+            "maxLength" : 64
+          },
+          "deliver_time_interval" : {
+            "type" : "integer",
+            "default" : 300,
+            "description" : "根据用户配置的时间,周期性的将数据导入OBS,若某个时间段内无数据,则此时间段不会生成打包文件。",
+            "maximum" : 900,
+            "minimum" : 30,
+            "format" : "int32"
+          },
+          "consumer_strategy" : {
+            "type" : "string",
+            "default" : "LATEST",
+            "description" : "偏移量。",
+            "enum" : [ "LATEST", "TRIM_HORIZON" ]
+          }
+        },
+        "type" : "object"
+      },
+      "OpenTSDBTags" : {
+        "required" : [ "name", "type", "value" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "存储该通道数据的OpenTSDB数据的tag名称。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "通道内用户JSON数据对应JSON属性的类型名称。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "常量或通道内用户数据的JSON属性名称。"
+          }
+        },
+        "type" : "object"
+      },
+      "OBSDestinationDescriptorRequest" : {
+        "xml" : {
+          "name" : "OBSDestinationDescriptorRequest"
+        },
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonDestinationDescriptor"
+        }, {
+          "type" : "object",
+          "required" : [ "obs_bucket_path" ],
+          "properties" : {
+            "file_prefix" : {
+              "type" : "string",
+              "example" : "prefix1/prefix2",
+              "description" : "在OBS中存储通道文件的自定义目录,多级目录可用“/”进行分隔,不可以“/”开头。",
+              "maxLength" : 50
+            },
+            "partition_format" : {
+              "type" : "string",
+              "example" : "yyyy/MM/dd",
+              "description" : "将转储文件的生成时间使用“yyyy/MM/dd/HH/mm”格式生成分区字符串,用来定义写到OBS的Object文件所在的目录层次结构。",
+              "enum" : [ "yyyy", "yyyy/MM", "yyyy/MM/dd", "yyyy/MM/dd/HH", "yyyy/MM/dd/HH/mm" ]
+            },
+            "obs_bucket_path" : {
+              "type" : "string",
+              "example" : "new-obs-bucket",
+              "description" : "存储该通道数据的OBS桶名称。"
+            },
+            "destination_file_type" : {
+              "type" : "string",
+              "example" : "text",
+              "description" : "转储文件格式。",
+              "default" : "text",
+              "enum" : [ "text", "parquet", "carbon" ]
+            },
+            "processing_schema" : {
+              "$ref" : "#/components/schemas/ProcessingSchema"
+            },
+            "record_delimiter" : {
+              "type" : "string",
+              "example" : "\n",
+              "description" : "转储文件的记录分隔符,用于分隔写入转储文件的用户数据。",
+              "default" : "\\n",
+              "format" : "int32"
+            }
+          }
+        } ],
+        "description" : "转储目的地为OBS的参数列表。",
+        "type" : "object"
+      },
+      "DliDestinationDescriptorRequest" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonDestinationDescriptor"
+        }, {
+          "type" : "object",
+          "required" : [ "dli_database_name", "dli_table_name", "obs_bucket_path" ],
+          "properties" : {
+            "dli_database_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DLI数据库名称。"
+            },
+            "dli_table_name" : {
+              "type" : "string",
+              "description" : "存储该通道数据的DLI表名称。"
+            },
+            "obs_bucket_path" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶名称。"
+            },
+            "file_prefix" : {
+              "type" : "string",
+              "description" : "临时存储该通道数据的OBS桶下的自定义目录,多级目录可用“/”进行分隔,不可以“/”开头。"
+            },
+            "retry_duration" : {
+              "type" : "string",
+              "description" : "用户数据导入DLI失败的失效重试时间。重试时间超过该配置项配置的值,则将转储失败的数据备份至“OBS桶/ file_prefix/dli_error”目录下。"
+            }
+          }
+        } ],
+        "description" : "转储目的地为DLI的参数列表。",
+        "type" : "object"
+      },
+      "Column" : {
+        "properties" : {
+          "column_family_name" : {
+            "type" : "string",
+            "description" : "存储该通道数据的HBase表数据的列族名称。"
+          },
+          "column_name" : {
+            "type" : "string",
+            "description" : "存储该通道数据的HBase表数据的列名称。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "通道内JSON数据的JSON属性名,用于生成HBase数据的列值。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "通道内JSON数据的JSON属性的类型名称。",
+            "enum" : [ "Bigint", "Double", "Boolean", "Timestamp", "String", "Decimal" ]
+          }
+        },
+        "xml" : {
+          "name" : "SchemaField"
+        },
+        "required" : [ "column_family_name", "column_name", "value", "type" ],
+        "type" : "object"
+      },
+      "BatchStopTransferTaskReq" : {
+        "required" : [ "action", "tasks" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "转储任务操作,目前支持:",
+            "enum" : [ "stop" ]
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "待暂停的转储任务列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/BatchTransferTask"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "PrincipalRule" : {
+        "properties" : {
+          "principal" : {
+            "type" : "string",
+            "description" : "授权用户ID。"
+          },
+          "principal_name" : {
+            "type" : "string",
+            "description" : "授权用户名。"
+          },
+          "action_type" : {
+            "type" : "string",
+            "description" : "授权操作类型。",
+            "enum" : [ "putRecords", "getRecords" ]
+          },
+          "effect" : {
+            "type" : "string",
+            "description" : "授权影响类型。",
+            "enum" : [ "accept" ]
+          }
+        },
+        "xml" : {
+          "name" : "PrincipalRule"
+        },
+        "type" : "object"
+      },
+      "ListPoliciesResult" : {
+        "type" : "object",
+        "properties" : {
+          "stream_id" : {
+            "type" : "string",
+            "description" : "通道唯一标识符。"
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "通道授权信息列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PrincipalRule",
+              "type" : "object"
+            }
+          }
+        },
+        "xml" : {
+          "name" : "ListStreamsResult"
+        }
+      },
+      "CommitCheckpointReq" : {
+        "type" : "object",
+        "required" : [ "app_name", "checkpoint_type", "stream_name", "partition_id", "sequence_number" ],
+        "properties" : {
+          "app_name" : {
+            "type" : "string",
+            "example" : "new-app",
+            "description" : "APP的名称,用户数据消费程序的唯一标识符,需要先通过创建App接口创建。"
+          },
+          "checkpoint_type" : {
+            "type" : "string",
+            "example" : "LAST_READ",
+            "description" : "Checkpoint类型。",
+            "enum" : [ "LAST_READ" ]
+          },
+          "stream_name" : {
+            "type" : "string",
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。"
+          },
+          "partition_id" : {
+            "type" : "string",
+            "example" : "shardId-0000000000",
+            "description" : "通道的分区标识符。"
+          },
+          "sequence_number" : {
+            "type" : "string",
+            "example" : 10,
+            "description" : "需要提交的序列号,用来记录该通道的消费检查点,需要保证该序列号处于有效范围内。"
+          },
+          "metadata" : {
+            "type" : "string",
+            "description" : "用户消费程序端的元数据信息。",
+            "maxLength" : 1000
+          }
+        },
+        "xml" : {
+          "name" : "CommitCheckpointReq"
+        }
+      },
+      "CreateStreamReq" : {
+        "required" : [ "stream_name", "partition_count" ],
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "example" : "new-stream",
+            "description" : "通道名称。",
+            "maxLength" : 64
+          },
+          "partition_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "分区数量。"
+          },
+          "stream_type" : {
+            "type" : "string",
+            "example" : "COMMON",
+            "description" : "通道类型。",
+            "enum" : [ "COMMON", "ADVANCED" ]
+          },
+          "data_type" : {
+            "type" : "string",
+            "example" : "JSON",
+            "description" : "源数据类型。",
+            "enum" : [ "BLOB", "JSON", "CSV" ]
+          },
+          "data_duration" : {
+            "type" : "integer",
+            "example" : 24,
+            "description" : "数据保留时长。",
+            "default" : 24,
+            "format" : "int32"
+          },
+          "auto_scale_enabled" : {
+            "type" : "boolean",
+            "description" : "是否开启自动扩缩容。",
+            "default" : false
+          },
+          "auto_scale_min_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动缩容的最小分片数。",
+            "minimum" : 1,
+            "format" : "int64"
+          },
+          "auto_scale_max_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动扩容的最大分片数。"
+          },
+          "data_schema" : {
+            "type" : "string",
+            "description" : "用于描述用户JSON、CSV格式的源数据结构,采用Avro Schema的语法描述。",
+            "format" : "int32"
+          },
+          "csv_properties" : {
+            "$ref" : "#/components/schemas/CSVProperties"
+          },
+          "compression_format" : {
+            "type" : "string",
+            "description" : "数据的压缩类型,目前支持:",
+            "enum" : [ "snappy", "gzip", "zip" ],
+            "format" : "int32"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "通道标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "sys_tags" : {
+            "type" : "array",
+            "description" : "通道企业项目列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/SysTag"
+            }
+          }
+        },
+        "xml" : {
+          "name" : "CreateStreamReq"
+        },
+        "type" : "object"
+      },
+      "CreateDliTransferTaskReq" : {
+        "required" : [ "destination_type" ],
+        "properties" : {
+          "destination_type" : {
+            "type" : "string",
+            "example" : "OBS",
+            "description" : "转储任务类型。",
+            "default" : "NOWHERE",
+            "enum" : [ "DLI" ]
+          },
+          "dli_destination_descriptor" : {
+            "$ref" : "#/components/schemas/DliDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "Tags" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。",
+            "maxLength" : 36
+          },
+          "values" : {
+            "type" : "array",
+            "description" : "标签值列表。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ListResourceInstancesReq" : {
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识(仅限于filter,count)",
+            "enum" : [ "filter", "count" ]
+          },
+          "limit" : {
+            "type" : "string",
+            "default" : 1000,
+            "description" : "查询记录数(action为count时无此参数)如果action为filter默认为1000,limit最多为1000,不能为负数,最小值为1"
+          },
+          "offset" : {
+            "type" : "string",
+            "description" : "索引位置, 从offset指定的下一条数据开始查询。 查询第一页数据时,不需要传入此参数,查询后续页码数据时,将查询前一页数据时响应体中的值带入此参数(action为count时无此参数)如果action为filter默认为0,必须为数字,不能为负数"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "返回结果包含该参数中所有标签对应的资源,该参数最多包含10个key,每个key下面的value最多10个,结构体不能缺失,key不能为空或者空字符串。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            }
+          },
+          "tags_any" : {
+            "type" : "array",
+            "description" : "返回结果包含该参数中任意一个标签对应的资源,该参数最多包含10个key,每个key下面的value最多10个,结构体不能缺失,key不能为空或者空字符串。Key不能重复,同一个key中values不能重复。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            }
+          },
+          "not_tags" : {
+            "type" : "array",
+            "description" : "返回结果不包含该参数中所有标签对应的资源,该参数最多包含10个key,每个key下面的value最多10个, 结构体不能缺失,key不能为空或者空字符串。Key不能重复,同一个key中values不能重复。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            }
+          },
+          "not_tags_any" : {
+            "type" : "array",
+            "description" : "返回结果不包含该参数中任意一个标签对应的资源,该参数最多包含10个key,每个key下面的value最多10个,结构体不能缺失,key不能为空或者空字符串。Key不能重复,同一个key中values不能重复。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            }
+          },
+          "matches" : {
+            "type" : "string",
+            "description" : "搜索字段,key为要匹配的字段,当前仅支持resource_name。value为匹配的值。此字段为固定字典值"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTransferTaskReq" : {
+        "required" : [ "destination_type" ],
+        "properties" : {
+          "destination_type" : {
+            "type" : "string",
+            "example" : "OBS",
+            "description" : "转储任务类型。",
+            "default" : "NOWHERE",
+            "enum" : [ "OBS" ]
+          },
+          "obs_destination_descriptor" : {
+            "$ref" : "#/components/schemas/OBSDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "TransferTask" : {
+        "properties" : {
+          "task_name" : {
+            "type" : "string",
+            "description" : "转储任务名称。"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "转储任务状态。",
+            "enum" : [ "ERROR", "STARTING", "PAUSED", "RUNNING", "DELETE", "ABNORMAL" ],
+            "format" : "int32",
+            "example" : "RUNNING"
+          },
+          "destination_type" : {
+            "type" : "string",
+            "description" : "转储任务类型。",
+            "enum" : [ "OBS", "MRS", "DLI", "CLOUDTABLE", "DWS" ],
+            "format" : "int32",
+            "example" : "OBS"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "转储任务创建时间。",
+            "format" : "int64"
+          },
+          "last_transfer_timestamp" : {
+            "type" : "integer",
+            "description" : "转储任务最近一次转储时间。",
+            "format" : "int64"
+          }
+        },
+        "type" : "object"
+      },
+      "ListTransferTasksResult" : {
+        "properties" : {
+          "total_number" : {
+            "type" : "integer",
+            "description" : "转储任务总数。"
+          },
+          "quota" : {
+            "type" : "integer",
+            "description" : "可创建的转储任务配额。",
+            "format" : "int32"
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "转储任务列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/TransferTask"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "GetCheckpointResult" : {
+        "type" : "object",
+        "properties" : {
+          "sequence_number" : {
+            "type" : "string",
+            "description" : "序列号,用来记录该通道的消费检查点。"
+          },
+          "metadata" : {
+            "type" : "string",
+            "description" : "用户消费程序端的元数据信息。"
+          }
+        },
+        "xml" : {
+          "name" : "GetCheckpointResult"
+        }
+      },
+      "ListResourceTagsResult" : {
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CreateMrsTransferTaskReq" : {
+        "required" : [ "destination_type" ],
+        "properties" : {
+          "destination_type" : {
+            "type" : "string",
+            "example" : "OBS",
+            "description" : "转储任务类型。",
+            "default" : "NOWHERE",
+            "enum" : [ "MRS" ]
+          },
+          "mrs_destination_descriptor" : {
+            "$ref" : "#/components/schemas/MRSDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "GetPartitionCursorResult" : {
+        "type" : "object",
+        "properties" : {
+          "partition_cursor" : {
+            "type" : "string",
+            "description" : "数据游标。",
+            "maxLength" : 512,
+            "minLength" : 1,
+            "format" : "int32"
+          }
+        },
+        "xml" : {
+          "name" : "GetPartitionCursorResult"
+        }
+      },
+      "GetStreamMetricsResult" : {
+        "properties" : {
+          "metrics" : {
+            "$ref" : "#/components/schemas/Metrics"
+          },
+          "metrics_list" : {
+            "type" : "array",
+            "description" : "监控数据对象列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Metrics"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateStreamReq" : {
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "description" : "待更新的通道名称。",
+            "maxLength" : 64,
+            "example" : "new-stream"
+          },
+          "data_duration" : {
+            "type" : "integer",
+            "description" : "数据保留时长。",
+            "default" : 24,
+            "example" : 24,
+            "format" : "int32"
+          },
+          "data_type" : {
+            "type" : "string",
+            "description" : "源数据类型。",
+            "enum" : [ "BLOB", "JSON", "CSV" ],
+            "example" : "JSON",
+            "format" : "int32"
+          },
+          "data_schema" : {
+            "type" : "string",
+            "description" : "用于描述用户JSON、CSV格式的源数据结构,采用Avro Schema的语法描述。",
+            "example" : "JSON",
+            "format" : "int32"
+          },
+          "auto_scale_enabled" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "是否开启自动扩缩容。"
+          },
+          "auto_scale_min_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动缩容的最小分片数。",
+            "minimum" : 1,
+            "format" : "int64"
+          },
+          "auto_scale_max_partition_count" : {
+            "type" : "integer",
+            "description" : "当自动扩缩容启用时,自动扩容的最大分片数。",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "stream_name" ],
+        "type" : "object"
+      },
+      "CreateCloudTableTransferTaskReq" : {
+        "required" : [ "destination_type" ],
+        "properties" : {
+          "destination_type" : {
+            "type" : "string",
+            "example" : "OBS",
+            "description" : "转储任务类型。",
+            "default" : "NOWHERE",
+            "enum" : [ "CLOUDTABLE" ]
+          },
+          "cloudtable_destination_descriptor" : {
+            "$ref" : "#/components/schemas/CloudtableDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateDwsTransferTaskReq" : {
+        "required" : [ "destination_type" ],
+        "properties" : {
+          "destination_type" : {
+            "type" : "string",
+            "example" : "OBS",
+            "description" : "转储任务类型。",
+            "default" : "NOWHERE",
+            "enum" : [ "DWS" ]
+          },
+          "dws_destination_descriptor" : {
+            "$ref" : "#/components/schemas/DWSDestinationDescriptorRequest"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchCreateTagsReq" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识:仅限于create",
+            "enum" : [ "create" ]
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreatePolicies" : {
+      "post" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "添加权限策略",
+        "description" : "本接口用于给指定通道添加权限策略。",
+        "operationId" : "CreatePolicies",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要添加授权策略的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要添加授权策略的通道名称。",
+            "type" : "string",
+            "maxLength" : 64
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePolicyRuleRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreatePolicies",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/policies"
+    },
+    "/SendRecords" : {
+      "post" : {
+        "tags" : [ "数据管理" ],
+        "summary" : "上传数据",
+        "description" : "本接口用于上传数据到DIS通道中。",
+        "operationId" : "SendRecords",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PutRecordsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PutRecordsRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SendRecords",
+      "x-url" : "{endpoint}/v2/{project_id}/records"
+    },
+    "/BatchStartTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "批量启动转储任务",
+        "description" : "此接口用于批量启动转储任务。",
+        "operationId" : "BatchStartTransferTask",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要查询的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要查询的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchStartTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchStartTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks/action"
+    },
+    "/BatchDeleteTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量删除资源标签",
+        "description" : "该接口用于批量删除资源(通道等)标签。此接口为幂等接口:删除时,如果删除的标签不存在,默认处理成功;删除时不对标签字符集范围做校验。删除时tags结构体不能缺失,key不能为空,或者空字符串。",
+        "operationId" : "BatchDeleteTags",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_id",
+          "in" : "path",
+          "description" : "通道ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "CiFxxxxr0401xxxxZlp",
+            "description" : "通道ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchDeleteTagsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteTags",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/{stream_id}/tags/action"
+    },
+    "/ShowStreamTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "查询指定通道的标签信息",
+        "description" : "该接口用于查询指定通道的标签信息。",
+        "operationId" : "ShowStreamTags",
+        "responses" : {
+          "200" : {
+            "description" : "通道标签信息响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowResourceTagsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_id",
+          "in" : "path",
+          "description" : "通道ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "CiFxxxxr0401xxxxZlp",
+            "description" : "通道ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowStreamTags",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/{stream_id}/tags"
+    },
+    "/DeleteTransferTask" : {
+      "delete" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "删除转储任务",
+        "description" : "该接口用于删除转储任务。",
+        "operationId" : "DeleteTransferTask",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道的名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道的名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_name",
+          "in" : "path",
+          "description" : "待删除的转储任务名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-task",
+            "description" : "待删除的转储任务名称。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks/{task_name}"
+    },
+    "/ListApp" : {
+      "get" : {
+        "tags" : [ "App管理" ],
+        "summary" : "查询App列表",
+        "description" : "本接口用于查询APP列表。",
+        "operationId" : "ListApp",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListAppResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Parameters"
+          },
+          "404" : {
+            "description" : "Application not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "单次请求返回APP列表的最大数量。",
+          "required" : false,
+          "schema" : {
+            "example" : 100,
+            "description" : "单次请求返回APP列表的最大数量。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "start_app_name",
+          "in" : "query",
+          "description" : "从该app名称开始返回app列表,返回的app列表不包括此app名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "从该app名称开始返回app列表,返回的app列表不包括此app名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "query",
+          "description" : "返回该通道下的app列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "返回该通道下的app列表。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApp",
+      "x-url" : "{endpoint}/v2/{project_id}/apps"
+    },
+    "/ShowStream" : {
+      "get" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "查看通道详情",
+        "description" : "本接口用于查询指定通道的详情。",
+        "operationId" : "ShowStream",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DescribeStreamResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要查询的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要查询的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "start_partitionId",
+          "in" : "query",
+          "description" : "从该分区值开始返回分区列表,返回的分区列表不包括此分区。",
+          "required" : false,
+          "schema" : {
+            "description" : "从该分区值开始返回分区列表,返回的分区列表不包括此分区。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit_partitions",
+          "in" : "query",
+          "description" : "单次请求返回的最大分区数。",
+          "required" : false,
+          "schema" : {
+            "example" : 100,
+            "description" : "单次请求返回的最大分区数。",
+            "type" : "integer",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowStream",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}"
+    },
+    "/CreateTag" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "给指定通道添加标签",
+        "description" : "本接口用于给指定通道添加标签。",
+        "operationId" : "CreateTag",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_id",
+          "in" : "path",
+          "description" : "通道ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "CiFxxxxr0401xxxxZlp",
+            "description" : "通道ID。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTagReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTag",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/{stream_id}/tags"
+    },
+    "/ListStreams" : {
+      "get" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "查询通道列表",
+        "description" : "本接口用户查询当前租户创建的所有通道。",
+        "operationId" : "ListStreams",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListStreamsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "单次请求返回通道列表的最大数量。",
+          "required" : false,
+          "schema" : {
+            "description" : "单次请求返回通道列表的最大数量。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "start_stream_name",
+          "in" : "query",
+          "description" : "从该通道开始返回通道列表,返回的通道列表不包括此通道名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "从该通道开始返回通道列表,返回的通道列表不包括此通道名称。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStreams",
+      "x-url" : "{endpoint}/v2/{project_id}/streams"
+    },
+    "/ShowPartitionMetrics" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "查询分区监控",
+        "description" : "本接口用于查询通道指定分区的监控数据。",
+        "operationId" : "ShowPartitionMetrics",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetPartitionMetricsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "partition_id",
+          "in" : "path",
+          "description" : "分区编号。",
+          "required" : true,
+          "schema" : {
+            "example" : 0,
+            "description" : "分区编号。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "分区监控指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+          "required" : false,
+          "schema" : {
+            "description" : "分区监控指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+            "type" : "string",
+            "enum" : [ "total_put_bytes_per_partition", "total_get_bytes_per_partition", "total_put_records_per_partition", "total_get_records_per_partition" ]
+          }
+        }, {
+          "name" : "label_list",
+          "in" : "query",
+          "description" : "使用label用逗号拼接组成,用于批量查询多个label的指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+          "required" : false,
+          "schema" : {
+            "description" : "使用label用逗号拼接组成,用于批量查询多个label的指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "监控开始时间点,10位时间戳。",
+          "required" : true,
+          "schema" : {
+            "description" : "监控开始时间点,10位时间戳。",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "监控结束时间点,10位时间戳。",
+          "required" : true,
+          "schema" : {
+            "description" : "监控结束时间点,10位时间戳。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPartitionMetrics",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/partitions/{partition_id}/metrics"
+    },
+    "/ConsumeRecords" : {
+      "get" : {
+        "tags" : [ "数据管理" ],
+        "summary" : "下载数据",
+        "description" : "本接口用于从DIS通道中下载数据。",
+        "operationId" : "ConsumeRecords",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetRecordsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "partition-cursor",
+          "in" : "query",
+          "description" : "数据游标,需要先通过获取数据游标的接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "数据游标,需要先通过获取数据游标的接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "max_fetch_bytes",
+          "in" : "query",
+          "description" : "每个请求获取记录的最大字节数。",
+          "required" : false,
+          "schema" : {
+            "example" : 1048576,
+            "description" : "每个请求获取记录的最大字节数。",
+            "type" : "integer"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ConsumeRecords",
+      "x-url" : "{endpoint}/v2/{project_id}/records"
+    },
+    "/ShowApp" : {
+      "get" : {
+        "tags" : [ "App管理" ],
+        "summary" : "查看App详情",
+        "description" : "本接口用于查询APP详情。",
+        "operationId" : "ShowApp",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DescribeAppResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "path",
+          "description" : "需要查询的App名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-app",
+            "description" : "需要查询的App名称。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApp",
+      "x-url" : "{endpoint}/v2/{project_id}/apps/{app_name}"
+    },
+    "/DeleteTag" : {
+      "delete" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "删除指定通道的标签",
+        "description" : "该接口用于删除指定通道的标签。",
+        "operationId" : "DeleteTag",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_id",
+          "in" : "path",
+          "description" : "通道ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "CiFxxxxr0401xxxxZlp",
+            "description" : "通道ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "key",
+          "in" : "path",
+          "description" : "标签键。",
+          "required" : true,
+          "schema" : {
+            "description" : "标签键。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTag",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/{stream_id}/tags/{key}"
+    },
+    "/CreateApp" : {
+      "post" : {
+        "tags" : [ "App管理" ],
+        "summary" : "创建消费App",
+        "description" : "本接口用于创建消费APP。",
+        "operationId" : "CreateApp",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateAppReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateApp",
+      "x-url" : "{endpoint}/v2/{project_id}/apps"
+    },
+    "/UpdatePartitionCount" : {
+      "put" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "修改分区数量",
+        "description" : "本接口用于变更指定通道中的分区数量。",
+        "operationId" : "UpdatePartitionCount",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要变更分区数量的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要变更分区数量的通道名称。",
+            "type" : "string",
+            "maxLength" : 64
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdatePartitionCountReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdatePartitionCount",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}"
+    },
+    "/ShowTransferTask" : {
+      "get" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "查询转储任务详情",
+        "description" : "查询转储任务详情。",
+        "operationId" : "ShowTransferTask",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DescribeTransferTaskResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道的名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道的名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_name",
+          "in" : "path",
+          "description" : "待删除的转储任务名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-task",
+            "description" : "待删除的转储任务名称。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks/{task_name}"
+    },
+    "/BatchStopTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "批量暂停转储任务",
+        "description" : "此接口用于批量暂停转储任务。",
+        "operationId" : "BatchStopTransferTask",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要查询的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要查询的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchStopTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchStopTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks/action"
+    },
+    "/ListPolicies" : {
+      "get" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "查询权限策略列表",
+        "description" : "本接口用于查询指定通道的权限策略列表。",
+        "operationId" : "ListPolicies",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListPoliciesResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPolicies",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/policies"
+    },
+    "/CommitCheckpoint" : {
+      "post" : {
+        "tags" : [ "Checkpoint管理" ],
+        "summary" : "提交Checkpoint",
+        "description" : "本接口用于提交Checkpoint。",
+        "operationId" : "CommitCheckpoint",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommitCheckpointReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CommitCheckpoint",
+      "x-url" : "{endpoint}/v2/{project_id}/checkpoints"
+    },
+    "/CreateStream" : {
+      "post" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "创建通道",
+        "description" : "本接口用于创建通道。",
+        "operationId" : "CreateStream",
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateStreamReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateStream",
+      "x-url" : "{endpoint}/v2/{project_id}/streams"
+    },
+    "/CreateDliTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "添加DLI转储任务",
+        "description" : "本接口用于添加DLI转储任务。",
+        "operationId" : "CreateDliTransferTask",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDliTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDliTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/ListResourcesByTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "使用标签过滤资源(通道等)",
+        "description" : "该接口用于使用标签过滤资源(通道等)。",
+        "operationId" : "ListResourcesByTags",
+        "responses" : {
+          "200" : {
+            "description" : "使用标签过滤资源(通道等)请求体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListResourceInstancesReq"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListResourceInstancesReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourcesByTags",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/resource_instances/action"
+    },
+    "/DeleteStream" : {
+      "delete" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "删除指定通道",
+        "description" : "本接口用于删除指定通道。",
+        "operationId" : "DeleteStream",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要删除的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要删除的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteStream",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}"
+    },
+    "/CreateObsTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "添加OBS转储任务",
+        "description" : "本接口用于添加OBS转储任务。",
+        "operationId" : "CreateObsTransferTask",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateObsTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/ListTransferTasks" : {
+      "get" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "查询转储任务列表",
+        "description" : "本接口用于查询转储任务列表。",
+        "operationId" : "ListTransferTasks",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTransferTasksResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要查询的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要查询的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTransferTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/DeleteCheckpoint" : {
+      "delete" : {
+        "tags" : [ "Checkpoint管理" ],
+        "summary" : "删除Checkpoint",
+        "description" : "本接口用于删除Checkpoint。",
+        "operationId" : "DeleteCheckpoint",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "query",
+          "description" : "该Checkpoint所属的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "该Checkpoint所属的通道名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "query",
+          "description" : "该Checkpoint关联App名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-app",
+            "description" : "该Checkpoint关联App名称。",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "checkpoint_type",
+          "in" : "query",
+          "description" : "Checkpoint类型。",
+          "required" : true,
+          "schema" : {
+            "example" : "LAST_READ",
+            "description" : "Checkpoint类型。",
+            "type" : "string",
+            "enum" : [ "LAST_READ" ]
+          }
+        }, {
+          "name" : "partition_id",
+          "in" : "query",
+          "description" : "该Checkpoint所属的通道分区标识符。",
+          "required" : false,
+          "schema" : {
+            "example" : "shardId-0000000000",
+            "description" : "该Checkpoint所属的通道分区标识符。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCheckpoint",
+      "x-url" : "{endpoint}/v2/{project_id}/checkpoints"
+    },
+    "/ShowCheckpoint" : {
+      "get" : {
+        "tags" : [ "Checkpoint管理" ],
+        "summary" : "查询Checkpoint详情",
+        "description" : "本接口用于查询Checkpoint详情。",
+        "operationId" : "ShowCheckpoint",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetCheckpointResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "query",
+          "description" : "该Checkpoint所属的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "该Checkpoint所属的通道名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "partition_id",
+          "in" : "query",
+          "description" : "该Checkpoint所属的通道分区标识符。",
+          "required" : true,
+          "schema" : {
+            "example" : "shardId-0000000000",
+            "description" : "该Checkpoint所属的通道分区标识符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "query",
+          "description" : "该Checkpoint关联App名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-app",
+            "description" : "该Checkpoint关联App名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "checkpoint_type",
+          "in" : "query",
+          "description" : "Checkpoint类型。",
+          "required" : true,
+          "schema" : {
+            "example" : "LAST_READ",
+            "description" : "Checkpoint类型。",
+            "type" : "string",
+            "enum" : [ "LAST_READ" ]
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCheckpoint",
+      "x-url" : "{endpoint}/v2/{project_id}/checkpoints"
+    },
+    "/ListTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "查询指定区域所有标签集合",
+        "description" : "该接口用于查询指定区域所有标签集合。",
+        "operationId" : "ListTags",
+        "responses" : {
+          "200" : {
+            "description" : "标签集合响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListResourceTagsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTags",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/tags"
+    },
+    "/DeleteApp" : {
+      "delete" : {
+        "tags" : [ "App管理" ],
+        "summary" : "删除App",
+        "description" : "本接口用于删除App。",
+        "operationId" : "DeleteApp",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "path",
+          "description" : "需要删除的App名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-app",
+            "description" : "需要删除的App名称。",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteApp",
+      "x-url" : "{endpoint}/v2/{project_id}/apps/{app_name}"
+    },
+    "/CreateMrsTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "添加MRS转储任务",
+        "description" : "本接口用于添加MRS转储任务。",
+        "operationId" : "CreateMrsTransferTask",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateMrsTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateMrsTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/ShowCursor" : {
+      "get" : {
+        "tags" : [ "数据管理" ],
+        "summary" : "获取数据游标",
+        "description" : "本接口用于获取数据游标。",
+        "operationId" : "ShowCursor",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetPartitionCursorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream-name",
+          "in" : "query",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "partition-id",
+          "in" : "query",
+          "description" : "通道的分区标识符。",
+          "required" : true,
+          "schema" : {
+            "example" : "shardId-0000000000",
+            "description" : "通道的分区标识符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cursor-type",
+          "in" : "query",
+          "description" : "游标类型。",
+          "required" : false,
+          "schema" : {
+            "example" : "AT_SEQUENCE_NUMBER",
+            "description" : "游标类型。",
+            "type" : "string",
+            "enum" : [ "AT_SEQUENCE_NUMBER", "AFTER_SEQUENCE_NUMBER", "TRIM_HORIZON", "LATEST", "AT_TIMESTAMP" ]
+          }
+        }, {
+          "name" : "starting-sequence-number",
+          "in" : "query",
+          "description" : "序列号。序列号是每个记录的唯一标识符。序列号由DIS在数据生产者调用PutRecords操作以添加数据到DIS数据通道时DIS服务自动分配的。同一分区键的序列号通常会随时间变化增加。PutRecords请求之间的时间段越长,序列号越大。",
+          "required" : false,
+          "schema" : {
+            "example" : "0",
+            "description" : "序列号。序列号是每个记录的唯一标识符。序列号由DIS在数据生产者调用PutRecords操作以添加数据到DIS数据通道时DIS服务自动分配的。同一分区键的序列号通常会随时间变化增加。PutRecords请求之间的时间段越长,序列号越大。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "timestamp",
+          "in" : "query",
+          "description" : "开始读取数据记录的时间戳,与游标类型AT_TIMESTAMP强相关,二者共同确定读取数据的位置。",
+          "required" : false,
+          "schema" : {
+            "description" : "开始读取数据记录的时间戳,与游标类型AT_TIMESTAMP强相关,二者共同确定读取数据的位置。",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCursor",
+      "x-url" : "{endpoint}/v2/{project_id}/cursors"
+    },
+    "/ShowStreamMetrics" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "查询通道监控",
+        "description" : "本接口用于查询指定通道的监控数据。",
+        "operationId" : "ShowStreamMetrics",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetStreamMetricsResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "通道监控指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+          "required" : false,
+          "schema" : {
+            "description" : "通道监控指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+            "type" : "string",
+            "enum" : [ "total_put_bytes_per_stream", "total_get_bytes_per_stream", "total_put_records_per_stream", "total_get_records_per_stream", "total_put_req_latency", "total_get_req_latency", "total_put_req_suc_per_stream", "total_get_req_suc_per_stream", "traffic_control_put", "traffic_control_get" ]
+          }
+        }, {
+          "name" : "label_list",
+          "in" : "query",
+          "description" : "使用label用逗号拼接组成,用于批量查询多个label的指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+          "required" : false,
+          "schema" : {
+            "description" : "使用label用逗号拼接组成,用于批量查询多个label的指标。(label与label_list必须二选一,label_list与label同时存在时,以label_list为准)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "监控开始时间点,10位时间戳。",
+          "required" : true,
+          "schema" : {
+            "description" : "监控开始时间点,10位时间戳。",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "监控结束时间点,10位时间戳。",
+          "required" : true,
+          "schema" : {
+            "description" : "监控结束时间点,10位时间戳。",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowStreamMetrics",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/metrics"
+    },
+    "/ShowConsumerState" : {
+      "get" : {
+        "tags" : [ "App管理" ],
+        "summary" : "查看App消费状态",
+        "description" : "本接口用于查询APP消费状态。",
+        "operationId" : "ShowConsumerState",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DescribeAppResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "path",
+          "description" : "需要查询的App名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-app",
+            "description" : "需要查询的App名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要查询的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "需要查询的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "单次请求返回的最大分区数。最小值是1,最大值是1000;默认值是100。",
+          "required" : false,
+          "schema" : {
+            "description" : "单次请求返回的最大分区数。最小值是1,最大值是1000;默认值是100。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "start_partition_id",
+          "in" : "query",
+          "description" : "从该分区值开始返回分区列表,返回的分区列表不包括此分区。",
+          "required" : false,
+          "schema" : {
+            "description" : "从该分区值开始返回分区列表,返回的分区列表不包括此分区。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "checkpoint_type",
+          "in" : "query",
+          "description" : "Checkpoint类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "Checkpoint类型。",
+            "type" : "string",
+            "enum" : [ "LAST_READ" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowConsumerState",
+      "x-url" : "{endpoint}/v2/{project_id}/apps/{app_name}/streams/{stream_name}"
+    },
+    "/UpdateStream" : {
+      "put" : {
+        "tags" : [ "通道管理" ],
+        "summary" : "更新通道信息",
+        "description" : "本接口用于更新指定通道的通道信息。",
+        "operationId" : "UpdateStream",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "需要变更分区数量的通道名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "需要变更分区数量的通道名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateStreamReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateStream",
+      "x-url" : "{endpoint}/v3/{project_id}/streams/{stream_name}"
+    },
+    "/CreateCloudTableTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "添加CloudTable转储任务",
+        "description" : "本接口用于添加CloudTable转储任务。",
+        "operationId" : "CreateCloudTableTransferTask",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCloudTableTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCloudTableTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/CreateDwsTransferTask" : {
+      "post" : {
+        "tags" : [ "转储任务管理" ],
+        "summary" : "添加DWS转储任务",
+        "description" : "本接口用于添加DWS转储任务。",
+        "operationId" : "CreateDwsTransferTask",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "已创建的通道名称。",
+          "required" : true,
+          "schema" : {
+            "example" : "new-stream",
+            "description" : "已创建的通道名称。",
+            "type" : "string",
+            "maxLength" : 60
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDwsTransferTaskReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "aksk" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDwsTransferTask",
+      "x-url" : "{endpoint}/v2/{project_id}/streams/{stream_name}/transfer-tasks"
+    },
+    "/BatchCreateTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量添加资源标签",
+        "description" : "该接口用于批量添加资源(通道等)标签。此接口为幂等接口:创建时如果请求体中存在重复key则报错。创建时,不允许设置重复key数据,如果数据库已存在该key,就覆盖value的值。",
+        "operationId" : "BatchCreateTags",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_id",
+          "in" : "path",
+          "description" : "通道ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "CiFxxxxr0401xxxxZlp",
+            "description" : "通道ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateTagsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateTags",
+      "x-url" : "{endpoint}/v2/{project_id}/stream/{stream_id}/tags/action"
+    }
+  }
+}

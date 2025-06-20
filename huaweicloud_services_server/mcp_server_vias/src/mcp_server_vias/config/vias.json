@@ -1,0 +1,4952 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VIAS-运维中心",
+    "title" : "VIAS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ErrorResponse" : {
+        "type" : "object",
+        "required" : [ "advice", "detail", "error_code", "error_msg", "params", "reason" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "example" : "VIAS.00010001",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "example" : "Invalid parameter: user_id.",
+            "description" : "错误信息描述"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "错误详情"
+          },
+          "params" : {
+            "type" : "array",
+            "description" : "错误参数列举",
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 1,
+            "minItems" : 0
+          },
+          "reason" : {
+            "type" : "string",
+            "example" : "Invalid parameter.",
+            "description" : "错误原因"
+          },
+          "advice" : {
+            "type" : "string",
+            "example" : "Ensure that the entered parameter is valid.",
+            "description" : "建议"
+          }
+        },
+        "description" : "400,401,500等错误码响应"
+      },
+      "CreateEdgePoolRequestDto" : {
+        "type" : "object",
+        "required" : [ "name", "nodes" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "边缘池名称。只能由小写字母(a~z)、数字(0~9)、中划线(-)组成,长度范围为[4,32]。需以小写字母开头,以小写字母或数字结尾。",
+            "pattern" : "^[a-z][a-z0-9-]{2,30}[a-z0-9]$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "作业的描述",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "ief_service_instance_id" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "IEF的铂金版实例ID",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "nodes" : {
+            "type" : "array",
+            "example" : [ "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx", "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx" ],
+            "description" : "ief边缘节点数组",
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 1
+          }
+        }
+      },
+      "CreateEdgePoolResDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "创建出的边缘池ID"
+          }
+        }
+      },
+      "EdgeNodeInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx",
+            "description" : "边缘节点ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "CityCortex-dev-80",
+            "description" : "边缘池名称。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "描述信息。描述为空则不返回该字段。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "FAIL",
+            "description" : "边缘池状态"
+          },
+          "cpu" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 4,
+            "description" : "CPU核心数量。"
+          },
+          "arch" : {
+            "type" : "string",
+            "example" : "arm64",
+            "description" : "计算机架构。"
+          },
+          "enable_gpu" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否使用GPU。"
+          },
+          "enable_npu" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否使用NPU。"
+          },
+          "memory" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3867,
+            "description" : "内存大小。"
+          },
+          "gpu_info" : {
+            "type" : "array",
+            "description" : "GPU信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/GpuInfo"
+            }
+          },
+          "npu_info" : {
+            "type" : "array",
+            "description" : "NPU信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/NpuInfo"
+            }
+          }
+        }
+      },
+      "NpuInfo" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "NPU卡名称"
+          },
+          "driver_version" : {
+            "type" : "string",
+            "description" : "NPU卡驱动版本"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "NPU卡类型"
+          },
+          "capacity" : {
+            "type" : "string",
+            "description" : "NPU卡容量"
+          }
+        }
+      },
+      "GpuInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "GPU卡名称"
+          },
+          "driver_version" : {
+            "type" : "string",
+            "description" : "GPU卡驱动版本"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "GPU卡类型"
+          },
+          "capacity" : {
+            "type" : "string",
+            "description" : "GPU卡容量"
+          }
+        },
+        "type" : "object"
+      },
+      "EdgePoolInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "边缘池ID"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "edge-pool-96ec",
+            "description" : "边缘池名称"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "desc",
+            "description" : "描述信息"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "Running",
+            "description" : "边缘池状态"
+          },
+          "project_id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "用户项目ID"
+          },
+          "workspace_id" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "工作空间ID"
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1661657615999,
+            "description" : "创建时间"
+          },
+          "updated_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1661657615999,
+            "description" : "更新时间"
+          },
+          "nodes" : {
+            "type" : "array",
+            "description" : "边缘节点列表",
+            "items" : {
+              "$ref" : "#/components/schemas/EdgeNodeInfoDto"
+            }
+          }
+        }
+      },
+      "BatchTaskInputDto" : {
+        "type" : "object",
+        "properties" : {
+          "video_source_group" : {
+            "type" : "array",
+            "description" : "视频源分组信息",
+            "items" : {
+              "$ref" : "#/components/schemas/BatchTaskVideoSourceGroupDto"
+            },
+            "maxItems" : 100,
+            "minItems" : 1
+          }
+        }
+      },
+      "CreateBatchTasksRequestBody" : {
+        "type" : "object",
+        "required" : [ "batch_input", "name", "output", "service_name", "service_version" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "task-test",
+            "description" : "任务名称,只能由中文、字母(a~z A~Z)、数字(0~9)、中划线(-)、下划线(_)组成,长度范围为[1,100]",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "任务的描述,选填。长度不超过500",
+            "minLength" : 0,
+            "maxLength" : 500
+          },
+          "schedule" : {
+            "$ref" : "#/components/schemas/TaskSchedule"
+          },
+          "batch_input" : {
+            "description" : "批量任务输入",
+            "$ref" : "#/components/schemas/BatchTaskInputDto"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "config" : {
+            "description" : "任务配置参数",
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          },
+          "service_name" : {
+            "type" : "string",
+            "description" : "算法api标识,需要满足正则:^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "service_version" : {
+            "type" : "string",
+            "description" : "服务版本号,输入需要满足正则:^[a-z0-9\\.]{3,32}$。",
+            "minLength" : 3,
+            "maxLength" : 32,
+            "pattern" : "^[a-z0-9\\.]{3,32}$"
+          },
+          "is_saved_as_template" : {
+            "type" : "boolean",
+            "description" : "是否保存为模板",
+            "default" : false
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "description" : "资源订单id,与关联算法挂钩。非商用白名单的算法 就不用填,商用算法就为必填项,需要满足正则表达式^[a-z0-9-_]{4,36}$。",
+            "minLength" : 4,
+            "maxLength" : 36,
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }
+      },
+      "BatchTaskInputVideoSourceDto" : {
+        "type" : "object",
+        "required" : [ "video_source_id" ],
+        "properties" : {
+          "video_source_id" : {
+            "type" : "string",
+            "description" : "视频源id",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          },
+          "target_roi" : {
+            "type" : "string",
+            "description" : "roi区域",
+            "minLength" : 0,
+            "maxLength" : 2048
+          }
+        }
+      },
+      "BatchTaskResDto" : {
+        "type" : "object",
+        "properties" : {
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "作业总数"
+          },
+          "failed_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "失败作业数量"
+          },
+          "succeed_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "成功作业数量"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "批量作业id"
+          },
+          "error_list" : {
+            "type" : "array",
+            "description" : "错误信息列表",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "TaskServiceConfig" : {
+        "type" : "object",
+        "properties" : {
+          "common" : {
+            "type" : "object",
+            "example" : {
+              "stream_direct" : "reverse"
+            },
+            "description" : "任务运行时指定的具体的自定义配置项,由服务发布者定义。整体呈json格式,具体配置项参见相应算法服务的说明",
+            "properties" : { }
+          }
+        },
+        "description" : "任务运行时指定的自定义参数,由服务发布者定义"
+      },
+      "TaskOutput" : {
+        "type" : "object",
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/TaskOutputObs"
+          },
+          "dis" : {
+            "$ref" : "#/components/schemas/TaskOutputDis"
+          },
+          "webhook" : {
+            "$ref" : "#/components/schemas/TaskOutputWebhook"
+          },
+          "event_center" : {
+            "type" : "boolean",
+            "description" : "输出方式是否选择为事件中心,选择 true或者1表示是,默认为false",
+            "default" : false
+          }
+        },
+        "description" : "作业的输出配置,至少需要配置一项输出方式"
+      },
+      "TaskOutputWebhook" : {
+        "type" : "object",
+        "required" : [ "headers", "url" ],
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "format" : "uri",
+            "example" : "https://api.huawei.com/v1/tasks",
+            "description" : "结果回调地址,选用webhook类型输出时必填",
+            "maxLength" : 1000,
+            "pattern" : "^(https?|rtsp|rtmp|ftp|file):\\/\\/[-A-Za-z0-9+&@*#/%?=~_|!:,.;]+[-A-Za-z0-9+&@*#/%=~_|]$"
+          },
+          "headers" : {
+            "type" : "object",
+            "example" : {
+              "appKey" : "24bnaxxxxxxxxxxxxxxxj9sdf",
+              "appId" : "10000000"
+            },
+            "description" : "结果回调时需要携带的请求头,选用webhook类型输出时必填。整体呈json格式,以键值对的形式表示请求头和取值,至少1组,至多10组",
+            "properties" : { }
+          },
+          "data_category" : {
+            "type" : "array",
+            "example" : [ "FaceImage" ],
+            "description" : "任务输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据",
+            "uniqueItems" : true,
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        },
+        "description" : "输出为webhook类型时的配置信息"
+      },
+      "TaskSchedule" : {
+        "type" : "object",
+        "required" : [ "timezone", "type" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "example" : "weekly",
+            "description" : "计划任务的类型,使用计划任务时必填。可选类型weekly(每周执行)。",
+            "pattern" : "^(weekly|monthly)$"
+          },
+          "timezone" : {
+            "type" : "string",
+            "example" : "+08:00",
+            "description" : "用户所处的时区,使用计划任务时必填。精确到分钟",
+            "pattern" : "^[+-][0-9]{2}:[0-9]{2}$"
+          },
+          "days_of_week" : {
+            "type" : "array",
+            "example" : [ 1, 2, 3, 4, 5 ],
+            "description" : "任务会在一周的哪几天执行,当且仅当计划任务类型为weekly时,该字段需填且必填。1~7分别指代星期一至星期日",
+            "uniqueItems" : true,
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "example" : 1,
+              "minimum" : 1,
+              "maximum" : 7
+            },
+            "maxItems" : 7,
+            "minItems" : 1
+          },
+          "days_of_month" : {
+            "type" : "array",
+            "example" : 1,
+            "description" : "任务会在一个月的哪几天执行,当且仅当计划任务类型为monthly时,该字段需填且必填。1~31分别指代一个月中的1日至31日,当前系统不支持该参数。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "minimum" : 1,
+              "maximum" : 31
+            }
+          },
+          "periods" : {
+            "type" : "array",
+            "description" : "时间段模式配置,指定周计划或者月计划中具体每天任务的执行时间段,至少需指定一个时间段",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "begin_at" : {
+                    "type" : "string",
+                    "example" : "08:00:00",
+                    "description" : "单个时间段执行的起始时间,必填。其余计划任务类型时,格式为hh:mm:ss",
+                    "pattern" : "^([0-9]{4}-[0-9]{2}-[0-9]{2}T)?[0-9]{2}:[0-9]{2}:[0-9]{2}$"
+                  },
+                  "end_at" : {
+                    "type" : "string",
+                    "example" : "12:00:00",
+                    "description" : "单个时间段执行的结束时间,必填,其余计划任务类型时,格式为hh:mm:ss",
+                    "pattern" : "^([0-9]{4}-[0-9]{2}-[0-9]{2}T)?[0-9]{2}:[0-9]{2}:[0-9]{2}$"
+                  }
+                },
+                "required" : [ "begin_at", "end_at" ]
+              },
+              "maxItems" : 10,
+              "minItems" : 1
+            }
+          }
+        },
+        "description" : "定时任务参数,定时周期 仅支持周模式"
+      },
+      "TaskOutputDis" : {
+        "type" : "object",
+        "required" : [ "stream_name" ],
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "example" : "dis-test",
+            "description" : "DIS流名称,选用dis类型输出时必填,校验规则:^[-A-Za-z0-9_]{1,64}$。",
+            "maxLength" : 64,
+            "pattern" : "^[-A-Za-z0-9_]{1,64}$"
+          },
+          "data_category" : {
+            "type" : "array",
+            "example" : [ "FaceImage" ],
+            "description" : "任务输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "uniqueItems" : true,
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        },
+        "description" : "输出为dis类型时的配置信息"
+      },
+      "BatchTaskVideoSourceGroupDto" : {
+        "type" : "object",
+        "required" : [ "video_source_group_id", "video_source_list" ],
+        "properties" : {
+          "video_source_group_id" : {
+            "type" : "string",
+            "description" : "视频源分组id",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          },
+          "video_source_list" : {
+            "type" : "array",
+            "description" : "视频源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/BatchTaskInputVideoSourceDto"
+            },
+            "maxItems" : 100,
+            "minItems" : 0
+          }
+        }
+      },
+      "TaskOutputObs" : {
+        "type" : "object",
+        "required" : [ "bucket", "path" ],
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "example" : "obs-iva",
+            "description" : "OBS桶名,选用obs类型输出时必填,校验规则:(pattern:“^\\[a-z0-9](?!.*[-.]\\[-.].*)(\\[a-z0-9-.]{1,61})\\[a-z0-9]$”)",
+            "maxLength" : 63,
+            "pattern" : "^[a-z0-9](?!.*[-.][-.].*)([a-z0-9-.]{1,61})[a-z0-9]$"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "output/",
+            "description" : "OBS的路径,选用obs类型输出时必填,校验规则:^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$",
+            "maxLength" : 1023,
+            "pattern" : "^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$"
+          },
+          "data_category" : {
+            "type" : "array",
+            "example" : [ "FaceImage" ],
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据",
+            "uniqueItems" : true,
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        },
+        "description" : "输出为obs类型时的配置信息"
+      },
+      "VideoGroupInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "video_group_id" : {
+            "type" : "string",
+            "description" : "视频源所在分组id"
+          },
+          "video_group_name" : {
+            "type" : "string",
+            "description" : "视频源所在分组名称"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "视频源所在分组描述"
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入方式(cloud、edge)"
+          },
+          "create_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "modify_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "修改时间"
+          },
+          "num_video_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源数量"
+          },
+          "group_status" : {
+            "description" : "视频源状态",
+            "$ref" : "#/components/schemas/GroupStatusDto"
+          },
+          "num_batch_task" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已配置批量作业数量"
+          }
+        }
+      },
+      "GroupStatusDto" : {
+        "type" : "object",
+        "properties" : {
+          "num_online" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "在线视频源数量"
+          },
+          "num_exception" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "异常视频源数量"
+          },
+          "num_offline" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "离线视频源数量"
+          }
+        }
+      },
+      "UpdateVideoGroupDto" : {
+        "type" : "object",
+        "required" : [ "video_source_ids" ],
+        "properties" : {
+          "video_group_name" : {
+            "type" : "string",
+            "description" : "视频源分组名称。如不传入则不修改名称,传入则只能由中文、中划线(-)、下划线(\\_)、英文字母(a~z)、数字(0~9)组成长度范围为[1, 20]",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "pattern" : "^[\\u4e00-\\u9fa5-_a-zA-Z0-9]{1,20}$"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述。如不传入则不修改描述。",
+            "maxLength" : 100
+          },
+          "video_source_ids" : {
+            "type" : "array",
+            "description" : "分组中的视频源id集。id个数需在1~50,每个id只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)组成长度范围为[4, 36]",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[a-z0-9-_]{4,36}$"
+            },
+            "maxItems" : 50,
+            "minItems" : 1
+          }
+        }
+      },
+      "TaskInfoDto" : {
+        "type" : "object",
+        "required" : [ "company", "created_at", "creator", "id", "input", "name", "output", "project_id", "service_id", "state", "updated_at", "video_source_name" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "任务ID",
+            "pattern" : "^[0-9a-f]{32}$"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "task-test",
+            "description" : "任务的名称",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "creator" : {
+            "type" : "string",
+            "example" : "user_test",
+            "description" : "任务创建者的用户名",
+            "pattern" : "^.{1,100}$"
+          },
+          "project_id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "任务创建者的项目ID",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "任务的描述",
+            "minLength" : 0,
+            "maxLength" : 500
+          },
+          "release_id" : {
+            "type" : "string",
+            "description" : "任务对应服务的ID",
+            "pattern" : "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+          },
+          "service_id" : {
+            "type" : "string",
+            "description" : "任务对应服务的ID",
+            "pattern" : "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2020-01-01T08:00:00Z",
+            "description" : "任务创建的时间"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2020-01-01T08:00:00Z",
+            "description" : "任务最近一次状态更新的时间"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "RUNNING",
+            "description" : "任务当前的状态,分别为PENDING(等待中),RECOVERING(恢复中),STARTING(启动中),UPGRADING(升级中),CREATE_FAILED(创建失败),START_FAILED(启动失败),RUNNING(运行中),STOPPING(停止中),STOPPED(已停止),ABNORMAL(异常),SUCCEEDED(运行成功),FAILED(运行失败),DELETING(删除中),FREEZING(冻结中),FROZEN(已冻结)",
+            "pattern" : "^(PENDING|RECOVERING|STARTING|UPGRADING|CREATE_FAILED|START_FAILED|RUNNING|STOPPING|STOPPED|ABNORMAL|SUCCEEDED|FAILED|DELETING|FREEZING|FROZEN)$"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "Waiting for available computing resource.",
+            "description" : "任务状态的详情信息,仅部分状态会有详情信息",
+            "minLength" : 0,
+            "maxLength" : 4096
+          },
+          "error" : {
+            "type" : "object",
+            "description" : "错误信息",
+            "properties" : {
+              "code" : {
+                "type" : "string",
+                "description" : "错误码",
+                "minLength" : 8,
+                "maxLength" : 36
+              },
+              "message" : {
+                "type" : "string",
+                "description" : "错误描述",
+                "minLength" : 2,
+                "maxLength" : 512
+              }
+            },
+            "required" : [ "code", "message" ]
+          },
+          "schedule_status" : {
+            "type" : "string",
+            "example" : "INACTIVATED",
+            "description" : "计划任务的状态,分别为ACTIVATED(激活),INACTIVATED(未激活)",
+            "pattern" : "^(ACTIVATED|INACTIVATED)$"
+          },
+          "schedule" : {
+            "$ref" : "#/components/schemas/TaskSchedule"
+          },
+          "input" : {
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutputForDisplay"
+          },
+          "config" : {
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          },
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "算法中文名称"
+          },
+          "group_name" : {
+            "type" : "string",
+            "description" : "分组名称,多个以逗号分隔"
+          },
+          "company" : {
+            "type" : "string",
+            "description" : "厂商"
+          },
+          "task_config" : {
+            "type" : "string",
+            "description" : "任务算法配置"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "cloud或edge"
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "description" : "资源订单id"
+          },
+          "package_id" : {
+            "type" : "string",
+            "description" : "算法包id"
+          },
+          "device_id" : {
+            "type" : "string",
+            "description" : "设备id"
+          },
+          "access_address" : {
+            "type" : "string",
+            "description" : "接入地址"
+          },
+          "algorithm_publish_id" : {
+            "type" : "string",
+            "description" : "算法id"
+          }
+        }
+      },
+      "TaskInput" : {
+        "type" : "object",
+        "required" : [ "data", "type" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "example" : "obs",
+            "description" : "任务的输入类型,创建时必填,视频源类型为video_source 时 不支持切换为其他的type。创建时可选类型有",
+            "pattern" : "^(video_source|obs|url|edgecamera|restful|vcn)$"
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "任务的输入详情,必填。针对不同的输入类型有不同的配置。创建时允许填写多路输入,但更新时只允许填写一路输入。",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskInputData"
+            },
+            "maxItems" : 50,
+            "minItems" : 1
+          },
+          "vcn" : {
+            "$ref" : "#/components/schemas/TaskInputVcn"
+          }
+        },
+        "description" : "任务的输入配置,必填"
+      },
+      "TaskOutputForDisplay" : {
+        "type" : "object",
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/TaskOutputObs"
+          },
+          "dis" : {
+            "$ref" : "#/components/schemas/TaskOutputDis"
+          },
+          "webhook" : {
+            "$ref" : "#/components/schemas/TaskOutputWebhook"
+          },
+          "event_center" : {
+            "type" : "boolean",
+            "description" : "输出类型是否关联事件中心"
+          }
+        },
+        "description" : "作业的输出配置展示"
+      },
+      "TaskInputVcn" : {
+        "type" : "object",
+        "required" : [ "ip", "password", "port", "username" ],
+        "properties" : {
+          "ip" : {
+            "type" : "string",
+            "format" : "ipv4",
+            "example" : "10.10.10.10",
+            "description" : "VCN服务器的IP地址,仅输入类型为vcn时需填且必填"
+          },
+          "port" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 60,
+            "description" : "VCN服务器的端口号,仅输入类型为vcn时需填且必填",
+            "minimum" : 0,
+            "maximum" : 65535
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "user_test",
+            "description" : "VCN服务器的账号名,仅输入类型为vcn时需填且必填,需要满足正则表达式^.{1,100}$。",
+            "pattern" : "^.{1,100}$"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxx",
+            "description" : "VCN服务器的与账号对应的密码,仅输入类型为vcn时需填且必填,需要满足正则表达式^.{1,1000}$。",
+            "pattern" : "^.{1,1000}$"
+          }
+        },
+        "description" : "VCN服务器信息,仅输入类型为vcn时需填且必填"
+      },
+      "TaskInputData" : {
+        "type" : "object",
+        "properties" : {
+          "video_source_id" : {
+            "type" : "string",
+            "description" : "视频源id,当输入类型为video_source时必填。",
+            "pattern" : "^[0-9a-z-_]{4,36}$"
+          },
+          "stream_name" : {
+            "type" : "string",
+            "example" : "stream-test",
+            "description" : "视频流名称",
+            "pattern" : "^[-A-Za-z0-9_]{1,80}$"
+          },
+          "bucket" : {
+            "type" : "string",
+            "example" : "obs-iva",
+            "description" : "OBS桶名,当输入为obs类型时必填",
+            "maxLength" : 64,
+            "pattern" : "^[a-z0-9](?!.*[-.][-.].*)([a-z0-9-.]{1,61})[a-z0-9]$"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "/input/test.mp4",
+            "description" : "OBS的路径,当输入为obs类型时必填",
+            "maxLength" : 1023,
+            "pattern" : "^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$"
+          },
+          "url" : {
+            "type" : "string",
+            "format" : "uri",
+            "example" : "https://livestream.com/live/stream-test",
+            "description" : "url输入源的地址或者获取视频流地址的restful请求地址,当输入为url类型或者edgerestful类型时必填。长度不超过1000",
+            "maxLength" : 1000,
+            "pattern" : "^(https?|rtsp|rtmp|ftp|file):\\/\\/[-A-Za-z0-9+&@*#/%?=~_|!:,.;]+[-A-Za-z0-9+&@*#/%=~_|]$"
+          },
+          "headers" : {
+            "type" : "object",
+            "example" : {
+              "Content-Type" : "application/json"
+            },
+            "description" : "获取视频流地址的restful请求携带的请求头,当输入为edgerestful类型时可选。整体呈json格式,以键值对的形式表示请求头和取值,最多允许10组。",
+            "properties" : { }
+          },
+          "rtsp_path_in_response" : {
+            "type" : "string",
+            "example" : "data/url",
+            "description" : "restful请求返回的body中,视频流地址的路径,当输入为edgerestful类型时必填。长度不超过1024",
+            "maxLength" : 1024,
+            "pattern" : "^([-A-Za-z0-9+&?=~_][-A-Za-z0-9+&/?=~_]+[-A-Za-z0-9+&/?=~_]|[A-Za-z]+)$"
+          },
+          "device_id" : {
+            "type" : "string",
+            "example" : "46459876132169871364#xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "VCN设备ID,当输入为vcn类型时必填",
+            "pattern" : "^([0-9]{20}[#]{1}[a-zA-Z0-9]{32})|([0-9]{20}[#]{1}[0-9]{1,10}[#]{1}[a-zA-Z0-9]{32})$"
+          },
+          "stream_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "准备进行分析的码流,当输入为vcn类型时选填。取值范围为1~3,其中1代表主码流,2代表子码流1,3代表子码流2",
+            "minimum" : 1,
+            "maximum" : 3
+          },
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx",
+            "description" : "IEF挂载的边缘设备的ID,当输入为edgecamera类型时必填",
+            "maxLength" : 63,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$"
+          },
+          "certificate_check" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否需要对https请求进行证书校验,当输入为edgerestful类型时必填。取值为true或者false。",
+            "default" : false
+          }
+        },
+        "description" : "输入数据的配置信息"
+      },
+      "UpdateTasksRequestBody" : {
+        "type" : "object",
+        "required" : [ "input", "name", "output" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "task-test",
+            "description" : "任务名称,只能由中文、字母(a~z A~Z)、数字(0~9)、中划线(-)、下划线(_)组成,长度范围为[1,100]",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "任务的描述,选填。长度不超过500",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{0,500}$"
+          },
+          "schedule" : {
+            "description" : "定时任务参数,定时周期 仅支持周模式",
+            "$ref" : "#/components/schemas/TaskSchedule"
+          },
+          "input" : {
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "config" : {
+            "description" : "任务配置参数",
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          },
+          "is_saved_as_template" : {
+            "type" : "boolean",
+            "description" : "是否保存为模板",
+            "default" : false
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "description" : "资源订单id,与关联算法挂钩。非商用白名单的算法 就不用填,商用算法就为必填项,需要满足正则表达式^[a-z0-9-_]{4,36}$",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }
+      },
+      "CreateVideoSourceResponseBody" : {
+        "type" : "object",
+        "required" : [ "video_source_id" ],
+        "properties" : {
+          "video_source_id" : {
+            "type" : "string",
+            "description" : "视频源id"
+          }
+        },
+        "description" : "创建视频源响应体"
+      },
+      "CreateVideoSourceDto" : {
+        "type" : "object",
+        "required" : [ "access_type", "type", "type_config", "video_source_name" ],
+        "properties" : {
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称,只支持中文、英文字母(a-z,A-Z)、数字、特殊字符(空格.-_() ()),不能以空格开头和结尾",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^([\\u4e00-\\u9fa5a-zA-Z0-9()()._-]|([\\u4e00-\\u9fa5a-zA-Z0-9()()._-][\\u4e00-\\u9fa5a-zA-Z0-9 ()()._-]{0,98}[\\u4e00-\\u9fa5a-zA-Z0-9()()._-]))$"
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入类型(cloud、edge)",
+            "pattern" : "cloud|edge"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "类型:obs、vcn、url、restful、camera",
+            "pattern" : "obs|vcn|url|restful|camera|VIDEO_PLATFORM|VIDEO_IMAGE_DB|RTSP_STREAM"
+          },
+          "latitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,纬度,-90.00000~90.00000",
+            "pattern" : "^$|^[+-]?(([0-8]?\\d(\\.\\d{1,5})?)|(90(\\.0{1,5})?))$"
+          },
+          "longitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,经度,-180.00000~180.00000",
+            "pattern" : "^$|^-?((([0-9]\\d?|1[0-7]\\d)(\\.\\d{1,5})?)|180(\\.0{1,5})?)$"
+          },
+          "video_group_ids" : {
+            "type" : "array",
+            "description" : "系统中所有的视频源分组,只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(_)组成, 长度范围为[4, 36]",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[a-z0-9-_]{4,36}$"
+            }
+          },
+          "type_config" : {
+            "type" : "string",
+            "description" : "视频源配置信息xml",
+            "maxLength" : 1024
+          },
+          "tag" : {
+            "type" : "array",
+            "description" : "视频源标签,标签最多选择4个,标签内容只能由中文, 英文字母(a~z, A~Z)、数字(0~9)、中划线(-)、下划线(_)组成, ",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[\\u4e00-\\u9fa5a-zA-Z0-9,_-]{1,10}$"
+            },
+            "maxItems" : 4
+          }
+        }
+      },
+      "BatchTaskStatusInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "pending" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "等待中作业数量"
+          },
+          "recovering" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "恢复中作业数量"
+          },
+          "starting" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "启动中作业数量"
+          },
+          "upgrading" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "升级中作业数量"
+          },
+          "create_failed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "创建失败作业数量"
+          },
+          "start_failed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "启动失败作业数量"
+          },
+          "running" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "运行中作业数量"
+          },
+          "stopping" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "停止中作业数量"
+          },
+          "stopped" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已停止作业数量"
+          },
+          "abnormal" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "异常作业数量"
+          },
+          "succeeded" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "运行成功作业数量"
+          },
+          "failed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "运行失败作业数量"
+          },
+          "deleting" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "删除中作业数量"
+          },
+          "freezing" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "冻结中作业数量"
+          },
+          "frozen" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已冻结作业数量"
+          },
+          "stopped_no_service" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "无服务的任务数量"
+          },
+          "scheduling" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "调度中"
+          },
+          "lack_of_resources" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "资源不足,创建失败"
+          }
+        }
+      },
+      "BatchTaskListResp" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "条目总数"
+          },
+          "batch_task_list" : {
+            "type" : "array",
+            "description" : "批量作业列表",
+            "items" : {
+              "$ref" : "#/components/schemas/BatchTaskDto"
+            }
+          }
+        }
+      },
+      "BatchTaskDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "批量作业ID"
+          },
+          "batch_task_name" : {
+            "type" : "string",
+            "description" : "批量作业名称"
+          },
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称"
+          },
+          "video_group_name" : {
+            "type" : "string",
+            "description" : "分组名称"
+          },
+          "alg_name" : {
+            "type" : "string",
+            "description" : "算法名称"
+          },
+          "company" : {
+            "type" : "string",
+            "description" : "厂商名"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "作业类型"
+          },
+          "num_task" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "批量作业总数"
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "batch_task_status_info" : {
+            "description" : "批量作业状态基本信息",
+            "$ref" : "#/components/schemas/BatchTaskStatusInfoDto"
+          }
+        }
+      },
+      "AcceleratorsDto" : {
+        "type" : "object",
+        "required" : [ "name", "type" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "加速卡类型",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "加速卡名称",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "cuda_version" : {
+            "type" : "string",
+            "description" : "CUDA版本",
+            "minLength" : 1,
+            "maxLength" : 256
+          },
+          "driver_version_section" : {
+            "type" : "string",
+            "description" : "昇腾驱动版本",
+            "minLength" : 1,
+            "maxLength" : 256
+          }
+        },
+        "description" : "accelerators"
+      },
+      "GetServiceDetailDto" : {
+        "type" : "object",
+        "properties" : {
+          "service_id" : {
+            "type" : "string",
+            "description" : "服务ID"
+          },
+          "service_name" : {
+            "type" : "string",
+            "description" : "服务名称"
+          },
+          "logo" : {
+            "type" : "string",
+            "description" : "算法图标,Base64编码格式的字符串,非空时返回"
+          },
+          "function_version" : {
+            "type" : "string",
+            "description" : "功能版本"
+          },
+          "release_flag" : {
+            "type" : "boolean",
+            "description" : "是否已发布,取值为“true”或者“false”"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "算法描述,非空时返回"
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "updated_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "更新时间"
+          },
+          "release_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "发布时间"
+          },
+          "api" : {
+            "type" : "string",
+            "description" : "API"
+          },
+          "pool_id" : {
+            "type" : "string",
+            "description" : "资源池ID"
+          },
+          "alg_name" : {
+            "type" : "string",
+            "description" : "算法名称"
+          },
+          "alg_id" : {
+            "type" : "string",
+            "description" : "算法ID"
+          },
+          "request_mode" : {
+            "type" : "string",
+            "description" : "请求模式,取值为“sync”或者“async”",
+            "pattern" : "sync|async"
+          },
+          "package_name" : {
+            "type" : "string",
+            "description" : "算法包名称"
+          },
+          "package_id" : {
+            "type" : "string",
+            "description" : "算法包ID"
+          },
+          "alg_version" : {
+            "type" : "string",
+            "description" : "算法版本"
+          },
+          "alg_versions" : {
+            "type" : "array",
+            "description" : "算法历史版本",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "diagram" : {
+            "type" : "string",
+            "description" : "算法场景图,Base64编码格式的字符串,非空时返回"
+          },
+          "service_api_list" : {
+            "type" : "array",
+            "description" : "服务API列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ServiceApiDto"
+            }
+          },
+          "deployment_constraints" : {
+            "description" : "模型部署约束",
+            "$ref" : "#/components/schemas/DeploymentConstraintsDto"
+          },
+          "company" : {
+            "type" : "string",
+            "description" : "厂商名称"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "应用场景标签",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "deploy_type" : {
+            "type" : "string",
+            "description" : "部署类型,取值为“cloud”或者“edge”",
+            "pattern" : "cloud|edge"
+          },
+          "alg_class" : {
+            "type" : "string",
+            "description" : "算法类别,取值为“self”或者“partner”"
+          },
+          "alg_status" : {
+            "type" : "string",
+            "description" : "算法状态,取值为“service_running”、“service_deploying”、“service_failed”、“service_stopping”、“service_stopped”、“service_upgrading”、“service_finished”、“service_concerning”或者“not_deployed”"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "服务异常信息,非空时返回"
+          }
+        },
+        "description" : "服务详情基本信息"
+      },
+      "ServiceApiDto" : {
+        "type" : "object",
+        "properties" : {
+          "request_type" : {
+            "type" : "string",
+            "description" : "请求类型,get, post"
+          },
+          "zh" : {
+            "type" : "string",
+            "description" : "中文描述"
+          },
+          "en" : {
+            "type" : "string",
+            "description" : "英文描述"
+          },
+          "request_url" : {
+            "type" : "string",
+            "description" : "请求url"
+          }
+        }
+      },
+      "DeploymentConstraintsDto" : {
+        "type" : "object",
+        "required" : [ "cpu_type", "input_types", "output_types", "request_mode" ],
+        "properties" : {
+          "request_mode" : {
+            "type" : "string",
+            "description" : "请求模式,取值为“sync”或者“async”",
+            "pattern" : "sync|async"
+          },
+          "cpu_type" : {
+            "type" : "string",
+            "description" : "CPU类型,取值为“x86_64”或者“aarch64”",
+            "pattern" : "x86_64|aarch64"
+          },
+          "accelerators" : {
+            "type" : "array",
+            "description" : "推理加速卡",
+            "items" : {
+              "$ref" : "#/components/schemas/AcceleratorsDto"
+            }
+          },
+          "input_types" : {
+            "type" : "array",
+            "description" : "支持的输入类型,列表元素取值为“OBS”、“URL”、“Restful”、“VCN”、“EdgeCamera”",
+            "items" : {
+              "type" : "string",
+              "pattern" : "OBS|URL|Restful|VCN|EdgeCamera"
+            }
+          },
+          "output_types" : {
+            "type" : "array",
+            "description" : "支持的输出类型,列表元素取值为“OBS”、“DIS”或者“Webhook”",
+            "items" : {
+              "type" : "string",
+              "pattern" : "OBS|DIS|Webhook"
+            }
+          },
+          "service_config" : {
+            "type" : "string",
+            "example" : "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<algorithm>\\n <deployConfig>\\n        <param  name=\\\"start\\\" titleCn=\\\"启动参数\\\" titleEn=\\\"start\\\" required=\\\"false\\\" type=\\\"String\\\">\\n </param>\\n    </deployConfig>\\n</algorithm>",
+            "description" : "服务启动参数"
+          },
+          "task_config" : {
+            "type" : "string",
+            "example" : "<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<algorithm>\\n <config>\\n        <common>\\n            <param  name=\\\"config\\\" titleCn=\\\"配置参数\\\" titleEn=\\\"config\\\" required=\\\"false\\\" type=\\\"String\\\">\\n            </param>\\n        </common>\\n </config>\\n</algorithm>",
+            "description" : "作业配置参数"
+          }
+        },
+        "description" : "创建模型参数deployment_constraints"
+      },
+      "ListVideoSourceResponse" : {
+        "type" : "object",
+        "properties" : {
+          "video_source_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源数量"
+          },
+          "total_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源总数"
+          },
+          "quota_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源限额"
+          },
+          "video_source_list" : {
+            "type" : "array",
+            "description" : "视频源列表数据",
+            "items" : {
+              "$ref" : "#/components/schemas/ListVideoSourceInfoDto"
+            }
+          }
+        }
+      },
+      "VideoSourceStatusInfoDto" : {
+        "type" : "object",
+        "required" : [ "level", "name", "status" ],
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "视频源状态"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "状态中文名"
+          },
+          "level" : {
+            "type" : "string",
+            "description" : "状态等级(用于前端图片颜色匹配)"
+          }
+        },
+        "description" : "视频源状态"
+      },
+      "ListVideoSourceInfoDto" : {
+        "type" : "object",
+        "required" : [ "access_type", "create_at", "status", "type", "video_source_id", "video_source_name" ],
+        "properties" : {
+          "video_source_id" : {
+            "type" : "string",
+            "description" : "已创建成功的视频源id"
+          },
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称,只支持中文、英文字母(a-z,A-Z)、数字、特殊字符(空格.-_() ()),不能以空格开头和结尾"
+          },
+          "status" : {
+            "description" : "视频源状态",
+            "$ref" : "#/components/schemas/VideoSourceStatusInfoDto"
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入类型(cloud、edge)"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "类型:obs、vcn、url、restful、camera"
+          },
+          "latitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,纬度,-90.00000~90.00000"
+          },
+          "longitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,经度,-180.00000~180.00000"
+          },
+          "create_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "video_packages" : {
+            "type" : "array",
+            "description" : "视频源所在分组",
+            "items" : {
+              "$ref" : "#/components/schemas/VideoGroupInfoDto"
+            }
+          },
+          "num_tasks" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源已运行算法作业数量"
+          },
+          "num_service_config_templates" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源算法服务配置模板数量"
+          },
+          "type_config" : {
+            "type" : "string",
+            "description" : "视频源配置信息xml"
+          },
+          "tag" : {
+            "type" : "array",
+            "description" : "视频源标签,标签最多选择4个,标签内容只能由中文, 英文字母(a~z, A~Z)、数字(0~9)、中划线(-)、下划线(_)组成,",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "stream_path" : {
+            "type" : "string",
+            "description" : "流地址"
+          },
+          "scene_recommend" : {
+            "type" : "array",
+            "description" : "智能算法推荐的标签",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "video_source_quality" : {
+            "type" : "array",
+            "description" : "视频源的视频流质量:",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "UpdateBatchTaskRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "task-test",
+            "description" : "任务的名称,必填。仅能包含汉字、字母、数字、中划线和下划线,长度介于1~100之间",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "任务的描述,选填。长度不超过500",
+            "minLength" : 0,
+            "maxLength" : 500
+          },
+          "schedule" : {
+            "description" : "定时任务参数",
+            "$ref" : "#/components/schemas/TaskSchedule"
+          },
+          "batch_input" : {
+            "description" : "任务的输入配置",
+            "$ref" : "#/components/schemas/BatchTaskInputDto"
+          },
+          "output" : {
+            "description" : "任务的输出配置",
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "config" : {
+            "description" : "任务配置参数",
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          },
+          "is_saved_as_template" : {
+            "type" : "boolean",
+            "description" : "是否保存为模板",
+            "default" : false
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "description" : "资源订单id,与关联算法挂钩。非商用白名单的算法 就不用填,商用算法就为必填项,需要满足正则表达式^[a-z0-9-_]{4,36}$。",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }
+      },
+      "UpdateDeployAlgorithmResp" : {
+        "type" : "object",
+        "properties" : {
+          "alg_id" : {
+            "type" : "string",
+            "description" : "算法ID"
+          }
+        }
+      },
+      "VideoGroupListInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "video_group_id" : {
+            "type" : "string",
+            "description" : "视频源分组id"
+          },
+          "video_group_name" : {
+            "type" : "string",
+            "description" : "视频源分组名称"
+          },
+          "num_video_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源数量"
+          },
+          "group_status" : {
+            "description" : "分组中视频源状态",
+            "$ref" : "#/components/schemas/GroupStatusDto"
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入方式"
+          },
+          "create_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "modify_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "最后一次修改时间"
+          },
+          "num_batch_task" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已配置批量作业数量"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "分组中视频源类型"
+          }
+        }
+      },
+      "VideoGroupListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "video_group_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "分组数量"
+          },
+          "total_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源分组总数"
+          },
+          "quota_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频源分组最大限额"
+          },
+          "video_group_list" : {
+            "type" : "array",
+            "description" : "分组列表",
+            "items" : {
+              "$ref" : "#/components/schemas/VideoGroupListInfoDto"
+            }
+          }
+        }
+      },
+      "ServiceListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "数量"
+          },
+          "service_list" : {
+            "type" : "array",
+            "description" : "服务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ServicesListInfoDto"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数数量"
+          }
+        },
+        "description" : "查询算法服务响应体"
+      },
+      "ServicesListInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "alg_id" : {
+            "type" : "string",
+            "description" : "算法ID"
+          },
+          "service_id" : {
+            "type" : "string",
+            "description" : "服务ID"
+          },
+          "service_name" : {
+            "type" : "string",
+            "description" : "服务名称"
+          },
+          "package_id" : {
+            "type" : "string",
+            "description" : "算法服务包ID"
+          },
+          "package_name" : {
+            "type" : "string",
+            "description" : "算法服务包名称"
+          },
+          "company" : {
+            "type" : "string",
+            "description" : "厂商名称"
+          },
+          "alg_version" : {
+            "type" : "string",
+            "description" : "算法版本"
+          },
+          "function_version" : {
+            "type" : "string",
+            "description" : "功能版本"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "应用场景标签",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "alg_status" : {
+            "type" : "string",
+            "description" : "算法状态,取值为“service_running”、“service_deploying”、“service_failed”、“service_stopping”、“service_stopped”、“service_upgrading”、“service_finished”、“service_concerning”或者“not_deployed”"
+          },
+          "deploy_type" : {
+            "type" : "string",
+            "description" : "部署类型,取值为“cloud”或者“edge”"
+          },
+          "alg_class" : {
+            "type" : "string",
+            "description" : "算法类别,取值为“self”或者“partner”"
+          },
+          "request_mode" : {
+            "type" : "string",
+            "description" : "请求模式,取值为“sync”或者“async”",
+            "pattern" : "sync|async"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "算法描述,信息非空时返回"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "服务异常信息,信息非空时返回"
+          },
+          "can_update" : {
+            "type" : "boolean",
+            "description" : "是否可升级,值为true时返回"
+          },
+          "new_alg_id" : {
+            "type" : "string",
+            "description" : "升级后的算法ID,可升级时返回"
+          }
+        }
+      },
+      "EdgePoolListItemDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "边缘池ID"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "edge-pool-96ec",
+            "description" : "边缘池名称"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "Running",
+            "description" : "边缘池状态"
+          },
+          "project_id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "用户项目ID"
+          },
+          "workspace_id" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "工作空间ID"
+          },
+          "created_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1661657615999,
+            "description" : "创建时间"
+          },
+          "updated_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1661657615999,
+            "description" : "更新时间"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "desc",
+            "description" : "描述信息"
+          }
+        }
+      },
+      "EdgePoolListDto" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "边缘资源池总量"
+          },
+          "edge_pools" : {
+            "type" : "array",
+            "description" : "边缘资源池列表响应体",
+            "items" : {
+              "$ref" : "#/components/schemas/EdgePoolListItemDto"
+            }
+          }
+        },
+        "description" : "边缘资源池列表"
+      },
+      "CreateTasksResponseBody" : {
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "任务创建成功生成的任务ID"
+                }
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTasksRequestBody" : {
+        "type" : "object",
+        "required" : [ "input", "name", "output", "service_version" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "task-test",
+            "description" : "任务名称,只能由中文、字母(a~z A~Z)、数字(0~9)、中划线(-)、下划线(_)组成,长度范围为[1,100]",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "hello world!",
+            "description" : "任务的描述,选填。长度不超过500",
+            "minLength" : 0,
+            "maxLength" : 500
+          },
+          "schedule" : {
+            "description" : "定时任务参数,定时周期 仅支持周模式",
+            "$ref" : "#/components/schemas/TaskSchedule"
+          },
+          "input" : {
+            "description" : "任务的输入配置",
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "description" : "任务的输出配置",
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "config" : {
+            "description" : "任务配置参数",
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          },
+          "service_version" : {
+            "type" : "string",
+            "description" : "服务版本号,需要满足正则:^[a-z0-9\\.]{3,32}$",
+            "minLength" : 3,
+            "maxLength" : 32,
+            "pattern" : "^[a-z0-9\\.]{3,32}$"
+          },
+          "is_saved_as_template" : {
+            "type" : "boolean",
+            "description" : "是否保存为模板",
+            "default" : false
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "description" : "资源订单id,与关联算法挂钩。非商用白名单的算法 就不用填,商用算法就为必填项,需要满足正则表达式^[a-z0-9-_]{4,36}$。",
+            "minLength" : 4,
+            "maxLength" : 36,
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }
+      },
+      "CreateVideoGroupDto" : {
+        "type" : "object",
+        "required" : [ "access_type", "video_group_name" ],
+        "properties" : {
+          "video_group_name" : {
+            "type" : "string",
+            "description" : "视频源分组名称,只能由中文、小写英文字母(a~z)、大写英文字母(A~Z)、数字(0~9)组成, 长度范围为[1, 20]",
+            "maxLength" : 20,
+            "pattern" : "^[\\u4e00-\\u9fa5-_a-zA-Z0-9]{1,20}$"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "视频源分组描述",
+            "maxLength" : 100
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入方式,只能选择cloud 或者 edge",
+            "maxLength" : 5,
+            "pattern" : "cloud|edge"
+          },
+          "video_source_ids" : {
+            "type" : "array",
+            "description" : "选中分组内视频源id列表,只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)组成, 长度范围为[4, 36]",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[a-z0-9-_]{4,36}$"
+            },
+            "minItems" : 1
+          }
+        }
+      },
+      "CreateVideoGroupResponseBody" : {
+        "type" : "object",
+        "required" : [ "video_group_id" ],
+        "properties" : {
+          "video_group_id" : {
+            "type" : "string",
+            "description" : "视频源分组id"
+          }
+        },
+        "description" : "创建视频源分组响应体"
+      },
+      "DeployServiceResp" : {
+        "type" : "object",
+        "properties" : {
+          "alg_name" : {
+            "type" : "string",
+            "description" : "算法名称"
+          }
+        }
+      },
+      "DeployServiceReq" : {
+        "type" : "object",
+        "required" : [ "stream_count" ],
+        "properties" : {
+          "pool_id" : {
+            "type" : "string",
+            "description" : "资源池ID,服务状态为未部署时必填",
+            "pattern" : "^[A-Za-z-_0-9]{1,64}$"
+          },
+          "stream_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "视频流路数",
+            "minimum" : 1,
+            "maximum" : 10000
+          },
+          "deploy_config" : {
+            "type" : "object",
+            "description" : "服务启动参数,须按照模型的部署约束填写。类型为“Map<String, Object>”,可选填,默认为空。为确保您的数据安全,在环境变量中,请勿输入敏感信息,如明文密码",
+            "properties" : { }
+          },
+          "envs" : {
+            "type" : "object",
+            "description" : "运行服务需要的环境变量键值对。类型为“Map<String, String>”,可选填,默认为空。为确保您的数据安全,在环境变量中,请勿输入敏感信息,如明文密码",
+            "properties" : { }
+          }
+        }
+      },
+      "TaskInfo" : {
+        "type" : "object",
+        "required" : [ "algorithm_publish_id", "created_at", "id", "name", "service_id", "state", "title", "type", "video_source_name" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "description" : "任务ID"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "task_test1",
+            "description" : "任务的名称"
+          },
+          "service_id" : {
+            "type" : "string",
+            "example" : "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx",
+            "description" : "任务对应服务的ID"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "1686027880205",
+            "description" : "任务创建的时间"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "description" : "任务当前的状态,分别为PENDING(等待中),RECOVERING(恢复中),STARTING(启动中),UPGRADING(升级中),CREATE_FAILED(创建失败),START_FAILED(启动失败),RUNNING(运行中),STOPPING(停止中),STOPPED(已停止),ABNORMAL(异常),SUCCEEDED(运行成功),FAILED(运行失败),DELETING(删除中),FREEZING(冻结中),FROZEN(已冻结)"
+          },
+          "video_source_name" : {
+            "type" : "string",
+            "example" : "test_g11",
+            "description" : "视频源名称"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "alg_test",
+            "description" : "算法中文名称"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "任务类型(0:云上任务 1:边缘任务)"
+          },
+          "algorithm_publish_id" : {
+            "type" : "string",
+            "example" : "xxxxxxx-xxxxxxx-xxxxxxx-xxxxx-xxxxxx",
+            "description" : "算法id"
+          }
+        },
+        "description" : "查询任务列表响应体"
+      },
+      "TaskListDto" : {
+        "type" : "object",
+        "required" : [ "count", "page", "page_size", "tasks" ],
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前页面的条目数"
+          },
+          "tasks" : {
+            "type" : "array",
+            "description" : "查询到的任务列表信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskInfo"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前页号"
+          },
+          "page_size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "分页尺寸"
+          }
+        }
+      },
+      "VideoSourceInfoDto" : {
+        "type" : "object",
+        "required" : [ "access_type", "type", "video_source_name" ],
+        "properties" : {
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称,只支持中文、英文字母(a-z,A-Z)、数字、特殊字符(空格.-_() ()),不能以空格开头和结尾"
+          },
+          "access_type" : {
+            "type" : "string",
+            "description" : "接入类型(cloud、edge)"
+          },
+          "status" : {
+            "description" : "数据源状态",
+            "$ref" : "#/components/schemas/VideoSourceStatusInfoDto"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "类型:obs、vcn、url、restful、camera"
+          },
+          "latitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,纬度,-90.00000~90.00000"
+          },
+          "longitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,经度,-180.00000~180.00000"
+          },
+          "create_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "type_config" : {
+            "type" : "string",
+            "description" : "视频源配置信息xml"
+          },
+          "video_packages" : {
+            "type" : "array",
+            "description" : "视频源所在分组",
+            "items" : {
+              "$ref" : "#/components/schemas/VideoGroupInfoDto"
+            }
+          },
+          "service_config_templates" : {
+            "type" : "array",
+            "description" : "算法模板体",
+            "items" : {
+              "$ref" : "#/components/schemas/VideoServiceConfigTemplateDto"
+            }
+          },
+          "stream_path" : {
+            "type" : "string",
+            "description" : "流地址"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "视频源截图的base64转码"
+          },
+          "tag" : {
+            "type" : "array",
+            "description" : "视频源标签,标签最多选择4个,标签内容只能由中文, 英文字母(a~z, A~Z)、数字(0~9)、中划线(-)、下划线(_)组成,",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "scene_recommend" : {
+            "type" : "array",
+            "description" : "智能算法推荐的标签",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "video_source_quality" : {
+            "type" : "array",
+            "description" : "视频源的视频流质量:",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "VideoServiceConfigTemplateDto" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "算法服务名称"
+          },
+          "roi" : {
+            "type" : "string",
+            "description" : "公共roi"
+          },
+          "serviceConfig" : {
+            "type" : "string",
+            "description" : "算法服务公共配置"
+          },
+          "createAt" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间"
+          },
+          "modifyAt" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "修改时间"
+          },
+          "numTask" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已运行算法数量"
+          }
+        }
+      },
+      "UpdateVideoSourceDto" : {
+        "type" : "object",
+        "required" : [ "type_config", "video_source_name" ],
+        "properties" : {
+          "video_source_name" : {
+            "type" : "string",
+            "description" : "视频源名称,只支持中文、英文字母(a-z,A-Z)、数字、特殊字符(空格.-_() ()),不能以空格开头和结尾",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^$|^([\\u4e00-\\u9fa5a-zA-Z0-9()()._-]|([\\u4e00-\\u9fa5a-zA-Z0-9()()._-][\\u4e00-\\u9fa5a-zA-Z0-9 ()()._-]{0,98}[\\u4e00-\\u9fa5a-zA-Z0-9()()._-]))$"
+          },
+          "latitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,纬度,-90.00000~90.00000",
+            "pattern" : "^$|^[+-]?(([0-8]?\\d(\\.\\d{1,5})?)|(90(\\.0{1,5})?))$"
+          },
+          "longitude" : {
+            "type" : "string",
+            "description" : "视频源的地理位置信息,经度,-180.00000~180.00000",
+            "pattern" : "^$|^-?((([0-9]\\d?|1[0-7]\\d)(\\.\\d{1,5})?)|180(\\.0{1,5})?)$"
+          },
+          "type_config" : {
+            "type" : "string",
+            "description" : "视频源配置信息xml",
+            "maxLength" : 1024
+          },
+          "tag" : {
+            "type" : "array",
+            "description" : "视频源标签,标签最多选择4个,标签内容只能由中文, 英文字母(a~z, A~Z)、数字(0~9)、中划线(-)、下划线(_)组成, ",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[\\u4e00-\\u9fa5a-zA-Z0-9,_-]{1,10}$"
+            },
+            "maxItems" : 4
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateEdgePool" : {
+      "post" : {
+        "tags" : [ "IEdgePoolController" ],
+        "summary" : "创建边缘资源池",
+        "description" : "创建边缘资源池",
+        "operationId" : "CreateEdgePool",
+        "responses" : {
+          "201" : {
+            "description" : "创建边缘资源池响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateEdgePoolResDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateEdgePoolRequestDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEdgePool",
+      "x-url" : "{endpoint}/v2/{project_id}/edge-pools"
+    },
+    "/ShowEdgePoolInfo" : {
+      "get" : {
+        "tags" : [ "IEdgePoolController" ],
+        "summary" : "查询边缘资源池详情",
+        "description" : "查询边缘资源池详情",
+        "operationId" : "ShowEdgePoolInfo",
+        "responses" : {
+          "200" : {
+            "description" : "边缘资源池详情响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EdgePoolInfoDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "边缘资源池id,满足正则^[a-zA-Z0-9-]{1,64}$",
+          "required" : true,
+          "schema" : {
+            "description" : "边缘资源池id,满足正则^[a-zA-Z0-9-]{1,64}$",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEdgePoolInfo",
+      "x-url" : "{endpoint}/v2/{project_id}/edge-pools/{id}"
+    },
+    "/CreateBatchTask" : {
+      "post" : {
+        "tags" : [ "IBatchTaskController" ],
+        "summary" : "新增批量任务",
+        "description" : "新增批量任务",
+        "operationId" : "CreateBatchTask",
+        "responses" : {
+          "200" : {
+            "description" : "批量操作响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskResDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateBatchTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateBatchTask",
+      "x-url" : "{endpoint}/v2/{project_id}/batch-tasks"
+    },
+    "/ShowVideoGroupDetail" : {
+      "get" : {
+        "tags" : [ "IVideoGroupController" ],
+        "summary" : "获取视频源分组详情",
+        "description" : "获取视频源分组详情",
+        "operationId" : "ShowVideoGroupDetail",
+        "responses" : {
+          "200" : {
+            "description" : "视频源分组信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoGroupInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_group_id",
+          "in" : "path",
+          "description" : "视频源分组id,只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(\\_)组成长度范围是[4,36]",
+          "required" : true,
+          "schema" : {
+            "description" : "视频源分组id,只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(\\_)组成长度范围是[4,36]",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVideoGroupDetail",
+      "x-url" : "{endpoint}/v2/{project_id}/video-group/{video_group_id}"
+    },
+    "/UpdateVideoGroup" : {
+      "put" : {
+        "tags" : [ "IVideoGroupController" ],
+        "summary" : "更新视频源分组",
+        "description" : "更新视频源分组",
+        "operationId" : "UpdateVideoGroup",
+        "responses" : {
+          "200" : {
+            "description" : "更新成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_group_id",
+          "in" : "path",
+          "description" : "已创建成功的视频源分组id。只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(\\_)组成长度范围是[4,36]",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功的视频源分组id。只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(\\_)组成长度范围是[4,36]",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateVideoGroupDto"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVideoGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/video-group/{video_group_id}"
+    },
+    "/ShowTaskInfo" : {
+      "get" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "获取任务详情",
+        "description" : "用于获取视频智能分析任务详情",
+        "operationId" : "ShowTaskInfo",
+        "responses" : {
+          "200" : {
+            "description" : "任务详情信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskInfoDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "作业ID",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskInfo",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}"
+    },
+    "/DeleteTask" : {
+      "delete" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "删除单个任务",
+        "description" : "删除单个任务",
+        "operationId" : "DeleteTask",
+        "responses" : {
+          "200" : {
+            "description" : "任务被正常删除",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}"
+    },
+    "/DeleteBatchTask" : {
+      "delete" : {
+        "tags" : [ "IBatchTaskController" ],
+        "summary" : "删除批量配置任务",
+        "description" : "删除批量配置",
+        "operationId" : "DeleteBatchTask",
+        "responses" : {
+          "200" : {
+            "description" : "批量操作响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskResDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "批量配置ID",
+          "required" : true,
+          "schema" : {
+            "description" : "批量配置ID",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteBatchTask",
+      "x-url" : "{endpoint}/v2/{project_id}/batch-tasks/{id}"
+    },
+    "/UpdateTask" : {
+      "put" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "修改任务",
+        "description" : "任务修改接口,用于修改任务配置",
+        "operationId" : "UpdateTask",
+        "responses" : {
+          "200" : {
+            "description" : "任务编辑成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "已创建成功任务的id信息",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功任务的id信息",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}"
+    },
+    "/CreateVideoSource" : {
+      "post" : {
+        "tags" : [ "IVideoSourceController" ],
+        "summary" : "创建视频源",
+        "description" : "创建视频源",
+        "operationId" : "CreateVideoSource",
+        "responses" : {
+          "200" : {
+            "description" : "视频源信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateVideoSourceResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateVideoSourceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVideoSource",
+      "x-url" : "{endpoint}/v2/{project_id}/source"
+    },
+    "/ListBatchTasks" : {
+      "get" : {
+        "tags" : [ "IBatchTaskController" ],
+        "summary" : "获取批量配置任务列表",
+        "description" : "获取批量配置任务列表",
+        "operationId" : "ListBatchTasks",
+        "responses" : {
+          "200" : {
+            "description" : "批量操作响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskListResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "is_paged",
+          "in" : "query",
+          "description" : "是否分页",
+          "required" : false,
+          "schema" : {
+            "description" : "是否分页",
+            "type" : "boolean",
+            "default" : true
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 200,
+            "minimum" : 5
+          }
+        }, {
+          "name" : "page_num",
+          "in" : "query",
+          "description" : "页号",
+          "required" : false,
+          "schema" : {
+            "description" : "页号",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "升序或降序,枚举值:asc|desc。",
+          "required" : false,
+          "schema" : {
+            "description" : "升序或降序,枚举值:asc|desc。",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "asc|desc"
+          }
+        }, {
+          "name" : "sort_name",
+          "in" : "query",
+          "description" : "排序字段,枚举值:task_count|created_at。",
+          "required" : false,
+          "schema" : {
+            "description" : "排序字段,枚举值:task_count|created_at。",
+            "type" : "string",
+            "default" : "created_at",
+            "pattern" : "task_count|created_at"
+          }
+        }, {
+          "name" : "video_group",
+          "in" : "query",
+          "description" : "视频源分组列表,多个以逗号分隔,需要满足正则:^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{1,1000}$",
+          "required" : false,
+          "schema" : {
+            "description" : "视频源分组列表,多个以逗号分隔,需要满足正则:^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{1,1000}$",
+            "type" : "string",
+            "maxLength" : 1000,
+            "minLength" : 1,
+            "pattern" : "^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{1,1000}$"
+          }
+        }, {
+          "name" : "task_state",
+          "in" : "query",
+          "description" : "任务状态,需要枚举值:pending|recovering|starting|upgrading|create_failed|start_failed|running|stopping|stopped|abnormal|succeeded|failed|deleting|freezing|frozen|stopped_no_service|scheduling|lack_of_resources",
+          "required" : false,
+          "schema" : {
+            "description" : "任务状态,需要枚举值:pending|recovering|starting|upgrading|create_failed|start_failed|running|stopping|stopped|abnormal|succeeded|failed|deleting|freezing|frozen|stopped_no_service|scheduling|lack_of_resources",
+            "type" : "string",
+            "pattern" : "pending|recovering|starting|upgrading|create_failed|start_failed|running|stopping|stopped|abnormal|succeeded|failed|deleting|freezing|frozen|stopped_no_service|scheduling|lack_of_resources"
+          }
+        }, {
+          "name" : "type_like",
+          "in" : "query",
+          "description" : "模糊查询字段,枚举值: batch_task_name|publish_service_name",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查询字段,枚举值: batch_task_name|publish_service_name",
+            "type" : "string",
+            "pattern" : "^(batch_task_name|publish_service_name)$"
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "description" : "模糊查询名称,需要与type_like搭配使用来实现是通过batch_task_name还是publish_service_name进行模糊查询",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查询名称,需要与type_like搭配使用来实现是通过batch_task_name还是publish_service_name进行模糊查询",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "manufacturer",
+          "in" : "query",
+          "description" : "根据厂商字段筛选,需要满足正则表达式 ^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$",
+          "required" : false,
+          "schema" : {
+            "description" : "根据厂商字段筛选,需要满足正则表达式 ^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 2,
+            "pattern" : "^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$"
+          }
+        }, {
+          "name" : "title",
+          "in" : "query",
+          "description" : "算法中文名,需要满足正则表达式 ^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$",
+          "required" : false,
+          "schema" : {
+            "description" : "算法中文名,需要满足正则表达式 ^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 2,
+            "pattern" : "^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{2,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBatchTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/batch-tasks"
+    },
+    "/DeleteVideoGroup" : {
+      "delete" : {
+        "tags" : [ "IVideoGroupController" ],
+        "summary" : "删除视频源分组",
+        "description" : "删除视频源分组",
+        "operationId" : "DeleteVideoGroup",
+        "responses" : {
+          "200" : {
+            "description" : "删除视频源分组成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_group_id",
+          "in" : "path",
+          "description" : "视频源分组id,只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)长度范围为[4, 36]",
+          "required" : true,
+          "schema" : {
+            "description" : "视频源分组id,只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)长度范围为[4, 36]",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVideoGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/video-group/{video_group_id}"
+    },
+    "/DeleteEdgePool" : {
+      "delete" : {
+        "tags" : [ "IEdgePoolController" ],
+        "summary" : "删除边缘资源池",
+        "description" : "删除边缘资源池",
+        "operationId" : "DeleteEdgePool",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "边缘资源池id,满足正则^[a-zA-Z0-9-]{1,64}$",
+          "required" : true,
+          "schema" : {
+            "description" : "边缘资源池id,满足正则^[a-zA-Z0-9-]{1,64}$",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEdgePool",
+      "x-url" : "{endpoint}/v2/{project_id}/edge-pools/{id}"
+    },
+    "/BatchStartStopTask" : {
+      "put" : {
+        "tags" : [ "IBatchTaskController" ],
+        "summary" : "启动/停止批量配置任务",
+        "description" : "启动/停止批量配置任务",
+        "operationId" : "BatchStartStopTask",
+        "responses" : {
+          "200" : {
+            "description" : "批量操作响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskResDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "批量配置ID",
+          "required" : true,
+          "schema" : {
+            "description" : "批量配置ID",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "command",
+          "in" : "path",
+          "description" : "指定该API要对批量任务配置进行的操作,停止或者启动 枚举值:start|stop",
+          "required" : true,
+          "schema" : {
+            "description" : "指定该API要对批量任务配置进行的操作,停止或者启动 枚举值:start|stop",
+            "type" : "string",
+            "pattern" : "^(start|stop)$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchStartStopTask",
+      "x-url" : "{endpoint}/v2/{project_id}/batch-tasks/{id}/action/{command}"
+    },
+    "/ShowServiceDetail" : {
+      "get" : {
+        "tags" : [ "IAlgorithmController" ],
+        "summary" : "获取服务详情",
+        "description" : "获取服务详情",
+        "operationId" : "ShowServiceDetail",
+        "responses" : {
+          "200" : {
+            "description" : "服务详情响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetServiceDetailDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-z0-9]{32}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_id",
+          "in" : "path",
+          "description" : "服务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "服务ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowServiceDetail",
+      "x-url" : "{endpoint}/v2/{project_id}/algorithm/services/{service_id}"
+    },
+    "/ListVideoSources" : {
+      "get" : {
+        "tags" : [ "IVideoSourceController" ],
+        "summary" : "获取视频源列表",
+        "description" : "获取视频源列表",
+        "operationId" : "ListVideoSources",
+        "responses" : {
+          "200" : {
+            "description" : "视频源列表响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListVideoSourceResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "scope",
+          "in" : "query",
+          "description" : "模糊查找参数,可选,根据名称查找",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查找参数,可选,根据名称查找",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "scope_name",
+          "in" : "query",
+          "description" : "模糊查找参数字段名,可选,名称(取值source_name)或分组名称(取值group_name)",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查找参数字段名,可选,名称(取值source_name)或分组名称(取值group_name)",
+            "type" : "string",
+            "default" : "source_name",
+            "maxLength" : 11,
+            "pattern" : "^$|source_name|group_name"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "视频源状态,可选,取值为1 2 9,分别代表在线、离线、异常",
+          "required" : false,
+          "schema" : {
+            "description" : "视频源状态,可选,取值为1 2 9,分别代表在线、离线、异常",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "1|2|9"
+            }
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "类型:obs、vcn、url、restful、camera、ivm",
+          "required" : false,
+          "schema" : {
+            "description" : "类型:obs、vcn、url、restful、camera、ivm",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "obs|vcn|url|restful|camera|VIDEO_PLATFORM|VIDEO_IMAGE_DB|RTSP_STREAM"
+            }
+          }
+        }, {
+          "name" : "video_group_id",
+          "in" : "query",
+          "description" : "视频源分组,可选。若传入则需要符合正则表达式^[0-9a-zA-Z-_]{1,36}$",
+          "required" : false,
+          "schema" : {
+            "description" : "视频源分组,可选。若传入则需要符合正则表达式^[0-9a-zA-Z-_]{1,36}$",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^[0-9a-zA-Z-_]{1,36}$"
+            }
+          }
+        }, {
+          "name" : "sort_name",
+          "in" : "query",
+          "description" : "排序项。可选,值范围(create_at,num_task,num_template)",
+          "required" : false,
+          "schema" : {
+            "description" : "排序项。可选,值范围(create_at,num_task,num_template)",
+            "type" : "string",
+            "default" : "create_at",
+            "pattern" : "create_at|num_task|num_template"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序顺序,可选,默认倒序",
+          "required" : false,
+          "schema" : {
+            "description" : "排序顺序,可选,默认倒序",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "desc|asc"
+          }
+        }, {
+          "name" : "is_paged",
+          "in" : "query",
+          "description" : "是否分页",
+          "required" : false,
+          "schema" : {
+            "description" : "是否分页",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "分页每页显示的条目",
+          "required" : false,
+          "schema" : {
+            "description" : "分页每页显示的条目",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 200,
+            "minimum" : 5
+          }
+        }, {
+          "name" : "page_num",
+          "in" : "query",
+          "description" : "第几页",
+          "required" : false,
+          "schema" : {
+            "description" : "第几页",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1,
+            "maximum" : 100000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "access_type",
+          "in" : "query",
+          "description" : "接入方式",
+          "required" : false,
+          "schema" : {
+            "description" : "接入方式",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^$|cloud|edge"
+            }
+          }
+        }, {
+          "name" : "platform_name",
+          "in" : "query",
+          "description" : "平台名称",
+          "required" : false,
+          "schema" : {
+            "description" : "平台名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "tag",
+          "in" : "query",
+          "description" : "标签",
+          "required" : false,
+          "schema" : {
+            "description" : "标签",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVideoSources",
+      "x-url" : "{endpoint}/v2/{project_id}/source/sources"
+    },
+    "/UpdateBatchTask" : {
+      "put" : {
+        "tags" : [ "IBatchTaskController" ],
+        "summary" : "修改批量配置任务",
+        "description" : "修改批量配置任务",
+        "operationId" : "UpdateBatchTask",
+        "responses" : {
+          "200" : {
+            "description" : "批量操作响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchTaskResDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "批量配置ID",
+          "required" : true,
+          "schema" : {
+            "description" : "批量配置ID",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateBatchTaskRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateBatchTask",
+      "x-url" : "{endpoint}/v2/{project_id}/batch-tasks/{id}"
+    },
+    "/StopDeployAlgorithm" : {
+      "put" : {
+        "tags" : [ "IAlgorithmController" ],
+        "summary" : "停止算法部署",
+        "description" : "停止算法部署",
+        "operationId" : "StopDeployAlgorithm",
+        "responses" : {
+          "200" : {
+            "description" : "停止算法部署响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateDeployAlgorithmResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-z0-9]{32}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "alg_id",
+          "in" : "path",
+          "description" : "算法ID",
+          "required" : true,
+          "schema" : {
+            "description" : "算法ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopDeployAlgorithm",
+      "x-url" : "{endpoint}/v2/{project_id}/algorithm/{alg_id}/deploy/stop"
+    },
+    "/ListVideoGroups" : {
+      "get" : {
+        "tags" : [ "IVideoGroupController" ],
+        "summary" : "获取视频源分组列表",
+        "description" : "获取视频源分组列表",
+        "operationId" : "ListVideoGroups",
+        "responses" : {
+          "200" : {
+            "description" : "视频源分组列表响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoGroupListResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_name",
+          "in" : "query",
+          "description" : "排序项。可选,可选值(create_at、modify_at、num_video_source、num_task)",
+          "required" : false,
+          "schema" : {
+            "description" : "排序项。可选,可选值(create_at、modify_at、num_video_source、num_task)",
+            "type" : "string",
+            "default" : "create_at",
+            "pattern" : "create_at|modify_at|num_video_source|num_task"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序顺序,可选,默认倒序,可选值(desc、asc)",
+          "required" : false,
+          "schema" : {
+            "description" : "排序顺序,可选,默认倒序,可选值(desc、asc)",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "desc|asc"
+          }
+        }, {
+          "name" : "is_paged",
+          "in" : "query",
+          "description" : "是否分页",
+          "required" : false,
+          "schema" : {
+            "description" : "是否分页",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "分页每页显示的条目",
+          "required" : false,
+          "schema" : {
+            "description" : "分页每页显示的条目",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 200,
+            "minimum" : 5
+          }
+        }, {
+          "name" : "page_num",
+          "in" : "query",
+          "description" : "第几页",
+          "required" : false,
+          "schema" : {
+            "description" : "第几页",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1,
+            "maximum" : 100000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "模糊查找参数,可以按分组名称进行模糊查找",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查找参数,可以按分组名称进行模糊查找",
+            "type" : "string",
+            "maxLength" : 20
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "状态level筛选,可选值(1、2、9)",
+          "required" : false,
+          "schema" : {
+            "description" : "状态level筛选,可选值(1、2、9)",
+            "type" : "string",
+            "pattern" : "(^$)|(^1|2|9$)"
+          }
+        }, {
+          "name" : "access_type",
+          "in" : "query",
+          "description" : "根据接入方式筛选(可多选),可选值(cloud、edge)",
+          "required" : false,
+          "schema" : {
+            "description" : "根据接入方式筛选(可多选),可选值(cloud、edge)",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^$|cloud|edge"
+            }
+          }
+        }, {
+          "name" : "has_task",
+          "in" : "query",
+          "description" : "是否有批量作业",
+          "required" : false,
+          "schema" : {
+            "description" : "是否有批量作业",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "视频源类型筛选(可多选)类型:obs、vcn、url、restful、camera",
+          "required" : false,
+          "schema" : {
+            "description" : "视频源类型筛选(可多选)类型:obs、vcn、url、restful、camera",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^$|obs|vcn|url|restful|camera|VIDEO_PLATFORM|VIDEO_IMAGE_DB|RTSP_STREAM"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVideoGroups",
+      "x-url" : "{endpoint}/v2/{project_id}/video-group/groups"
+    },
+    "/ListUserServices" : {
+      "get" : {
+        "tags" : [ "IAlgorithmController" ],
+        "summary" : "我的算法服务列表",
+        "description" : "我的算法服务列表",
+        "operationId" : "ListUserServices",
+        "responses" : {
+          "200" : {
+            "description" : "我的算法服务列表响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-z0-9]{32}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "description" : "服务名称,支持模糊匹配",
+          "required" : false,
+          "schema" : {
+            "description" : "服务名称,支持模糊匹配",
+            "type" : "string"
+          }
+        }, {
+          "name" : "is_paged",
+          "in" : "query",
+          "description" : "是否分页",
+          "required" : false,
+          "schema" : {
+            "description" : "是否分页",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "每页的最大条目数",
+          "required" : false,
+          "schema" : {
+            "description" : "每页的最大条目数",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 200,
+            "minimum" : 5
+          }
+        }, {
+          "name" : "page_num",
+          "in" : "query",
+          "description" : "第几页",
+          "required" : false,
+          "schema" : {
+            "description" : "第几页",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序方式,可选“asc”或“desc”,代表递增排序及递减排序",
+          "required" : false,
+          "schema" : {
+            "description" : "排序方式,可选“asc”或“desc”,代表递增排序及递减排序",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "desc|asc"
+          }
+        }, {
+          "name" : "sort_name",
+          "in" : "query",
+          "description" : "排序字段,可选“created_at”或“function_version”",
+          "required" : false,
+          "schema" : {
+            "description" : "排序字段,可选“created_at”或“function_version”",
+            "type" : "string",
+            "default" : "created_at",
+            "pattern" : "created_at|function_version"
+          }
+        }, {
+          "name" : "alg_status",
+          "in" : "query",
+          "description" : "服务状态,支持多选。可选“service_running”、“service_deploying”、“service_failed”、“service_stopping”、“service_stopped”、“service_upgrading”、“service_finished”、“service_concerning”、“not_deployed”",
+          "required" : false,
+          "schema" : {
+            "description" : "服务状态,支持多选。可选“service_running”、“service_deploying”、“service_failed”、“service_stopping”、“service_stopped”、“service_upgrading”、“service_finished”、“service_concerning”、“not_deployed”",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "pattern" : "^service_running|service_deploying|service_failed|service_stopping|service_stopped|service_upgrading|service_finished|service_concerning|not_deployed$"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListUserServices",
+      "x-url" : "{endpoint}/v2/{project_id}/algorithm/services/user"
+    },
+    "/ListEdgePools" : {
+      "get" : {
+        "tags" : [ "IEdgePoolController" ],
+        "summary" : "查询边缘资源池列表",
+        "description" : "查询边缘资源池列表",
+        "operationId" : "ListEdgePools",
+        "responses" : {
+          "200" : {
+            "description" : "获取边缘资源池列表响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EdgePoolListDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "is_paged",
+          "in" : "query",
+          "description" : "是否分页",
+          "required" : false,
+          "schema" : {
+            "description" : "是否分页",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "第几页",
+          "required" : false,
+          "schema" : {
+            "description" : "第几页",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "page_num",
+          "in" : "query",
+          "description" : "页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "description" : "模糊查询名称,满足正则表达式^[a-z0-9-]{1,30}$",
+          "required" : false,
+          "schema" : {
+            "description" : "模糊查询名称,满足正则表达式^[a-z0-9-]{1,30}$",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-]{1,30}$"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序方式,根据传入的sort_name的值进行正序或倒序地排序。asc为正序,desc为倒序。",
+          "required" : false,
+          "schema" : {
+            "description" : "排序方式,根据传入的sort_name的值进行正序或倒序地排序。asc为正序,desc为倒序。",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "desc|asc"
+          }
+        }, {
+          "name" : "sort_name",
+          "in" : "query",
+          "description" : "排序字段。枚举值:",
+          "required" : false,
+          "schema" : {
+            "description" : "排序字段。枚举值:",
+            "type" : "string",
+            "default" : "created_at",
+            "pattern" : "created_at|updated_at"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "状态筛选,单选。枚举值:",
+          "required" : false,
+          "schema" : {
+            "description" : "状态筛选,单选。枚举值:",
+            "type" : "string",
+            "pattern" : "Running|Abnormal"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEdgePools",
+      "x-url" : "{endpoint}/v2/{project_id}/edge-pools"
+    },
+    "/CreateTask" : {
+      "post" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "创建任务",
+        "description" : "该接口用于创建任务",
+        "operationId" : "CreateTask",
+        "responses" : {
+          "200" : {
+            "description" : "任务创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-z0-9]{32}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务API名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务API名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1,
+            "pattern" : "^[a-zA-Z0-9\\u4e00-\\u9fa5\\,-_]{1,100}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTask",
+      "x-url" : "{endpoint}/v2/{project_id}/services/{service_name}/tasks"
+    },
+    "/CreateVideoGroup" : {
+      "post" : {
+        "tags" : [ "IVideoGroupController" ],
+        "summary" : "创建视频源分组",
+        "description" : "创建视频源分组",
+        "operationId" : "CreateVideoGroup",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateVideoGroupResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateVideoGroupDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVideoGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/video-group"
+    },
+    "/DeployAlgorithm" : {
+      "post" : {
+        "tags" : [ "IAlgorithmController" ],
+        "summary" : "部署算法",
+        "description" : "部署算法",
+        "operationId" : "DeployAlgorithm",
+        "responses" : {
+          "200" : {
+            "description" : "部署算法响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeployServiceResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "^[a-z0-9]{32}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "alg_id",
+          "in" : "path",
+          "description" : "算法ID",
+          "required" : true,
+          "schema" : {
+            "description" : "算法ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeployServiceReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeployAlgorithm",
+      "x-url" : "{endpoint}/v2/{project_id}/algorithm/{alg_id}/deploy"
+    },
+    "/StartStopTask" : {
+      "put" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "任务启停",
+        "description" : "该接口用于启动或停止任务",
+        "operationId" : "StartStopTask",
+        "responses" : {
+          "200" : {
+            "description" : "任务操作成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "已创建成功任务的id信息",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功任务的id信息",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "command",
+          "in" : "path",
+          "description" : "指定该API要对任务进行的操作,停止或者启动",
+          "required" : true,
+          "schema" : {
+            "description" : "指定该API要对任务进行的操作,停止或者启动",
+            "type" : "string",
+            "pattern" : "^(start|stop)$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartStopTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/action/{command}"
+    },
+    "/DeleteVideoSource" : {
+      "delete" : {
+        "tags" : [ "IVideoSourceController" ],
+        "summary" : "删除视频源",
+        "description" : "删除视频源",
+        "operationId" : "DeleteVideoSource",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_source_id",
+          "in" : "path",
+          "description" : "已创建成功的视频源id,只能由小写英文字母(a~z)、数字(0~9)组成、 中划线(-)、下划线(\\_)长度范围为[4, 36]",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功的视频源id,只能由小写英文字母(a~z)、数字(0~9)组成、 中划线(-)、下划线(\\_)长度范围为[4, 36]",
+            "type" : "string",
+            "maxLength" : 36,
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVideoSource",
+      "x-url" : "{endpoint}/v2/{project_id}/source/{video_source_id}"
+    },
+    "/ListTasks" : {
+      "get" : {
+        "tags" : [ "ITaskController" ],
+        "summary" : "获取任务列表",
+        "description" : "获取任务列表",
+        "operationId" : "ListTasks",
+        "responses" : {
+          "200" : {
+            "description" : "查询作业列表响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskListDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "pattern" : "[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "source_data_type",
+          "in" : "query",
+          "description" : "任务类型,用作查询过滤。仅支持async_task与sync_task两种类型。",
+          "required" : false,
+          "schema" : {
+            "description" : "任务类型,用作查询过滤。仅支持async_task与sync_task两种类型。",
+            "type" : "string",
+            "pattern" : "^(async_task|sync_task)$"
+          }
+        }, {
+          "name" : "title",
+          "in" : "query",
+          "description" : "算法中文名,需要满足正则表达式^[a-zA-Z0-9\\u4e00-\\u9fa5-_\\,]{2,64}$",
+          "required" : false,
+          "schema" : {
+            "description" : "算法中文名,需要满足正则表达式^[a-zA-Z0-9\\u4e00-\\u9fa5-_\\,]{2,64}$",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9\\u4e00-\\u9fa5-_\\,]{2,64}$"
+          }
+        }, {
+          "name" : "camera_name",
+          "in" : "query",
+          "description" : "摄像头名称",
+          "required" : false,
+          "schema" : {
+            "description" : "摄像头名称",
+            "type" : "string",
+            "maxLength" : 255
+          }
+        }, {
+          "name" : "task_state",
+          "in" : "query",
+          "description" : "任务状态,状态可选PENDING|RECOVERING|STARTING|UPGRADING|CREATE_FAILED|START_FAILED|RUNNING|STOPPING|STOPPED|ABNORMAL|SUCCEEDED|FAILED|DELETING|FREEZING|FROZEN|SCHEDULING|LACK_OF_RESOURCES",
+          "required" : false,
+          "schema" : {
+            "description" : "任务状态,状态可选PENDING|RECOVERING|STARTING|UPGRADING|CREATE_FAILED|START_FAILED|RUNNING|STOPPING|STOPPED|ABNORMAL|SUCCEEDED|FAILED|DELETING|FREEZING|FROZEN|SCHEDULING|LACK_OF_RESOURCES",
+            "type" : "string",
+            "pattern" : "PENDING|RECOVERING|STARTING|UPGRADING|CREATE_FAILED|START_FAILED|RUNNING|STOPPING|STOPPED|ABNORMAL|SUCCEEDED|FAILED|DELETING|FREEZING|FROZEN|SCHEDULING|LACK_OF_RESOURCES"
+          }
+        }, {
+          "name" : "task_name",
+          "in" : "query",
+          "description" : "任务名称",
+          "required" : false,
+          "schema" : {
+            "description" : "任务名称",
+            "type" : "string",
+            "maxLength" : 1024
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 5
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "展示服务任务时的排序规则",
+          "required" : false,
+          "schema" : {
+            "description" : "展示服务任务时的排序规则",
+            "type" : "string",
+            "default" : "desc",
+            "pattern" : "desc|asc"
+          }
+        }, {
+          "name" : "batch_id",
+          "in" : "query",
+          "description" : "批量配置ID,需要满足正则表达式^[a-z0-9-_]{4,36}$",
+          "required" : false,
+          "schema" : {
+            "description" : "批量配置ID,需要满足正则表达式^[a-z0-9-_]{4,36}$",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        }, {
+          "name" : "video_group_id",
+          "in" : "query",
+          "description" : "视频分组ID(多个ID英文逗号分隔拼接),长度要求[4,2048]",
+          "required" : false,
+          "schema" : {
+            "description" : "视频分组ID(多个ID英文逗号分隔拼接),长度要求[4,2048]",
+            "type" : "string",
+            "pattern" : "^[a-z0-9-_]{4,2048}$"
+          }
+        }, {
+          "name" : "company",
+          "in" : "query",
+          "description" : "厂商(多选时逗号分隔拼接)",
+          "required" : false,
+          "schema" : {
+            "description" : "厂商(多选时逗号分隔拼接)",
+            "type" : "string",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9\\,_-]{0,100}$"
+          }
+        }, {
+          "name" : "alg_id",
+          "in" : "query",
+          "description" : "算法ID,需要满足正则表达式^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "required" : false,
+          "schema" : {
+            "description" : "算法ID,需要满足正则表达式^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks"
+    },
+    "/ShowVideoSourceDetail" : {
+      "get" : {
+        "tags" : [ "IVideoSourceController" ],
+        "summary" : "获取视频源详情",
+        "description" : "视频源详情展示",
+        "operationId" : "ShowVideoSourceDetail",
+        "responses" : {
+          "200" : {
+            "description" : "视频源详情",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoSourceInfoDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_source_id",
+          "in" : "path",
+          "description" : "已创建成功的视频源id,只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(_)组成, 长度范围为[4, 36]",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功的视频源id,只能由小写英文字母(a~z)、数字(0~9)、中划线(-)、下划线(_)组成, 长度范围为[4, 36]",
+            "type" : "string",
+            "maxLength" : 36,
+            "pattern" : "^[a-z0-9-_]{4,36}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVideoSourceDetail",
+      "x-url" : "{endpoint}/v2/{project_id}/source/sources/{video_source_id}"
+    },
+    "/UpdateVideoSource" : {
+      "put" : {
+        "tags" : [ "IVideoSourceController" ],
+        "summary" : "修改视频源",
+        "description" : "修改视频源",
+        "operationId" : "UpdateVideoSource",
+        "responses" : {
+          "200" : {
+            "description" : "更新视频源响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoSourceInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID,获取方法参见[获取项目ID和名称](vias_03_0283.xml)",
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,获取方法参见[认证鉴权](vias_03_0009.xml)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_source_id",
+          "in" : "path",
+          "description" : "已创建成功的视频源id,只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)长度范围为[4, 36]",
+          "required" : true,
+          "schema" : {
+            "description" : "已创建成功的视频源id,只能由小写英文字母(a~z,)、数字(0~9)、中划线(-)、下划线(\\_)长度范围为[4, 36]",
+            "type" : "string",
+            "maxLength" : 36,
+            "pattern" : "^[0-9a-z-_]{4,36}$"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateVideoSourceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVideoSource",
+      "x-url" : "{endpoint}/v2/{project_id}/source/{video_source_id}"
+    }
+  }
+}

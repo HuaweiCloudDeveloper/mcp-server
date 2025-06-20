@@ -1,0 +1,1469 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VAS-服务作业管理",
+    "title" : "VAS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "TaskOutputForDisplay" : {
+        "description" : "作业的输出配置展示",
+        "type" : "object",
+        "minProperties" : 1,
+        "maxProperties" : 5,
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/TaskOutputObs"
+          },
+          "dis" : {
+            "$ref" : "#/components/schemas/TaskOutputDis"
+          },
+          "webhook" : {
+            "$ref" : "#/components/schemas/TaskOutputWebhook"
+          },
+          "hosting" : {
+            "$ref" : "#/components/schemas/TaskOutputHostingForDisplay"
+          },
+          "localpath" : {
+            "$ref" : "#/components/schemas/TaskOutputLocalpath"
+          }
+        }
+      },
+      "TaskDetails" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$",
+            "description" : "作业ID",
+            "example" : "839ceexxxxxxxxxxxxxxxxxxxx7dbd4f"
+          },
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$",
+            "description" : "作业的名称",
+            "example" : "task-test"
+          },
+          "creator" : {
+            "type" : "string",
+            "pattern" : "^.{1,100}$",
+            "description" : "作业创建者的用户名",
+            "example" : "user_test"
+          },
+          "project_id" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$",
+            "description" : "作业创建者的项目ID",
+            "example" : "8deadcxxxxxxxxxxxxxxxxxxxx4b7249"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "description" : "作业的描述",
+            "example" : "hello world!"
+          },
+          "service_name" : {
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 100,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$",
+            "description" : "作业对应服务的名称"
+          },
+          "service_version" : {
+            "type" : "string",
+            "pattern" : "^\\d{1,3}\\.\\d{1,3}$",
+            "description" : "作业对应服务的版本号",
+            "example" : "1.0"
+          },
+          "service_title" : {
+            "type" : "object",
+            "description" : "作业对应服务的标题",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "pattern" : "^[a-zA-Z\\d一-龥_-][a-zA-Z\\s\\d一-龥_-]{0,98}[a-zA-Z\\d一-龥_-]$",
+                "description" : "作业对应服务的中文标题",
+                "example" : "人脸识别"
+              },
+              "en" : {
+                "type" : "string",
+                "pattern" : "^[a-zA-Z\\d_-][a-zA-Z\\s\\d_-]{0,98}[a-zA-Z\\d_-]$",
+                "description" : "作业对应服务的英文标题",
+                "example" : "Face Recognition"
+              }
+            }
+          },
+          "edge_pool_id" : {
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|edgestreampool\\w{8}$",
+            "description" : "仅边缘作业会出现,作业运行所在的边缘运行池ID",
+            "example" : "6be5aaxxxxxxxxxxxxxxxxxxxxde56ac"
+          },
+          "resource_order_id" : {
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}$",
+            "description" : "作业指定的算法能力包包周期订单ID",
+            "example" : "da64bexxxxxxxxxxxxxxxxxxxxeca64f"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "作业创建的时间",
+            "example" : "2020-01-01T08:00:00Z"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "作业最近一次状态更新的时间",
+            "example" : "2020-01-01T08:00:00Z"
+          },
+          "state" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "RECOVERING", "STARTING", "UPGRADING", "CREATE_FAILED", "START_FAILED", "RUNNING", "STOPPING", "STOPPED", "ABNORMAL", "SUCCEEDED", "FAILED", "DELETING", "FREEZING", "FROZEN" ],
+            "description" : "作业当前的状态,分别为PENDING(等待中),RECOVERING(恢复中),STARTING(启动中),UPGRADING(升级中),CREATE_FAILED(创建失败),START_FAILED(启动失败),RUNNING(运行中),STOPPING(停止中),STOPPED(已停止),ABNORMAL(异常),SUCCEEDED(运行成功),FAILED(运行失败),DELETING(删除中),FREEZING(冻结中),FROZEN(已冻结)",
+            "example" : "RUNNING"
+          },
+          "status" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "作业状态的详情信息,仅部分状态会有详情信息",
+            "example" : "Waiting for available computing resource."
+          },
+          "error" : {
+            "type" : "object",
+            "description" : "作业运行失败时收集到的错误信息",
+            "properties" : {
+              "code" : {
+                "type" : "string",
+                "description" : "算法服务定义的错误码",
+                "example" : "ALG.002"
+              },
+              "message" : {
+                "type" : "string",
+                "description" : "算法服务反馈的错误信息",
+                "example" : "test"
+              }
+            },
+            "required" : [ "code", "message" ]
+          },
+          "timing_status" : {
+            "type" : "string",
+            "enum" : [ "ACTIVATED", "INACTIVATED" ],
+            "description" : "计划任务的状态,分别为ACTIVATED(激活),INACTIVATED(未激活)",
+            "example" : "INACTIVATED"
+          },
+          "timing" : {
+            "$ref" : "#/components/schemas/TaskTiming"
+          },
+          "input" : {
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutputForDisplay"
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          }
+        },
+        "required" : [ "id", "name", "creator", "project_id", "service_name", "service_version", "service_title", "created_at", "updated_at", "state", "input", "output" ]
+      },
+      "TaskServiceConfig" : {
+        "description" : "作业运行时指定的算法配置参数,部分服务需填且必填。",
+        "type" : "object",
+        "minProperties" : 1,
+        "properties" : {
+          "common" : {
+            "description" : "作业运行时指定的具体的算法配置项,部分服务需填且必填。整体呈json格式,具体配置项参见相应算法服务的说明。",
+            "type" : "object",
+            "example" : {
+              "stream_direct" : "reverse"
+            }
+          }
+        }
+      },
+      "TaskInputData" : {
+        "type" : "object",
+        "description" : "输入数据的配置信息",
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "description" : "VIS的视频流名称,当输入为vis类型时必填。",
+            "pattern" : "^[-A-Za-z0-9_]{1,80}$",
+            "example" : "stream-test"
+          },
+          "bucket" : {
+            "type" : "string",
+            "description" : "OBS桶名,当输入为obs类型时必填。",
+            "maxLength" : 63,
+            "pattern" : "^[a-z0-9](?!.*[-.][-.].*)([a-z0-9-.]{1,61})[a-z0-9]$",
+            "example" : "obs-iva"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "OBS的路径,当输入为obs类型时必填。",
+            "maxLength" : 1023,
+            "pattern" : "^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$",
+            "example" : "/input/test.mp4"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "url输入源的地址或者获取视频流地址的restful请求地址,当输入为url类型或者edgerestful类型时必填。长度不超过1000。",
+            "format" : "uri",
+            "pattern" : "^(https?|rtsp|rtmp|ftp|file):\\/\\/[-A-Za-z0-9+&@*#/%?=~_|!:,.;]+[-A-Za-z0-9+&@*#/%=~_|]$",
+            "maxLength" : 1000,
+            "example" : "https://livestream.com/live/stream-test"
+          },
+          "headers" : {
+            "type" : "object",
+            "description" : "获取视频流地址的restful请求携带的请求头,当输入为edgerestful类型时可选。整体呈json格式,以键值对的形式表示请求头和取值,最多允许10组。",
+            "minProperties" : 1,
+            "maxProperties" : 10,
+            "example" : {
+              "Content-Type" : "application/json"
+            }
+          },
+          "certificate_check" : {
+            "description" : "是否需要对https请求进行证书校验,当输入为edgerestful类型时必填。取值为true或者false。",
+            "type" : "boolean",
+            "example" : false
+          },
+          "rtsp_path_in_response" : {
+            "description" : "restful请求返回的body中,视频流地址的路径,当输入为edgerestful类型时必填。长度不超过1024。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "pattern" : "^([-A-Za-z0-9+&?=~_][-A-Za-z0-9+&/?=~_]+[-A-Za-z0-9+&/?=~_]|[A-Za-z]+)$",
+            "example" : "data/url"
+          },
+          "node_id" : {
+            "type" : "string",
+            "format" : "uuid",
+            "description" : "IEF节点的ID,仅部分服务在输入类型为edgerestful或vcn时需填且必填。",
+            "pattern" : "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "example" : "841xxxxx-xxxx-xxxx-xxxx-xxxxxxf714fb"
+          },
+          "device_id" : {
+            "type" : "string",
+            "description" : "VCN设备ID,当输入为vcn类型时必填。",
+            "pattern" : "^([0-9]{20}[#]{1}[a-zA-Z0-9]{32})|([0-9]{20}[#]{1}[0-9]{1,10}[#]{1}[a-zA-Z0-9]{32})$",
+            "example" : "46459876132169871364#abb6541c6d546c65ffee16ebaf5ce9ca"
+          },
+          "stream_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "准备进行分析的码流,当输入为vcn类型时选填。取值范围为1~3,其中1代表主码流,2代表子码流1,3代表子码流2。",
+            "minimum" : 1,
+            "maximum" : 3,
+            "example" : 1
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "IEF挂载的边缘设备的ID,当输入为edgecamera类型时必填。",
+            "maxLength" : 63,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$",
+            "example" : "dd8xxxxx-xxxx-xxxx-xxxx-xxxxxx2f5bcb"
+          }
+        }
+      },
+      "TaskOutputObs" : {
+        "type" : "object",
+        "description" : "输出为obs类型时的配置信息",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "maxLength" : 63,
+            "pattern" : "^[a-z0-9](?!.*[-.][-.].*)([a-z0-9-.]{1,61})[a-z0-9]$",
+            "description" : "OBS桶名,选用obs类型输出时必填。",
+            "example" : "obs-iva"
+          },
+          "path" : {
+            "type" : "string",
+            "maxLength" : 1023,
+            "pattern" : "^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$",
+            "description" : "OBS的路径,选用obs类型输出时必填。",
+            "example" : "output/"
+          },
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "items" : {
+              "type" : "string"
+            },
+            "minItems" : 0,
+            "maxItems" : 10,
+            "uniqueItems" : true,
+            "example" : [ "FaceImage" ]
+          }
+        },
+        "required" : [ "bucket", "path" ]
+      },
+      "TaskOutputHostingForDisplay" : {
+        "type" : "object",
+        "description" : "输出为hosting类型时的配置和展示信息",
+        "properties" : {
+          "obs" : {
+            "type" : "array",
+            "description" : "作业所有结果文件所在的OBS桶和路径",
+            "items" : {
+              "type" : "object",
+              "description" : "单个结果文件result.json所在的OBS桶和路径",
+              "properties" : {
+                "bucket" : {
+                  "type" : "string",
+                  "maxLength" : 63,
+                  "pattern" : "^[a-z0-9](?!.*[-.][-.].*)([a-z0-9-.]{1,61})[a-z0-9]$",
+                  "description" : "结果文件result.json所在的OBS桶",
+                  "example" : "video-analyze"
+                },
+                "path" : {
+                  "type" : "string",
+                  "maxLength" : 1023,
+                  "pattern" : "^(?![/.\\s])(?!.*//.*)([^:*?\"<>|\\\\]{0,1023})(?<![.\\s])$",
+                  "description" : "结果文件result.json所在的路径",
+                  "example" : "hosting/f98acbxxxxxxxxxxxxxxxxxxxx011462/result.json"
+                }
+              }
+            },
+            "minItems" : 0,
+            "maxItems" : 50
+          },
+          "result_json_overdue_at" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "description" : "作业结果文件的过期时间",
+            "example" : 1577836800000
+          },
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据,部分服务需要",
+            "items" : {
+              "type" : "string"
+            },
+            "minItems" : 0,
+            "maxItems" : 10,
+            "uniqueItems" : true,
+            "example" : [ "FaceImage" ]
+          }
+        }
+      },
+      "TaskInput" : {
+        "description" : "作业的输入配置,必填。",
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "description" : "作业的输入类型,必填。可选类型有obs(对象存储服务存储的文件),vis(视频接入服务的视频流),url(指定的文件地址或取流地址),edgecamera(绑定在IEF的边缘摄像头),edgerestful(从自定义的流媒体服务器通过Restful接口获取取流地址),vcn(VCN设备)。",
+            "type" : "string",
+            "enum" : [ "obs", "vis", "url", "edgecamera", "edgerestful", "vcn" ],
+            "example" : "obs"
+          },
+          "data" : {
+            "description" : "作业的输入详情,必填。针对不同的输入类型有不同的配置。创建时允许填写多路输入,但更新时只允许填写一路输入。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskInputData"
+            },
+            "minItems" : 1,
+            "maxItems" : 50
+          },
+          "vcn" : {
+            "$ref" : "#/components/schemas/TaskInputVcn"
+          }
+        },
+        "required" : [ "type", "data" ]
+      },
+      "TaskInputVcn" : {
+        "type" : "object",
+        "description" : "VCN服务器信息,仅输入类型为vcn时需填且必填。",
+        "properties" : {
+          "ip" : {
+            "type" : "string",
+            "format" : "ipv4",
+            "description" : "VCN服务器的IP地址,仅输入类型为vcn时需填且必填。",
+            "example" : "10.10.10.10"
+          },
+          "port" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 65535,
+            "description" : "VCN服务器的端口号,仅输入类型为vcn时需填且必填。",
+            "example" : 60
+          },
+          "username" : {
+            "type" : "string",
+            "pattern" : "^.{1,100}$",
+            "description" : "VCN服务器的账号名,仅输入类型为vcn时需填且必填。",
+            "example" : "user_test"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password",
+            "pattern" : "^.{1,1000}$",
+            "description" : "VCN服务器的与账号对应的密码,仅输入类型为vcn时需填且必填。",
+            "example" : "password@test"
+          }
+        },
+        "required" : [ "ip", "port", "username", "password" ]
+      },
+      "TaskTiming" : {
+        "description" : "计划任务的配置项,选填。计划任务不支持obs输入,对于url输入则仅支持rtmp和rtsp两种形式。",
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "description" : "计划任务的类型,使用计划任务时必填。可选类型分别为once(仅执行一次),daily(每日执行),weekly(每周执行),monthly(每月执行)。",
+            "type" : "string",
+            "enum" : [ "once", "daily", "weekly", "monthly" ],
+            "example" : "daily"
+          },
+          "timezone" : {
+            "description" : "用户所处的时区,使用计划任务时必填。精确到分钟。",
+            "type" : "string",
+            "pattern" : "^[+-][0-9]{2}:[0-9]{2}$",
+            "example" : "+08:00"
+          },
+          "days_of_week" : {
+            "description" : "作业会在一周的哪几天执行,当且仅当计划任务类型为weekly时,该字段需填且必填。1~7分别指代星期一至星期日。",
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "minimum" : 1,
+              "maximum" : 7,
+              "example" : 1
+            },
+            "minItems" : 1,
+            "maxItems" : 7,
+            "uniqueItems" : true,
+            "example" : [ 1, 2, 3, 4, 5 ]
+          },
+          "days_of_month" : {
+            "description" : "作业会在一个月的哪几天执行,当且仅当计划任务类型为monthly时,该字段需填且必填。1~31分别指代一个月中的1日至31日。",
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "minimum" : 1,
+              "maximum" : 31,
+              "example" : 1
+            },
+            "minItems" : 1,
+            "maxItems" : 31,
+            "uniqueItems" : true,
+            "example" : [ 1 ]
+          },
+          "date" : {
+            "description" : "作业的执行日。当且仅当计划任务类型为once且为频率模式时,该字段需填且必填。格式形如yyyy-MM-dd。",
+            "type" : "string",
+            "pattern" : "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "example" : "2020-01-01"
+          },
+          "periods" : {
+            "description" : "时间段模式配置。和frequency字段二选一,不可共存。时间段模式下,至少需指定一个时间段。",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "begin_at" : {
+                  "description" : "单个时间段执行的起始时间,和end_at需成对出现。计划任务类型为once时,格式为yyyy-MM-ddThh:mm:ss,其余计划任务类型时,格式为hh:mm:ss。",
+                  "type" : "string",
+                  "pattern" : "^([0-9]{4}-[0-9]{2}-[0-9]{2}T)?[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                  "example" : "08:00:00"
+                },
+                "end_at" : {
+                  "description" : "单个时间段执行的结束时间,和begin_at需成对出现。计划任务类型为once时,格式为yyyy-MM-ddThh:mm:ss,其余计划任务类型时,格式为hh:mm:ss。",
+                  "type" : "string",
+                  "pattern" : "^([0-9]{4}-[0-9]{2}-[0-9]{2}T)?[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                  "example" : "12:00:00"
+                }
+              }
+            },
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "frequency" : {
+            "description" : "频率模式配置。和periods字段二选一,不可共存。",
+            "type" : "object",
+            "properties" : {
+              "interval" : {
+                "description" : "相邻两次执行之间的间隔,频率模式必填。取值范围在5~720之间,单位:分钟。",
+                "type" : "integer",
+                "format" : "int32",
+                "minimum" : 5,
+                "maximum" : 720,
+                "example" : 5
+              },
+              "duration" : {
+                "description" : "单次执行的运行时长,频率模式必填。取值范围在5~720之间,单位:分钟。",
+                "type" : "integer",
+                "format" : "int32",
+                "minimum" : 5,
+                "maximum" : 720,
+                "example" : 5
+              },
+              "begin_at" : {
+                "description" : "单日内执行的起始时间,选填。格式形如hh:mm:ss。",
+                "type" : "string",
+                "pattern" : "^[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                "example" : "08:00:00"
+              },
+              "end_at" : {
+                "description" : "单日内执行的结束时间,选填。格式形如hh:mm:ss。",
+                "type" : "string",
+                "pattern" : "^[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                "example" : "20:00:00"
+              }
+            },
+            "required" : [ "interval", "duration" ]
+          }
+        },
+        "required" : [ "type", "timezone" ]
+      },
+      "TaskOutputWebhook" : {
+        "type" : "object",
+        "description" : "输出为webhook类型时的配置信息",
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "format" : "uri",
+            "pattern" : "^(https?|rtsp|rtmp|ftp|file):\\/\\/[-A-Za-z0-9+&@*#/%?=~_|!:,.;]+[-A-Za-z0-9+&@*#/%=~_|]$",
+            "maxLength" : 1000,
+            "description" : "结果回调地址,选用webhook类型输出时必填。",
+            "example" : "https://api.huawei.com/v1/tasks"
+          },
+          "headers" : {
+            "type" : "object",
+            "minProperties" : 1,
+            "maxProperties" : 10,
+            "description" : "结果回调时需要携带的请求头,选用webhook类型输出时必填。整体呈json格式,以键值对的形式表示请求头和取值,至少1组,至多10组。",
+            "example" : {
+              "appKey" : "24bnaxxxxxxxxxxxxxxxj9sdf",
+              "appId" : "10000000"
+            }
+          },
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true,
+            "minItems" : 0,
+            "maxItems" : 10,
+            "example" : [ "FaceImage" ]
+          }
+        },
+        "required" : [ "url", "headers" ]
+      },
+      "ListTasksDetailsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "description" : "符合检索条件的总条目数",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 1
+          },
+          "tasks" : {
+            "description" : "检索到的服务作业条目",
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "$ref" : "#/components/schemas/TaskDetails"
+            }
+          }
+        },
+        "required" : [ "count", "tasks" ]
+      },
+      "ErrorResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "description" : "服务内部错误码",
+            "type" : "string",
+            "pattern" : "^IVA.\\d{4}$",
+            "example" : "IVA.0004"
+          },
+          "error_msg" : {
+            "description" : "错误信息",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "example" : "The request param is invalid."
+          }
+        },
+        "required" : [ "error_code", "error_msg" ]
+      },
+      "TaskOutputDis" : {
+        "type" : "object",
+        "description" : "输出为dis类型时的配置信息",
+        "properties" : {
+          "stream_name" : {
+            "type" : "string",
+            "maxLength" : 64,
+            "pattern" : "^[-A-Za-z0-9_]{1,64}$",
+            "description" : "DIS流名称,选用dis类型输出时必填。",
+            "example" : "dis-test"
+          },
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "items" : {
+              "type" : "string"
+            },
+            "minItems" : 0,
+            "maxItems" : 10,
+            "uniqueItems" : true,
+            "example" : [ "FaceImage" ]
+          }
+        },
+        "required" : [ "stream_name" ]
+      },
+      "TaskOutputLocalpath" : {
+        "type" : "object",
+        "description" : "输出为localpath类型时的配置信息",
+        "properties" : {
+          "mount_source_path" : {
+            "type" : "string",
+            "pattern" : "^(/[\\w-.]+)+/?$",
+            "maxLength" : 255,
+            "description" : "挂载的源路径,存放作业运行结果的路径,选用localpath类型输出时必填。必须为linux路径,且为选用的边缘运行池挂载路径的子路径,长度不超过255。",
+            "example" : "/usr/local/"
+          },
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "items" : {
+              "type" : "string"
+            },
+            "minItems" : 0,
+            "maxItems" : 10,
+            "uniqueItems" : true,
+            "example" : [ "FaceImage" ]
+          }
+        },
+        "required" : [ "mount_source_path" ]
+      },
+      "ShowTaskResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/TaskDetails"
+        }, {
+          "$ref" : "#/components/schemas/TaskHostingResult"
+        } ],
+        "type" : "object"
+      },
+      "TaskHostingResult" : {
+        "type" : "object",
+        "description" : "输出为hosting时,hosting结果文件的相关信息",
+        "properties" : {
+          "hosting_result" : {
+            "type" : "object",
+            "description" : "hosting结果文件的相关信息",
+            "properties" : {
+              "overdue_date" : {
+                "type" : "string",
+                "format" : "date-time",
+                "description" : "结果文件result.json的过期时间",
+                "example" : "2020-01-01T08:00:00Z"
+              },
+              "status" : {
+                "type" : "string",
+                "enum" : [ "NOT_GENERATED", "AVAILABLE", "EXCEED_IN_SIZE", "OVERDUE", "DELETED_MISTAKENLY" ],
+                "description" : "结果文件result.json的状态",
+                "example" : "AVAILABLE"
+              },
+              "data" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 9223372036854775807,
+                "description" : "结果文件result.json的具体内容",
+                "example" : "{}"
+              },
+              "file_size" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 25,
+                "pattern" : "^\\d+ byte(s)?$",
+                "description" : "结果文件result.json的大小",
+                "example" : "1024 bytes"
+              }
+            }
+          }
+        }
+      },
+      "UpdateTaskResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/TaskDetails"
+        } ],
+        "type" : "object"
+      },
+      "TaskOutputHosting" : {
+        "type" : "object",
+        "description" : "输出为hosting类型时的配置信息",
+        "properties" : {
+          "data_category" : {
+            "type" : "array",
+            "description" : "作业输出数据类别的列表,选填,仅部分服务需要。当输出类型下有这个列表时,表示希望这个输出类型下存放dataCategory列表内的数据。",
+            "items" : {
+              "type" : "string"
+            },
+            "minItems" : 0,
+            "maxItems" : 10,
+            "uniqueItems" : true,
+            "example" : [ "FaceImage" ]
+          }
+        }
+      },
+      "UpdateTaskRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$",
+            "description" : "作业的名称,必填。仅能包含汉字、字母、数字、中划线和下划线,长度介于1~100之间。",
+            "example" : "task-test"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "description" : "作业的描述,选填。长度不超过500。",
+            "example" : "hello world!"
+          },
+          "timing" : {
+            "$ref" : "#/components/schemas/TaskTiming"
+          },
+          "input" : {
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          }
+        }
+      },
+      "TaskOutput" : {
+        "description" : "作业的输出配置,至少需要配置一项输出方式。",
+        "type" : "object",
+        "minProperties" : 1,
+        "maxProperties" : 5,
+        "properties" : {
+          "obs" : {
+            "$ref" : "#/components/schemas/TaskOutputObs"
+          },
+          "dis" : {
+            "$ref" : "#/components/schemas/TaskOutputDis"
+          },
+          "webhook" : {
+            "$ref" : "#/components/schemas/TaskOutputWebhook"
+          },
+          "hosting" : {
+            "$ref" : "#/components/schemas/TaskOutputHosting"
+          },
+          "localpath" : {
+            "$ref" : "#/components/schemas/TaskOutputLocalpath"
+          }
+        }
+      },
+      "CreateTasksResponseBody" : {
+        "type" : "object",
+        "minItems" : 1,
+        "maxItems" : 50,
+        "items" : {
+          "$ref" : "#/components/schemas/CreateResponseBody"
+        }
+      },
+      "CreateTasksRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "description" : "作业的名称,必填。仅能包含汉字、字母、数字、中划线和下划线,长度介于1~100之间。",
+            "type" : "string",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$",
+            "example" : "task-test"
+          },
+          "description" : {
+            "description" : "作业的描述,选填。长度不超过500。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "hello world!"
+          },
+          "service_version" : {
+            "description" : "作业对应服务的版本号,必填。由两个介于0~999的整数和一个点号分隔符组成。",
+            "type" : "string",
+            "pattern" : "^\\d{1,3}\\.\\d{1,3}$",
+            "example" : "1.0"
+          },
+          "edge_pool_id" : {
+            "description" : "作业运行指定的边缘运行池ID,仅边缘场景需填且必填。",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|edgestreampool\\w{8}$",
+            "example" : "6be5aaxxxxxxxxxxxxxxxxxxxxde56ac"
+          },
+          "resource_order_id" : {
+            "description" : "作业指定的算法能力包包周期订单ID,仅部分服务需填且必填。",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}$",
+            "example" : "da64bexxxxxxxxxxxxxxxxxxxxeca64f"
+          },
+          "timing" : {
+            "$ref" : "#/components/schemas/TaskTiming"
+          },
+          "input" : {
+            "$ref" : "#/components/schemas/TaskInput"
+          },
+          "output" : {
+            "$ref" : "#/components/schemas/TaskOutput"
+          },
+          "service_config" : {
+            "$ref" : "#/components/schemas/TaskServiceConfig"
+          }
+        },
+        "required" : [ "name", "service_version", "input", "output" ]
+      },
+      "CreateResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "创建出的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$",
+            "example" : "f98acbxxxxxxxxxxxxxxxxxxxx011462"
+          }
+        },
+        "required" : [ "id" ]
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListTasksDetails" : {
+      "get" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "获取服务作业列表",
+        "description" : "该接口用于获取服务作业列表",
+        "operationId" : "ListTasksDetails",
+        "responses" : {
+          "200" : {
+            "description" : "获取服务作业列表成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTasksDetailsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 2,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "service_version",
+          "in" : "query",
+          "description" : "目标服务作业对应的服务版本号",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业对应的服务版本号",
+            "type" : "string",
+            "pattern" : "^\\d{1,3}\\.\\d{1,3}$"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "目标服务作业的状态,分别为PENDING(等待中),RECOVERING(恢复中),STARTING(启动中),UPGRADING(升级中),CREATE_FAILED(创建失败),START_FAILED(启动失败),RUNNING(运行中),STOPPING(停止中),STOPPED(已停止),ABNORMAL(异常),SUCCEEDED(运行成功),FAILED(运行失败),DELETING(删除中),FREEZING(冻结中),FROZEN(已冻结)",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业的状态,分别为PENDING(等待中),RECOVERING(恢复中),STARTING(启动中),UPGRADING(升级中),CREATE_FAILED(创建失败),START_FAILED(启动失败),RUNNING(运行中),STOPPING(停止中),STOPPED(已停止),ABNORMAL(异常),SUCCEEDED(运行成功),FAILED(运行失败),DELETING(删除中),FREEZING(冻结中),FROZEN(已冻结)",
+            "type" : "string",
+            "enum" : [ "PENDING", "RECOVERING", "STARTING", "UPGRADING", "CREATE_FAILED", "START_FAILED", "RUNNING", "STOPPING", "STOPPED", "ABNORMAL", "SUCCEEDED", "FAILED", "DELETING", "FREEZING", "FROZEN" ]
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "description" : "目标服务作业的名称,支持模糊匹配",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业的名称,支持模糊匹配",
+            "type" : "string",
+            "pattern" : "^[\\u4E00-\\u9FA5a-zA-Z0-9_-]{1,100}$"
+          }
+        }, {
+          "name" : "id_like",
+          "in" : "query",
+          "description" : "目标服务作业的ID,支持模糊匹配",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业的ID,支持模糊匹配",
+            "type" : "string",
+            "pattern" : "^[0-9a-z]{1,32}$"
+          }
+        }, {
+          "name" : "created_since",
+          "in" : "query",
+          "description" : "目标服务作业的创建起始时间",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业的创建起始时间",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "created_until",
+          "in" : "query",
+          "description" : "目标服务作业的创建截止时间",
+          "required" : false,
+          "schema" : {
+            "description" : "目标服务作业的创建截止时间",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "展示服务作业时的排序字段和顺序,分别为name:ASC(按名称顺序排序),name:DESC(按名称倒序排序),created_at:ASC(按创建时间正序排序),created_at:DESC(按创建时间倒序排序),updated_at:ASC(按更新时间正序排序),updated_at:DESC(按更新时间倒序排序)",
+          "required" : false,
+          "schema" : {
+            "description" : "展示服务作业时的排序字段和顺序,分别为name:ASC(按名称顺序排序),name:DESC(按名称倒序排序),created_at:ASC(按创建时间正序排序),created_at:DESC(按创建时间倒序排序),updated_at:ASC(按更新时间正序排序),updated_at:DESC(按更新时间倒序排序)",
+            "type" : "string",
+            "default" : "created_at:DESC",
+            "enum" : [ "name:ASC", "name:DESC", "created_at:ASC", "created_at:DESC", "updated_at:ASC", "updated_at:DESC" ]
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "首个展示的服务作业的偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "首个展示的服务作业的偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 100000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "展示服务作业的数量",
+          "required" : false,
+          "schema" : {
+            "description" : "展示服务作业的数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTasksDetails",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks"
+    },
+    "/StopTask" : {
+      "post" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "停止服务作业",
+        "description" : "该接口用于停止服务作业",
+        "operationId" : "StopTask",
+        "responses" : {
+          "202" : {
+            "description" : "停止服务作业请求已接受"
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "指定的服务作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "指定的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopTask",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks/{task_id}/stop"
+    },
+    "/ShowTask" : {
+      "get" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "查询服务作业",
+        "description" : "该接口用于查询服务作业",
+        "operationId" : "ShowTask",
+        "responses" : {
+          "200" : {
+            "description" : "获取服务作业信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowTaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 2,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "指定的服务作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "指定的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTask",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks/{task_id}"
+    },
+    "/StartTask" : {
+      "post" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "启动服务作业",
+        "description" : "该接口用于启动服务作业",
+        "operationId" : "StartTask",
+        "responses" : {
+          "202" : {
+            "description" : "启动服务作业请求已接受"
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "指定的服务作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "指定的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartTask",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks/{task_id}/start"
+    },
+    "/UpdateTask" : {
+      "put" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "更新服务作业",
+        "description" : "该接口用于更新服务作业",
+        "operationId" : "UpdateTask",
+        "responses" : {
+          "200" : {
+            "description" : "更新服务作业信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateTaskResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 2,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "指定的服务作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "指定的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTaskRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTask",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks/{task_id}"
+    },
+    "/CreateTasks" : {
+      "post" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "创建服务作业",
+        "description" : "该接口用于创建服务作业",
+        "operationId" : "CreateTasks",
+        "responses" : {
+          "201" : {
+            "description" : "创建服务作业成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 2,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTasks",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks"
+    },
+    "/DeleteTask" : {
+      "delete" : {
+        "tags" : [ "服务作业管理" ],
+        "summary" : "删除服务作业",
+        "description" : "该接口用于删除服务作业",
+        "operationId" : "DeleteTask",
+        "responses" : {
+          "202" : {
+            "description" : "删除服务作业请求已接受"
+          },
+          "400" : {
+            "description" : "请求不合法",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "指定的服务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "用户项目ID",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9-]{1,64}$"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "服务名称",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 2,
+            "pattern" : "^[a-z][a-z-]{0,98}[a-z]$"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "指定的服务作业ID",
+          "required" : true,
+          "schema" : {
+            "description" : "指定的服务作业ID",
+            "type" : "string",
+            "pattern" : "^[0-9a-f]{32}|task\\w{8}$"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTask",
+      "x-url" : "{endpoint}/{project_id}/services/{service_name}/tasks/{task_id}"
+    }
+  }
+}

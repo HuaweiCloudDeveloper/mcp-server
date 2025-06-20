@@ -1,0 +1,4528 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CodeArtsInspector-主机组管理",
+    "title" : "CodeArtsInspector",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "Group" : {
+        "description" : "群组信息",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "群组ID",
+            "example" : "6704f2e83cac4a618046051802e856af"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 24,
+            "description" : "群组名称",
+            "example" : "test"
+          }
+        },
+        "type" : "object"
+      },
+      "ErrorResponseBody" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码",
+            "minLength" : 0,
+            "maxLength" : 50,
+            "example" : "VSS.00006016"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "example" : "Invalid domain parameter."
+          }
+        },
+        "type" : "object"
+      },
+      "BaseResponseGroups" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "群组总数",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "example" : 5
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "群组列表",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "$ref" : "#/components/schemas/Group"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowReportStatusResponseBody" : {
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string",
+            "minLength" : 32,
+            "maxLength" : 50,
+            "example" : "017281b97c9845b08174895992ba179643028"
+          },
+          "report_status" : {
+            "description" : "PDF报告生成状态:",
+            "type" : "string",
+            "enum" : [ "ungenerated", "generating", "generated", "failed" ]
+          }
+        },
+        "type" : "object"
+      },
+      "OperateInfoResponseBody" : {
+        "properties" : {
+          "info_code" : {
+            "type" : "string",
+            "description" : "状态码:",
+            "enum" : [ "success", "failure" ],
+            "example" : "success"
+          },
+          "info_description" : {
+            "type" : "string",
+            "description" : "返回的提示信息",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "Operation succeeded"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchCreateHostsRequestBody" : {
+        "required" : [ "hosts" ],
+        "properties" : {
+          "hosts" : {
+            "type" : "array",
+            "description" : "主机资产列表",
+            "minItems" : 1,
+            "maxItems" : 100,
+            "items" : {
+              "$ref" : "#/components/schemas/HostItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "HostItem" : {
+        "required" : [ "ip", "name", "os_type" ],
+        "properties" : {
+          "ip" : {
+            "type" : "string",
+            "description" : "主机IP",
+            "minLength" : 7,
+            "maxLength" : 15,
+            "example" : "10.90.2.190"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "主机名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "密钥test190"
+          },
+          "os_type" : {
+            "type" : "string",
+            "description" : "操作系统类型:",
+            "enum" : [ "linux", "windows" ],
+            "example" : "linux"
+          },
+          "group_id" : {
+            "type" : "string",
+            "description" : "主机组id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "c322c9acecb244cebf2c5449ba8a1930"
+          },
+          "ssh_credential_id" : {
+            "type" : "string",
+            "description" : "linux主机ssh授权登录信息ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "c8a7b0e4707749dfaaf8764ea827a764"
+          },
+          "jumper_server_id" : {
+            "type" : "string",
+            "description" : "linux跳板机信息ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "b22f51d539994e76a325d388e51b9783"
+          },
+          "smb_credential_id" : {
+            "type" : "string",
+            "description" : "windows主机smb授权登录信息ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : ""
+          }
+        },
+        "type" : "object"
+      },
+      "BatchCreateHostsResponseBody" : {
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "description" : "创建的主机列表",
+            "minItems" : 1,
+            "maxItems" : 100,
+            "items" : {
+              "$ref" : "#/components/schemas/HostItemWithId"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "主机总数",
+            "minimum" : 0,
+            "maximum" : 100,
+            "example" : 1,
+            "format" : "int32"
+          }
+        },
+        "type" : "object"
+      },
+      "HostItemWithId" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/HostItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "description" : "主机ID",
+              "minLength" : 1,
+              "maxLength" : 64,
+              "example" : "6704f2e83cac4a618046051802e856af"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "AuthorizeDomainsResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/OperateInfoResponseBody"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "usage_notice" : {
+              "type" : "string",
+              "description" : "网站域名认证使用须知",
+              "minLength" : 0,
+              "maxLength" : 1000
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "AuthorizeDomainsRequestBody" : {
+        "required" : [ "domain_name" ],
+        "properties" : {
+          "domain_name" : {
+            "type" : "string",
+            "description" : "网站域名",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "https://127.0.0.1:8080"
+          },
+          "auth_mode" : {
+            "type" : "string",
+            "description" : "认证方式:",
+            "enum" : [ "file", "auto", "free" ],
+            "default" : "file"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateCbcOrderRequestBody" : {
+        "required" : [ "is_auto_renew", "is_auto_pay", "period_type", "cloud_service_type", "product_infos", "project_id", "region_id", "charging_mode" ],
+        "properties" : {
+          "charging_mode" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "计费模式:",
+            "maximum" : 10,
+            "minimum" : 0,
+            "enum" : [ 1, 10 ],
+            "example" : 1
+          },
+          "is_auto_renew" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1,
+            "minimum" : 0,
+            "default" : 0,
+            "example" : 1,
+            "description" : "0:不自动续订",
+            "enum" : [ 0, 1 ]
+          },
+          "is_auto_pay" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1,
+            "minimum" : 0,
+            "default" : 0,
+            "example" : 1,
+            "description" : "该请求参数为预留参数,当前不支持自动支付,使用接口时该参数请使用0",
+            "enum" : [ 0, 1 ]
+          },
+          "period_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "period_num",
+            "minLength" : 0,
+            "maxLength" : 65535,
+            "example" : 1
+          },
+          "period_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "订购周期类型:",
+            "minLength" : 0,
+            "maxLength" : 65535,
+            "example" : 2
+          },
+          "cloud_service_type" : {
+            "type" : "string",
+            "description" : "用户购买的云服务的主云服务类型",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "hws.service.type.webscan"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "project_id",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "example" : "fc6d40abe7e54492b7c7aa5a29d6cbacd"
+          },
+          "promotion_info" : {
+            "type" : "string",
+            "description" : "promotion_info",
+            "minLength" : 0,
+            "maxLength" : 2048,
+            "example" : ""
+          },
+          "region_id" : {
+            "type" : "string",
+            "description" : "Region标识,填region编码如\"cn-north-1\",对于global服务,此处固定填写虚拟的Global regionCode(global-cbc-1)",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "global-cbc-1"
+          },
+          "product_infos" : {
+            "description" : "product_infos",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductInfo"
+            },
+            "minItems" : 0,
+            "maxItems" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "ProductInfo" : {
+        "required" : [ "cloud_service_type", "product_id", "resource_speccode", "resource_type" ],
+        "properties" : {
+          "cloud_service_type" : {
+            "type" : "string",
+            "description" : "用户购买的云服务的主云服务类型",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "hws.service.type.webscan"
+          },
+          "product_id" : {
+            "type" : "string",
+            "description" : "产品标识,通过订购询价接口获得",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "00301-197022-0--0"
+          },
+          "resource_speccode" : {
+            "type" : "string",
+            "description" : "用户购买云服务产品的资源规格",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "vss.domain.enterprise"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "用户购买云服务产品的资源类型",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "hws.resource.type.vss.domain"
+          },
+          "resouce_size_measure_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "资源容量度量标识,购买vss服务时使用14:",
+            "minLength" : 0,
+            "maxLength" : 65535,
+            "example" : 14
+          },
+          "resource_size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "资源容量大小",
+            "minLength" : 0,
+            "maxLength" : 65535,
+            "example" : 1
+          }
+        },
+        "type" : "object"
+      },
+      "CreateCbcOrderResponseBody" : {
+        "properties" : {
+          "order_id" : {
+            "description" : "order_id",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowSubscriptionResources" : {
+        "properties" : {
+          "resourceId" : {
+            "type" : "string",
+            "description" : "resourceId",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "resourceSpecCode" : {
+            "type" : "string",
+            "description" : "resourceSpecCode",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "resourceType" : {
+            "type" : "string",
+            "description" : "resourceType",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "resourceSize" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "resourceSize",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "expireTime" : {
+            "type" : "string",
+            "description" : "expireTime",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "status",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "type" : "object"
+      },
+      "ShowSubscriptionResponseBody" : {
+        "properties" : {
+          "forcePurchase" : {
+            "type" : "boolean",
+            "description" : "forcePurchase"
+          },
+          "amount" : {
+            "description" : "amount",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "expireTime" : {
+            "type" : "string",
+            "description" : "expire_time",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "limit" : {
+            "description" : "limit",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "resources" : {
+            "description" : "resources",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ShowSubscriptionResources"
+            },
+            "minItems" : 0,
+            "maxItems" : 1000
+          },
+          "used" : {
+            "description" : "used",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 65535
+          },
+          "type" : {
+            "description" : "type",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 65535
+          },
+          "isNewUser" : {
+            "description" : "isNewUser",
+            "type" : "boolean"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "version",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "type" : "object"
+      },
+      "DomainSettings" : {
+        "properties" : {
+          "domain_id" : {
+            "type" : "string",
+            "description" : "网站域名ID",
+            "minLength" : 32,
+            "maxLength" : 32,
+            "example" : "2ec0993b8572455aacf14b6f9288b167"
+          },
+          "login_url" : {
+            "type" : "string",
+            "description" : "网站需要登录时,设置登录页面",
+            "minLength" : 0,
+            "maxLength" : 2048
+          },
+          "login_username" : {
+            "type" : "string",
+            "description" : "网站需要登录时,设置登录用户名",
+            "minLength" : 0,
+            "maxLength" : 256
+          },
+          "login_password" : {
+            "type" : "string",
+            "description" : "网站需要登录时,设置登录密码",
+            "minLength" : 0,
+            "maxLength" : 50
+          },
+          "login_cookies" : {
+            "type" : "string",
+            "description" : "网站需要登录时,设置登录cookie",
+            "minLength" : 0,
+            "maxLength" : 21845
+          },
+          "verify_url" : {
+            "type" : "string",
+            "description" : "设置用于验证登录是否成功的网址",
+            "minLength" : 0,
+            "maxLength" : 2048
+          },
+          "http_headers" : {
+            "type" : "object",
+            "description" : "设置自定义HTTP请求头",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : "请求头参数",
+              "minLength" : 0,
+              "maxLength" : 2048
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDomainSettingsRequestBody" : {
+        "required" : [ "domain_id" ],
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DomainSettings"
+        } ],
+        "type" : "object"
+      },
+      "HGHost" : {
+        "type" : "object",
+        "properties" : {
+          "auth_status" : {
+            "type" : "integer",
+            "description" : "主机授权状态:",
+            "enum" : [ -1, 0, 1, 2 ],
+            "format" : "int32",
+            "example" : 0
+          },
+          "group_id" : {
+            "type" : "string",
+            "description" : "主机组id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "c322c9acecb244cebf2c5449ba8a1930"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "主机id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "6704f2e83cac4a618046051802e856af"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "主机ip",
+            "minLength" : 0,
+            "maxLength" : 15,
+            "example" : "10.90.2.190"
+          },
+          "jumper_server_id" : {
+            "type" : "string",
+            "description" : "跳板机id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "b22f51d539994e76a325d388e51b9783"
+          },
+          "last_scan_id" : {
+            "type" : "string",
+            "description" : "最后一次扫描的id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "405958a48bc341b2bac4a4352d89e302"
+          },
+          "last_scan_info" : {
+            "$ref" : "#/components/schemas/ScanInfoDetail"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "主机名",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "密钥test190"
+          },
+          "os_type" : {
+            "type" : "string",
+            "description" : "主机操作系统类型",
+            "minLength" : 0,
+            "maxLength" : 50,
+            "example" : "linux"
+          },
+          "smb_credential_id" : {
+            "type" : "string",
+            "description" : "smb_credential_id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : ""
+          },
+          "ssh_credential_id" : {
+            "type" : "string",
+            "description" : "ssh授权id",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "c8a7b0e4707749dfaaf8764ea827a764"
+          }
+        }
+      },
+      "ScanInfoDetail" : {
+        "type" : "object",
+        "properties" : {
+          "create_time" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "description" : "扫描任务创建时间",
+            "format" : "int64",
+            "example" : 1711333867428
+          },
+          "enable_weak_passwd" : {
+            "type" : "boolean",
+            "description" : "弱密码检查",
+            "example" : false
+          },
+          "end_time" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "description" : "扫描任务结束时间",
+            "format" : "int64",
+            "example" : 1711334075973
+          },
+          "progress" : {
+            "type" : "integer",
+            "description" : "任务进度",
+            "minimum" : 0,
+            "maximum" : 100,
+            "format" : "int32",
+            "example" : 100
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "任务描述",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "<font color=\\\"green\\\">扫描成功, 快去修复已发现的漏洞吧</font>"
+          },
+          "status" : {
+            "type" : "integer",
+            "description" : "扫描任务状态:",
+            "minimum" : 0,
+            "maximum" : 5,
+            "format" : "int32",
+            "example" : 1
+          }
+        }
+      },
+      "BaseResponse" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "description" : "主机列表",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "items" : {
+              "$ref" : "#/components/schemas/HGHost"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "主机总数",
+            "minimum" : 0,
+            "maximum" : 100,
+            "example" : 1,
+            "format" : "int32"
+          }
+        }
+      },
+      "UpdateFalsePositiveRequestBody" : {
+        "required" : [ "vuln_id", "action" ],
+        "properties" : {
+          "vuln_id" : {
+            "type" : "string",
+            "description" : "漏洞ID",
+            "minLength" : 32,
+            "maxLength" : 32,
+            "example" : "006e7c21dc390410c2270bf9bebf7b1e"
+          },
+          "provider" : {
+            "type" : "string",
+            "description" : "误报确认人",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "误报确认理由",
+            "minLength" : 0,
+            "maxLength" : 1000
+          },
+          "vuln_status" : {
+            "type" : "string",
+            "description" : "对漏洞的操作:",
+            "enum" : [ "false_report", "repairing" ]
+          }
+        },
+        "type" : "object"
+      },
+      "TaskSettings" : {
+        "properties" : {
+          "timer" : {
+            "type" : "string",
+            "description" : "普通任务的定时启动时间",
+            "minLength" : 0,
+            "maxLength" : 19,
+            "example" : "2021-09-18 16:26:24"
+          },
+          "trigger_time" : {
+            "type" : "string",
+            "description" : "监测任务的定时触发时间",
+            "minLength" : 0,
+            "maxLength" : 19,
+            "example" : "2021-09-18 16:26:24"
+          },
+          "task_period" : {
+            "type" : "string",
+            "description" : "监测任务的定时触发周期:",
+            "enum" : [ "everyday", "threedays", "everyweek", "everymonth" ]
+          },
+          "task_config" : {
+            "type" : "object",
+            "description" : "扫描任务配置",
+            "properties" : {
+              "scan_mode" : {
+                "type" : "string",
+                "description" : "扫描模式:",
+                "enum" : [ "fast", "normal", "deep" ],
+                "default" : "normal"
+              },
+              "port_scan" : {
+                "type" : "boolean",
+                "description" : "是否进行端口扫描",
+                "default" : true
+              },
+              "weak_pwd_scan" : {
+                "type" : "boolean",
+                "description" : "是否进行弱密码扫描",
+                "default" : true
+              },
+              "cve_check" : {
+                "type" : "boolean",
+                "description" : "是否进行CVE漏洞扫描",
+                "default" : true
+              },
+              "text_check" : {
+                "type" : "boolean",
+                "description" : "是否进行网站内容合规文字检测",
+                "default" : true
+              },
+              "picture_check" : {
+                "type" : "boolean",
+                "description" : "是否进行网站内容合规图片检测",
+                "default" : false
+              },
+              "malicious_code" : {
+                "type" : "boolean",
+                "description" : "是否进行网站挂马检测",
+                "default" : false
+              },
+              "malicious_link" : {
+                "type" : "boolean",
+                "description" : "是否进行链接健康检测(死链、暗链、恶意外链)",
+                "default" : false
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTasksResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/OperateInfoResponseBody"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "task_id" : {
+              "type" : "string",
+              "description" : "任务ID",
+              "minLength" : 32,
+              "maxLength" : 50,
+              "example" : "017281b97c9845b08174895992ba179643028"
+            },
+            "task_status" : {
+              "type" : "string",
+              "description" : "任务状态:",
+              "enum" : [ "running", "success", "canceled", "waiting", "ready", "failure" ],
+              "example" : "waiting"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "CreateTasksRequestBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/TaskInfos"
+        }, {
+          "$ref" : "#/components/schemas/TaskSettings"
+        } ],
+        "type" : "object"
+      },
+      "TaskInfos" : {
+        "required" : [ "task_name", "url" ],
+        "properties" : {
+          "task_name" : {
+            "type" : "string",
+            "description" : "任务名称",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "测试任务1"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "待扫描的目标网址",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "https://127.0.0.1:8080"
+          },
+          "task_type" : {
+            "type" : "string",
+            "description" : "扫描任务类型:",
+            "enum" : [ "normal", "monitor" ],
+            "default" : "normal"
+          }
+        },
+        "type" : "object"
+      },
+      "CancelTasksRequestBody" : {
+        "required" : [ "task_id", "action" ],
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务ID",
+            "minLength" : 32,
+            "maxLength" : 50,
+            "example" : "017281b97c9845b08174895992ba179643028"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "对扫描任务的操作:",
+            "enum" : [ "cancel", "restart" ]
+          }
+        },
+        "type" : "object"
+      },
+      "CreateDomainsResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/OperateInfoResponseBody"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "domain_id" : {
+              "type" : "string",
+              "description" : "网站域名ID",
+              "minLength" : 32,
+              "maxLength" : 32,
+              "example" : "2ec0993b8572455aacf14b6f9288b167"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "CreateDomainsRequestBody" : {
+        "required" : [ "domain_name", "alias" ],
+        "properties" : {
+          "domain_name" : {
+            "type" : "string",
+            "description" : "网站域名",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "https://127.0.0.1:8080"
+          },
+          "alias" : {
+            "type" : "string",
+            "description" : "网站域名的别名",
+            "minLength" : 1,
+            "maxLength" : 50,
+            "example" : "网站资产1"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchStartHostTasksResponseBody" : {
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "扫描任务ID对应主机id列表",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "scan_id" : {
+                  "type" : "string",
+                  "description" : "扫描ID",
+                  "minLength" : 1,
+                  "maxLength" : 64,
+                  "example" : "6704f2e83cac4a618046051802e856af"
+                },
+                "host_id" : {
+                  "type" : "string",
+                  "description" : "主机ID",
+                  "minLength" : 1,
+                  "maxLength" : 64,
+                  "example" : "9a1cd36501a94a739db18a53ba07e35a"
+                }
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "BatchStartHostTasksRequestBody" : {
+        "properties" : {
+          "hosts" : {
+            "type" : "array",
+            "description" : "主机ID列表",
+            "minItems" : 1,
+            "maxItems" : 100,
+            "items" : {
+              "type" : "string",
+              "description" : "主机ID",
+              "minLength" : 1,
+              "maxLength" : 64,
+              "example" : "6704f2e83cac4a618046051802e856af"
+            }
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "对扫描任务的操作:",
+            "enum" : [ "start", "cancel" ],
+            "example" : "start"
+          }
+        },
+        "type" : "object"
+      },
+      "ExecuteGenerateReportRequestBody" : {
+        "required" : [ "task_id" ],
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string",
+            "minLength" : 32,
+            "maxLength" : 50,
+            "example" : "017281b97c9845b08174895992ba179643028"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowTasksResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/TaskInfos"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "task_id" : {
+              "type" : "string",
+              "description" : "任务ID",
+              "minLength" : 32,
+              "maxLength" : 50,
+              "example" : "017281b97c9845b08174895992ba179643028"
+            },
+            "domain_name" : {
+              "type" : "string",
+              "description" : "网站域名",
+              "minLength" : 1,
+              "maxLength" : 256,
+              "example" : "127.0.0.1:8080"
+            },
+            "task_settings" : {
+              "description" : "扫描任务设置",
+              "$ref" : "#/components/schemas/TaskSettings"
+            },
+            "create_time" : {
+              "type" : "string",
+              "description" : "创建任务的时间",
+              "minLength" : 0,
+              "maxLength" : 19,
+              "example" : "2021-09-18 16:26:24"
+            },
+            "start_time" : {
+              "type" : "string",
+              "description" : "任务启动的时间",
+              "minLength" : 0,
+              "maxLength" : 19,
+              "example" : "2021-09-18 16:26:24"
+            },
+            "end_time" : {
+              "type" : "string",
+              "description" : "任务结束的时间",
+              "minLength" : 0,
+              "maxLength" : 19,
+              "example" : "2021-09-18 17:00:00"
+            },
+            "task_status" : {
+              "type" : "string",
+              "description" : "任务状态:",
+              "enum" : [ "running", "success", "canceled", "waiting", "ready", "failure" ],
+              "example" : "waiting"
+            },
+            "schedule_status" : {
+              "type" : "string",
+              "description" : "监测任务状态:",
+              "enum" : [ "running", "waiting", "finished" ]
+            },
+            "progress" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "任务进度",
+              "minimum" : 0,
+              "maximum" : 100
+            },
+            "reason" : {
+              "type" : "string",
+              "description" : "任务状态描述",
+              "minLength" : 0,
+              "maxLength" : 128,
+              "example" : "Wait for the result."
+            },
+            "pack_num" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "包总数",
+              "minimum" : 0,
+              "maximum" : 100000
+            },
+            "score" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "安全分数",
+              "minimum" : 0,
+              "maximum" : 100
+            },
+            "safe_level" : {
+              "type" : "string",
+              "description" : "安全等级:",
+              "enum" : [ "safety", "average", "highrisk" ]
+            },
+            "statistics" : {
+              "description" : "漏洞风险等级统计",
+              "$ref" : "#/components/schemas/VulnsLevel"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "VulnsLevel" : {
+        "properties" : {
+          "high" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "高危漏洞数",
+            "minimum" : 0,
+            "maximum" : 1000
+          },
+          "middle" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "中危漏洞数",
+            "minimum" : 0,
+            "maximum" : 1000
+          },
+          "low" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "低危漏洞数",
+            "minimum" : 0,
+            "maximum" : 1000
+          },
+          "hint" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "提示危漏洞数",
+            "minimum" : 0,
+            "maximum" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "PortItem" : {
+        "properties" : {
+          "port" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "端口号",
+            "minimum" : 0,
+            "maximum" : 65535
+          },
+          "service" : {
+            "type" : "string",
+            "description" : "服务",
+            "minLength" : 0,
+            "maxLength" : 1000
+          },
+          "protocol" : {
+            "type" : "string",
+            "description" : "端口协议:",
+            "enum" : [ "TCP", "UDP" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "端口状态:",
+            "enum" : [ "filtered", "open" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ListPortResultsResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "端口总数",
+            "minimum" : 0,
+            "maximum" : 100000
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "端口信息列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PortItem"
+            },
+            "minItems" : 0,
+            "maxItems" : 100000
+          }
+        },
+        "type" : "object"
+      },
+      "ListDomainsResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "网站域名总数",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "example" : 5
+          },
+          "top_level_domain_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "网站一级域名总数",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "example" : 3
+          },
+          "domains" : {
+            "type" : "array",
+            "description" : "网站域名列表",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "$ref" : "#/components/schemas/DomainItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "DomainItem" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/VulnsLevel"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "domain_id" : {
+              "type" : "string",
+              "description" : "网站域名ID",
+              "minLength" : 32,
+              "maxLength" : 32,
+              "example" : "2ec0993b8572455aacf14b6f9288b167"
+            },
+            "top_level_domain_id" : {
+              "type" : "string",
+              "description" : "一级域名ID",
+              "minLength" : 32,
+              "maxLength" : 32,
+              "example" : "e38db200a348414f9c8df6418dab0765"
+            },
+            "domain_name" : {
+              "type" : "string",
+              "description" : "网站域名",
+              "minLength" : 1,
+              "maxLength" : 256,
+              "example" : "127.0.0.1:8080"
+            },
+            "alias" : {
+              "type" : "string",
+              "description" : "网站域名的别名",
+              "minLength" : 1,
+              "maxLength" : 50,
+              "example" : "网站域名资产1"
+            },
+            "create_time" : {
+              "type" : "string",
+              "description" : "创建网站域名资产的时间",
+              "minLength" : 0,
+              "maxLength" : 19,
+              "example" : "2021-09-18 16:26:24"
+            },
+            "auth_status" : {
+              "type" : "string",
+              "description" : "网站域名的认证状态:",
+              "enum" : [ "unauth", "auth", "invalid", "manual", "skip" ]
+            },
+            "protocol_type" : {
+              "type" : "string",
+              "description" : "协议类型:",
+              "enum" : [ "http://", "https://" ]
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "ListTaskHistoriesResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "网站历史扫描任务总数",
+            "minimum" : 0,
+            "maximum" : 100000
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "网站历史扫描任务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ShowTasksResponseBody"
+            },
+            "minItems" : 0,
+            "maxItems" : 100000
+          }
+        },
+        "type" : "object"
+      },
+      "ListBusinessRisksResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务风险总数",
+            "minimum" : 0,
+            "maximum" : 100000
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "业务风险列表",
+            "items" : {
+              "$ref" : "#/components/schemas/BusinessRiskItem"
+            },
+            "minItems" : 0,
+            "maxItems" : 100000
+          }
+        },
+        "type" : "object"
+      },
+      "BusinessRiskItem" : {
+        "properties" : {
+          "risk_id" : {
+            "type" : "string",
+            "description" : "业务风险ID",
+            "minLength" : 40,
+            "maxLength" : 40,
+            "example" : "fff18e42a6deeffb83f9e37f741e687ed2a3dd1a"
+          },
+          "risk_url" : {
+            "type" : "string",
+            "description" : "有风险的URL",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "http://example.com/links/index.php1"
+          },
+          "risk_type" : {
+            "type" : "string",
+            "description" : "业务风险类型:",
+            "enum" : [ "text", "image", "dead_link", "dark_link", "business_risk" ],
+            "example" : "dead_link"
+          },
+          "find_time" : {
+            "type" : "string",
+            "description" : "业务风险发现时间",
+            "minLength" : 0,
+            "maxLength" : 19,
+            "example" : "2021-09-18 16:26:24"
+          },
+          "risk_content" : {
+            "type" : "string",
+            "description" : "业务风险内容",
+            "minLength" : 0,
+            "maxLength" : 100000,
+            "example" : "http://evilllllllllll.com/code.txt700"
+          },
+          "risk_status" : {
+            "type" : "string",
+            "description" : "漏洞状态:",
+            "enum" : [ "repairing", "repaired", "false_report" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ShowResultsResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "网站漏洞总数",
+            "minimum" : 0,
+            "maximum" : 100000
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "网站漏洞信息列表",
+            "items" : {
+              "$ref" : "#/components/schemas/VulnItem"
+            },
+            "minItems" : 0,
+            "maxItems" : 100000
+          },
+          "statistics" : {
+            "description" : "网站漏洞风险等级统计",
+            "$ref" : "#/components/schemas/VulnsLevel"
+          }
+        },
+        "type" : "object"
+      },
+      "VulnItem" : {
+        "properties" : {
+          "vuln_id" : {
+            "type" : "string",
+            "description" : "漏洞ID",
+            "minLength" : 32,
+            "maxLength" : 32,
+            "example" : "006e7c21dc390410c2270bf9bebf7b1e"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "网站域名ID",
+            "minLength" : 32,
+            "maxLength" : 32,
+            "example" : "2ec0993b8572455aacf14b6f9288b167"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "目标网址",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "https://127.0.0.1:8080/examples/test.html"
+          },
+          "severity" : {
+            "type" : "string",
+            "description" : "漏洞风险等级:",
+            "enum" : [ "high", "middle", "low", "hint" ]
+          },
+          "vuln_status" : {
+            "type" : "string",
+            "description" : "漏洞状态:",
+            "enum" : [ "repairing", "repaired", "false_report" ]
+          },
+          "vuln_class" : {
+            "type" : "string",
+            "description" : "漏洞类别",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "InformationLeakage"
+          },
+          "vuln_type" : {
+            "type" : "string",
+            "description" : "漏洞名称",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "example" : "Insecure HTTP Method"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "漏洞描述",
+            "minLength" : 0,
+            "maxLength" : 1000,
+            "example" : "Attackers can use the OPTIONS and Trace methods to enumerate server information."
+          },
+          "advice" : {
+            "type" : "string",
+            "description" : "修复建议",
+            "minLength" : 0,
+            "maxLength" : 1000
+          },
+          "hit_details" : {
+            "type" : "string",
+            "description" : "命中详情",
+            "minLength" : 0,
+            "maxLength" : 1000000
+          },
+          "request" : {
+            "type" : "string",
+            "description" : "请求详情",
+            "minLength" : 0,
+            "maxLength" : 1000000
+          },
+          "response" : {
+            "type" : "string",
+            "description" : "响应详情",
+            "minLength" : 0,
+            "maxLength" : 1000000
+          },
+          "provider" : {
+            "type" : "string",
+            "description" : "漏洞确认人",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "example" : "user1"
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "漏洞忽略理由",
+            "minLength" : 0,
+            "maxLength" : 1000,
+            "example" : "确认该漏洞是误报"
+          },
+          "find_time" : {
+            "type" : "string",
+            "description" : "漏洞发现时间",
+            "minLength" : 0,
+            "maxLength" : 19,
+            "example" : "2021-09-18 16:26:24"
+          }
+        },
+        "type" : "object"
+      },
+      "ListHostResultsResponseBody" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "主机漏洞总数",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "example" : 5
+          },
+          "items" : {
+            "type" : "array",
+            "description" : "主机漏洞信息列表",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "$ref" : "#/components/schemas/HostVulnItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "HostVulnItem" : {
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "漏洞类型",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "protocolvuln"
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "扫描端口号",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "general-tcp"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "漏洞标题",
+            "minLength" : 0,
+            "maxLength" : 1000,
+            "example" : "Apache Log4j2 Remote Code Execution Vulnerability"
+          },
+          "sa_id" : {
+            "type" : "string",
+            "description" : "漏洞公告ID",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "Apache Log4j2 Remote Code Execution Vulnerability"
+          },
+          "vuln_id" : {
+            "type" : "string",
+            "description" : "漏洞ID",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "example" : "1.3.6.1.4.1.25623.1.0.301012-general-tcp"
+          },
+          "severity" : {
+            "type" : "string",
+            "description" : "漏洞风险等级:",
+            "enum" : [ "high", "medium", "low", "hint" ],
+            "example" : "high"
+          },
+          "topic" : {
+            "type" : "string",
+            "description" : "漏洞摘要",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "example" : "Apache Log4j2 Remote Code Execution Vulnerability"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "漏洞描述",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "Apache Log4j2 2.0-beta9 through 2.15.0 (excluding security releases 2.12.2, 2.12.3) JNDI features used in configuration, log messages, and parameters do not protect against attacker controlled LDAP and other JNDI related endpoints. \\nAn attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled.\\nhttps://www.huaweicloud.com/notice/2021/20211210001621800.html\\n"
+          },
+          "solution" : {
+            "type" : "string",
+            "description" : "漏洞提示建议",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "Update log4j to 2.12.2, 2.16.0 or later. Ask application vendor for a fix.\\nPlease refer to https://www.huaweicloud.com/notice/2021/20211210001621800.html"
+          },
+          "fix_advisory" : {
+            "type" : "string",
+            "description" : "漏洞修复建议",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "Update log4j to 2.12.2, 2.16.0 or later. Ask application vendor for a fix.\\nPlease refer to https://www.huaweicloud.com/notice/2021/20211210001621800.html"
+          },
+          "fix_cmd" : {
+            "type" : "string",
+            "description" : "漏洞修复指令",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "yum update jasper-libs"
+          },
+          "cve_list" : {
+            "type" : "array",
+            "description" : "CVE漏洞列表",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "CVE漏洞ID",
+                  "minLength" : 0,
+                  "maxLength" : 100,
+                  "example" : "CVE-2021-44228"
+                },
+                "link" : {
+                  "type" : "string",
+                  "description" : "CVE漏洞链接",
+                  "minLength" : 0,
+                  "maxLength" : 100,
+                  "example" : ""
+                }
+              }
+            }
+          },
+          "ref_link_list" : {
+            "type" : "array",
+            "description" : "参考信息链接列表",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 10000,
+              "example" : ""
+            }
+          },
+          "component_list" : {
+            "type" : "array",
+            "description" : "内容列表",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentName" : {
+                  "type" : "string",
+                  "description" : "内容名称",
+                  "minLength" : 0,
+                  "maxLength" : 1000,
+                  "example" : "kernel"
+                },
+                "componentInstallVersion" : {
+                  "type" : "string",
+                  "description" : "安装版本",
+                  "minLength" : 0,
+                  "maxLength" : 1000,
+                  "example" : "3.10.0-514.44.5.10.h254"
+                },
+                "componentFixedVersion" : {
+                  "type" : "string",
+                  "description" : "已经修复版本",
+                  "minLength" : 0,
+                  "maxLength" : 1000,
+                  "example" : "3.10.0-514.44.5.10.h275"
+                }
+              }
+            }
+          },
+          "vul_detect_result" : {
+            "type" : "string",
+            "description" : "检查结果",
+            "minLength" : 0,
+            "maxLength" : 10240,
+            "example" : "/var/lib/docker/overlay2/54e1e225d711d77afc0e8cf6fa3dda0274c56659b21d214715ee53f18565789f/diff/root/sdkrend/log4j-core-2.8.2.jar\\n"
+          },
+          "cvss_score" : {
+            "type" : "string",
+            "description" : "CVSS分数信息",
+            "minLength" : 0,
+            "maxLength" : 5,
+            "example" : 9.3
+          },
+          "cvss_version" : {
+            "type" : "string",
+            "description" : "CVSS版本信息",
+            "minLength" : 0,
+            "maxLength" : 5,
+            "example" : ""
+          },
+          "cvss_vector" : {
+            "type" : "string",
+            "description" : "CVSS向量信息",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "AV:N/AC:M/Au:N/C:C/I:C/A:C"
+          },
+          "is_ignore" : {
+            "type" : "boolean",
+            "description" : "是否误报",
+            "example" : false
+          }
+        },
+        "type" : "object"
+      },
+      "AddGroupRequestBody" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 24,
+            "description" : "群组名称",
+            "example" : "myGroup1"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateCbcOrderRequestBody" : {
+        "required" : [ "is_auto_pay", "change_mode", "cloud_service_type", "resource_id", "product_info", "project_id" ],
+        "properties" : {
+          "change_mode" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "change_mode",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "is_auto_pay" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1,
+            "minimum" : 0,
+            "default" : 0,
+            "example" : 1,
+            "description" : "该请求参数为预留参数,当前不支持自动支付,使用接口时该参数请使用0",
+            "enum" : [ 0, 1 ]
+          },
+          "cloud_service_type" : {
+            "type" : "string",
+            "description" : "发起规格变更操作的云服务类型",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "project_id",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源标识ID",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "product_info" : {
+            "type" : "object",
+            "description" : "product_info",
+            "required" : [ "cloud_service_type", "product_id", "resource_speccode", "resource_type" ],
+            "properties" : {
+              "cloud_service_type" : {
+                "type" : "string",
+                "description" : "用户购买的云服务的主云服务类型",
+                "minLength" : 0,
+                "maxLength" : 64,
+                "example" : "hws.service.type.webscan"
+              },
+              "product_id" : {
+                "type" : "string",
+                "description" : "产品标识,通过订购询价接口获得",
+                "minLength" : 0,
+                "maxLength" : 64,
+                "example" : "00301-197022-0--0"
+              },
+              "resource_speccode" : {
+                "type" : "string",
+                "description" : "用户购买云服务产品的资源规格",
+                "minLength" : 0,
+                "maxLength" : 64,
+                "example" : "vss.domain.enterprise"
+              },
+              "resource_type" : {
+                "type" : "string",
+                "description" : "用户购买云服务产品的资源类型",
+                "minLength" : 0,
+                "maxLength" : 64,
+                "example" : "hws.resource.type.vss.domain"
+              },
+              "resouce_size_measure_id" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "资源容量度量标识,购买vss服务时使用14:",
+                "minLength" : 0,
+                "maxLength" : 65535,
+                "example" : 14
+              },
+              "resource_size" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "资源容量大小",
+                "minLength" : 0,
+                "maxLength" : 65535,
+                "example" : 1
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateCbcOrderResponseBody" : {
+        "properties" : {
+          "order_id" : {
+            "description" : "order_id",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDomainSettingsResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DomainSettings"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "domain_name" : {
+              "type" : "string",
+              "description" : "网站域名",
+              "minLength" : 1,
+              "maxLength" : 256,
+              "example" : "https://127.0.0.1:8080"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "ShowDomainSettingsResponseBody" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UpdateDomainSettingsResponseBody"
+        } ],
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListGroups" : {
+      "get" : {
+        "tags" : [ "host_groups" ],
+        "summary" : "获取主机组列表",
+        "description" : "获取主机组列表",
+        "operationId" : "ListGroups",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseGroups"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "X-Auth-Token",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 200,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGroups",
+      "x-url" : "{endpoint}/{project_id}/hostscan/groups"
+    },
+    "/ShowReportStatus" : {
+      "get" : {
+        "tags" : [ "web_results" ],
+        "summary" : "获取网站扫描报告状态",
+        "description" : "获取网站扫描PDF报告生成状态",
+        "operationId" : "ShowReportStatus",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowReportStatusResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowReportStatus",
+      "x-url" : "{endpoint}/{project_id}/webscan/report/status"
+    },
+    "/DeleteDomains" : {
+      "delete" : {
+        "tags" : [ "websites" ],
+        "summary" : "删除网站资产",
+        "description" : "删除租户的网站资产",
+        "operationId" : "DeleteDomains",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "domain_name",
+          "in" : "query",
+          "description" : "网站域名",
+          "required" : true,
+          "schema" : {
+            "example" : "https://127.0.0.1:8080",
+            "description" : "网站域名",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDomains",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains"
+    },
+    "/BatchCreateHosts" : {
+      "post" : {
+        "tags" : [ "hosts" ],
+        "summary" : "批量创建主机资产",
+        "description" : "批量创建租户的主机资产",
+        "operationId" : "BatchCreateHosts",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchCreateHostsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateHostsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateHosts",
+      "x-url" : "{endpoint}/{project_id}/hostscan/hosts"
+    },
+    "/AuthorizeDomains" : {
+      "post" : {
+        "tags" : [ "websites" ],
+        "summary" : "认证网站资产",
+        "description" : "认证租户的网站资产",
+        "operationId" : "AuthorizeDomains",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorizeDomainsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AuthorizeDomainsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AuthorizeDomains",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains/authenticate"
+    },
+    "/DownloadTaskReport" : {
+      "get" : {
+        "tags" : [ "web_results" ],
+        "summary" : "下载网站扫描报告",
+        "description" : "下载网站扫描任务PDF报告",
+        "operationId" : "DownloadTaskReport",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "file"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadTaskReport",
+      "x-url" : "{endpoint}/{project_id}/webscan/report"
+    },
+    "/CreatePurchaseOrder" : {
+      "post" : {
+        "tags" : [ "purchase" ],
+        "summary" : "订购下单接口",
+        "description" : "订购下单接口",
+        "operationId" : "CreatePurchaseOrder",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCbcOrderResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "service",
+          "in" : "path",
+          "description" : "servicename,购买vss服务时使用\"webscan\"",
+          "required" : true,
+          "schema" : {
+            "description" : "servicename,购买vss服务时使用\"webscan\"",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 2
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=utf8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCbcOrderRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreatePurchaseOrder",
+      "x-url" : "{endpoint}/{project_id}/{service}/subscription/purchase"
+    },
+    "/ShowSubscription" : {
+      "get" : {
+        "tags" : [ "purchase" ],
+        "summary" : "资源版本查询接口",
+        "description" : "资源版本查询接口",
+        "operationId" : "ShowSubscription",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowSubscriptionResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token",
+          "required" : false,
+          "schema" : {
+            "description" : "X-Auth-Token",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "service",
+          "in" : "path",
+          "description" : "service",
+          "required" : true,
+          "schema" : {
+            "description" : "service",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSubscription",
+      "x-url" : "{endpoint}/{project_id}/{service}/subscription"
+    },
+    "/DeleteHost" : {
+      "delete" : {
+        "tags" : [ "hosts" ],
+        "summary" : "删除主机资产",
+        "description" : "删除租户的主机资产",
+        "operationId" : "DeleteHost",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "host_id",
+          "in" : "path",
+          "description" : "主机资产id",
+          "required" : true,
+          "schema" : {
+            "description" : "主机资产id",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteHost",
+      "x-url" : "{endpoint}/{project_id}/hostscan/hosts/delete/{host_id}"
+    },
+    "/UpdateDomainSettings" : {
+      "post" : {
+        "tags" : [ "websites" ],
+        "summary" : "更新网站配置",
+        "description" : "更新网站登录配置",
+        "operationId" : "UpdateDomainSettings",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDomainSettingsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDomainSettings",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains/settings"
+    },
+    "/ListHosts" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "获取主机资产",
+        "description" : "获取租户的主机资产列表",
+        "operationId" : "ListHosts",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "query",
+          "description" : "主机组id",
+          "required" : false,
+          "schema" : {
+            "description" : "主机组id",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListHosts",
+      "x-url" : "{endpoint}/{project_id}/hostscan/hosts"
+    },
+    "/UpdateFalsePositive" : {
+      "post" : {
+        "tags" : [ "web_results" ],
+        "summary" : "更新网站漏洞的误报状态",
+        "description" : "更新网站扫描漏洞的误报状态",
+        "operationId" : "UpdateFalsePositive",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateFalsePositiveRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateFalsePositive",
+      "x-url" : "{endpoint}/{project_id}/webscan/vulnerability/false-positive"
+    },
+    "/CreateTasks" : {
+      "post" : {
+        "tags" : [ "web_tasks" ],
+        "summary" : "创建网站扫描任务并启动",
+        "description" : "创建网站漏洞扫描任务并启动",
+        "operationId" : "CreateTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "upgrade",
+          "in" : "query",
+          "description" : "是否将本次扫描升级为专业版规格(¥99.00/次)",
+          "required" : false,
+          "schema" : {
+            "example" : true,
+            "description" : "是否将本次扫描升级为专业版规格(¥99.00/次)",
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTasks",
+      "x-url" : "{endpoint}/{project_id}/webscan/tasks"
+    },
+    "/CancelTasks" : {
+      "put" : {
+        "tags" : [ "web_tasks" ],
+        "summary" : "取消或重启网站扫描任务",
+        "description" : "取消或重启网站漏洞扫描任务",
+        "operationId" : "CancelTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CancelTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CancelTasks",
+      "x-url" : "{endpoint}/{project_id}/webscan/tasks"
+    },
+    "/CreateDomains" : {
+      "post" : {
+        "tags" : [ "websites" ],
+        "summary" : "创建网站资产",
+        "description" : "创建租户的网站资产",
+        "operationId" : "CreateDomains",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateDomainsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDomainsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDomains",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains"
+    },
+    "/BatchStartHostTasks" : {
+      "post" : {
+        "tags" : [ "host_tasks" ],
+        "summary" : "批量启动或取消主机扫描任务",
+        "description" : "批量启动或取消主机漏洞扫描任务",
+        "operationId" : "BatchStartHostTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchStartHostTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchStartHostTasksRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchStartHostTasks",
+      "x-url" : "{endpoint}/{project_id}/hostscan/hosts/scan"
+    },
+    "/ExecuteGenerateReport" : {
+      "post" : {
+        "tags" : [ "web_results" ],
+        "summary" : "生成网站扫描报告",
+        "description" : "生成网站扫描PDF报告",
+        "operationId" : "ExecuteGenerateReport",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExecuteGenerateReportRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGenerateReport",
+      "x-url" : "{endpoint}/{project_id}/webscan/report"
+    },
+    "/ShowTasks" : {
+      "get" : {
+        "tags" : [ "web_tasks" ],
+        "summary" : "获取网站扫描任务详情",
+        "description" : "获取网站漏洞扫描任务详情",
+        "operationId" : "ShowTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowTasksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTasks",
+      "x-url" : "{endpoint}/{project_id}/webscan/tasks"
+    },
+    "/ListPortResults" : {
+      "get" : {
+        "tags" : [ "web_results" ],
+        "summary" : "获取网站端口扫描结果",
+        "description" : "获取网站端口扫描结果",
+        "operationId" : "ListPortResults",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListPortResultsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPortResults",
+      "x-url" : "{endpoint}/{project_id}/webscan/results/ports"
+    },
+    "/ListDomains" : {
+      "get" : {
+        "tags" : [ "websites" ],
+        "summary" : "获取网站资产",
+        "description" : "获取租户的所有网站资产",
+        "operationId" : "ListDomains",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListDomainsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "query",
+          "description" : "网站域名ID",
+          "required" : false,
+          "schema" : {
+            "example" : "2ec0993b8572455aacf14b6f9288b167",
+            "description" : "网站域名ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "auth_status",
+          "in" : "query",
+          "description" : "网站域名的认证状态:",
+          "required" : false,
+          "schema" : {
+            "example" : "auth",
+            "description" : "网站域名的认证状态:",
+            "type" : "string",
+            "enum" : [ "unauth", "auth", "invalid", "manual", "skip" ]
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDomains",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains"
+    },
+    "/DeleteGroup" : {
+      "delete" : {
+        "tags" : [ "host_groups" ],
+        "summary" : "删除主机组",
+        "description" : "删除主机组",
+        "operationId" : "DeleteGroup",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "X-Auth-Token",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "group_id",
+          "required" : true,
+          "schema" : {
+            "description" : "group_id",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGroup",
+      "x-url" : "{endpoint}/{project_id}/hostscan/groups/{group_id}"
+    },
+    "/ListTaskHistories" : {
+      "get" : {
+        "tags" : [ "web_tasks" ],
+        "summary" : "获取网站的历史扫描任务",
+        "description" : "获取网站漏洞扫描的历史扫描任务",
+        "operationId" : "ListTaskHistories",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTaskHistoriesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "query",
+          "description" : "网站域名ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2ec0993b8572455aacf14b6f9288b167",
+            "description" : "网站域名ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTaskHistories",
+      "x-url" : "{endpoint}/{project_id}/webscan/tasks/histories"
+    },
+    "/ListBusinessRisks" : {
+      "get" : {
+        "tags" : [ "web_results" ],
+        "summary" : "获取网站业务风险扫描结果",
+        "description" : "获取网站业务风险扫描结果",
+        "operationId" : "ListBusinessRisks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListBusinessRisksResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBusinessRisks",
+      "x-url" : "{endpoint}/{project_id}/webscan/results/business-risk"
+    },
+    "/ShowResults" : {
+      "get" : {
+        "tags" : [ "web_results" ],
+        "summary" : "获取网站扫描结果",
+        "description" : "获取网站漏洞扫描结果",
+        "operationId" : "ShowResults",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowResultsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "query",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "017281b97c9845b08174895992ba179643028",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 10000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResults",
+      "x-url" : "{endpoint}/{project_id}/webscan/results"
+    },
+    "/ListHostResults" : {
+      "get" : {
+        "tags" : [ "host_results" ],
+        "summary" : "获取主机漏洞扫描结果",
+        "description" : "获取主机漏洞扫描结果",
+        "operationId" : "ListHostResults",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListHostResultsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "host_id",
+          "in" : "path",
+          "description" : "主机ID",
+          "required" : true,
+          "schema" : {
+            "example" : "9a1cd36501a94a739db18a53ba07e35a",
+            "description" : "主机ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "scan_id",
+          "in" : "query",
+          "description" : "扫描ID",
+          "required" : true,
+          "schema" : {
+            "example" : "473aca3eafab468198c23f36d540d112",
+            "description" : "扫描ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页查询,偏移量,表示从此偏移量开始查询",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页查询,每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "分页查询,每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListHostResults",
+      "x-url" : "{endpoint}/{project_id}/hostscan/hosts/{host_id}/sys-vulns"
+    },
+    "/AddGroup" : {
+      "post" : {
+        "tags" : [ "host_groups" ],
+        "summary" : "批量创建主机组",
+        "description" : "批量创建主机组",
+        "operationId" : "AddGroup",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Group"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "X-Auth-Token",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "project_id",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddGroupRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddGroup",
+      "x-url" : "{endpoint}/{project_id}/hostscan/groups"
+    },
+    "/UpdatePurchaseOrder" : {
+      "post" : {
+        "tags" : [ "purchase" ],
+        "summary" : "变更下单接口",
+        "description" : "变更下单接口",
+        "operationId" : "UpdatePurchaseOrder",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateCbcOrderResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "service",
+          "in" : "path",
+          "description" : "servicename,购买vss服务时使用\"webscan\"",
+          "required" : true,
+          "schema" : {
+            "description" : "servicename,购买vss服务时使用\"webscan\"",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 2
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=utf8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCbcOrderRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdatePurchaseOrder",
+      "x-url" : "{endpoint}/{project_id}/{service}/subscription/alter"
+    },
+    "/ShowDomainSettings" : {
+      "get" : {
+        "tags" : [ "websites" ],
+        "summary" : "获取网站配置",
+        "description" : "获取网站登录配置",
+        "operationId" : "ShowDomainSettings",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowDomainSettingsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          },
+          "418" : {
+            "description" : "I'm a teapot",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 102400,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id,获取方法请参见[获取项目ID](https://support.huaweicloud.com/api-vss/vss_api_04_019.html)。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "query",
+          "description" : "网站域名ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2ec0993b8572455aacf14b6f9288b167",
+            "description" : "网站域名ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDomainSettings",
+      "x-url" : "{endpoint}/{project_id}/webscan/domains/settings"
+    }
+  }
+}

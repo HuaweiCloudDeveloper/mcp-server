@@ -1,0 +1,6112 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "BCS-BCS管理",
+    "title" : "BCS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ChannelInfo" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "通道名"
+          },
+          "org_names" : {
+            "type" : "array",
+            "description" : "通道中组织名",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "org_name_hash" : {
+            "type" : "array",
+            "description" : "通道中组织名的哈希值",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "peers" : {
+            "type" : "object",
+            "description" : "key:组织名,value:peer节点数组",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "附加属性"
+              }
+            }
+          }
+        }
+      },
+      "CouchDBInfo" : {
+        "type" : "object",
+        "properties" : {
+          "user" : {
+            "type" : "string",
+            "description" : "couchDB用户名称"
+          }
+        }
+      },
+      "SfsInfo" : {
+        "type" : "object",
+        "properties" : {
+          "pvc_name" : {
+            "type" : "string",
+            "description" : "BCS服务下的SFS文件系统名称"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "BCS服务网络存储名称"
+          },
+          "addr" : {
+            "type" : "string",
+            "description" : "BCS服务网络存储地址"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "BCS服务网络存储类型"
+          }
+        }
+      },
+      "ShowBlockchainDetailRes" : {
+        "type" : "object",
+        "properties" : {
+          "basic_info" : {
+            "description" : "服务实例基本信息",
+            "$ref" : "#/components/schemas/BasicInfo"
+          },
+          "channels" : {
+            "description" : "通道信息",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ChannelInfo"
+            }
+          },
+          "peer_info" : {
+            "description" : "peer组织信息",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PeerInfo"
+            }
+          },
+          "light_peer_info" : {
+            "description" : "light_peer组织信息",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PeerInfo"
+            }
+          },
+          "orderer_info" : {
+            "description" : "order组织信息",
+            "$ref" : "#/components/schemas/PeerInfo"
+          },
+          "couch_db_info" : {
+            "description" : "couch db信息",
+            "$ref" : "#/components/schemas/CouchDBInfo"
+          },
+          "dms_kafka_info" : {
+            "description" : "kafka实例创建状态",
+            "$ref" : "#/components/schemas/DmsKafkaInfo"
+          },
+          "ief_info" : {
+            "description" : "边缘集群信息",
+            "$ref" : "#/components/schemas/IefInfo"
+          },
+          "sfs_info" : {
+            "description" : "文件存储信息",
+            "$ref" : "#/components/schemas/SfsInfo"
+          },
+          "agent_info" : {
+            "description" : "agent组织信息",
+            "$ref" : "#/components/schemas/PeerInfo"
+          },
+          "restapi_info" : {
+            "description" : "restapi组织信息",
+            "$ref" : "#/components/schemas/PeerInfo"
+          },
+          "evs_pvc_info" : {
+            "description" : "evs_pvc信息",
+            "$ref" : "#/components/schemas/EvsPvcInfo"
+          },
+          "tc3_taskserver_info" : {
+            "description" : "tc3_taskserver组织信息",
+            "$ref" : "#/components/schemas/PeerInfo"
+          },
+          "obs_bucket_info" : {
+            "description" : "OBS桶信息",
+            "$ref" : "#/components/schemas/OBSInfo"
+          }
+        }
+      },
+      "DmsKafkaInfo" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "状态"
+          },
+          "status_detail" : {
+            "type" : "string",
+            "description" : "状态详情"
+          },
+          "order_fade_enabled" : {
+            "type" : "boolean",
+            "description" : "是否允许order老化"
+          },
+          "addr" : {
+            "type" : "array",
+            "description" : "Kafka连接地址",
+            "items" : {
+              "type" : "string",
+              "description" : "Kafka连接地址"
+            }
+          },
+          "order_fade_enable" : {
+            "type" : "boolean",
+            "description" : "Kafka模式下,是否开启共识节点老化"
+          },
+          "order_fade_cache" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Kafka模式下,开启共识节点后的老化阈值"
+          }
+        }
+      },
+      "ErrorResponse" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "description" : "失败时返回的错误",
+        "type" : "object"
+      },
+      "OBSInfo" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "OBS桶名称"
+          },
+          "addr" : {
+            "type" : "string",
+            "description" : "OBS桶地址"
+          }
+        },
+        "description" : "OBS桶信息"
+      },
+      "PeerAddress" : {
+        "type" : "object",
+        "properties" : {
+          "domain_port" : {
+            "type" : "string",
+            "description" : "域名地址"
+          },
+          "ip_port" : {
+            "type" : "string",
+            "description" : "IP地址"
+          }
+        }
+      },
+      "PeerInfo" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称"
+          },
+          "node_cnt" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "节点数量"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "节点状态,分为创建中(IsCreating),升级中(IsUpgrading),扩缩容中(Adding/IsScaling),删除中(Isdeleting),正常(Normal),异常(AbNormal),未知(其余值)"
+          },
+          "status_detail" : {
+            "type" : "string",
+            "description" : "节点状态,形式如:1/1,分母是该组织下节点总数,分子是正常节点个数"
+          },
+          "pvc_name" : {
+            "type" : "string",
+            "description" : "节点对应pvc名称"
+          },
+          "address" : {
+            "description" : "Peer节点域名/IP地址",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PeerAddress"
+            }
+          }
+        }
+      },
+      "IefInfo" : {
+        "type" : "object",
+        "properties" : {
+          "deploy_mode" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "BCS服务边缘节点部署模式,分为:随机模式(0),绑定模式(1)"
+          }
+        }
+      },
+      "PVCInfo" : {
+        "type" : "object",
+        "description" : "key:容器实例名称,value:PVC名称",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "BasicInfo" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "BCS服务ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "区块链服务名称,支持英文,数字,中文字符和中划线(-),不能以中划线(-)开头,长度4-24个字符。"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "BCS服务版本信息"
+          },
+          "service_type" : {
+            "type" : "string",
+            "description" : "BCS服务的类型,分为:联盟链(union),私有链(private)"
+          },
+          "purchase_type" : {
+            "type" : "string",
+            "description" : "BCS服务部署类型,一键部署(onestep),普通部署(normal)"
+          },
+          "sign_algorithm" : {
+            "type" : "string",
+            "description" : "BCS服务安全机制,分为ECDSA(ECDSA),国密算法(sm2)"
+          },
+          "consensus" : {
+            "type" : "string",
+            "description" : "BCS服务的共识策略,分为测试策略(solo),快速拜占庭容错算法(sflic),Kafka(kafka),raft共识算法(etcdraft)"
+          },
+          "charging_mode" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "BCS服务付费模式,分为按需(1)"
+          },
+          "version_type" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "BCS服务版本类型"
+          },
+          "database_type" : {
+            "type" : "string",
+            "description" : "BCS服务数据库类型,包括文件数据库(goleveldb),NoSQL(couchdb)"
+          },
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "BCS服务所在集群ID"
+          },
+          "cluster_name" : {
+            "type" : "string",
+            "description" : "BCS服务所在集群名称"
+          },
+          "cluster_type" : {
+            "type" : "string",
+            "description" : "BCS服务的集群类型,分为CCE集群(CCE),IEF集群(ief)"
+          },
+          "cluster_az" : {
+            "type" : "string",
+            "description" : "BCS多可用区标示,分为:多可用区(yes),非多可用区(no)"
+          },
+          "created_time" : {
+            "type" : "string",
+            "description" : "BCS服务创建时间"
+          },
+          "deploy_type" : {
+            "type" : "string",
+            "description" : "BCS服务联盟链下生效,分为邀请方(create),被邀请方(invite)"
+          },
+          "order_fade_enabled" : {
+            "type" : "boolean",
+            "description" : "是否允许order老化"
+          },
+          "is_cross_region" : {
+            "type" : "boolean",
+            "description" : "BCS服务是否跨region"
+          },
+          "is_support_rollback" : {
+            "type" : "boolean",
+            "description" : "BCS服务升级失败,是否支持回滚"
+          },
+          "is_support_restful" : {
+            "type" : "boolean",
+            "description" : "BCS服务是否添加RESTful APIs支持,分为支持(true),不支持(false)"
+          },
+          "is_support_tc3" : {
+            "type" : "boolean",
+            "description" : "BCS服务是否支持可信计算平台,分为支持(true),不支持(false)"
+          },
+          "is_old_service" : {
+            "type" : "boolean",
+            "description" : "区分BCS是否新服务,分为老服务(true),新服务(false)"
+          },
+          "old_service_version" : {
+            "type" : "string",
+            "description" : "BCS服务为老服务时,此字段为老服务版本号"
+          },
+          "agent_portal_addrs" : {
+            "type" : "array",
+            "description" : "BCS服务用户数据面agent地址端口列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "BCS服务状态,分为正常(Normal),异常(Abnormal),弹性IP异常(EipAbnormal),已冻结(Freeze),休眠中(Hibernation),未知(其余值)"
+          },
+          "process_status" : {
+            "type" : "string",
+            "description" : "BCS服务处理状态,分为创建中(IsCreating),升级中(IsUpgrading),扩缩容中(IsScaling),删除中(IsDeleting),添加中(IsAdding)"
+          },
+          "order_status" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "BCS服务为包周期模式时,返回值为0(订单未成功),1(订单异常),2(订单正常)"
+          },
+          "order_fade_cache" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "共识节点的老化阈值"
+          },
+          "deploy_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "BCS服务部署状态,分为进行中(0),成功(1),失败(2),结束(3)"
+          },
+          "block_info" : {
+            "type" : "object",
+            "description" : "区块生成配置信息",
+            "properties" : {
+              "batch_timeout" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块产生时间(单位:秒),默认2秒"
+              },
+              "max_message_count" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块包含交易数量,默认500"
+              },
+              "preferred_maxbytes" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块容量(单位:MB),默认2MB"
+              }
+            }
+          },
+          "cluster_platform_type" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "集群CPU架构类型:X86(VirtualMachine),ARM(ARM64)"
+          }
+        },
+        "type" : "object"
+      },
+      "EvsPvcInfo" : {
+        "type" : "object",
+        "description" : "云硬盘存储卷信息",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/PVCInfo"
+        }
+      },
+      "StatisticValue" : {
+        "type" : "object",
+        "properties" : {
+          "statistic" : {
+            "type" : "string",
+            "description" : "统计方式。"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "统计结果。"
+          }
+        },
+        "description" : "统计结果"
+      },
+      "MetricDemision" : {
+        "type" : "object",
+        "properties" : {
+          "namespace" : {
+            "type" : "string",
+            "description" : "命名空间"
+          },
+          "metricName" : {
+            "type" : "string",
+            "description" : "指标名称"
+          },
+          "dimensions" : {
+            "type" : "array",
+            "description" : "维度列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Dimension"
+            }
+          }
+        },
+        "description" : "指标描述信息"
+      },
+      "ListBcsMetricRequestBody" : {
+        "properties" : {
+          "metric_names" : {
+            "type" : "array",
+            "description" : "指标列表 取值范围",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "example" : {
+          "metric_names" : [ "cpuUsage", "diskUsedRate" ]
+        },
+        "description" : "BCS服务监控数据查询请求结构",
+        "type" : "object"
+      },
+      "MetricDataPoints" : {
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "时间戳。"
+          },
+          "unit" : {
+            "type" : "string",
+            "description" : "指标单位。"
+          },
+          "statistics" : {
+            "type" : "array",
+            "description" : "统计方式。",
+            "items" : {
+              "$ref" : "#/components/schemas/StatisticValue"
+            }
+          }
+        },
+        "description" : "查询结果要点"
+      },
+      "MetricQueryItemResult" : {
+        "properties" : {
+          "metrics" : {
+            "type" : "array",
+            "description" : "指标对象列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricItemResultAPI"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "MetricItemResultAPI" : {
+        "properties" : {
+          "metric" : {
+            "description" : "指标描述信息",
+            "$ref" : "#/components/schemas/MetricDemision"
+          },
+          "dataPoints" : {
+            "type" : "array",
+            "description" : "监控数据信息",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricDataPoints"
+            }
+          }
+        },
+        "description" : "监控数据信息",
+        "type" : "object"
+      },
+      "Dimension" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "维度名称。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "维度取值。"
+          }
+        },
+        "description" : "指标维度。"
+      },
+      "CreateBlockchainCertByUserNameRequestBody" : {
+        "properties" : {
+          "security_mode" : {
+            "type" : "boolean",
+            "description" : "生成证书的安全模式:"
+          }
+        },
+        "description" : "生成证书的安全模式:",
+        "example" : {
+          "security_mode" : true
+        },
+        "type" : "object"
+      },
+      "Node" : {
+        "type" : "object",
+        "properties" : {
+          "ip_port" : {
+            "type" : "string",
+            "description" : "节点EIP信息"
+          },
+          "channels" : {
+            "type" : "array",
+            "description" : "节点所在通道数组",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "Org" : {
+        "type" : "object",
+        "properties" : {
+          "org_msp_id" : {
+            "type" : "string",
+            "description" : "组织MSP标识"
+          },
+          "org_domain" : {
+            "type" : "string",
+            "description" : "组织域名"
+          },
+          "peers" : {
+            "type" : "object",
+            "description" : "key:节点名称,value:节点详细信息",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/Node"
+            }
+          }
+        }
+      },
+      "NodesRes" : {
+        "type" : "object",
+        "properties" : {
+          "node_orgs" : {
+            "type" : "object",
+            "description" : "key:组织名,value:组织详细信息",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/Org"
+            }
+          }
+        }
+      },
+      "OpIdRes" : {
+        "type" : "object",
+        "properties" : {
+          "operation_id" : {
+            "type" : "string",
+            "description" : "操作记录id"
+          }
+        }
+      },
+      "Result" : {
+        "required" : [ "result" ],
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "操作结果"
+          }
+        },
+        "description" : "操作结果",
+        "type" : "object"
+      },
+      "QuitUnionFromMemberListRes" : {
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "请求结果"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "操作记录ID"
+          }
+        },
+        "description" : ""
+      },
+      "QuitUnionFromMemberListRequestBody" : {
+        "required" : [ "inviter_bcsid", "inviter_projectid", "inviter_domainid", "inviter_username", "channel_name", "invitee_bcsid", "invitee_projectid", "invitee_domainid" ],
+        "properties" : {
+          "inviter_bcsid" : {
+            "type" : "string",
+            "description" : "邀请方BCS服务实例ID。可调用“查询服务实例列表”接口获取对应的ID"
+          },
+          "inviter_projectid" : {
+            "type" : "string",
+            "description" : "邀请方项目ID。控制台->邀请方帐号->我的凭证->API凭证->项目列表,选择对应的项目ID"
+          },
+          "inviter_domainid" : {
+            "type" : "string",
+            "description" : "邀请方租户ID。控制台->邀请方帐号->我的凭证->API凭证->帐号ID"
+          },
+          "inviter_username" : {
+            "type" : "string",
+            "description" : "邀请方租户名称。控制台->邀请方帐号->我的凭证->API凭证->帐号名"
+          },
+          "channel_name" : {
+            "type" : "string",
+            "description" : "联盟通道名称。BCS管理面->成员管理->通道,选择对应的邀请的通道"
+          },
+          "invitee_bcsid" : {
+            "type" : "string",
+            "description" : "被邀请方BCS服务实例ID。可调用“查询服务实例列表”接口获取对应的id"
+          },
+          "invitee_projectid" : {
+            "type" : "string",
+            "description" : "被邀请方项目ID。控制台->被邀请方帐号->我的凭证->API凭证->项目列表,选择对应的项目ID"
+          },
+          "invitee_domainid" : {
+            "type" : "string",
+            "description" : "被邀请方租户ID。控制台->被邀请方帐号->我的凭证->API凭证->帐号ID"
+          }
+        },
+        "example" : {
+          "inviter_bcsid" : "a30962b6-xxxxx-f7ff1a0ec561",
+          "inviter_projectid" : "b45a57xxxxx8a5",
+          "inviter_domainid" : "a38c7xxxxd374d",
+          "inviter_username" : "bcs-test",
+          "channel_name" : "channel",
+          "invitee_bcsid" : "e97ae066-xxxxx-f6bdb4fd3df1",
+          "invitee_projectid" : "e64e7xxxxx65e1",
+          "invitee_domainid" : "a38c7xxxxx374d"
+        },
+        "type" : "object"
+      },
+      "ListInstanceMetricRequestBody" : {
+        "required" : [ "type", "entity_name", "instance_name" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "实体类型,[可选值如下:"
+          },
+          "entity_name" : {
+            "type" : "string",
+            "description" : "所属实体的名称,即区块链服务详情页面的“区块链实例”中各节点的名称(代理节点、共识节点、记账节点)"
+          },
+          "instance_name" : {
+            "type" : "string",
+            "description" : "具体实例的名称。若当前区块链服务部署在CCE集群上,该名称为各节点对应的负载(pod)名称;若当前区块链服务部署在IEF集群上,可进入“智能边缘平台”服务,进入“边缘应用”->“容器应用”,查询负载名称。"
+          }
+        },
+        "description" : "BCS组织实例监控数据详情查询请求结构",
+        "type" : "object"
+      },
+      "ShowBlockchainFlavorsRes" : {
+        "type" : "object",
+        "properties" : {
+          "enterprise_spec" : {
+            "description" : "企业版联盟链规格",
+            "$ref" : "#/components/schemas/InstanceSpc"
+          }
+        }
+      },
+      "InstanceSpc" : {
+        "properties" : {
+          "org_peer_max_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "单个组织支持的最大peer节点数量"
+          },
+          "orderer_max_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "单个联盟链支持的最大order节点数量"
+          },
+          "member_max_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "单个联盟链支持的最大租户数量"
+          }
+        },
+        "type" : "object"
+      },
+      "ComCCE" : {
+        "type" : "object",
+        "properties" : {
+          "cluster" : {
+            "description" : "云容器引擎集群创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "network" : {
+            "description" : "云容器引擎网络创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "security_group" : {
+            "description" : "云容器引擎安全组创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          }
+        },
+        "description" : "CCE组件"
+      },
+      "StatusRes" : {
+        "type" : "object",
+        "properties" : {
+          "bcs" : {
+            "description" : "区块链实例创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "eip" : {
+            "description" : "弹性IP创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "sfs" : {
+            "description" : "弹性文件存储创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "obs" : {
+            "description" : "OBS实例创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "kafka" : {
+            "description" : "kafka实例创建状态",
+            "$ref" : "#/components/schemas/Detail"
+          },
+          "cce" : {
+            "description" : "云容器引擎创建状态",
+            "$ref" : "#/components/schemas/ComCCE"
+          }
+        }
+      },
+      "Detail" : {
+        "type" : "object",
+        "properties" : {
+          "start_time" : {
+            "type" : "string",
+            "description" : "开始时间"
+          },
+          "end_time" : {
+            "type" : "string",
+            "description" : "结束时间"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "状态",
+            "enum" : [ "waiting", "deploying", "finished", "failed" ]
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "细节描述"
+          }
+        },
+        "description" : "组件创建信息"
+      },
+      "HandleNotificationRequestBody" : {
+        "required" : [ "channel_name", "status", "invitor_info" ],
+        "properties" : {
+          "channel_name" : {
+            "type" : "string",
+            "example" : "new_channel",
+            "description" : "邀请目标通道"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "reject",
+            "description" : "处理邀请",
+            "enum" : [ "agreed", "reject" ]
+          },
+          "invitor_info" : {
+            "$ref" : "#/components/schemas/HandleNotificationInvitor",
+            "description" : "邀请方信息"
+          },
+          "invitee_info" : {
+            "$ref" : "#/components/schemas/HandleNotificationInvitee",
+            "description" : "被邀请方信息,同意加入时必填"
+          },
+          "invited_orgs" : {
+            "type" : "array",
+            "description" : "加入联盟的组织,同意加入时必填",
+            "items" : {
+              "$ref" : "#/components/schemas/HandleNotificationOrg"
+            }
+          }
+        },
+        "description" : "处理联盟邀请body数据",
+        "example" : {
+          "channel_name" : "channel",
+          "invited_orgs" : [ {
+            "name" : "organization"
+          } ],
+          "invitor_info" : {
+            "invitor_user_id" : "051dded56100d4f90fe6c01d7d7a9240",
+            "invitor_bcs_id" : "6a9062bb-6aaf-a1cc-1756-7f45f9e0ea11",
+            "invitor_project_id" : "051dded75a80d4fb2f38c01d64a5789e",
+            "invitor_bcs_name" : "invitor-xxx"
+          },
+          "invitee_info" : {
+            "invitee_user_id" : "051ddda48580d3371fc6c014ba7175b5",
+            "invitee_bcs_id" : "6a9062bb-6aaf-a1cc-1756-7f45f9e0ea11",
+            "invitee_project_id" : "051dded75a80d4fb2f38c01d64a5789e",
+            "invitee_bcs_name" : "invitee-xxx"
+          },
+          "status" : "reject"
+        },
+        "type" : "object"
+      },
+      "SuccessResponse" : {
+        "description" : "请求成功",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "请求成功的结果"
+          }
+        },
+        "type" : "object"
+      },
+      "HandleNotificationInvitee" : {
+        "required" : [ "invitee_bcs_id", "invitee_bcs_name", "invitee_project_id", "invitee_user_id" ],
+        "properties" : {
+          "invitee_bcs_id" : {
+            "type" : "string",
+            "example" : "f390a735-9ff6-2f1b-f982-93992f861ca6",
+            "description" : "被邀请方BCS服务实例ID"
+          },
+          "invitee_bcs_name" : {
+            "type" : "string",
+            "example" : "abc",
+            "description" : "被邀请方BCS服务实例名称,同意联盟邀请时必填"
+          },
+          "invitee_project_id" : {
+            "type" : "string",
+            "example" : "397cd10b30544c588b2f4a56d83856c4",
+            "description" : "被邀请方project id"
+          },
+          "invitee_user_id" : {
+            "type" : "string",
+            "example" : "28839632c7954c6380e59a4d416a60ee",
+            "description" : "被邀请方租户id。控制台->被邀请方帐号->我的凭证->API凭证->帐号ID"
+          }
+        },
+        "type" : "object"
+      },
+      "HandleNotificationOrg" : {
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "organization002",
+            "description" : "加入的组织"
+          }
+        },
+        "type" : "object"
+      },
+      "HandleNotificationInvitor" : {
+        "required" : [ "invitor_bcs_id", "invitor_project_id", "invitor_user_id", "invitor_bcs_name" ],
+        "properties" : {
+          "invitor_bcs_id" : {
+            "type" : "string",
+            "example" : "eb1638e3-6272-24e0-5249-2abb7991c269",
+            "description" : "邀请方BCS服务实例ID"
+          },
+          "invitor_bcs_name" : {
+            "type" : "string",
+            "example" : "bcs_invitor-xxx",
+            "description" : "邀请方BCS服务实例名称"
+          },
+          "invitor_project_id" : {
+            "type" : "string",
+            "example" : "397cd10b30544c588b2f4a56d83856c4",
+            "description" : "邀请方project id"
+          },
+          "invitor_user_id" : {
+            "type" : "string",
+            "example" : "28839632c7954c6380e59a4d416a60ee",
+            "description" : "邀请方租户id。控制台->邀请方帐号->我的凭证->API凭证->帐号ID"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchRemoveOrgsFromChannelRequestBody" : {
+        "required" : [ "org_names" ],
+        "properties" : {
+          "org_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "组织名称列表"
+          }
+        },
+        "example" : {
+          "org_names" : [ "organization", "organization2" ]
+        },
+        "type" : "object"
+      },
+      "InvitedDomain" : {
+        "required" : [ "invited_user", "project_id" ],
+        "properties" : {
+          "invited_user" : {
+            "type" : "string",
+            "description" : "被邀请方租户"
+          }
+        },
+        "description" : "被邀请列表",
+        "type" : "object"
+      },
+      "BatchInviteMembersToChannelRequestBody" : {
+        "required" : [ "bcs_id", "channel_name", "invited_userinfo" ],
+        "properties" : {
+          "bcs_id" : {
+            "type" : "string",
+            "description" : "发出邀请的服务实例ID"
+          },
+          "channel_name" : {
+            "type" : "string",
+            "description" : "邀请加入的通道名"
+          },
+          "invitor_username" : {
+            "type" : "string",
+            "description" : "发出邀请的租户名"
+          },
+          "invited_userinfo" : {
+            "type" : "array",
+            "description" : "被邀请的用户列表",
+            "items" : {
+              "$ref" : "#/components/schemas/InvitedDomain"
+            }
+          }
+        },
+        "description" : "邀请联盟成员",
+        "example" : {
+          "bcs_id" : "ba0fc16d-c752-9ac4-7a43-7a84443e0a06",
+          "channel_name" : "channel",
+          "invitor_username" : "paas_bcs_c00218797_02",
+          "invited_userinfo" : [ {
+            "invited_user" : "xxx"
+          } ]
+        },
+        "type" : "object"
+      },
+      "RecordDetailInfo" : {
+        "type" : "object",
+        "description" : "操作记录详细信息",
+        "properties" : {
+          "operation_id" : {
+            "type" : "string",
+            "description" : "操作记录ID"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "操作类型"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "租户ID"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID"
+          },
+          "blockchain_id" : {
+            "type" : "string",
+            "description" : "区块链ID"
+          },
+          "blockchain_name" : {
+            "type" : "string",
+            "description" : "区块链名称"
+          },
+          "cluster_info" : {
+            "type" : "object",
+            "description" : "集群信息",
+            "$ref" : "#/components/schemas/OprecordCluster"
+          },
+          "operation_process" : {
+            "type" : "object",
+            "description" : "操作流程,key为流程名,value为流程信息",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : "操作记录总数",
+              "$ref" : "#/components/schemas/ProcessInfo"
+            }
+          },
+          "record_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "记录更新时间"
+          },
+          "operation_status" : {
+            "type" : "string",
+            "description" : "操作状态"
+          },
+          "message" : {
+            "type" : "array",
+            "description" : "操作过程信息记录",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "desc" : {
+            "type" : "string",
+            "description" : "操作描述"
+          }
+        }
+      },
+      "OprecordCluster" : {
+        "type" : "object",
+        "description" : "集群信息",
+        "properties" : {
+          "cluster_type" : {
+            "type" : "string",
+            "description" : "集群类型"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "集群名称"
+          },
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "集群ID"
+          },
+          "node_infos" : {
+            "type" : "array",
+            "description" : "节点信息",
+            "items" : {
+              "$ref" : "#/components/schemas/NodeInfo"
+            }
+          }
+        }
+      },
+      "SubDetail" : {
+        "type" : "object",
+        "description" : "子操作详情",
+        "properties" : {
+          "substep_name" : {
+            "type" : "string",
+            "description" : "子操作名"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "子操作详情"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "子操作状态"
+          },
+          "message" : {
+            "type" : "array",
+            "description" : "子操作过程信息记录",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "开始时间"
+          },
+          "end_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "结束时间"
+          },
+          "serial_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "序列号"
+          }
+        }
+      },
+      "ProcessInfo" : {
+        "type" : "object",
+        "description" : "操作进度信息",
+        "properties" : {
+          "step_name" : {
+            "type" : "string",
+            "description" : "操作名"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "操作状态"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "操作详情"
+          },
+          "sub_steps" : {
+            "type" : "object",
+            "description" : "子操作, \"map[string][SubDetail] key:子操作名 value:子操作结果\"",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : "子操作详情",
+              "$ref" : "#/components/schemas/SubDetail"
+            }
+          },
+          "serial_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "序列号"
+          }
+        }
+      },
+      "RecordsInfo" : {
+        "type" : "object",
+        "description" : "操作记录信息",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "操作记录总数"
+          },
+          "operation_records" : {
+            "type" : "array",
+            "description" : "操作记录列表",
+            "items" : {
+              "$ref" : "#/components/schemas/RecordDetailInfo"
+            }
+          }
+        }
+      },
+      "NodeInfo" : {
+        "type" : "object",
+        "description" : "节点信息",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "节点名"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "节点ID"
+          }
+        }
+      },
+      "ListNotificationsRes" : {
+        "properties" : {
+          "notifications" : {
+            "type" : "array",
+            "description" : "通知列表",
+            "items" : {
+              "$ref" : "#/components/schemas/NotificationList"
+            }
+          }
+        },
+        "description" : "获取全部通知返回",
+        "type" : "object"
+      },
+      "NotificationList" : {
+        "properties" : {
+          "channel_name" : {
+            "type" : "string",
+            "example" : "channel",
+            "description" : "通道名称"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "released",
+            "description" : "当前状态"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "example" : "2020-06-27T10:55:13+08:00",
+            "description" : "更新时间"
+          },
+          "tc3_need" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否开启可信"
+          },
+          "invitor_info" : {
+            "$ref" : "#/components/schemas/InvitorInfo",
+            "description" : "邀请方信息"
+          },
+          "invitee_info" : {
+            "$ref" : "#/components/schemas/InviteeInfo",
+            "description" : "被邀请方信息"
+          },
+          "hide" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 0,
+            "description" : "是否删除"
+          },
+          "invitee_orgs" : {
+            "type" : "array",
+            "description" : "被邀请的组织信息",
+            "items" : {
+              "$ref" : "#/components/schemas/OrganizationV2"
+            }
+          },
+          "read_status" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 0,
+            "description" : "阅读状态值"
+          },
+          "cross_version_upgrade" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "跨版本进行升级"
+          }
+        },
+        "type" : "object"
+      },
+      "OrganizationV2" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称"
+          },
+          "name_hash" : {
+            "type" : "string",
+            "description" : "组织hash"
+          },
+          "node_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "组织节点"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "状态"
+          },
+          "status_detail" : {
+            "type" : "string",
+            "description" : "状态描述"
+          }
+        },
+        "description" : "组织信息",
+        "type" : "object"
+      },
+      "InviteeInfo" : {
+        "properties" : {
+          "invitee_id" : {
+            "type" : "string",
+            "description" : "被邀请用户id"
+          },
+          "invitee_name" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "被邀请租户名称"
+          },
+          "invitee_bcs_name" : {
+            "type" : "string",
+            "description" : "被邀请的服务实例名称"
+          },
+          "invitee_bcs_id" : {
+            "type" : "string",
+            "description" : "被邀请的服务实例id"
+          },
+          "invitee_project_id" : {
+            "type" : "string",
+            "description" : "被邀请的项目id"
+          }
+        },
+        "description" : "被邀请方的信息",
+        "type" : "object"
+      },
+      "InvitorInfo" : {
+        "properties" : {
+          "invitor_id" : {
+            "type" : "string",
+            "example" : "d892e1ee60ce4239b9160ddf0f4431d6",
+            "description" : "邀请方用户id"
+          },
+          "invitor_name" : {
+            "type" : "string",
+            "example" : "pass_roma_cwx633509",
+            "description" : "邀请方用户名"
+          },
+          "invitor_bcs_id" : {
+            "type" : "string",
+            "example" : "eb1638e3-6272-24e0-5249-2abb7991c269",
+            "description" : "邀请方的服务实例id"
+          },
+          "invitor_bcs_name" : {
+            "type" : "string",
+            "example" : "bcs-xn7tr1",
+            "description" : "邀请方的服务实例名"
+          },
+          "invitor_consensus" : {
+            "type" : "string",
+            "example" : "SFLIC",
+            "description" : "邀请方的共识"
+          },
+          "invitor_project_id" : {
+            "type" : "string",
+            "description" : "邀请方的projectID"
+          },
+          "invitor_cluster_type" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "邀请方的集群类型"
+          },
+          "invitor_database_type" : {
+            "type" : "string",
+            "example" : "goleveldb",
+            "description" : "邀请方数据库类型"
+          },
+          "invitor_signature_algorithm" : {
+            "type" : "string",
+            "example" : "ECDSA",
+            "description" : "邀请方的签名算法"
+          },
+          "invitor_fabric_version" : {
+            "type" : "string",
+            "example" : "3.0.8",
+            "description" : "邀请方的fabric版本"
+          },
+          "order_fade_enabled" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否允许共识节点老化"
+          },
+          "order_fade_cache" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 0,
+            "description" : "共识节点的老化阈值"
+          }
+        },
+        "description" : "邀请者的信息",
+        "type" : "object"
+      },
+      "UpdateInstanceRequestBody" : {
+        "required" : [ "node_orgs" ],
+        "properties" : {
+          "node_orgs" : {
+            "type" : "array",
+            "description" : "添加节点的组织列表",
+            "items" : {
+              "$ref" : "#/components/schemas/NodeOrgs"
+            }
+          },
+          "publicips" : {
+            "type" : "array",
+            "description" : "ief添加组织时,ief节点信息。绑定模式的IEF服务,新增组织时,该字段必填",
+            "items" : {
+              "$ref" : "#/components/schemas/IefNodeinfo"
+            }
+          },
+          "is_delete_org" : {
+            "type" : "boolean",
+            "description" : "是否是删除组织"
+          }
+        },
+        "description" : "添加节点和添加组织,添加组织是需要提供pvc_name",
+        "example" : {
+          "node_orgs" : [ {
+            "name" : "organization",
+            "node_count" : 1
+          } ],
+          "is_delete_org" : false
+        },
+        "type" : "object"
+      },
+      "NodeOrgs" : {
+        "required" : [ "name", "node_count" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称,IEF节点绑定模式下组织名与IEF节点名称保持一致。支持英文,数字,中文字符和中划线(-), 不能以中划线(-)开头,长度4-24个字符"
+          },
+          "node_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "组织目标节点数, 1-2的正整数"
+          },
+          "pvc_name" : {
+            "type" : "string",
+            "description" : "pvc名称,添加组织时需要提供pvc_name。CCE模式必填"
+          }
+        },
+        "description" : "节点组织",
+        "type" : "object"
+      },
+      "IefNodeinfo" : {
+        "required" : [ "status", "public_ip_address", "id" ],
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "节点状态,要使用此节点的话,该状态值必须为ACTIVE"
+          },
+          "public_ip_address" : {
+            "type" : "string",
+            "description" : "节点IP,填写节点所在的EIP地址"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "ief节点id值"
+          }
+        },
+        "type" : "object"
+      },
+      "CouchDb" : {
+        "type" : "object",
+        "description" : "couchDB信息",
+        "required" : [ "user_name", "password" ],
+        "properties" : {
+          "user_name" : {
+            "type" : "string",
+            "description" : "couchDB用户名"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "couchDB密码"
+          }
+        }
+      },
+      "ChannelInfoV2" : {
+        "type" : "object",
+        "required" : [ "name", "org_names" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "通道名"
+          },
+          "org_names" : {
+            "type" : "array",
+            "description" : "通道中组织名",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "通道描述"
+          }
+        }
+      },
+      "InvitorInfos" : {
+        "type" : "object",
+        "description" : "邀请方信息",
+        "required" : [ "tenant_id", "project_id", "blockchain_id" ],
+        "properties" : {
+          "tenant_id" : {
+            "type" : "string",
+            "description" : "邀请方租户ID"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "邀请方项目ID"
+          },
+          "blockchain_id" : {
+            "type" : "string",
+            "description" : "邀请方BCS服务实例ID"
+          }
+        }
+      },
+      "OrgPeer" : {
+        "type" : "object",
+        "required" : [ "name", "node_count" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称"
+          },
+          "node_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "组织节点数"
+          }
+        }
+      },
+      "TurboInfo" : {
+        "type" : "object",
+        "description" : "极速文件存储卷信息",
+        "required" : [ "share_type", "type", "available_zone", "resource_spec_code" ],
+        "properties" : {
+          "share_type" : {
+            "type" : "string",
+            "description" : "共享方式,固定值为“STANDARD”"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "类型,固定值为“efs-ha”"
+          },
+          "available_zone" : {
+            "type" : "string",
+            "description" : "可用区,可填空字符串(\"\")。"
+          },
+          "resource_spec_code" : {
+            "type" : "string",
+            "description" : "规格,固定值为“sfs.turbo.standard”"
+          }
+        }
+      },
+      "CreateBlockchainRes" : {
+        "type" : "object",
+        "properties" : {
+          "blockchain_id" : {
+            "type" : "string",
+            "description" : "服务实例ID"
+          },
+          "blockchain_name" : {
+            "type" : "string",
+            "description" : "服务实例名"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "操作ID"
+          }
+        }
+      },
+      "CCEClusterInfo" : {
+        "description" : "使用已有CCE集群信息,说明:Fabric1.4版本服务仅支持1.15及以下版本集群",
+        "properties" : {
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "集群ID"
+          },
+          "cluster_name" : {
+            "type" : "string",
+            "description" : "集群名称"
+          },
+          "cluster_platform_type" : {
+            "type" : "string",
+            "description" : "集群CPU架构类型:X86(VirtualMachine),ARM(ARM64)"
+          }
+        },
+        "required" : [ "cluster_id", "cluster_name", "cluster_platform_type" ],
+        "type" : "object"
+      },
+      "CreateRequestBody" : {
+        "type" : "object",
+        "example" : {
+          "name" : "bcs-test",
+          "fabric_version" : "2.2",
+          "blockchain_type" : "union",
+          "consensus" : "etcdraft",
+          "version_type" : 4,
+          "sign_algorithm" : "ECDSA",
+          "enterprise_project_id" : "0",
+          "volume_type" : "nfs",
+          "evs_disk_type" : "SATA",
+          "org_disk_size" : 100,
+          "database_type" : "goleveldb",
+          "resource_password" : "xxx",
+          "orderer_node_number" : 3,
+          "use_eip" : true,
+          "bandwidth_size" : 5,
+          "cluster_type" : "cce",
+          "create_new_cluster" : false,
+          "cce_cluster_info" : {
+            "cluster_id" : "5adc2ce2-9712-11ea-9535-0255ac100b0d",
+            "cluster_name" : "byl-1-15",
+            "cluster_platform_type" : "ARM64"
+          },
+          "cce_create_info" : {
+            "node_num" : 1,
+            "node_flavor" : "Si1.xlarge.4.linux",
+            "cce_flavor" : "cce.s1.small",
+            "init_node_pwd" : "JDYkUzdOOUR0JEdyajFQV0tSWXNQRjZBZlhiSE5MVmpWV204V3M5alFMUXl4Z3dtOVNKb25xR0lIZWZaNUFReDVWeHNJa3gvb3JML2d1WjZyazNLQmNWczBpWVVFR2gw",
+            "az" : "cn-north-7a",
+            "cluster_platform_type" : "ARM64"
+          },
+          "ief_deploy_mode" : 0,
+          "ief_nodes_info" : [ {
+            "status" : "ACTIVE",
+            "public_ip_address" : "192.168.1.95",
+            "id" : "5700372e-49ef-4f4c-b433-11d95ad7acea"
+          }, {
+            "status" : "ACTIVE",
+            "public_ip_address" : "192.168.1.213",
+            "id" : "2455e71a-d806-4827-9cf4-81e1b3764681"
+          } ],
+          "peer_orgs" : [ {
+            "name" : "organization",
+            "node_count" : 2
+          } ],
+          "channels" : [ {
+            "name" : "channel",
+            "org_names" : [ "organization" ],
+            "description" : ""
+          } ],
+          "block_info" : {
+            "batch_timeout" : 2,
+            "max_message_count" : 500,
+            "preferred_maxbytes" : 2
+          },
+          "turbo_info" : {
+            "share_type" : "STANDARD",
+            "type" : "efs-ha",
+            "available_zone" : "cn-north-7a",
+            "resource_spec_code" : "sfs.turbo.standard"
+          }
+        },
+        "required" : [ "name", "enterprise_project_id", "resource_password", "create_new_cluster", "version_type", "cluster_type" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "区块链服务名称,支持英文,数字,中文字符和中划线(-),不能以中划线(-)开头,长度4-24个字符。"
+          },
+          "version_type" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "BCS服务版本类型,可选:。被邀请方创建时,和邀请方保持一致。"
+          },
+          "fabric_version" : {
+            "type" : "string",
+            "description" : "Fabric版本,当前邀请方以及私有链的创建仅可选:2.2 ;被邀请方创建时,和邀请方保持一致,1.4版本服务仅支持1.15及以下版本集群. 默认值为2.2."
+          },
+          "blockchain_type" : {
+            "type" : "string",
+            "description" : "区块链类型,默认私有链,可选:联盟链(union),私有链(private)。被邀请方创建时,和邀请方保持一致。"
+          },
+          "consensus" : {
+            "type" : "string",
+            "description" : "BCS服务的共识策略,Fabric1.4版本可选:测试策略(solo)、快速拜占庭容错算法(SFLIC);Fabric2.2版本可选:raft共识算法(etcdraft)、快速拜占庭容错算法(SFLIC)。被邀请方创建时,和邀请方保持一致。"
+          },
+          "sign_algorithm" : {
+            "type" : "string",
+            "description" : "BCS服务安全机制,可选:ECDSA(ECDSA),国密算法(sm2)"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "BCS服务所属企业项目ID"
+          },
+          "volume_type" : {
+            "type" : "string",
+            "description" : "CCE集群存储卷类型,根据实际环境可选:云硬盘存储卷(evs),文件存储卷(nfs), 极速文件存储卷(efs)"
+          },
+          "evs_disk_type" : {
+            "type" : "string",
+            "description" : "云硬盘存储卷类型,volume_type选择evs时必填,可选:普通I/O(SATA),高I/O(SAS),超高I/O(SSD)"
+          },
+          "org_disk_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "节点组织存储容量,"
+          },
+          "database_type" : {
+            "type" : "string",
+            "description" : "BCS服务数据库类型,包括文件数据库(goleveldb),NoSQL(couchdb),选择couchdb需要填写couchdb_info字段中的信息"
+          },
+          "resource_password" : {
+            "type" : "string",
+            "description" : "BCS服务资源、区块链管理密码"
+          },
+          "orderer_node_number" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "共识组织节点数,被邀请方创实例时可不填。购买fabric2.2服务时必填,若共识策略为Raft(CFT),节点数为3;若共识策略为快速拜占庭容错共识算法(FBFT),节点数为4。"
+          },
+          "use_eip" : {
+            "type" : "boolean",
+            "description" : "是否使用集群节点弹性IP"
+          },
+          "bandwidth_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "弹性IP带宽"
+          },
+          "cluster_type" : {
+            "type" : "string",
+            "description" : "集群类型,可选:CCE集群 。"
+          },
+          "create_new_cluster" : {
+            "type" : "boolean",
+            "description" : "是否创建新集群,使用已有集群需要填写cce_cluster_info字段中的信息,创建新集群需要填写cce_create_info字段中的信息"
+          },
+          "cce_cluster_info" : {
+            "$ref" : "#/components/schemas/CCEClusterInfo"
+          },
+          "cce_create_info" : {
+            "$ref" : "#/components/schemas/CCECreateInfo"
+          },
+          "ief_deploy_mode" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "IEF集群部署方式,随机部署(0),组织节点绑定(1)。组织节点绑定模式时,peer_orgs 参数必填。组织名和IEF节点名必须一致。"
+          },
+          "ief_nodes_info" : {
+            "type" : "array",
+            "description" : "IEF集群节点列表,使用边缘集群模式部署时必填。",
+            "items" : {
+              "$ref" : "#/components/schemas/IEFNode"
+            }
+          },
+          "peer_orgs" : {
+            "type" : "array",
+            "description" : "节点组织列表。节点绑定模式中,组织名和IEF节点名必须一致。边缘集群模式时此字段必填。",
+            "items" : {
+              "$ref" : "#/components/schemas/OrgPeer"
+            }
+          },
+          "channels" : {
+            "type" : "array",
+            "description" : "通道列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ChannelInfoV2"
+            }
+          },
+          "couchdb_info" : {
+            "$ref" : "#/components/schemas/CouchDb"
+          },
+          "turbo_info" : {
+            "$ref" : "#/components/schemas/TurboInfo"
+          },
+          "block_info" : {
+            "type" : "object",
+            "description" : "区块生成配置信息",
+            "properties" : {
+              "batch_timeout" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块产生时间(单位:秒),默认2秒"
+              },
+              "max_message_count" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块包含交易数量,默认500"
+              },
+              "preferred_maxbytes" : {
+                "type" : "integer",
+                "format" : "int64",
+                "description" : "区块容量(单位:MB),默认2MB"
+              }
+            }
+          },
+          "kafka_create_info" : {
+            "$ref" : "#/components/schemas/KafkaCreateInfo"
+          },
+          "tc3_need" : {
+            "type" : "boolean",
+            "description" : "是否添加可信计算平台"
+          },
+          "restful_api_support" : {
+            "type" : "boolean",
+            "description" : "是否添加restful API支持"
+          },
+          "is_invitee" : {
+            "type" : "boolean",
+            "description" : "是否是创建被邀请方BCS服务实例,创建被邀请方实例需要同时填写invitor_infos字段中的信息"
+          },
+          "invitor_infos" : {
+            "$ref" : "#/components/schemas/InvitorInfos"
+          }
+        }
+      },
+      "CCECreateInfo" : {
+        "type" : "object",
+        "description" : "创建新集群信息",
+        "required" : [ "node_num", "node_flavor", "cce_flavor", "init_node_pwd", "az", "cluster_platform_type" ],
+        "properties" : {
+          "node_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "集群节点数"
+          },
+          "node_flavor" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "集群节点规格ID(支持的规格配置最小为4u8g)"
+          },
+          "cce_flavor" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "CCE集群规格"
+          },
+          "init_node_pwd" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "节点初始密码"
+          },
+          "az" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "可用区"
+          },
+          "cluster_platform_type" : {
+            "type" : "string",
+            "format" : "int64",
+            "description" : "集群CPU架构类型:X86(VirtualMachine),ARM(ARM64)"
+          }
+        }
+      },
+      "IEFNode" : {
+        "type" : "object",
+        "required" : [ "id", "status", "public_ip_address" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "节点ID(注意:应填写IEF节点的ID信息)"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "节点状态:\"ACTIVE\""
+          },
+          "public_ip_address" : {
+            "type" : "string",
+            "description" : "节点公有IP(弹性IP)"
+          }
+        }
+      },
+      "KafkaCreateInfo" : {
+        "type" : "object",
+        "description" : "kafka实例创建信息",
+        "required" : [ "spec", "storage", "az" ],
+        "properties" : {
+          "spec" : {
+            "type" : "string",
+            "description" : "kafka实例规格,可选:mini:基准带宽100MB/s,small:基准带宽300MB/s,middle:基准带宽600MB/s,high:基准带宽1200MB/s"
+          },
+          "storage" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "存储空间(单位:GB),至多9000,mini版至少300,small至少1200,middle至少2400,high至少4800"
+          },
+          "az" : {
+            "type" : "string",
+            "description" : "kafka实例可用区"
+          }
+        }
+      },
+      "ListQuotasRes" : {
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "description" : "配额信息",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Resource" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "资源类型,包含instance(服务实例数)"
+          },
+          "unit" : {
+            "type" : "string",
+            "description" : "单位"
+          },
+          "min" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "最小值"
+          },
+          "max" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "最大值"
+          },
+          "quota" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "配额"
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已使用配额"
+          },
+          "free" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "剩余配额"
+          }
+        }
+      },
+      "CfgRequestBody" : {
+        "type" : "object",
+        "required" : [ "chaincode_name", "cert_path", "channel_name", "peer_orgs" ],
+        "properties" : {
+          "chaincode_name" : {
+            "type" : "string",
+            "description" : "链代码名称,以小写字母开头,支持小写字母和数字,长度6-25位"
+          },
+          "cert_path" : {
+            "type" : "string",
+            "description" : "SDK配置文件存放路径"
+          },
+          "channel_name" : {
+            "type" : "string",
+            "description" : "通道名称"
+          },
+          "peer_orgs" : {
+            "type" : "object",
+            "description" : "key:组织名,value:该组织下需要下载的peer节点信息,peer节点请按照0,1,2的顺序升序填写",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "节点名称+.+节点所在组织域名",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          },
+          "union_info" : {
+            "type" : "object",
+            "description" : "key:联盟成员名称,value:该联盟成员peer组织名称hash值数组",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "附加属性"
+              }
+            }
+          },
+          "is_multi_chan" : {
+            "type" : "boolean",
+            "description" : "是否是多通道请求,如此处设成true则必须传入channel_chaincode,chaincode_name和channel_name设为空即可"
+          },
+          "channel_chaincode" : {
+            "type" : "object",
+            "description" : "key:通道名称,value:该通道对应的链代码数组",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "附加属性"
+              }
+            }
+          }
+        },
+        "example" : {
+          "chaincode_name" : "chaincode",
+          "cert_path" : "/root",
+          "channel_name" : "channel",
+          "peer_orgs" : {
+            "organization" : [ "peer-328000cb35d8971e0b0388f6182f95eaa4100784-0.peer-328000cb35d8971e0b0388f6182f95eaa4100784.default.svc.cluster.local", "peer-328000cb35d8971e0b0388f6182f95eaa4100784-1.peer-328000cb35d8971e0b0388f6182f95eaa4100784.default.svc.cluster.local" ]
+          }
+        }
+      },
+      "BatchRemovePeersFromChannelRequestBody" : {
+        "required" : [ "org_name", "peers" ],
+        "properties" : {
+          "org_name" : {
+            "type" : "string",
+            "description" : "组织名称。仅可输入一个组织名称"
+          },
+          "peers" : {
+            "type" : "integer",
+            "description" : "要退出的节点个数。取值范围(0, 组织中节点总数)"
+          }
+        },
+        "example" : {
+          "org_name" : "organization",
+          "peers" : 1
+        },
+        "type" : "object"
+      },
+      "BatchCreateChannelsRequestBody" : {
+        "required" : [ "channels" ],
+        "properties" : {
+          "channels" : {
+            "type" : "array",
+            "description" : "通道列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ChannelCreateInfo"
+            }
+          }
+        },
+        "description" : "创建通道的配置",
+        "example" : {
+          "channels" : [ {
+            "channel_name" : "channel_test",
+            "channel_description" : ""
+          } ]
+        },
+        "type" : "object"
+      },
+      "ChannelCreateInfo" : {
+        "required" : [ "channel_name" ],
+        "properties" : {
+          "channel_name" : {
+            "type" : "string",
+            "example" : "testchannel",
+            "description" : "通道名称,字符串长度4-24,必须包含a-z,0-9,以小写字母开头,以小写字母或者数字结尾"
+          },
+          "channel_description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "通道描述"
+          }
+        },
+        "description" : "通道信息",
+        "type" : "object"
+      },
+      "MemberInvitee" : {
+        "properties" : {
+          "invitee_bcs_id" : {
+            "type" : "string",
+            "description" : "被邀请方BCS服务实例ID"
+          },
+          "invitee_user_id" : {
+            "type" : "string",
+            "description" : "被邀请方租户id"
+          },
+          "invitee_username" : {
+            "type" : "string",
+            "description" : "被邀请方租户名"
+          }
+        },
+        "description" : "联盟成员中的被邀请方",
+        "type" : "object"
+      },
+      "ListMembersRes" : {
+        "properties" : {
+          "members" : {
+            "type" : "array",
+            "description" : "联盟成员列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Member"
+            }
+          }
+        },
+        "description" : "查询联盟成员列表响应",
+        "type" : "object"
+      },
+      "Member" : {
+        "properties" : {
+          "tcs_need" : {
+            "type" : "boolean",
+            "description" : "是否支持可信"
+          },
+          "channel_name" : {
+            "type" : "string",
+            "description" : "通道名称"
+          },
+          "invited_orgs" : {
+            "type" : "array",
+            "description" : "被邀请的组织",
+            "items" : {
+              "$ref" : "#/components/schemas/OrganizationV2"
+            }
+          },
+          "invitor_info" : {
+            "$ref" : "#/components/schemas/MemberInvitor",
+            "description" : "邀请方信息"
+          },
+          "invitee_info" : {
+            "$ref" : "#/components/schemas/MemberInvitee",
+            "description" : "被邀请方信息"
+          }
+        },
+        "description" : "联盟成员",
+        "type" : "object"
+      },
+      "MemberInvitor" : {
+        "properties" : {
+          "invitor_bcs_id" : {
+            "type" : "string",
+            "description" : "邀请方BCS服务实例ID"
+          },
+          "invitor_bcs_name" : {
+            "type" : "string",
+            "description" : "邀请方BCS服务实例名称"
+          },
+          "invitor_project_id" : {
+            "type" : "string",
+            "description" : "邀请方project id"
+          },
+          "invitor_user_id" : {
+            "type" : "string",
+            "description" : "邀请方租户id"
+          },
+          "invitor_username" : {
+            "type" : "string",
+            "description" : "邀请方租户名"
+          }
+        },
+        "description" : "联盟成员中的邀请方",
+        "type" : "object"
+      },
+      "Channel" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "通道名"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "通道细节描述"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "通道创建时间"
+          },
+          "consensus" : {
+            "type" : "string",
+            "description" : "共识策略"
+          },
+          "peers" : {
+            "type" : "object",
+            "description" : "key:组织名,value:节点名称列表",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "记账组织列表",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          },
+          "consensusNodes" : {
+            "type" : "object",
+            "description" : "key:组织名,value:节点名称列表",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "共识组织列表",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "ChannelsRes" : {
+        "type" : "object",
+        "properties" : {
+          "channels" : {
+            "type" : "array",
+            "description" : "通道信息列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Channel"
+            }
+          }
+        }
+      },
+      "DeleteMemberInviteRequestBody" : {
+        "required" : [ "bcs_id", "channel_name", "invited_userinfo" ],
+        "properties" : {
+          "bcs_id" : {
+            "type" : "string",
+            "description" : "邀请实例id"
+          },
+          "channel_name" : {
+            "type" : "string",
+            "description" : "邀请加入的通道名"
+          },
+          "invited_userinfo" : {
+            "type" : "array",
+            "description" : "被邀请的用户列表,对应信息可通过获取联盟成员列表(ListMembers)接口查询,或被邀请方已加入联盟,或邀请状态为released时,需填写准确的被邀请方bcs实例id和邀请状态",
+            "items" : {
+              "$ref" : "#/components/schemas/InvitationDetail"
+            }
+          }
+        },
+        "example" : {
+          "bcs_id" : "83d85ea4-0f97-3bb7-07e2-4ad4b5a9f39d",
+          "channel_name" : "chan2",
+          "invited_userinfo" : [ {
+            "invited_user" : "bcstest02",
+            "status" : "quit",
+            "invited_bcs_id" : "11ba0ae0-2986-72d5-9049-43998c16fe86"
+          } ]
+        },
+        "type" : "object"
+      },
+      "InvitationDetail" : {
+        "required" : [ "invited_user" ],
+        "properties" : {
+          "invited_user" : {
+            "type" : "string",
+            "description" : "被邀请方租户名,IAM用户名"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "quit", "waiting", "reject", "released" ],
+            "description" : "邀请状态,可选:已退出(quit),等待中(waiting),已拒绝(reject),已解散(released),其他状态不允许删除"
+          },
+          "invited_bcs_id" : {
+            "type" : "string",
+            "description" : "被邀请方服务实例ID"
+          }
+        },
+        "description" : "被邀请列表",
+        "type" : "object"
+      },
+      "EventResultSort" : {
+        "type" : "object",
+        "description" : "返回列表的排序方式,可以为空",
+        "properties" : {
+          "order_by" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "排序字段列表。会根据列表中定义顺序对返回列表最排序"
+          },
+          "order" : {
+            "type" : "string",
+            "description" : "排序方式枚举值。asc代表正序,desc代表倒序",
+            "enum" : [ "asc", "desc" ]
+          }
+        }
+      },
+      "EventMetadataRelation" : {
+        "type" : "object",
+        "description" : "事件告警查询条件组合",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "指定查询字段的key,对应metadata里面的key"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "查询条件中指定key的值"
+          },
+          "relation" : {
+            "type" : "string",
+            "description" : "该条件与其他条件的组合方式",
+            "enum" : [ "AND", "OR", "NOT" ]
+          }
+        }
+      },
+      "ListBcsEventRequestBody" : {
+        "type" : "object",
+        "description" : "查询和统计事件告警请求体",
+        "properties" : {
+          "time_range" : {
+            "type" : "string",
+            "description" : "timeRange用于指标查询时间范围,主要用于解决客户端时间和服务端时间不一致情况下,查询最近N分钟的数据。另可用于精确查询某一段时间的数据。"
+          },
+          "step" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "统计步长。毫秒数"
+          },
+          "search" : {
+            "type" : "string",
+            "description" : "模糊查询匹配字段,可以为空"
+          },
+          "metadata_relation" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EventMetadataRelation"
+            },
+            "description" : "查询条件组合,可以为空"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/EventResultSort"
+          }
+        },
+        "required" : [ "time_range", "step" ]
+      },
+      "EntityMetricList" : {
+        "type" : "object",
+        "properties" : {
+          "dimensions" : {
+            "type" : "array",
+            "description" : "指标对象列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Dimension"
+            }
+          },
+          "values" : {
+            "type" : "array",
+            "description" : "监控数据列表项目。",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityMetricListItem"
+            }
+          }
+        },
+        "description" : "BCS组织维度监控数据列表结构"
+      },
+      "EntityMetricListItem" : {
+        "type" : "object",
+        "properties" : {
+          "cpuUsage" : {
+            "type" : "string",
+            "description" : "cpu使用率"
+          },
+          "diskReadRate" : {
+            "type" : "string",
+            "description" : "磁盘读取速率"
+          },
+          "diskWriteRate" : {
+            "type" : "string",
+            "description" : "磁盘写入速率"
+          },
+          "memUsage" : {
+            "type" : "string",
+            "description" : "物理内存使用率"
+          },
+          "recvBytesRate" : {
+            "type" : "string",
+            "description" : "下行BPs"
+          },
+          "sendBytesRate" : {
+            "type" : "string",
+            "description" : "上行BPs"
+          },
+          "filesystemUsage" : {
+            "type" : "string",
+            "description" : "文件系统使用率"
+          }
+        },
+        "description" : "监控数据列表项目"
+      },
+      "ListEntityMetricRequestBody" : {
+        "required" : [ "type" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "实体类型,[可选值如下:"
+          },
+          "entity_name" : {
+            "type" : "string",
+            "description" : "具体实体的名称"
+          }
+        },
+        "description" : "BCS组织监控数据列表查询请求结构",
+        "type" : "object"
+      },
+      "EntityMetricListResult" : {
+        "type" : "object",
+        "properties" : {
+          "metrics" : {
+            "type" : "array",
+            "description" : "指标对象列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityMetricList"
+            }
+          }
+        },
+        "description" : "BCS组织监控数据列表查询结果"
+      },
+      "BatchAddPeersToChannelRequestBody" : {
+        "type" : "object",
+        "required" : [ "channel_peers" ],
+        "properties" : {
+          "channel_peers" : {
+            "type" : "array",
+            "description" : "加入某个通道的节点信息",
+            "items" : {
+              "$ref" : "#/components/schemas/PeerChannelInfo"
+            }
+          }
+        },
+        "description" : "节点加入通道",
+        "example" : {
+          "channel_peers" : [ {
+            "channel_name" : "channel02",
+            "peers" : {
+              "organization" : 2,
+              "organization2" : 1
+            }
+          } ]
+        }
+      },
+      "PeerChannelInfo" : {
+        "required" : [ "channel_name", "peers" ],
+        "properties" : {
+          "channel_name" : {
+            "type" : "string",
+            "description" : "peer加入的通道名称"
+          },
+          "peers" : {
+            "type" : "object",
+            "description" : "加入通道peer名称和数量,key为组织名称,value为peer数量",
+            "additionalProperties" : {
+              "type" : "integer",
+              "format" : "int64"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "BlockchainsInfo" : {
+        "type" : "object",
+        "properties" : {
+          "blockchains" : {
+            "type" : "array",
+            "description" : "服务实例简要信息",
+            "items" : {
+              "$ref" : "#/components/schemas/BlockchainInfo"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "实例总数"
+          }
+        }
+      },
+      "BlockchainInfo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "服务实例ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "服务实例名称"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowBlockchainDetail" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询实例信息",
+        "description" : "查询指定服务实例详细信息",
+        "operationId" : "ShowBlockchainDetail",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowBlockchainDetailRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBlockchainDetail",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}"
+    },
+    "/ListBcsMetric" : {
+      "post" : {
+        "tags" : [ "BCS监控" ],
+        "summary" : "查询服务实例监控数据",
+        "description" : "该接口用于查询BCS服务的监控数据,可以指定相应的指标名称。",
+        "operationId" : "ListBcsMetric",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricQueryItemResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListBcsMetricRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBcsMetric",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/metric/list"
+    },
+    "/CreateBlockchainCertByUserName" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "生成用户证书",
+        "description" : "通过用户名生成指定服务实例组织用户证书",
+        "operationId" : "CreateBlockchainCertByUserName",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "file"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "org_name",
+          "in" : "path",
+          "description" : "peer组织名称",
+          "required" : true,
+          "schema" : {
+            "description" : "peer组织名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "user_name",
+          "in" : "path",
+          "description" : "用户名称,字符串长度4-24,仅支持小写字母和数字,以小写字母开头",
+          "required" : true,
+          "schema" : {
+            "description" : "用户名称,字符串长度4-24,仅支持小写字母和数字,以小写字母开头",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateBlockchainCertByUserNameRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateBlockchainCertByUserName",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/orgs/{org_name}/usercert/{user_name}"
+    },
+    "/ShowBlockchainNodes" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询节点信息",
+        "description" : "查询指定服务实例节点信息",
+        "operationId" : "ShowBlockchainNodes",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NodesRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBlockchainNodes",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/nodes"
+    },
+    "/DeleteChannel" : {
+      "delete" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "BCS删除某个通道",
+        "description" : "该接口用于BCS删除某个通道。仅支持删除空通道",
+        "operationId" : "DeleteChannel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id。可调用“查询服务实例列表”接口获取ID",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id。可调用“查询服务实例列表”接口获取ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "channel_id",
+          "in" : "path",
+          "description" : "区块链通道名称。可调用“查询实例信息”接口获取,接口返回的“channels”中的name字段值",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链通道名称。可调用“查询实例信息”接口获取,接口返回的“channels”中的name字段值",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteChannel",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/channel/{channel_id}"
+    },
+    "/UnfreezeCert" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "解冻用户证书",
+        "description" : "解冻指定服务实例组织用户证书,解冻后需等待半分钟到一分钟左右生效",
+        "operationId" : "UnfreezeCert",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "user_name",
+          "in" : "path",
+          "description" : "userName",
+          "required" : true,
+          "schema" : {
+            "description" : "userName",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "org_name",
+          "in" : "path",
+          "description" : "orgName",
+          "required" : true,
+          "schema" : {
+            "description" : "orgName",
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "生成证书的zip文件(每次只允许上传一个证书文件,文件大小不大于30K,后缀名为.zip文件)",
+          "required" : false,
+          "schema" : {
+            "description" : "生成证书的zip文件(每次只允许上传一个证书文件,文件大小不大于30K,后缀名为.zip文件)",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UnfreezeCert",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/orgs/{org_name}/usercert/{user_name}/unfreeze"
+    },
+    "/HandleUnionMemberQuitList" : {
+      "put" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "被邀请方退出指定联盟",
+        "description" : "被邀请方退出联盟",
+        "operationId" : "HandleUnionMemberQuitList",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuitUnionFromMemberListRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QuitUnionFromMemberListRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "HandleUnionMemberQuitList",
+      "x-url" : "{endpoint}/v2/{project_id}/members/quit"
+    },
+    "/ListInstanceMetric" : {
+      "post" : {
+        "tags" : [ "BCS监控" ],
+        "summary" : "查询BCS组织实例监控数据详情",
+        "description" : "该接口用于BCS组织实例监控数据详情。",
+        "operationId" : "ListInstanceMetric",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricQueryItemResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id。",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListInstanceMetricRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInstanceMetric",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/entity/instance/metric/list"
+    },
+    "/ShowBlockchainFlavors" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询规格",
+        "description" : "查询服务联盟链规格信息",
+        "operationId" : "ShowBlockchainFlavors",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowBlockchainFlavorsRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "取值范围(0,1000],默认值为1000。用于限制本次返回的结果数据条数。",
+          "required" : false,
+          "schema" : {
+            "description" : "取值范围(0,1000],默认值为1000。用于限制本次返回的结果数据条数。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询起始位置,为非负整数。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询起始位置,为非负整数。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBlockchainFlavors",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/flavors"
+    },
+    "/ShowBlockchainStatus" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询创建状态",
+        "description" : "查询指定服务实例创建状态",
+        "operationId" : "ShowBlockchainStatus",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StatusRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBlockchainStatus",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/status"
+    },
+    "/HandleNotification" : {
+      "post" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "处理联盟邀请",
+        "description" : "处理联盟邀请",
+        "operationId" : "HandleNotification",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/HandleNotificationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "HandleNotification",
+      "x-url" : "{endpoint}/v2/{project_id}/notification/handle"
+    },
+    "/BatchRemoveOrgsFromChannel" : {
+      "put" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "BCS组织退出某通道",
+        "description" : "该接口用于BCS组织退出某通道。",
+        "operationId" : "BatchRemoveOrgsFromChannel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id。",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "channel_id",
+          "in" : "path",
+          "description" : "区块链通道名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链通道名称。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchRemoveOrgsFromChannelRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchRemoveOrgsFromChannel",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/{channel_id}/orgs/quit"
+    },
+    "/BatchInviteMembersToChannel" : {
+      "post" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "邀请联盟成员",
+        "description" : "批量邀请联盟成员加入通道,此操作会向被邀请方发出邀请通知",
+        "operationId" : "BatchInviteMembersToChannel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchInviteMembersToChannelRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchInviteMembersToChannel",
+      "x-url" : "{endpoint}/v2/{project_id}/members/invitations"
+    },
+    "/ListOpRecord" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询异步操作结果",
+        "description" : "查询异步操作结果",
+        "operationId" : "ListOpRecord",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RecordsInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "query",
+          "description" : "区块链ID",
+          "required" : false,
+          "schema" : {
+            "description" : "区块链ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "operation_status",
+          "in" : "query",
+          "description" : "操作状态, 可选数值如下(括号中为该数值对应的操作状态含义):waiting(等待执行),processing(处理中),finished(操作完成,成功),failed(操作失败),stop(操作中断)",
+          "required" : false,
+          "schema" : {
+            "description" : "操作状态, 可选数值如下(括号中为该数值对应的操作状态含义):waiting(等待执行),processing(处理中),finished(操作完成,成功),failed(操作失败),stop(操作中断)",
+            "type" : "string",
+            "enum" : [ "waiting", "processing", "finished", "failed", "stop" ]
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "query",
+          "description" : "资源类型, 可选数值如下(括号中为该数值对应的资源类型含义):BCSSVC01(BCS变更操作),BCSSVC02(UGBaaS变更操作),PLUGIN01(RestAPI插件变更操作),PLUGIN02(TC3插件变更操作),PLUGIN03(轻节点插件变更操作)",
+          "required" : false,
+          "schema" : {
+            "description" : "资源类型, 可选数值如下(括号中为该数值对应的资源类型含义):BCSSVC01(BCS变更操作),BCSSVC02(UGBaaS变更操作),PLUGIN01(RestAPI插件变更操作),PLUGIN02(TC3插件变更操作),PLUGIN03(轻节点插件变更操作)",
+            "type" : "string",
+            "enum" : [ "BCSSVC01", "BCSSVC02", "PLUGIN01", "PLUGIN02", "PLUGIN03" ]
+          }
+        }, {
+          "name" : "operation_type",
+          "in" : "query",
+          "description" : "操作类型, 可选数值如下(括号中为该数值对应的操作类型含义):99(OpCreate),00(OpDelete),01(OpUpgrade),91(OpUpgradeRb),02(OpAddOrg),03(OpScaleOrg),04(OpJoinChannel),05(OpJoinUnion)",
+          "required" : false,
+          "schema" : {
+            "description" : "操作类型, 可选数值如下(括号中为该数值对应的操作类型含义):99(OpCreate),00(OpDelete),01(OpUpgrade),91(OpUpgradeRb),02(OpAddOrg),03(OpScaleOrg),04(OpJoinChannel),05(OpJoinUnion)",
+            "type" : "string",
+            "enum" : [ "99", "00", "01", "91", "02", "03", "04", "05" ]
+          }
+        }, {
+          "name" : "operation_id",
+          "in" : "query",
+          "description" : "操作记录ID",
+          "required" : false,
+          "schema" : {
+            "description" : "操作记录ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListOpRecord",
+      "x-url" : "{endpoint}/v2/{project_id}/operation/record"
+    },
+    "/DownloadBlockchainCert" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "下载证书",
+        "description" : "下载指定服务实例相关证书",
+        "operationId" : "DownloadBlockchainCert",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "file"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "org_name",
+          "in" : "query",
+          "description" : "order或者peer组织名称",
+          "required" : true,
+          "schema" : {
+            "description" : "order或者peer组织名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cert_type",
+          "in" : "query",
+          "description" : "下载证书类别",
+          "required" : true,
+          "schema" : {
+            "description" : "下载证书类别",
+            "type" : "string",
+            "enum" : [ "admin", "user", "ca" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadBlockchainCert",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/cert"
+    },
+    "/ListNotifications" : {
+      "get" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "获取全部通知",
+        "description" : "获取全部通知",
+        "operationId" : "ListNotifications",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListNotificationsRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNotifications",
+      "x-url" : "{endpoint}/v2/{project_id}/notifications"
+    },
+    "/DeleteBlockchain" : {
+      "delete" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "删除服务实例",
+        "description" : "删除bcs实例。包周期实例不支持",
+        "operationId" : "DeleteBlockchain",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "bcs 服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "bcs 服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "is_delete_storage",
+          "in" : "query",
+          "description" : "是否删除存储,IEF模式下不用填写",
+          "required" : false,
+          "schema" : {
+            "description" : "是否删除存储,IEF模式下不用填写",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "is_delete_obs",
+          "in" : "query",
+          "description" : "是否删除obs,IEF模式下不用填写",
+          "required" : false,
+          "schema" : {
+            "description" : "是否删除obs,IEF模式下不用填写",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "is_delete_resource",
+          "in" : "query",
+          "description" : "是否删除底层CCE资源,IEF模式下不用填写",
+          "required" : false,
+          "schema" : {
+            "description" : "是否删除底层CCE资源,IEF模式下不用填写",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "is_delete_ief",
+          "in" : "query",
+          "description" : "是否删除底层依赖的IEF边缘节点资源,CCE模式下不用填写,IEF模式下必填",
+          "required" : false,
+          "schema" : {
+            "description" : "是否删除底层依赖的IEF边缘节点资源,CCE模式下不用填写,IEF模式下必填",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "is_delete_lightpeer",
+          "in" : "query",
+          "description" : "CCE模式下选填:是否删除LightPeer轻节点插件使用的IEF边缘节点资源,若需要删除,则填写对应的IEF编译节点名称,否则无需填写。例如:is_delete_lightpeer=ief_node_name_1,ief_node_name_2",
+          "required" : false,
+          "schema" : {
+            "description" : "CCE模式下选填:是否删除LightPeer轻节点插件使用的IEF边缘节点资源,若需要删除,则填写对应的IEF编译节点名称,否则无需填写。例如:is_delete_lightpeer=ief_node_name_1,ief_node_name_2",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ief_nodes_id",
+          "in" : "query",
+          "description" : "IEF模式下选填:若需要删除IEF边缘集群所使用的IEF边缘节点资源,则填写IEF节点的id,否则无需填写。例如:ief_nodes_id=1356f6f0-c448-4ec2-926f-c13b026369d9,0cdacbf9-2002-41e9-8123-2fa13e8d1449",
+          "required" : false,
+          "schema" : {
+            "description" : "IEF模式下选填:若需要删除IEF边缘集群所使用的IEF边缘节点资源,则填写IEF节点的id,否则无需填写。例如:ief_nodes_id=1356f6f0-c448-4ec2-926f-c13b026369d9,0cdacbf9-2002-41e9-8123-2fa13e8d1449",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteBlockchain",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}"
+    },
+    "/UpdateInstance" : {
+      "put" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "修改服务实例",
+        "description" : "修改实例的节点、组织,目前仅支持添加、删除节点(IEF模式不支持添加、删除节点),添加、删除组织,共4种类型,每次操作只可以操作一种类型。此接口不支持包周期模式; 注意注册IEF节点时,IEF节点名称长度应该为4-24位的字符",
+        "operationId" : "UpdateInstance",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "bcs 服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "bcs 服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateInstanceRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateInstance",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}"
+    },
+    "/CreateNewBlockchain" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "创建服务实例",
+        "description" : "创建BCS服务实例,只支持按需创建",
+        "operationId" : "CreateNewBlockchain",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateBlockchainRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNewBlockchain",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains"
+    },
+    "/ListQuotas" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询配额",
+        "description" : "查询当前项目下BCS服务所有资源的配额信息",
+        "operationId" : "ListQuotas",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListQuotasRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQuotas",
+      "x-url" : "{endpoint}/v2/{project_id}/quotas"
+    },
+    "/DownloadBlockchainSdkConfig" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "下载SDK配置",
+        "description" : "下载指定服务实例SDK配置文件",
+        "operationId" : "DownloadBlockchainSdkConfig",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "file"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CfgRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadBlockchainSdkConfig",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/sdk-cfg"
+    },
+    "/FreezeCert" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "冻结用户证书",
+        "description" : "冻结指定服务实例组织用户证书,冻结后需等待半分钟到一分钟左右生效",
+        "operationId" : "FreezeCert",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "user_name",
+          "in" : "path",
+          "description" : "userName",
+          "required" : true,
+          "schema" : {
+            "description" : "userName",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "org_name",
+          "in" : "path",
+          "description" : "orgName",
+          "required" : true,
+          "schema" : {
+            "description" : "orgName",
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "生成证书的zip文件(每次只允许上传一个证书文件,文件大小不大于30K,后缀名为.zip文件)",
+          "required" : false,
+          "schema" : {
+            "description" : "生成证书的zip文件(每次只允许上传一个证书文件,文件大小不大于30K,后缀名为.zip文件)",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "FreezeCert",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/orgs/{org_name}/usercert/{user_name}/freeze"
+    },
+    "/BatchRemovePeersFromChannel" : {
+      "put" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "BCS某个组织中的节点退出某通道",
+        "description" : "该接口用于BCS某个组织中的节点退出某通道。当节点为通道中最后一个节点时,需要使用组织退通道的接口来将通道中的最后一个节点退出。",
+        "operationId" : "BatchRemovePeersFromChannel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id。可调用“查询服务实例列表”接口获取ID",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id。可调用“查询服务实例列表”接口获取ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "channel_id",
+          "in" : "path",
+          "description" : "区块链通道名称。可调用“查询实例信息”接口获取,接口返回的“channels”中的name字段值",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链通道名称。可调用“查询实例信息”接口获取,接口返回的“channels”中的name字段值",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchRemovePeersFromChannelRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchRemovePeersFromChannel",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/{channel_id}/peers/quit"
+    },
+    "/BatchCreateChannels" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "创建通道",
+        "description" : "创建通道",
+        "operationId" : "BatchCreateChannels",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "bcs 服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "bcs 服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateChannelsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateChannels",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/channels"
+    },
+    "/ListMembers" : {
+      "get" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "获取联盟成员列表",
+        "description" : "获取联盟成员列表",
+        "operationId" : "ListMembers",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListMembersRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListMembers",
+      "x-url" : "{endpoint}/v2/{project_id}/members"
+    },
+    "/ListBlockchainChannels" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询通道信息",
+        "description" : "查询指定服务实例通道信息",
+        "operationId" : "ListBlockchainChannels",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ChannelsRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "blockchainID",
+          "required" : true,
+          "schema" : {
+            "description" : "blockchainID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBlockchainChannels",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/channels"
+    },
+    "/DeleteMemberInvite" : {
+      "delete" : {
+        "tags" : [ "BCS联盟" ],
+        "summary" : "删除邀请成员信息",
+        "description" : "可通过此接口批量取消邀请或删除对已退出或拒绝加入或解散的成员邀请信息",
+        "operationId" : "DeleteMemberInvite",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteMemberInviteRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteMemberInvite",
+      "x-url" : "{endpoint}/v2/{project_id}/members/invitations"
+    },
+    "/ListBcsEventsStatistic" : {
+      "post" : {
+        "tags" : [ "BCS监控" ],
+        "summary" : "查询服务实例告警统计接口",
+        "description" : "该接口用于查询BCS服务的分段事件、告警统计数据,可以指定查询时的过滤条件。",
+        "operationId" : "ListBcsEventsStatistic",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricQueryItemResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "查询类型。type=active_alert代表查询活动告警,type=history_alert代表查询历史告警。不传或者传其他值则返回指定查询条件的所有信息",
+          "required" : false,
+          "schema" : {
+            "description" : "查询类型。type=active_alert代表查询活动告警,type=history_alert代表查询历史告警。不传或者传其他值则返回指定查询条件的所有信息",
+            "type" : "string",
+            "enum" : [ "history_alert", "active_alert" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListBcsEventRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBcsEventsStatistic",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/events/statistic"
+    },
+    "/ListEntityMetric" : {
+      "post" : {
+        "tags" : [ "BCS监控" ],
+        "summary" : "查询BCS组织监控数据列表",
+        "description" : "该接口用于查询BCS组织的监控数据列表。",
+        "operationId" : "ListEntityMetric",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityMetricListResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token,通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token,通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListEntityMetricRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEntityMetric",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/entity/metric/list"
+    },
+    "/ListBcsEvents" : {
+      "post" : {
+        "tags" : [ "BCS监控" ],
+        "summary" : "查询服务实例告警信息",
+        "description" : "该接口用于查询BCS服务的事件、告警数据,可以指定查询时的过滤条件。",
+        "operationId" : "ListBcsEvents",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricQueryItemResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的projectid,一般为32位字符串。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "区块链服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "区块链服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "查询类型。type=active_alert代表查询活动告警,type=history_alert代表查询历史告警。不传或者传其他值则返回指定查询条件的所有信息。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询类型。type=active_alert代表查询活动告警,type=history_alert代表查询历史告警。不传或者传其他值则返回指定查询条件的所有信息。",
+            "type" : "string",
+            "enum" : [ "history_alert", "active_alert" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListBcsEventRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBcsEvents",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/events"
+    },
+    "/BatchAddPeersToChannel" : {
+      "post" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "peer节点加入通道",
+        "description" : "peer节点加入通道,目前仅支持往一个通道中加入peer",
+        "operationId" : "BatchAddPeersToChannel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpIdRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        }, {
+          "name" : "blockchain_id",
+          "in" : "path",
+          "description" : "bcs 服务id",
+          "required" : true,
+          "schema" : {
+            "description" : "bcs 服务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "帐号token",
+          "required" : true,
+          "schema" : {
+            "description" : "帐号token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchAddPeersToChannelRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddPeersToChannel",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains/{blockchain_id}/channels/peers"
+    },
+    "/ListBlockchains" : {
+      "get" : {
+        "tags" : [ "BCS管理" ],
+        "summary" : "查询服务实例列表",
+        "description" : "查询当前项目下所有服务实例的简要信息",
+        "operationId" : "ListBlockchains",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BlockchainsInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "InternalServerError",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "从IAM服务获取的用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "从IAM服务获取的用户Token",
+            "type" : "string",
+            "maxLength" : 32768,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+          "required" : true,
+          "schema" : {
+            "description" : "租户从IAM申请到的项目ID,一般为32位字符串",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBlockchains",
+      "x-url" : "{endpoint}/v2/{project_id}/blockchains"
+    }
+  }
+}

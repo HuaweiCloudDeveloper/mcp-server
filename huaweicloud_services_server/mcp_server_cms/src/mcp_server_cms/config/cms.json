@@ -1,0 +1,1290 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CMS-规格推荐管理",
+    "title" : "CMS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ListSupplyRecommendationRequestBody" : {
+        "properties" : {
+          "flavor_constraint" : {
+            "description" : "资源供给规格的约束,给出规格列表时优先使用规格列表",
+            "$ref" : "#/components/schemas/FlavorConstraint"
+          },
+          "flavor_ids" : {
+            "type" : "array",
+            "description" : "接受推荐的规格列表",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "locations" : {
+            "type" : "array",
+            "description" : "接受推荐的地域列表,默认接受所有区域",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/DistinctLocation"
+            }
+          },
+          "option" : {
+            "description" : "供给推荐的选项",
+            "$ref" : "#/components/schemas/SupplyOption"
+          },
+          "strategy" : {
+            "type" : "string",
+            "description" : "推荐的策略。",
+            "enum" : [ "CAPACITY", "COST" ],
+            "default" : "CAPACITY"
+          },
+          "limit" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 1000,
+            "description" : "查询返回的数量限制"
+          },
+          "marker" : {
+            "type" : "string",
+            "description" : "取值为上一页数据的最后一条记录的唯一标记"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "IntegerRange" : {
+        "properties" : {
+          "max" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "最大值,-1表示无限制",
+            "default" : 2147483647
+          },
+          "min" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "最小值,-1表示无限制",
+            "default" : -2147483648
+          }
+        },
+        "description" : "资源取值范围,最大值最小值可取。",
+        "type" : "object"
+      },
+      "DoubleRange" : {
+        "properties" : {
+          "max" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "最大值,-1表示无限制",
+            "default" : 9.999999999E8
+          },
+          "min" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "最小值,-1表示无限制",
+            "default" : 0
+          }
+        },
+        "description" : "资源取值范围,最大值最小值可取。",
+        "type" : "object"
+      },
+      "SupplyRecommendation" : {
+        "properties" : {
+          "flavor_id" : {
+            "type" : "string",
+            "description" : "实例规格ID"
+          },
+          "region_id" : {
+            "type" : "string",
+            "description" : "区域ID"
+          },
+          "availability_zone_id" : {
+            "type" : "string",
+            "description" : "可用区ID"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "推荐分数",
+            "minimum" : 1,
+            "maximum" : 10
+          }
+        },
+        "description" : "资源供给推荐结果",
+        "type" : "object"
+      },
+      "FlavorRequirement" : {
+        "properties" : {
+          "vcpu_count" : {
+            "description" : "规格的vcpu数量范围,不填表示接受所有",
+            "$ref" : "#/components/schemas/IntegerRange"
+          },
+          "memory_mb" : {
+            "description" : "规格的内存大小范围,单位是MiB,不填表示接受所有",
+            "$ref" : "#/components/schemas/IntegerRange"
+          },
+          "cpu_manufacturers" : {
+            "type" : "array",
+            "description" : "可选CPU制造商,不填表示接受所有",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "INTEL", "AMD", "OTHER" ]
+            }
+          },
+          "memory_gb_per_vcpu" : {
+            "description" : "Flavor的单vcpu对应内存容量范围,内存单位GiB,不填表示接受所有",
+            "$ref" : "#/components/schemas/DoubleRange"
+          },
+          "instance_generations" : {
+            "type" : "array",
+            "description" : "接受的资源代系,不填表示接受所有",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "CURRENT", "PREVIOUS" ]
+            }
+          }
+        },
+        "description" : "对规格的资源需求约束",
+        "type" : "object"
+      },
+      "DistinctLocation" : {
+        "required" : [ "region_id" ],
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "区域ID"
+          },
+          "availability_zone_id" : {
+            "type" : "string",
+            "description" : "可用区ID"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ListSupplyRecommendationResponseBody" : {
+        "required" : [ "supply_recommendations" ],
+        "properties" : {
+          "supply_recommendations" : {
+            "type" : "array",
+            "description" : "资源供给推荐结果",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/SupplyRecommendation"
+            }
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "FlavorConstraint" : {
+        "properties" : {
+          "architecture_type" : {
+            "type" : "array",
+            "description" : "接受的体系结构描述",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "x86_64", "arm64" ]
+            }
+          },
+          "flavor_requirements" : {
+            "type" : "array",
+            "description" : "资源的需求约束",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/FlavorRequirement"
+            }
+          }
+        },
+        "description" : "资源规格的筛选约束",
+        "type" : "object"
+      },
+      "SupplyOption" : {
+        "properties" : {
+          "result_granularity" : {
+            "type" : "string",
+            "description" : "推荐结果的粒度",
+            "enum" : [ "BY_REGION", "BY_AZ", "BY_FLAVOR", "BY_FLAVOR_AND_REGION", "BY_FLAVOR_AND_AZ" ],
+            "default" : "BY_REGION"
+          },
+          "enable_spot" : {
+            "type" : "boolean",
+            "description" : "是否推荐竞价实例",
+            "default" : false
+          }
+        },
+        "description" : "供给推荐的选项",
+        "type" : "object"
+      },
+      "LaunchTemplateConfig" : {
+        "required" : [ "launch_template", "overrides" ],
+        "properties" : {
+          "launch_template" : {
+            "description" : "实例的启动模板",
+            "$ref" : "#/components/schemas/LaunchTemplateInfo"
+          },
+          "overrides" : {
+            "type" : "array",
+            "description" : "实例的详细信息",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/OverrideInfo"
+            }
+          }
+        },
+        "description" : "启动模板相关配置",
+        "type" : "object"
+      },
+      "AutoLaunchGroupResponseBodyV2" : {
+        "properties" : {
+          "auto_launch_group_id" : {
+            "type" : "string",
+            "description" : "创建好的智能购买组"
+          },
+          "error_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "LaunchTemplateInfo" : {
+        "required" : [ "launch_template_id", "version" ],
+        "properties" : {
+          "launch_template_id" : {
+            "type" : "string",
+            "description" : "实例的启动模板ID,唯一标识一个启动模板"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "启动模板版本号"
+          }
+        },
+        "description" : "实例的启动模板,创建虚拟机时,使用到安全组、网络、镜像、flavor等信息",
+        "type" : "object"
+      },
+      "AutoLaunchGroupReqV2" : {
+        "required" : [ "name", "region_specs", "target_capacity" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "智能购买组名称。",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "pattern" : "[a-zA-Z0-9-_一-龥]{1,64}"
+          },
+          "dry_run" : {
+            "type" : "boolean",
+            "description" : "创建智能购买组参数核查",
+            "default" : false
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "request或者maintain",
+            "description" : "请求类型,枚举值",
+            "enum" : [ "request", "maintain" ],
+            "default" : "maintain"
+          },
+          "guarantee_plan_id" : {
+            "type" : "string",
+            "description" : "算力保障计划ID"
+          },
+          "target_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "智能购买组目标容量。",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "stable_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "按需实例目标容量。",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "excess_fulfilled_capacity_behavior" : {
+            "type" : "string",
+            "description" : "超过目标容量或目标容量减少时的实例中断行为,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "terminate", "noTermination" ],
+            "default" : "terminate"
+          },
+          "instances_behavior_with_expiration" : {
+            "type" : "string",
+            "description" : "请求到期正在的实例中断行为,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "terminate", "noTermination" ],
+            "default" : "terminate"
+          },
+          "valid_since" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "请求开始时间,和valid_until共同确定有效时段。"
+          },
+          "valid_until" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "请求结束时间,和valid_since共同确定有效时段。"
+          },
+          "allocation_strategy" : {
+            "type" : "string",
+            "description" : "实例分配策略,枚举值",
+            "enum" : [ "lowest_price", "diversified", "capacity_optimized", "prioritized" ],
+            "default" : "lowest_price"
+          },
+          "region_specs" : {
+            "type" : "array",
+            "description" : "智能购买组内各区域的资源描述",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/RegionSpec"
+            }
+          },
+          "supply_option" : {
+            "type" : "string",
+            "description" : "资源供给中规格选择策略:枚举值",
+            "enum" : [ "singlation", "multiple" ],
+            "default" : "multiple"
+          },
+          "spot_price" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "用户愿意为竞价实例每小时支付的最高价格。如果overrides中没有提供价格,可以使用该价格"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "RegionSpec" : {
+        "required" : [ "launch_template_config", "region_id", "expect_target_capacity", "expect_stable_capacity" ],
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "区域ID"
+          },
+          "expect_target_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "区域内期望的总算力容量"
+          },
+          "expect_stable_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "区域内期望的稳定算力容量"
+          },
+          "launch_template_config" : {
+            "description" : "启动模板配置",
+            "$ref" : "#/components/schemas/LaunchTemplateConfig"
+          }
+        },
+        "description" : "一个区域内的资源需求描述",
+        "type" : "object"
+      },
+      "OverrideInfo" : {
+        "required" : [ "availability_zone_id", "flavor_id" ],
+        "properties" : {
+          "availability_zone_id" : {
+            "type" : "string",
+            "description" : "可用区ID"
+          },
+          "flavor_id" : {
+            "type" : "string",
+            "description" : "实例规格ID"
+          },
+          "spot_price" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "用户愿意为竞价实例每小时支付的最高价格"
+          },
+          "priority" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "优先级。数值越小,优先级越高,优先购买。",
+            "minimum" : 0
+          },
+          "weighted_capacity" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "实例规格的权重。取值越高,单台实例满足计算力需求的能力越大,所需的实例数量越小。",
+            "minimum" : 1.0,
+            "maximum" : 500,
+            "default" : 1.0
+          }
+        },
+        "description" : "实例的详细信息",
+        "type" : "object"
+      },
+      "ShowAutoLaunchGroupResp" : {
+        "required" : [ "allocation_strategy", "created_at", "current_capacity", "current_stable_capacity", "excess_fulfilled_capacity_behavior", "instances_behavior_with_expiration", "name", "region_specs", "stable_capacity", "target_capacity", "type", "user_id", "valid_since", "valid_until", "status", "task_state" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "智能购买组名称",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "请求类型。枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "request", "maintain" ],
+            "default" : "request"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "智能购买组的运行状态,枚举值"
+          },
+          "task_state" : {
+            "type" : "string",
+            "description" : "智能购买组的任务状态,枚举值"
+          },
+          "target_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "智能购买组目标容量.",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "stable_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "按需实例目标容量",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "current_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前已经购买成功的总算力",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "current_stable_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前已经购买成功的按需算力",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "default" : 0
+          },
+          "excess_fulfilled_capacity_behavior" : {
+            "type" : "string",
+            "description" : "超过目标容量或目标容量减少时的实例中断行为,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "noTermination", "terminate" ],
+            "default" : "terminate"
+          },
+          "instances_behavior_with_expiration" : {
+            "type" : "string",
+            "description" : "请求到期时的实例中断行为,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "terminate", "noTermination" ],
+            "default" : "terminate"
+          },
+          "valid_since" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "请求开始时间,格式为yyyy-MM-ddTHH:mm:ssZ"
+          },
+          "valid_until" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "请求结束时间,格式为yyyy-MM-ddTHH:mm:ssZ"
+          },
+          "region_specs" : {
+            "type" : "array",
+            "description" : "智能购买组在各个区域的配置",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/RegionSpec"
+            },
+            "maxItems" : 100,
+            "minItems" : 0
+          },
+          "allocation_strategy" : {
+            "type" : "string",
+            "description" : "实例分配策略,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "enum" : [ "lowest_price", "diversified", "prioritized", "capacity_optimized" ],
+            "default" : "lowest_price"
+          },
+          "spot_price" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "用户愿意为竞价实例每小时支付的最高价格。如果overrides中没有提供价格,可以使用该价格。",
+            "minimum" : 0,
+            "maximum" : 1000
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "智能购买组创建时间"
+          }
+        },
+        "description" : "智能购买组信息",
+        "type" : "object"
+      },
+      "ShowAutoLaunchGroupResponsesBodyV2" : {
+        "properties" : {
+          "auto_launch_group" : {
+            "description" : "智能购买组详细信息",
+            "$ref" : "#/components/schemas/ShowAutoLaunchGroupResp"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "InstanceInfo" : {
+        "required" : [ "availability_zone_id", "flavor_id", "id", "name", "sell_mode", "status" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "实例名称。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "实例ID。"
+          },
+          "availability_zone_id" : {
+            "type" : "string",
+            "description" : "可用区ID"
+          },
+          "flavor_id" : {
+            "type" : "string",
+            "description" : "实例规格"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "实例状态"
+          },
+          "sell_mode" : {
+            "type" : "string",
+            "description" : "销售模型,枚举值"
+          }
+        },
+        "description" : "实例列表",
+        "type" : "object"
+      },
+      "ListInstancesResponseBodyV2" : {
+        "required" : [ "instances", "page_info" ],
+        "properties" : {
+          "instances" : {
+            "type" : "array",
+            "description" : "实例列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/InstanceInfo"
+            }
+          },
+          "page_info" : {
+            "description" : "页标记",
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "PageInfo" : {
+        "required" : [ "next_marker" ],
+        "properties" : {
+          "next_marker" : {
+            "type" : "string",
+            "description" : "返回下一页查询地址"
+          }
+        },
+        "description" : "页标记",
+        "type" : "object"
+      },
+      "DeleteAutoLaunchGroupReqV2" : {
+        "properties" : {
+          "delete_instances" : {
+            "type" : "string",
+            "example" : "terminate",
+            "description" : "删除智能购买组时组内实例的中断行为。枚举值",
+            "default" : "terminate",
+            "enum" : [ "terminate", "noTermination" ]
+          }
+        },
+        "description" : "This is a delete Request Object",
+        "type" : "object"
+      },
+      "DeleteAutoLaunchGroupResp" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          }
+        },
+        "description" : "This is a delete Response Object",
+        "type" : "object"
+      },
+      "AutoLaunchGroupInfo" : {
+        "required" : [ "id", "name", "status", "task_state", "type", "valid_since", "valid_until" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "智能购买组ID",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "智能购买组的名称",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "请求类型",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "智能购买组的运行状态,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "task_state" : {
+            "type" : "string",
+            "description" : "智能购买组的任务状态,枚举值",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "valid_since" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "开始时间"
+          },
+          "valid_until" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "结束时间"
+          }
+        },
+        "description" : "智能购买组列表",
+        "type" : "object"
+      },
+      "ListAutoLaunchGroupsResponseBodyV2" : {
+        "required" : [ "auto_launch_groups", "page_info" ],
+        "properties" : {
+          "auto_launch_groups" : {
+            "type" : "array",
+            "description" : "智能购买组列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/AutoLaunchGroupInfo"
+            }
+          },
+          "page_info" : {
+            "description" : "页标记",
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "UpdateAutoLaunchGroupResp" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          }
+        },
+        "description" : "This is a update Response Object",
+        "type" : "object"
+      },
+      "UpdateAutoLaunchGroupReqV2" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "智能购买组名称。",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "pattern" : "[a-zA-Z0-9-_一-龥]{1,64}"
+          },
+          "guarantee_plan_id" : {
+            "type" : "string",
+            "description" : "算力保障计划ID"
+          },
+          "target_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "智能购买组目标容量。",
+            "minimum" : 0
+          },
+          "stable_capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "按需实例目标容量。",
+            "minimum" : 0
+          },
+          "excess_fulfilled_capacity_behavior" : {
+            "type" : "string",
+            "enum" : [ "terminate", "noTermination" ],
+            "description" : "超过目标容量或目标容量减少时的实例中断行为,枚举值"
+          },
+          "instances_behavior_with_expiration" : {
+            "type" : "string",
+            "enum" : [ "terminate", "noTermination" ],
+            "description" : "请求到期时正在运行实例的中断行为,枚举值",
+            "default" : "true"
+          },
+          "spot_price" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "用户愿意为竞价实例每小时支付的最高价格。如果overrides中没有提供价格,可以使用该价格"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListSupplyRecommendation" : {
+      "post" : {
+        "tags" : [ "规格推荐管理" ],
+        "summary" : "地域推荐",
+        "description" : "对ECS的资源供给的地域和规格进行推荐,推荐结果以打分的形式呈现,分数越高推荐程度越高",
+        "operationId" : "ListSupplyRecommendation",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSupplyRecommendationResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          },
+          "502" : {
+            "description" : "Bad Gateway"
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListSupplyRecommendationRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSupplyRecommendation",
+      "x-url" : "{endpoint}/v1/{domain_id}/recommendations/ecs-supply"
+    },
+    "/CreateAutoLaunchGroup" : {
+      "post" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "创建智能购买组",
+        "description" : "创建智能购买组",
+        "operationId" : "CreateAutoLaunchGroup",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AutoLaunchGroupResponseBodyV2"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string",
+            "minLength" : 1
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AutoLaunchGroupReqV2"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAutoLaunchGroup",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups"
+    },
+    "/ShowAutoLaunchGroup" : {
+      "get" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "查询智能购买组详情",
+        "description" : "查询指定智能购买组的详细信息",
+        "operationId" : "ShowAutoLaunchGroup",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowAutoLaunchGroupResponsesBodyV2"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "auto_launch_group_id",
+          "in" : "path",
+          "description" : "智能购买组ID",
+          "required" : true,
+          "schema" : {
+            "description" : "智能购买组ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAutoLaunchGroup",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups/{auto_launch_group_id}"
+    },
+    "/ListInstances" : {
+      "get" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "查询智能购买组实例列表",
+        "description" : "获取智能购买组创建的实例信息",
+        "operationId" : "ListInstances",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListInstancesResponseBodyV2"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回实例数量限制",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回实例数量限制",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "取值为上一页数据的最后一条记录的唯一标识",
+          "required" : false,
+          "schema" : {
+            "description" : "取值为上一页数据的最后一条记录的唯一标识",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "auto_launch_group_id",
+          "in" : "path",
+          "description" : "智能购买组ID",
+          "required" : true,
+          "schema" : {
+            "description" : "智能购买组ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInstances",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups/{auto_launch_group_id}/instances"
+    },
+    "/DeleteAutoLaunchGroup" : {
+      "delete" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "删除智能购买组",
+        "description" : "删除指定的智能购买组",
+        "operationId" : "DeleteAutoLaunchGroup",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteAutoLaunchGroupResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "auto_launch_group_id",
+          "in" : "path",
+          "description" : "智能购买组ID",
+          "required" : true,
+          "schema" : {
+            "description" : "智能购买组ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteAutoLaunchGroupReqV2"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAutoLaunchGroup",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups/{auto_launch_group_id}"
+    },
+    "/ListAutoLaunchGroups" : {
+      "get" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "查询智能购买组列表",
+        "description" : "获取租户创建的所有的智能购买组",
+        "operationId" : "ListAutoLaunchGroups",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListAutoLaunchGroupsResponseBodyV2"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回智能购买组的数量限制",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回智能购买组的数量限制",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "取值为上一页数据的最后一条记录的唯一标识",
+          "required" : false,
+          "schema" : {
+            "description" : "取值为上一页数据的最后一条记录的唯一标识",
+            "type" : "string",
+            "default" : "“”",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "智能购买组名称",
+          "required" : false,
+          "schema" : {
+            "description" : "智能购买组名称",
+            "type" : "string",
+            "default" : "“”",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "valid_since",
+          "in" : "query",
+          "description" : "请求开始时间,按照时间范围过滤",
+          "required" : false,
+          "schema" : {
+            "example" : "2021-04-06T15:58:13Z",
+            "description" : "请求开始时间,按照时间范围过滤",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "valid_until",
+          "in" : "query",
+          "description" : "请求结束时间,按照时间范围过滤",
+          "required" : false,
+          "schema" : {
+            "example" : "2021-04-06T15:58:13Z",
+            "description" : "请求结束时间,按照时间范围过滤",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAutoLaunchGroups",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups"
+    },
+    "/UpdateAutoLaunchGroup" : {
+      "put" : {
+        "tags" : [ "智能购买组管理" ],
+        "summary" : "修改智能购买组",
+        "description" : "更新指定智能购买组信息",
+        "operationId" : "UpdateAutoLaunchGroup",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateAutoLaunchGroupResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string",
+            "minLength" : 1
+          }
+        }, {
+          "name" : "auto_launch_group_id",
+          "in" : "path",
+          "description" : "智能购买组ID",
+          "required" : true,
+          "schema" : {
+            "description" : "智能购买组ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "租户域ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户域ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateAutoLaunchGroupReqV2"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAutoLaunchGroup",
+      "x-url" : "{endpoint}/v2/{domain_id}/auto-launch-groups/{auto_launch_group_id}"
+    }
+  }
+}

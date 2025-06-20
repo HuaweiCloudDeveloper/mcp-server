@@ -1,0 +1,1532 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "ER-路由",
+    "title" : "ER",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListStaticRoutes" : {
+      "get" : {
+        "tags" : [ "Route" ],
+        "summary" : "查询静态路由列表",
+        "description" : "查询静态路由列表。",
+        "operationId" : "ListStaticRoutes",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/DestinationInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceTypeInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStaticRoutes",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/static-routes"
+    },
+    "/ChangeAvailabilityZone" : {
+      "post" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "更新企业路由器的可用区信息",
+        "description" : "更新企业路由器的可用区信息,企业路由器实例状态为available的时候才能更新。",
+        "operationId" : "ChangeAvailabilityZone",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ChangeAvailabilityZone",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances/{er_id}/change-availability-zone-ids"
+    },
+    "/ShowFlowLog" : {
+      "get" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "查询流日志详情",
+        "description" : "查询流日志详情",
+        "operationId" : "ShowFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "name" : "flow_log_id",
+          "in" : "path",
+          "description" : "流日志ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs/{flow_log_id}"
+    },
+    "/ShowResourceTag" : {
+      "get" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询资源标签",
+        "description" : "查询特定类型资源的标签信息。",
+        "operationId" : "ShowResourceTag",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "标签资源类型:",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "instance", "route-table", "vpc-attachment", "dgw-attachment", "vgw-attachment", "peering-attachment", "vpn-attachment", "can-attachment", "ecn-attachment", "gdgw-attachment", "connect-attachment", "cfw-attachment", "attachments" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResourceTag",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags"
+    },
+    "/ListPropagations" : {
+      "get" : {
+        "tags" : [ "Propagation" ],
+        "summary" : "查询路由传播列表",
+        "description" : "查询路由传播列表。",
+        "operationId" : "ListPropagations",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceTypeInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/StateInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPropagations",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/propagations"
+    },
+    "/ListProjectTags" : {
+      "get" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询项目标签",
+        "description" : "查询特定类型资源的标签集合。",
+        "operationId" : "ListProjectTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "标签资源类型:",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "instance", "route-table", "vpc-attachment", "dgw-attachment", "vgw-attachment", "peering-attachment", "vpn-attachment", "can-attachment", "ecn-attachment", "gdgw-attachment", "connect-attachment", "cfw-attachment", "attachments" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProjectTags",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/tags"
+    },
+    "/ListEffectiveRoutes" : {
+      "get" : {
+        "tags" : [ "Route" ],
+        "summary" : "查询有效路由列表",
+        "description" : "查询有效的路由列表,支持分页查询能力",
+        "operationId" : "ListEffectiveRoutes",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/DestinationInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceTypeInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEffectiveRoutes",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/routes"
+    },
+    "/ListAttachments" : {
+      "get" : {
+        "tags" : [ "Attachments" ],
+        "summary" : "查询连接列表",
+        "description" : "查询企业路由器实例下的连接列表。",
+        "operationId" : "ListAttachments",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentStateInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceTypeInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAttachments",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/attachments"
+    },
+    "/BatchCreateResourceTags" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "批量添加删除资源标签",
+        "description" : "- 为指定实例批量添加或删除标签",
+        "operationId" : "BatchCreateResourceTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "批量添加或删除操作成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "标签资源类型:",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "instance", "route-table", "vpc-attachment", "dgw-attachment", "vgw-attachment", "peering-attachment", "vpn-attachment", "can-attachment", "ecn-attachment", "gdgw-attachment", "connect-attachment", "cfw-attachment", "attachments" ]
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateResourceTags",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags/action"
+    },
+    "/ListEnterpriseRouters" : {
+      "get" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "查询企业路由器列表",
+        "description" : "查询企业路由器列表",
+        "operationId" : "ListEnterpriseRouters",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/EnterpriseProjectIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/StateInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/IdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/OwnedBySelfInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEnterpriseRouters",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances"
+    },
+    "/ShowAttachment" : {
+      "get" : {
+        "tags" : [ "Attachments" ],
+        "summary" : "查询连接详情",
+        "description" : "查询连接详情",
+        "operationId" : "ShowAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/attachments/{attachment_id}"
+    },
+    "/UpdateAttachment" : {
+      "put" : {
+        "tags" : [ "Attachments" ],
+        "summary" : "更新连接基本信息",
+        "description" : "修改连接基本信息。",
+        "operationId" : "UpdateAttachment",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/attachments/{attachment_id}"
+    },
+    "/CreateResourceTag" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "创建资源标签",
+        "description" : "为特定类型的资源创建标签。",
+        "operationId" : "CreateResourceTag",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "Created"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "标签资源类型:",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "instance", "route-table", "vpc-attachment", "dgw-attachment", "vgw-attachment", "peering-attachment", "vpn-attachment", "can-attachment", "ecn-attachment", "gdgw-attachment", "connect-attachment", "cfw-attachment", "attachments" ]
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateResourceTag",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags"
+    },
+    "/RejectAttachment" : {
+      "post" : {
+        "tags" : [ "Attachments" ],
+        "summary" : "拒绝共享连接创建",
+        "description" : "拒绝共享连接创建",
+        "operationId" : "RejectAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RejectAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/attachments/{attachment_id}/reject"
+    },
+    "/CreateEnterpriseRouter" : {
+      "post" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "创建企业路由器",
+        "description" : "创建企业路由器实例,如果使能默认关联路由表或使能默认传递路由表,那么系统会默认创建一张路由表,作为默认关联路由表或默认传递路由表。",
+        "operationId" : "CreateEnterpriseRouter",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEnterpriseRouter",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances"
+    },
+    "/ListRouteTables" : {
+      "get" : {
+        "tags" : [ "RouteTable" ],
+        "summary" : "查询路由表列表",
+        "description" : "查询路由表列表。",
+        "operationId" : "ListRouteTables",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "状态",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "pending", "available", "deleting", "deleted", "failed" ]
+            }
+          }
+        }, {
+          "name" : "is_default_propagation_table",
+          "in" : "query",
+          "description" : "是否为默认传播路由表",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "is_default_association_table",
+          "in" : "query",
+          "description" : "是否为默认关联路由表",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRouteTables",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables"
+    },
+    "/ShowQuotas" : {
+      "get" : {
+        "tags" : [ "QuotaManager" ],
+        "summary" : "查询配额",
+        "description" : "查询租户各类资源的使用情况,如企业路由器的使用量,VPC连接的使用量等。",
+        "operationId" : "ShowQuotas",
+        "responses" : {
+          "200" : {
+            "description" : "查询配额成功"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "支持过滤的配额类型:",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "erId",
+          "in" : "query",
+          "description" : "企业路由器ID",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/UUIDS"
+          }
+        }, {
+          "name" : "routeTableId",
+          "in" : "query",
+          "description" : "路由表ID",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/UUIDS"
+          }
+        }, {
+          "name" : "vpcId",
+          "in" : "query",
+          "description" : "VPC ID",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/UUIDS"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowQuotas",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/quotas"
+    },
+    "/DisassociateRouteTable" : {
+      "post" : {
+        "tags" : [ "Association" ],
+        "summary" : "删除路由关联",
+        "description" : "解绑连接和路由表的关联关系。",
+        "operationId" : "DisassociateRouteTable",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/disassociate"
+    },
+    "/ListVpcAttachments" : {
+      "get" : {
+        "tags" : [ "VPCAttachment" ],
+        "summary" : "查询VPC连接列表",
+        "description" : "查询企业路由器实例下的VPC连接列表。",
+        "operationId" : "ListVpcAttachments",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentStateInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/IdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        }, {
+          "name" : "vpc_id",
+          "in" : "query",
+          "description" : "VPC id",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpcAttachments",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/vpc-attachments"
+    },
+    "/UpdateEnterpriseRouter" : {
+      "put" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "更新企业路由器",
+        "description" : "更新企业路由器基本信息。",
+        "operationId" : "UpdateEnterpriseRouter",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEnterpriseRouter",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances/{er_id}"
+    },
+    "/EnableFlowLog" : {
+      "post" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "开启流日志",
+        "description" : "开启流日志",
+        "operationId" : "EnableFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "name" : "flow_log_id",
+          "in" : "path",
+          "description" : "流日志ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs/{flow_log_id}/enable"
+    },
+    "/UpdateFlowLog" : {
+      "put" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "更新流日志基本信息",
+        "description" : "更新流日志基本信息",
+        "operationId" : "UpdateFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "name" : "flow_log_id",
+          "in" : "path",
+          "description" : "流日志ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs/{flow_log_id}"
+    },
+    "/ShowVpcAttachment" : {
+      "get" : {
+        "tags" : [ "VPCAttachment" ],
+        "summary" : "查询VPC连接详情",
+        "description" : "查询VPC连接详情",
+        "operationId" : "ShowVpcAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/VpcAttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpcAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/vpc-attachments/{vpc_attachment_id}"
+    },
+    "/UpdateVpcAttachment" : {
+      "put" : {
+        "tags" : [ "VPCAttachment" ],
+        "summary" : "更新VPC连接基本信息",
+        "description" : "修改VPC连接基本信息。",
+        "operationId" : "UpdateVpcAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/VpcAttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpcAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/vpc-attachments/{vpc_attachment_id}"
+    },
+    "/CreateRouteTable" : {
+      "post" : {
+        "tags" : [ "RouteTable" ],
+        "summary" : "创建路由表",
+        "description" : "路由表是企业路由器收发报文的依据,包含了连接的关联关系,传播关系以及路由信息。",
+        "operationId" : "CreateRouteTable",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables"
+    },
+    "/ListAvailabilityZone" : {
+      "get" : {
+        "tags" : [ "AvailableZone" ],
+        "summary" : "查询可用区列表",
+        "description" : "查询支持创建企业路由器实例的可用区列表,当可用区状态为available时,表示可以创建企业路由器实例。",
+        "operationId" : "ListAvailabilityZone",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "查询可用区列表成功"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "instance_id",
+          "in" : "query",
+          "description" : "企业路由器ID",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAvailabilityZone",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/availability-zones"
+    },
+    "/CreateStaticRoute" : {
+      "post" : {
+        "tags" : [ "Route" ],
+        "summary" : "创建静态路由",
+        "description" : "创建静态路由",
+        "operationId" : "CreateStaticRoute",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateStaticRoute",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/static-routes"
+    },
+    "/ShowEnterpriseRouter" : {
+      "get" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "查询企业路由器详情",
+        "description" : "查询企业路由器详情",
+        "operationId" : "ShowEnterpriseRouter",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEnterpriseRouter",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances/{er_id}"
+    },
+    "/DeleteFlowLog" : {
+      "delete" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "删除流日志",
+        "description" : "删除流日志",
+        "operationId" : "DeleteFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "name" : "flow_log_id",
+          "in" : "path",
+          "description" : "流日志ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs/{flow_log_id}"
+    },
+    "/DisableFlowLog" : {
+      "post" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "关闭流日志",
+        "description" : "关闭流日志",
+        "operationId" : "DisableFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "name" : "flow_log_id",
+          "in" : "path",
+          "description" : "流日志ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs/{flow_log_id}/disable"
+    },
+    "/CreateVpcAttachment" : {
+      "post" : {
+        "tags" : [ "VPCAttachment" ],
+        "summary" : "创建VPC连接",
+        "description" : "给ER实例创建VPC连接。",
+        "operationId" : "CreateVpcAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpcAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/vpc-attachments"
+    },
+    "/DeleteVpcAttachment" : {
+      "delete" : {
+        "tags" : [ "VPCAttachment" ],
+        "summary" : "删除VPC连接",
+        "description" : "删除VPC连接。",
+        "operationId" : "DeleteVpcAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "No Content"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/VpcAttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpcAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/vpc-attachments/{vpc_attachment_id}"
+    },
+    "/DeleteResourceTag" : {
+      "delete" : {
+        "tags" : [ "Tags" ],
+        "summary" : "删除资源标签",
+        "description" : "删除特定类型资源的标签。",
+        "operationId" : "DeleteResourceTag",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "parameters" : [ {
+          "name" : "key",
+          "in" : "path",
+          "description" : "标签键",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "标签资源类型:",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "instance", "route-table", "vpc-attachment", "dgw-attachment", "vgw-attachment", "peering-attachment", "vpn-attachment", "can-attachment", "ecn-attachment", "gdgw-attachment", "connect-attachment", "cfw-attachment", "attachments" ]
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteResourceTag",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags/{key}"
+    },
+    "/UpdateStaticRoute" : {
+      "put" : {
+        "tags" : [ "Route" ],
+        "summary" : "更新静态路由",
+        "description" : "更新静态路由",
+        "operationId" : "UpdateStaticRoute",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteIdInPath"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateStaticRoute",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/static-routes/{route_id}"
+    },
+    "/ListAssociations" : {
+      "get" : {
+        "tags" : [ "Association" ],
+        "summary" : "查询路由关联列表",
+        "description" : "查询路由关联列表。",
+        "operationId" : "ListAssociations",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentResourceTypeInQuery"
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "状态",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "pending", "available", "deleting", "deleted", "failed", "modifying" ]
+            }
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAssociations",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/associations"
+    },
+    "/DeleteEnterpriseRouter" : {
+      "delete" : {
+        "tags" : [ "EnterpriseRouterInstance" ],
+        "summary" : "删除企业路由器",
+        "description" : "删除企业路由器。",
+        "operationId" : "DeleteEnterpriseRouter",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "No Content"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEnterpriseRouter",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/instances/{er_id}"
+    },
+    "/ListFlowLogs" : {
+      "get" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "查询流日志列表",
+        "description" : "查询企业路由器实例下的流日志列表",
+        "operationId" : "ListFlowLogs",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/FlowLogResourceTypeInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/FlowLogResourceIdInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/LimitInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortKeyInQuery"
+        }, {
+          "$ref" : "#/components/components/parameters/SortDirInQuery"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFlowLogs",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs"
+    },
+    "/DeleteRouteTable" : {
+      "delete" : {
+        "tags" : [ "RouteTable" ],
+        "summary" : "删除路由表",
+        "description" : "删除路由表",
+        "operationId" : "DeleteRouteTable",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "No Content"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}"
+    },
+    "/ShowStaticRoute" : {
+      "get" : {
+        "tags" : [ "Route" ],
+        "summary" : "查询静态路由详情",
+        "description" : "查询静态路由详情",
+        "operationId" : "ShowStaticRoute",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteIdInPath"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowStaticRoute",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/static-routes/{route_id}"
+    },
+    "/DisablePropagation" : {
+      "post" : {
+        "tags" : [ "Propagation" ],
+        "summary" : "删除路由传播",
+        "description" : "解绑连接和路由表的传播关系。",
+        "operationId" : "DisablePropagation",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisablePropagation",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/disable-propagations"
+    },
+    "/AssociateRouteTable" : {
+      "post" : {
+        "tags" : [ "Association" ],
+        "summary" : "创建路由关联",
+        "description" : "每个连接只能关联到一张路由表。通过创建关联将连接关联到路由表,从该连接收到的报文会用被关联的路由表进行路由。",
+        "operationId" : "AssociateRouteTable",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/associate"
+    },
+    "/CreateFlowLog" : {
+      "post" : {
+        "tags" : [ "FlowLog" ],
+        "summary" : "创建流日志",
+        "description" : "给ER实例创建流日志。",
+        "operationId" : "CreateFlowLog",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFlowLog",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/flow-logs"
+    },
+    "/ShowRouteTable" : {
+      "get" : {
+        "tags" : [ "RouteTable" ],
+        "summary" : "查询路由表详情",
+        "description" : "查询路由表详情",
+        "operationId" : "ShowRouteTable",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}"
+    },
+    "/DeleteStaticRoute" : {
+      "delete" : {
+        "tags" : [ "Route" ],
+        "summary" : "删除静态路由",
+        "description" : "删除静态路由",
+        "operationId" : "DeleteStaticRoute",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "No Content"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteIdInPath"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteStaticRoute",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/route-tables/{route_table_id}/static-routes/{route_id}"
+    },
+    "/UpdateRouteTable" : {
+      "put" : {
+        "tags" : [ "RouteTable" ],
+        "summary" : "更新路由表信息",
+        "description" : "更新路由表基本信息,如名称,描述等。",
+        "operationId" : "UpdateRouteTable",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateRouteTable",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}"
+    },
+    "/AcceptAttachment" : {
+      "post" : {
+        "tags" : [ "Attachments" ],
+        "summary" : "接受共享连接创建",
+        "description" : "接受共享连接创建",
+        "operationId" : "AcceptAttachment",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "OK"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/AttachmentIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AcceptAttachment",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/attachments/{attachment_id}/accept"
+    },
+    "/EnablePropagation" : {
+      "post" : {
+        "tags" : [ "Propagation" ],
+        "summary" : "创建路由传播",
+        "description" : "每个连接可以和多个路由表建立传播关系,从该连接学习到的路由会应用到具有传播关系的路由表。",
+        "operationId" : "EnablePropagation",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Client-Token" : {
+                "description" : "幂等性标识",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/ErIdInPath"
+        }, {
+          "$ref" : "#/components/components/parameters/RouteTableIdInPath"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnablePropagation",
+      "x-url" : "{endpoint}/v3/{project_id}/enterprise-router/{er_id}/route-tables/{route_table_id}/enable-propagations"
+    }
+  }
+}

@@ -1,0 +1,3010 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "NLP-自然语言处理基础服务",
+    "title" : "NLP",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "KeywordExtractionResponse" : {
+        "properties" : {
+          "words" : {
+            "type" : "array",
+            "description" : "关键词列表。调用失败时无此字段。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "关键词抽取响应体",
+        "type" : "object"
+      },
+      "keyword-extractReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,长度为1~512,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回关键词的最大数量,默认为5。",
+            "default" : 5
+          },
+          "lang" : {
+            "type" : "string",
+            "example" : "zh",
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "TextSimilarityResponse" : {
+        "properties" : {
+          "similarity" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "相似度得分,范围在0~1,默认小数点后保留8位。调用失败时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "文本相似度返回体",
+        "type" : "object"
+      },
+      "TextSimilarityRequest" : {
+        "required" : [ "text1", "text2" ],
+        "properties" : {
+          "text1" : {
+            "type" : "string",
+            "example" : "华为云计算",
+            "description" : "待计算文本1,中文长度1~512,英文长度1~2000,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 2000
+          },
+          "text2" : {
+            "type" : "string",
+            "example" : "华为云",
+            "description" : "待计算文本2,中文长度1~512,英文长度1~2000,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 2000
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前支持中文(zh)和英文(en),默认为中文。",
+            "enum" : [ "zh", "en" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "文本相似度请求体",
+        "type" : "object"
+      },
+      "AspectSentimentResponse" : {
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本"
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "该文本的整体情感标签,取值如下:"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "该文本整体情感label的置信度,小数点精确到3位。"
+          },
+          "aspect_opinions" : {
+            "type" : "array",
+            "description" : "属性级情感挖掘列表",
+            "items" : {
+              "$ref" : "#/components/schemas/AspectOpinion"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "属性级情感分析响应",
+        "type" : "object"
+      },
+      "AspectSentimentRequest" : {
+        "required" : [ "content", "type" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。仅支持中文,文本编码要求为utf-8。 建议文本长度1000个字符以内。"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 1 ],
+            "default" : 1,
+            "description" : "取值如下:"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "AspectOpinion" : {
+        "required" : [ "aspect_category", "aspect_term", "label", "opinion_term", "span" ],
+        "properties" : {
+          "aspect_category" : {
+            "type" : "string",
+            "description" : "属性类别"
+          },
+          "aspect_term" : {
+            "type" : "string",
+            "description" : "属性词,与对应的描述词至少出现其中之一,可能为null。"
+          },
+          "opinion_term" : {
+            "type" : "string",
+            "description" : "描述词,与对应的属性词至少出现其中之一,可能为null。"
+          },
+          "span" : {
+            "type" : "array",
+            "description" : "共4个数字,分别表示属性词和描述词在文本中的起始位置和结束位置。若属性词为null,则1, 2两位不展示;若描述词为null,则3, 4位不展示。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "情感标签,0:负向,1:正向"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "情感标签置信度"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "属性-描述词片段所对应的标签。若分类为'其他',则不给出标签,返回null。"
+          }
+        },
+        "description" : "属性观点列表",
+        "type" : "object"
+      },
+      "HWCloudSentimentReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。文本编码要求为utf-8。仅支持中文和英文情感分析。"
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前支持中文(zh)和英文(en),默认为中文。",
+            "enum" : [ "en", "zh" ]
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "HWCloudSentimentResp" : {
+        "required" : [ "confidence", "content", "label" ],
+        "properties" : {
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "该文本的分析结果标签,取值如下:"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "标签label的置信度。小数点精确到(6)位。"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本"
+          }
+        },
+        "description" : "result字段数据结构说明",
+        "type" : "object"
+      },
+      "GeneralRep" : {
+        "properties" : {
+          "result" : {
+            "description" : "情感信息。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/HWCloudSentimentResp"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "情感分析返回信息",
+        "type" : "object"
+      },
+      "SummaryResp" : {
+        "properties" : {
+          "summary" : {
+            "type" : "string",
+            "description" : "根据文本请求体,返回摘要结果。调用失败时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "type" : "object"
+      },
+      "SummaryReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "文本正文(目前仅支持UTF-8编码),长度不超过10000字。"
+          },
+          "lang" : {
+            "type" : "string",
+            "default" : "zh",
+            "enum" : [ "zh", "en" ],
+            "description" : "支持的文本语言类型,目前支持中文(zh)和英文(en),默认为中文。"
+          },
+          "length_limit" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "生成摘要的长度限制。length_limit > 1,则返回结果为字数不小于该值且最接近该值的摘要。"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "文本标题(目前仅支持UTF-8编码),长度不超过1000字。"
+          }
+        },
+        "type" : "object"
+      },
+      "EntitySentimentReq" : {
+        "required" : [ "content", "entity", "type" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "请求文本。文本编码要求为utf-8,仅支持中文实体情感分析。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "entity" : {
+            "type" : "string",
+            "description" : "请求实体。文本编码要求为utf-8.仅支持中文实体情感分析。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 3,
+            "description" : "取值如下:"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "EntitySentimentResponse" : {
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "响应的文本"
+          },
+          "entity" : {
+            "type" : "string",
+            "description" : "响应的实体"
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "响应的情感标签,0表示负面,1表示非负面,2表示不相关"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "该实体在文本中的情感label的置信度"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TextSimilarityAdvanceRequest" : {
+        "required" : [ "text1", "text2" ],
+        "properties" : {
+          "text1" : {
+            "type" : "string",
+            "example" : "华为云计算",
+            "description" : "待计算文本1,长度1~512,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "text2" : {
+            "type" : "string",
+            "example" : "华为云",
+            "description" : "待计算文本1,长度1~512,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前只支持中文(zh),默认为中文。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "文本相似度请求体",
+        "type" : "object"
+      },
+      "NerRequest" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,中文长度为1~512,英文和西班牙文长度为1~2000,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 2000
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前支持中文(zh),英文(en),和西班牙文(es),默认为中文。",
+            "enum" : [ "zh", "en", "es" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "命名实体识别post请求体",
+        "type" : "object"
+      },
+      "NamedEntity" : {
+        "required" : [ "len", "offset", "tag", "word" ],
+        "properties" : {
+          "word" : {
+            "type" : "string",
+            "description" : "实体文本。"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "实体类型,枚举类型。"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本在待分析文本中的起始位置。"
+          },
+          "len" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本长度。"
+          }
+        },
+        "description" : "命名实体。",
+        "type" : "object"
+      },
+      "NerResponse" : {
+        "required" : [ "named_entities" ],
+        "properties" : {
+          "named_entities" : {
+            "type" : "array",
+            "description" : "命名实体识别结果。调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/NamedEntity"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "ner响应体",
+        "type" : "object"
+      },
+      "PostDomainNerResponse" : {
+        "properties" : {
+          "named_entities" : {
+            "type" : "array",
+            "description" : "命名实体识别结果。调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/DomainNamedEntity"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "领域版命名实体识别响应体。",
+        "type" : "object"
+      },
+      "DomainNamedEntity" : {
+        "required" : [ "len", "offset", "tag", "word" ],
+        "properties" : {
+          "word" : {
+            "type" : "string",
+            "description" : "实体文本。"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "实体类型,枚举类型。"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本在待分析文本中的起始位置。"
+          },
+          "len" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本长度。"
+          }
+        },
+        "description" : "命名实体类",
+        "type" : "object"
+      },
+      "PostDomainNerRequest" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,长度为1~512,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "支持的领域类型,目前支持通用(general)领域、商务(business)领域、娱乐(entertainment)领域,默认为general。",
+            "default" : "general",
+            "enum" : [ "general", "business", "entertainment" ]
+          }
+        },
+        "description" : "命名实体识别post请求体",
+        "type" : "object"
+      },
+      "DocumentClassificationReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "输入的文档,最大长度10000, 长度超过10000字符截取前10000个字符。",
+            "minLength" : 1,
+            "maxLength" : 10000
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "预留字段,支持的文本语言类型,当前只支持zh(中文),默认zh。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "DocClsPredictionItem" : {
+        "required" : [ "confidence", "label" ],
+        "properties" : {
+          "label" : {
+            "type" : "string",
+            "description" : "输入的文档标签,包括 sport(体育), anime(动漫), hospital(医院), history(历史), advertising (广告), entertainment(娱乐), religion(宗教), novel(小说), estate(地产), recruitment(招聘), education(教育), tourism(旅游), automobile(汽车), game(游戏), technology(科技), joke(笑话), health(健康), gourmet(美食), stock(股票), parenting(育儿), pornography(色情), finance(金融)"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度,0到1之间的数"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "DocumentClassificationResp" : {
+        "required" : [ "result" ],
+        "properties" : {
+          "result" : {
+            "description" : "标签列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/DocClsPredictionItem"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Slot" : {
+        "required" : [ "length", "normalized_word", "offset", "tag", "word" ],
+        "properties" : {
+          "word" : {
+            "type" : "string",
+            "description" : "实体文本。"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "实体类型。对于每个意图类别所支持的实体类型分别为:"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本在待分析文本中的起始位置。"
+          },
+          "length" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实体文本长度。"
+          },
+          "normalized_word" : {
+            "type" : "string",
+            "description" : "同义词或者其他标准表达的词,默认为原始的word。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "IntentReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "lang" : {
+            "enum" : [ "zh" ],
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。"
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本列表,UTF-8编码,限定32个字符以内,文本长度超过32个字符时,只检测前32个字符。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "IntentResp" : {
+        "properties" : {
+          "result" : {
+            "description" : "调用成功时的返回情感信息。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/IntentResult"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "IntentResult" : {
+        "required" : [ "confidence", "label", "slots", "text" ],
+        "properties" : {
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "标签label的置信度。"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "文本的意图标签。标签共有以下9类,取值如下:"
+          },
+          "slots" : {
+            "type" : "array",
+            "description" : "slot数据结构",
+            "items" : {
+              "$ref" : "#/components/schemas/Slot"
+            }
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "返回待分析文本。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Word" : {
+        "required" : [ "content", "pos" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "词汇文本。"
+          },
+          "pos" : {
+            "type" : "string",
+            "description" : "词汇对应的词性。"
+          }
+        },
+        "description" : "词汇类",
+        "type" : "object"
+      },
+      "SegmentRequest" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分词文本,长度为1~512,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "pos_switch" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 0, 1 ],
+            "description" : "是否开启词性标注功能,1为开启,0为关闭,默认为关闭。",
+            "default" : 0
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前支持中文(zh)和英文(en),默认为中文。",
+            "enum" : [ "zh", "en" ],
+            "default" : "zh"
+          },
+          "criterion" : {
+            "type" : "string",
+            "description" : "支持的分词规范。",
+            "enum" : [ "PKU", "CTB" ],
+            "default" : "PKU"
+          }
+        },
+        "description" : "分词post请求体",
+        "type" : "object"
+      },
+      "SegmentResponse" : {
+        "properties" : {
+          "words" : {
+            "type" : "array",
+            "description" : "分词结果。调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/Word"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "分词结果响应信息",
+        "type" : "object"
+      },
+      "CreatePoem" : {
+        "required" : [ "title", "type" ],
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "诗歌标题,目前仅支持UTF-8编码,仅支持中文,长度为1-10",
+            "minLength" : 1,
+            "maxLength" : 10
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 0, 1, 2, 3 ],
+            "default" : 0,
+            "description" : "诗歌类型,取值如下:"
+          },
+          "acrostic" : {
+            "type" : "boolean",
+            "description" : "藏头诗,取值如下:"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CreatePoemResp" : {
+        "properties" : {
+          "poem" : {
+            "type" : "array",
+            "description" : "根据文本请求体,返回生成的诗歌。调用失败时无此字段。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "fileTranslationReq" : {
+        "required" : [ "from", "to", "type", "url" ],
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "description" : "存放在OBS的文档文件路径,私密文件推荐使用临时授权URL调用服务,如何获取OBS文件URL和临时授权URL请参见配置OBS访问权限(https://support.huaweicloud.com/api-nlp/nlp_03_0080.html)。OBS的region要和请求服务的region保持一致,region不一致则OBS不可用,即使obs是公开访问权限。"
+          },
+          "from" : {
+            "type" : "string",
+            "default" : "zh",
+            "enum" : [ "zh", "en" ],
+            "description" : "翻译原语言,文档翻译服务当前仅支持中英互译。"
+          },
+          "to" : {
+            "type" : "string",
+            "default" : "en",
+            "enum" : [ "zh", "en" ],
+            "description" : "翻译目标语言,文档翻译服务当前仅支持中英互译。"
+          },
+          "type" : {
+            "type" : "string",
+            "default" : "docx",
+            "enum" : [ "docx", "pptx", "txt" ],
+            "description" : "文档格式,当前仅支持翻译“docx”、“pptx”和“txt”格式的文档。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "fileTranslationResp" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "创建的任务标识, 如果创建任务成功时必存在。调用失败时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "getFileTranslationResultResp" : {
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "当前翻译状态。具体状态如下所示:"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "临时url,用于获取翻译结果,有效期十分钟。过期后请再次调用接口获取新的url。调用失败时或翻译状态非FINISHED时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "PostEntityLinkingRequest" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "example" : "李娜唱的青藏高原真好听",
+            "description" : "待分析文本,长度为1~50,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 50
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          }
+        },
+        "description" : "实体链接post请求体",
+        "type" : "object"
+      },
+      "PostEntityLinkingResponse" : {
+        "required" : [ "entities" ],
+        "properties" : {
+          "entities" : {
+            "type" : "array",
+            "description" : "识别出的实体列表",
+            "items" : {
+              "$ref" : "#/components/schemas/LinkedEntity"
+            }
+          }
+        },
+        "description" : "实体链接响应体",
+        "type" : "object"
+      },
+      "LinkedEntity" : {
+        "required" : [ "entity_title", "mention", "offset" ],
+        "properties" : {
+          "mention" : {
+            "type" : "string",
+            "description" : "实体指称"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "偏移量"
+          },
+          "entity_title" : {
+            "type" : "string",
+            "description" : "实体名称"
+          }
+        },
+        "description" : "链接的实体 类",
+        "type" : "object"
+      },
+      "textTranslationReq" : {
+        "required" : [ "from", "text", "to" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待翻译文本,仅支持utf-8编码,长度不超过2000字符。"
+          },
+          "from" : {
+            "type" : "string",
+            "default" : "zh",
+            "enum" : [ "zh", "en", "ja", "ru", "es", "de", "ar", "pt", "th", "tr", "ko", "fr", "vi", "hi", "km", "my", "ta", "fa", "ur", "bn", "mr", "gu", "pa", "te", "he", "cs", "sk", "ro", "sq", "lv", "et", "lt", "hr", "bs", "ka", "sl", "ca", "af", "mg", "id", "fil", "sw", "hu", "sr", "mk", "uk", "bg", "mt", "el", "is", "ga", "cy", "ht", "no", "sv", "fi", "da", "zh-tw", "auto" ],
+            "description" : "翻译原语言,具体取值见支持的语言列表:"
+          },
+          "to" : {
+            "type" : "string",
+            "default" : "en",
+            "enum" : [ "zh", "en", "ja", "ru", "es", "de", "ar", "pt", "th", "tr", "ko", "fr", "vi", "hi", "km", "my", "ta", "fa", "ur", "bn", "mr", "gu", "pa", "te", "he", "cs", "sk", "ro", "sq", "lv", "et", "lt", "hr", "bs", "ka", "sl", "ca", "af", "mg", "id", "fil", "sw", "hu", "sr", "mk", "uk", "bg", "mt", "el", "is", "ga", "cy", "ht", "no", "sv", "fi", "da", "zh-tw" ],
+            "description" : "翻译目标语言,具体取值见支持的语言列表:"
+          },
+          "scene" : {
+            "type" : "string",
+            "enum" : [ "common" ],
+            "description" : "默认为“common”,当前只有通用场景"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "textTranslationResp" : {
+        "properties" : {
+          "src_text" : {
+            "type" : "string",
+            "description" : "翻译原文,编码格式为UTF-8。调用失败时无此字段。"
+          },
+          "translated_text" : {
+            "type" : "string",
+            "description" : "翻译译文,编码格式为UTF-8。调用失败时无此字段。"
+          },
+          "from" : {
+            "type" : "string",
+            "description" : "调用成功时表示源语种(源语种输入为auto时,显示语种识别结果),编码格式为UTF-8。调用失败时无此字段。"
+          },
+          "to" : {
+            "type" : "string",
+            "description" : "调用成功时表示目标语种,编码格式为UTF-8。调用失败时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "DependencyParserWord" : {
+        "required" : [ "dependency_label", "head_word_id", "id", "word", "pos" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "词汇id"
+          },
+          "word" : {
+            "type" : "string",
+            "description" : "词汇内容"
+          },
+          "head_word_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "头节点ID,根节点默认为0"
+          },
+          "pos" : {
+            "type" : "string",
+            "description" : "词性"
+          },
+          "dependency_label" : {
+            "type" : "string",
+            "description" : "词与头节点的依存关系,包括以下几种类型",
+            "enum" : [ "root", "sasubj-obj", "sasubj", "dfsubj", "subj", "subj-in", "obj", "pred", "att", "adv", "cmp", "coo", "pobj", "iobj", "de", "adjct", "app", "exp", "punc", "frag", "repet" ]
+          }
+        },
+        "description" : "依存句法分析结果词汇单元结构体",
+        "type" : "object"
+      },
+      "DependencyParserRequest" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,长度为1~32,文本编码为utf-8。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "lang" : {
+            "type" : "string",
+            "enum" : [ "zh" ],
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。"
+          }
+        },
+        "description" : "依存句法分析请求体",
+        "type" : "object"
+      },
+      "DependencyParserResponse" : {
+        "properties" : {
+          "words" : {
+            "type" : "array",
+            "description" : "依存句法分析结果,词汇集合。调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/DependencyParserWord"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "依存句法分析响应体",
+        "type" : "object"
+      },
+      "DomainSentimentReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。文本编码要求为utf-8。仅支持中文情感分析。"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 0, 1, 2 ],
+            "description" : "取值如下:"
+          }
+        },
+        "description" : "请求消息",
+        "type" : "object"
+      },
+      "AspectSentimentAdvanceRequest" : {
+        "required" : [ "content", "type" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。文本编码要求为utf-8,仅支持中文。 限定4096个字符以内,建议文本长度300个字符以内。"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 1, 2 ],
+            "default" : 1,
+            "description" : "取值如下:"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "AspectSentimentAdvanceResponse" : {
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本"
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "该文本的整体情感标签,取值如下:"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "该文本整体情感label的置信度,小数点精确到3位。"
+          },
+          "aspect_opinions" : {
+            "type" : "array",
+            "description" : "属性情感挖掘列表",
+            "items" : {
+              "$ref" : "#/components/schemas/AspectAdvanceOpinion"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "属性级情感分析响应",
+        "type" : "object"
+      },
+      "AspectAdvanceOpinion" : {
+        "required" : [ "aspect_category", "aspect_term", "label", "opinion_term", "span" ],
+        "properties" : {
+          "aspect_category" : {
+            "type" : "string",
+            "description" : "属性类别"
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "情感标签,0:负向,1:正向"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "情感标签置信度"
+          },
+          "aspect_term" : {
+            "type" : "string",
+            "description" : "属性描述词,预留参数,暂不支持。"
+          },
+          "opinion_term" : {
+            "type" : "string",
+            "description" : "观点描述词,预留参数,暂不支持。"
+          },
+          "span" : {
+            "type" : "array",
+            "description" : "属性评价起始位置,预留参数,暂不支持。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "观点标签,预留参数,暂不支持。"
+          }
+        },
+        "description" : "属性观点列表",
+        "type" : "object"
+      },
+      "EventExtractionResponse" : {
+        "required" : [ "events" ],
+        "properties" : {
+          "events" : {
+            "type" : "array",
+            "description" : "事件抽取结果。调用失败时无此字段。",
+            "items" : {
+              "description" : "events数据结构",
+              "$ref" : "#/components/schemas/EventExtractionResponseItem"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "事件抽取响应",
+        "type" : "object"
+      },
+      "EventExtractionResponseItemArgument" : {
+        "required" : [ "role", "span", "word" ],
+        "properties" : {
+          "role" : {
+            "type" : "string",
+            "description" : "元素角色。元素角色指的是事件元素在事件中扮演的角色,是事件元素与事件的语义关系。"
+          },
+          "span" : {
+            "type" : "array",
+            "description" : "实体文本在待分析文本中的起始和终止位置。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          },
+          "word" : {
+            "type" : "string",
+            "description" : "实体文本。"
+          }
+        },
+        "description" : "事件元素",
+        "type" : "object"
+      },
+      "PostEventExtractionReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,长度为1~256,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 256
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "EventExtractionResponseItem" : {
+        "required" : [ "argument", "event_trigger", "trigger_span" ],
+        "properties" : {
+          "argument" : {
+            "type" : "array",
+            "description" : "事件元素列表。",
+            "items" : {
+              "description" : "事件元素",
+              "$ref" : "#/components/schemas/EventExtractionResponseItemArgument"
+            }
+          },
+          "event_trigger" : {
+            "type" : "string",
+            "description" : "事件触发词。触发词是事件描述中最能代表事件发生的词汇,决定事件类别的重要特征。"
+          },
+          "event_type" : {
+            "type" : "string",
+            "description" : "事件类型。"
+          },
+          "trigger_span" : {
+            "type" : "array",
+            "description" : "事件触发词在待分析文本中的起始和终止位置。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "events数据结构",
+        "type" : "object"
+      },
+      "ClassificationReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。文本编码要求为utf-8。"
+          },
+          "domain" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 1 ],
+            "description" : "1 广告检测"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ClassificationResp" : {
+        "properties" : {
+          "result" : {
+            "description" : "文本分类结果。调用失败时无此字段。",
+            "$ref" : "#/components/schemas/ClassificationResult"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "type" : "object"
+      },
+      "ClassificationResult" : {
+        "required" : [ "confidence", "content", "label" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "待分析文本。"
+          },
+          "label" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "分类标签。"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "标签label的置信度。"
+          }
+        },
+        "description" : "result字段数据结构说明",
+        "type" : "object"
+      },
+      "languageDetectionResp" : {
+        "properties" : {
+          "detected_language" : {
+            "type" : "string",
+            "description" : "调用成功时表示调用结果,语种缩写对应名称如下:"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "languageDetectionReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "需要识别语种的文本。仅支持utf-8编码,长度不超过2000字符。",
+            "minLength" : 1,
+            "maxLength" : 2000
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "SummaryDomainResp" : {
+        "properties" : {
+          "summary" : {
+            "type" : "string",
+            "description" : "根据文本请求体,返回摘要结果。调用失败时无此字段。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "SummaryDomainReq" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "length_limit" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "生成摘要的长度限制。length_limit > 1,则返回结果为字数不小于该值且最接近该值的摘要。",
+            "minimum" : 0
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "文本标题(目前仅支持UTF-8编码),长度不超过1000字。",
+            "minLength" : 0,
+            "maxLength" : 1000
+          },
+          "lang" : {
+            "type" : "string",
+            "enum" : [ "zh" ],
+            "description" : "支持的文本语言类型,目前支持中文(zh)。"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "文本正文(目前仅支持UTF-8编码),长度不超过10000字。",
+            "minLength" : 1,
+            "maxLength" : 10000
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 0 ],
+            "description" : "支持的领域类型,取值如下(目前只支持通用领域),默认为通用领域:"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ConstituencyParserResp" : {
+        "properties" : {
+          "tree" : {
+            "type" : "string",
+            "description" : "成分句法分析结果,用嵌套括号的形式表示一棵树。括号内的第一个元素为子树的标签,若是叶子节点则用符号_代替。第二个元素为子树,若是叶子节点则为字符串。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "ConstituencyParserReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "lang" : {
+            "type" : "string",
+            "enum" : [ "zh" ],
+            "description" : "支持的文本语言类型,目前支持中文(zh)。"
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "待分析文本,长度为1~32。",
+            "minLength" : 1,
+            "maxLength" : 32
+          }
+        },
+        "type" : "object"
+      },
+      "PostMultiGainedSegmentResponse" : {
+        "required" : [ "result" ],
+        "properties" : {
+          "result" : {
+            "type" : "array",
+            "description" : "多粒度分词结果列表。调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/PostMultiGainedSegmentResponseItem"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "多粒度分词响应体",
+        "type" : "object"
+      },
+      "postMultiGrainedSegmentReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待分词文本,长度为1~64,文本编码为UTF-8。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "lang" : {
+            "type" : "string",
+            "description" : "支持的文本语言类型,目前只支持中文,默认为zh。",
+            "enum" : [ "zh" ],
+            "default" : "zh"
+          },
+          "granularity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 1, 2, 0 ],
+            "description" : "分词粒度,1为最细粒度,2为最粗粒度,其它情况默认返回全部粒度分词树结果。",
+            "default" : 1
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "PostMultiGainedSegmentResponseItem_copy" : {
+        "required" : [ "content", "type" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "当前节点对应的文本内容"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "文本类型,取值如下:",
+            "enum" : [ "WORD", "CHAR" ]
+          },
+          "sub_contents" : {
+            "type" : "array",
+            "description" : "当前节点的子节点列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PostMultiGainedSegmentResponseItem"
+            }
+          }
+        },
+        "description" : "多粒度分词结果中的词汇节点",
+        "type" : "object"
+      },
+      "PostMultiGainedSegmentResponseItem" : {
+        "required" : [ "content", "type" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "当前节点对应的文本内容"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "文本类型,取值如下:",
+            "enum" : [ "WORD", "CHAR" ]
+          },
+          "sub_contents" : {
+            "type" : "array",
+            "description" : "当前节点的子节点列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PostMultiGainedSegmentResponseItem_copy"
+            }
+          }
+        },
+        "description" : "多粒度分词结果中的词汇节点",
+        "type" : "object"
+      },
+      "PostSentenceEmbeddingReq" : {
+        "required" : [ "sentences" ],
+        "properties" : {
+          "sentences" : {
+            "type" : "array",
+            "description" : "文本列表,文本长度为1~512,列表大小为1~1000,文本编码为UTF-8。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "支持的领域类型,目前只支持通用领域,默认为general。",
+            "enum" : [ "general" ],
+            "default" : "general"
+          }
+        },
+        "description" : "命名实体识别post请求体",
+        "type" : "object"
+      },
+      "PostSentenceEmbeddingResp" : {
+        "properties" : {
+          "vectors" : {
+            "type" : "array",
+            "description" : "句向量结果列表,按输入句子顺序返回句向量。调用失败时无此字段。",
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "type" : "number",
+                "format" : "float"
+              }
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。调用成功时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/RunKeywordExtract" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "关键词抽取",
+        "description" : "给定一段文本,抽取其中最能够反映文本主题或者意思的词汇。",
+        "operationId" : "RunKeywordExtract",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/KeywordExtractionResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/keyword-extractReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunKeywordExtract",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/keyword-extraction"
+    },
+    "/RunTextSimilarity" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "文本相似度(基础版)",
+        "description" : "文本相似度服务,对文本对进行相似度计算。",
+        "operationId" : "RunTextSimilarity",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TextSimilarityResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TextSimilarityRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTextSimilarity",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/text-similarity"
+    },
+    "/RunAspectSentiment" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "属性级情感分析",
+        "description" : "属性级情感分析,针对手机领域的用户评论进行属性级情感分析。",
+        "operationId" : "RunAspectSentiment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AspectSentimentResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AspectSentimentRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunAspectSentiment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/aspect-sentiment"
+    },
+    "/RunSentiment" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "情感分析(基础版)",
+        "description" : "通用情感分析,针对通用领域的用户评论进行情感分析。",
+        "operationId" : "RunSentiment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GeneralRep"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/HWCloudSentimentReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSentiment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/sentiment"
+    },
+    "/RunSummary" : {
+      "post" : {
+        "tags" : [ "语言生成服务" ],
+        "summary" : "文本摘要(基础版)",
+        "description" : "对文本生成摘要。",
+        "operationId" : "RunSummary",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SummaryResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SummaryReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSummary",
+      "x-url" : "{endpoint}/v1/{project_id}/nlg/summarization"
+    },
+    "/RunEntitySentiment" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "实体级情感分析",
+        "description" : "实体级情感分析,本产品适用于金融方面公司实体正负面新闻的分析。",
+        "operationId" : "RunEntitySentiment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntitySentimentResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EntitySentimentReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunEntitySentiment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/entity-sentiment"
+    },
+    "/RunTextSimilarityAdvance" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "文本相似度(高级版)",
+        "description" : "文本相似度服务高级版,对文本对进行相似度计算。",
+        "operationId" : "RunTextSimilarityAdvance",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TextSimilarityResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TextSimilarityAdvanceRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTextSimilarityAdvance",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/text-similarity/advance"
+    },
+    "/RunNer" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "命名实体识别(基础版)",
+        "description" : "基础版命名实体识别,对文本进行命名实体识别分析,目前支持人名、地名、时间、组织机构类实体的识别。",
+        "operationId" : "RunNer",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NerResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NerRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunNer",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/ner"
+    },
+    "/RunNerDomain" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "命名实体识别(领域版)",
+        "description" : "领域版本命名实体识别,对文本进行命名实体识别分析,目前支持人名、地名、组织机构、时间点、日期、百分比、货币额度、序数词、计量规格词、民族、职业、邮箱12类实体的识别。",
+        "operationId" : "RunNerDomain",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostDomainNerResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostDomainNerRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunNerDomain",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/ner/domain"
+    },
+    "/RunDocClassification" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "文档分类",
+        "description" : "文档分类接口,输入文档内容,输出文档的标签和置信度,支持多个标签。",
+        "operationId" : "RunDocClassification",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentClassificationResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DocumentClassificationReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunDocClassification",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/doc-classification"
+    },
+    "/RunSemanticParser" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "意图理解",
+        "description" : "针对天气、报时、新闻、笑话、翻译、提醒、闹钟、音乐8个领域进行意图理解,对用户的问题进行领域识别并提取领域内的参数。",
+        "operationId" : "RunSemanticParser",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IntentResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IntentReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSemanticParser",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/semantic-parser"
+    },
+    "/RunSegment" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "分词",
+        "description" : "对文本进行分词和词性标注处理。",
+        "operationId" : "RunSegment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SegmentResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SegmentRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSegment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/segment"
+    },
+    "/RunPoem" : {
+      "post" : {
+        "tags" : [ "语言生成服务" ],
+        "summary" : "诗歌生成",
+        "description" : "根据用户的输入生成诗歌。",
+        "operationId" : "RunPoem",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePoemResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePoem"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunPoem",
+      "x-url" : "{endpoint}/v1/{project_id}/nlg/poem"
+    },
+    "/RunFileTranslation" : {
+      "post" : {
+        "tags" : [ "机器翻译服务" ],
+        "summary" : "文档翻译",
+        "description" : "文档翻译接口,用于翻译文档格式文件。由于文档翻译会需要较长的时间,因此识别是异步的,也即接口分为创建翻译任务和查询任务状态两个接口。创建翻译任务接口创建任务完成后返回,然后用户通过调用查询任务状态接口来获得翻译状态和临时URL。 用户可以使用临时URL下载翻译好的文件,每个临时URL有效期为10分种。翻译结果会保存24小时(从翻译完成的时间算起)。24小时后如果再访问,将会返回 \\\"task id is not found\\\"错误。",
+        "operationId" : "RunFileTranslation",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/fileTranslationResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID, 用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID, 用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/fileTranslationReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunFileTranslation",
+      "x-url" : "{endpoint}/v1/{project_id}/machine-translation/file-translation/jobs"
+    },
+    "/RunGetFileTranslationResult" : {
+      "get" : {
+        "tags" : [ "机器翻译服务" ],
+        "summary" : "文档翻译状态查询",
+        "description" : "该接口用于获取文档翻译识别状态以及临时url,临时url可以用与获取翻译后的文档,每个临时url有效期为十分钟。",
+        "operationId" : "RunGetFileTranslationResult",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getFileTranslationResultResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "文档翻译任务标识符。通过文档翻译接口获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "文档翻译任务标识符。通过文档翻译接口获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunGetFileTranslationResult",
+      "x-url" : "{endpoint}/v1/{project_id}/machine-translation/file-translation/jobs/{job_id}"
+    },
+    "/RunEntityLinking" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "实体链接",
+        "description" : "针对通用领域的文本进行实体链接分析,识别出其中的实体,并返回实体相关信息。",
+        "operationId" : "RunEntityLinking",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostEntityLinkingResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostEntityLinkingRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunEntityLinking",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/entity-linking"
+    },
+    "/RunTextTranslation" : {
+      "post" : {
+        "tags" : [ "机器翻译服务" ],
+        "summary" : "文本翻译",
+        "description" : "对于用户输入原始语种的文本,转换为目标语种的文本。",
+        "operationId" : "RunTextTranslation",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/textTranslationResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID, 用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID, 用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/textTranslationReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTextTranslation",
+      "x-url" : "{endpoint}/v1/{project_id}/machine-translation/text-translation"
+    },
+    "/RunDependencyParser" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "依存句法分析",
+        "description" : "识别句子中词汇与词汇之间的相互依存关系。",
+        "operationId" : "RunDependencyParser",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DependencyParserResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DependencyParserRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunDependencyParser",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/dependency-parser"
+    },
+    "/RunDomainSentiment" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "情感分析(领域版)",
+        "description" : "领域情感分析,针对未知领域,电商,汽车领域的用户评论进行情感分析。",
+        "operationId" : "RunDomainSentiment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GeneralRep"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DomainSentimentReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunDomainSentiment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/sentiment/domain"
+    },
+    "/RunAspectSentimentAdvance" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "属性级情感分析(高级版)",
+        "description" : "属性级情感分析(高级版),针对手机、汽车领域的用户评论进行属性级情感分析。",
+        "operationId" : "RunAspectSentimentAdvance",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应消息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AspectSentimentAdvanceResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AspectSentimentAdvanceRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunAspectSentimentAdvance",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/aspect-sentiment/advance"
+    },
+    "/RunEventExtraction" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "事件抽取",
+        "description" : "事件抽取是指从自然语言文本中抽取指定类型的事件以及相关实体信息,并形成结构化数据输出的文本处理技术。",
+        "operationId" : "RunEventExtraction",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EventExtractionResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostEventExtractionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunEventExtraction",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/event-extraction"
+    },
+    "/RunClassification" : {
+      "post" : {
+        "tags" : [ "语言理解服务" ],
+        "summary" : "文本分类",
+        "description" : "针对广告领域的自动分类,判断是否是广告。",
+        "operationId" : "RunClassification",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ClassificationResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ClassificationReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunClassification",
+      "x-url" : "{endpoint}/v1/{project_id}/nlu/classification"
+    },
+    "/RunLanguageDetection" : {
+      "post" : {
+        "tags" : [ "机器翻译服务" ],
+        "summary" : "语种识别",
+        "description" : "对于用户输入的文本,返回识别出的所属语种。",
+        "operationId" : "RunLanguageDetection",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/languageDetectionResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID, 用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID, 用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/languageDetectionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunLanguageDetection",
+      "x-url" : "{endpoint}/v1/{project_id}/machine-translation/language-detection"
+    },
+    "/RunSummaryDomain" : {
+      "post" : {
+        "tags" : [ "语言生成服务" ],
+        "summary" : "文本摘要(领域版)",
+        "description" : "对文本生成摘要。",
+        "operationId" : "RunSummaryDomain",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SummaryDomainResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SummaryDomainReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSummaryDomain",
+      "x-url" : "{endpoint}/v1/{project_id}/nlg/summarization/domain"
+    },
+    "/RunConstituencyParser" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "成分句法分析",
+        "description" : "识别句子中的成分以及成分之间的层次包含关系。",
+        "operationId" : "RunConstituencyParser",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConstituencyParserResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConstituencyParserReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunConstituencyParser",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/constituency-parser"
+    },
+    "/RunMultiGrainedSegment" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "多粒度分词",
+        "description" : "多粒度分词:给定一个句子输入,输出不同粒度的所有单词的层次结构。",
+        "operationId" : "RunMultiGrainedSegment",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostMultiGainedSegmentResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/postMultiGrainedSegmentReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunMultiGrainedSegment",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/multi-grained-segment"
+    },
+    "/RunSentenceEmbedding" : {
+      "post" : {
+        "tags" : [ "自然语言处理基础服务" ],
+        "summary" : "句向量",
+        "description" : "输入句子,返回对应的句向量。",
+        "operationId" : "RunSentenceEmbedding",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostSentenceEmbeddingResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostSentenceEmbeddingReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunSentenceEmbedding",
+      "x-url" : "{endpoint}/v1/{project_id}/nlp-fundamental/sentence-embedding"
+    }
+  }
+}

@@ -1,0 +1,691 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "TICS-联盟管理",
+    "title" : "TICS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListNotices" : {
+      "get" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "查询通知管理列表",
+        "description" : "功能描述:用户可以使用该接口查询通知管理列表。",
+        "operationId" : "ListNotices",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "500" : {
+            "description" : "获取节点列表失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNotices",
+      "x-url" : "{endpoint}/v1/{project_id}/notices"
+    },
+    "/ShowAgentDetail" : {
+      "get" : {
+        "tags" : [ "可信节点管理" ],
+        "summary" : "获取计算节点详情信息",
+        "description" : "功能描述:用户可以使用该接口获取单个可信计算节点详情信息。",
+        "operationId" : "ShowAgentDetail",
+        "responses" : {
+          "200" : {
+            "description" : "获取计算节点详情信息成功"
+          },
+          "500" : {
+            "description" : "获取计算节点详情信息失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/agent_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAgentDetail",
+      "x-url" : "{endpoint}/v1/{project_id}/agents/{agent_id}"
+    },
+    "/UpdateLeague" : {
+      "put" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "更新联盟信息",
+        "description" : "功能描述:用户可以使用接口更新联盟信息(包含联盟描述,联盟版本,隐私保护等级,查分隐私开关)。",
+        "operationId" : "UpdateLeague",
+        "responses" : {
+          "200" : {
+            "description" : "更新联盟信息成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateLeague",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}"
+    },
+    "/ListAgents" : {
+      "get" : {
+        "tags" : [ "可信节点管理" ],
+        "summary" : "获取计算节点列表",
+        "description" : "功能描述:用户可以使用该接口获取可信节点信息列表。支持节点名称与联盟名称的模糊查询。",
+        "operationId" : "ListAgents",
+        "responses" : {
+          "200" : {
+            "description" : "查询节点列表成功"
+          },
+          "500" : {
+            "description" : "查询节点列表失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/agent_name"
+        }, {
+          "$ref" : "#/components/components/parameters/league_name"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAgents",
+      "x-url" : "{endpoint}/v1/{project_id}/agents"
+    },
+    "/ShowJobInstanceDag" : {
+      "get" : {
+        "tags" : [ "作业实例管理" ],
+        "summary" : "获取实例执行图",
+        "description" : "获取实例执行图",
+        "operationId" : "ShowJobInstanceDag",
+        "responses" : {
+          "200" : {
+            "description" : "获取实例执行图成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/instance_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/round_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobInstanceDag",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/job-instances/{instance_id}/dag"
+    },
+    "/ListInstanceHistory" : {
+      "get" : {
+        "tags" : [ "作业实例管理" ],
+        "summary" : "查询作业的历史实例列表",
+        "description" : "查询作业的历史实例列表",
+        "operationId" : "ListInstanceHistory",
+        "responses" : {
+          "200" : {
+            "description" : "查询作业的历史实例列表成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/job_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInstanceHistory",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/job-instances"
+    },
+    "/ShowOverview" : {
+      "get" : {
+        "tags" : [ "统计信息管理" ],
+        "summary" : "查询租户下统计信息",
+        "description" : "查询当前租户的联盟及代理统计数量",
+        "operationId" : "ShowOverview",
+        "responses" : {
+          "200" : {
+            "description" : "获取租户统计信息成功"
+          },
+          "500" : {
+            "description" : "获取租户统计信息失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOverview",
+      "x-url" : "{endpoint}/v1/{project_id}/overview/statistics"
+    },
+    "/ListLeagueDatasets" : {
+      "get" : {
+        "tags" : [ "数据集管理" ],
+        "summary" : "查询联盟已注册数据集列表",
+        "description" : "功能描述:用户可以使用该接口查询联盟已注册数据集列表。",
+        "operationId" : "ListLeagueDatasets",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/dataset_name"
+        }, {
+          "$ref" : "#/components/components/parameters/partner_name"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListLeagueDatasets",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/datasets"
+    },
+    "/ShowPartnerStatistics" : {
+      "get" : {
+        "tags" : [ "统计信息管理" ],
+        "summary" : "合作方统计",
+        "description" : "功能描述:用户可以使用该接口进行联盟合作方统计。",
+        "operationId" : "ShowPartnerStatistics",
+        "responses" : {
+          "200" : {
+            "description" : "合作方信息统计"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/start_date"
+        }, {
+          "$ref" : "#/components/components/parameters/end_date"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPartnerStatistics",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/partners-statistics"
+    },
+    "/ShowInstanceReport" : {
+      "get" : {
+        "tags" : [ "作业实例管理" ],
+        "summary" : "查询实例执行报告",
+        "description" : "查询实例执行报告",
+        "operationId" : "ShowInstanceReport",
+        "responses" : {
+          "200" : {
+            "description" : "查询实例执行报告成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/instance_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowInstanceReport",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/job-instances/{instance_id}/report"
+    },
+    "/ListPartners" : {
+      "get" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "获取联盟组员信息",
+        "description" : "功能描述:用户可以使用该接口获取联盟组员信息",
+        "operationId" : "ListPartners",
+        "responses" : {
+          "200" : {
+            "description" : "获取联盟组员信息成功"
+          },
+          "500" : {
+            "description" : "获取联盟组员信息失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPartners",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/partners"
+    },
+    "/ShowJobStatistics" : {
+      "get" : {
+        "tags" : [ "统计信息管理" ],
+        "summary" : "作业统计",
+        "description" : "功能描述:用户可以使用该接口进行联盟作业统计。",
+        "operationId" : "ShowJobStatistics",
+        "responses" : {
+          "200" : {
+            "description" : "作业统计信息"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/start_date"
+        }, {
+          "$ref" : "#/components/components/parameters/end_date"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobStatistics",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/jobs-statistics"
+    },
+    "/ListAuditInfo" : {
+      "get" : {
+        "tags" : [ "审计日志管理" ],
+        "summary" : "查询审计日志",
+        "description" : "查询审计日志信息",
+        "operationId" : "ListAuditInfo",
+        "responses" : {
+          "200" : {
+            "description" : "查询审计日志成功"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/audit-info"
+    },
+    "/ListNodes" : {
+      "get" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "查询联盟节点列表",
+        "description" : "功能描述:用户可以使用该接口查询联盟可信节点(包含聚合节点和计算节点)列表。",
+        "operationId" : "ListNodes",
+        "responses" : {
+          "200" : {
+            "description" : "查询联盟网元信息"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNodes",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/nodes"
+    },
+    "/ShowDatasetStatistics" : {
+      "get" : {
+        "tags" : [ "统计信息管理" ],
+        "summary" : "数据集统计",
+        "description" : "用户可以使用该接口进行联盟数据集统计。",
+        "operationId" : "ShowDatasetStatistics",
+        "responses" : {
+          "200" : {
+            "description" : "数据集统计信息"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/start_date"
+        }, {
+          "$ref" : "#/components/components/parameters/end_date"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDatasetStatistics",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/datasets-statistics"
+    },
+    "/ListSqlJob" : {
+      "get" : {
+        "tags" : [ "联邦分析作业管理" ],
+        "summary" : "查询联邦分析作业列表",
+        "description" : "查询联邦分析作业列表",
+        "operationId" : "ListSqlJob",
+        "responses" : {
+          "200" : {
+            "description" : "查询联邦分析作业列表成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSqlJob",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/sql-jobs"
+    },
+    "/ListLeagues" : {
+      "get" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "获取联盟列表",
+        "description" : "功能描述:用户可以使用该接口获取联盟列表。",
+        "operationId" : "ListLeagues",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "500" : {
+            "description" : "获取节点列表失败"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListLeagues",
+      "x-url" : "{endpoint}/v1/{project_id}/league-info"
+    },
+    "/ShowLeague" : {
+      "get" : {
+        "tags" : [ "联盟管理" ],
+        "summary" : "获取联盟详细信息",
+        "description" : "功能描述:用户可以使用该接口获取联盟详细信息。",
+        "operationId" : "ShowLeague",
+        "responses" : {
+          "200" : {
+            "description" : "获取联盟详细信息"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowLeague",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}"
+    },
+    "/ListFlJob" : {
+      "get" : {
+        "tags" : [ "联邦学习作业管理" ],
+        "summary" : "查询联邦学习作业列表",
+        "description" : "查询联邦学习作业列表",
+        "operationId" : "ListFlJob",
+        "responses" : {
+          "200" : {
+            "description" : "保存联邦学习作业成功"
+          },
+          "401" : {
+            "description" : "操作无权限"
+          },
+          "500" : {
+            "description" : "内部服务器错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/components/parameters/league_id"
+        }, {
+          "$ref" : "#/components/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/components/parameters/offset"
+        }, {
+          "$ref" : "#/components/components/parameters/x-auth-token"
+        }, {
+          "$ref" : "#/components/components/parameters/content-Type"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFlJob",
+      "x-url" : "{endpoint}/v1/{project_id}/leagues/{league_id}/fl-jobs"
+    }
+  }
+}

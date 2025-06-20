@@ -1,0 +1,5577 @@
+
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "GSL-标签管理",
+    "title" : "GSL",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : {
+      "X-Auth-Token" : {
+        "name" : "X-Auth-Token",
+        "in" : "header",
+        "description" : "用户Token。通过调用IAM服务 [获取IAM用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html)接口获取,接口返回的响应消息头中“X-Subject-Token”就是需要获取的用户Token。简要的获取方法样例请参见 [Token认证](https://support.huaweicloud.com/api-ocgsl/gsl_07_0004.html)。",
+        "required" : true,
+        "schema" : {
+          "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+          "description" : "用户Token。通过调用IAM服务 [获取IAM用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html)接口获取,接口返回的响应消息头中“X-Subject-Token”就是需要获取的用户Token。简要的获取方法样例请参见 [Token认证](https://support.huaweicloud.com/api-ocgsl/gsl_07_0004.html)。",
+          "type" : "string"
+        },
+        "type" : "object"
+      },
+      "offset" : {
+        "name" : "offset",
+        "in" : "query",
+        "description" : "分页查询时的页码数,默认值为1,取值范围为1-1000000的整数",
+        "required" : false,
+        "schema" : {
+          "description" : "分页查询时的页码数,默认值为1,取值范围为1-1000000的整数",
+          "type" : "integer",
+          "format" : "int64",
+          "default" : 1,
+          "maximum" : 1000000,
+          "minimum" : 1
+        },
+        "type" : "object"
+      },
+      "limit" : {
+        "name" : "limit",
+        "in" : "query",
+        "description" : "分页查询时每页显示的记录数,默认值为10,取值范围为10-500的整数",
+        "required" : false,
+        "schema" : {
+          "description" : "分页查询时每页显示的记录数,默认值为10,取值范围为10-500的整数",
+          "type" : "integer",
+          "format" : "int64",
+          "default" : 10,
+          "maximum" : 500,
+          "minimum" : 10
+        },
+        "type" : "object"
+      }
+    },
+    "schemas" : {
+      "ApiResponse" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误信息"
+          }
+        }
+      },
+      "CmTagVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "标签标识"
+          },
+          "tag_name" : {
+            "type" : "string",
+            "example" : "测试标签",
+            "description" : "标签名称",
+            "maxLength" : 100
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "标签状态,0未使用,1使用中。"
+          }
+        }
+      },
+      "AddOrModifyTagReq" : {
+        "type" : "object",
+        "required" : [ "tag_name" ],
+        "properties" : {
+          "tag_name" : {
+            "type" : "string",
+            "example" : "测试标签",
+            "description" : "标签名称",
+            "minLength" : 1,
+            "maxLength" : 100
+          }
+        },
+        "example" : {
+          "tag_name" : "新的标签名"
+        }
+      },
+      "SimDeviceVO" : {
+        "type" : "object",
+        "properties" : {
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "sim卡id"
+          },
+          "account_id" : {
+            "type" : "string",
+            "example" : "2a6exxxxxxxx",
+            "description" : "账户id"
+          },
+          "cid" : {
+            "type" : "string",
+            "example" : "TN123xxx",
+            "description" : "容器ID:不同类型卡含义如下 iccid(实体卡),eid(eSIM)cid(vSIM)"
+          },
+          "sim_pool_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "流量池ID"
+          },
+          "imei" : {
+            "type" : "string",
+            "example" : "356744063xxxxxx",
+            "description" : "设备IMEI"
+          },
+          "sim_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "sim卡状态:"
+          },
+          "device_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3,
+            "description" : "设备状态:1.注册 2.重启 3.在线 4.离线 (该参数只有ESIM、VSIM返回, 实体卡返回null)"
+          },
+          "device_model" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "设备模组 (该参数只有ESIM、VSIM返回, 实体卡返回null)"
+          },
+          "act_date" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-01-31T16:00:00.000Z",
+            "description" : "激活日期 例如2020-01-31T16:00:00.000Z"
+          },
+          "device_status_date" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-01-31T16:00:00.000Z",
+            "description" : "设备状态变更时间 例如2020-01-31T16:00:00.000Z (该参数只有ESIM、VSIM返回, 实体卡返回null)"
+          },
+          "node_id" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "设备标识"
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860426101980xxxxxx",
+            "description" : "码号iccid"
+          },
+          "network_type" : {
+            "type" : "string",
+            "example" : "4G",
+            "description" : "网络类型"
+          },
+          "dbm" : {
+            "type" : "string",
+            "example" : "-57",
+            "description" : "信号强度 (该参数只有ESIM、VSIM返回, 实体卡返回null)"
+          },
+          "signal_level" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "信号等级:1.差  2.良  3.良  4.优 (该参数只有ESIM、VSIM返回, 实体卡返回null)"
+          },
+          "sim_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3,
+            "description" : "sim卡类型 1.vSIM  2.eSIM  3.实体卡"
+          },
+          "tag_names" : {
+            "type" : "string",
+            "example" : "测试使用",
+            "description" : "标签名"
+          },
+          "order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3553513811123456,
+            "description" : "批次号"
+          },
+          "expire_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2021-06-30T00:00:00.000Z",
+            "description" : "到期时间 例如2021-06-30T00:00:00.000Z"
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国移动每月30M联接服务",
+            "description" : "在用套餐名",
+            "maxLength" : 128
+          },
+          "sim_price_plan_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3849095610654321,
+            "description" : "套餐订购实例ID"
+          },
+          "flow_left" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 15.0,
+            "description" : "剩余流量(单位M),数据默认截止到昨日24点。"
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 15.0,
+            "description" : "已用流量(单位M),数据默认截止到昨日24点。"
+          },
+          "operator_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "运营商状态 -1.正常(非停机状态) 1.停机(超流量停机) 2.停机(超流量阈值停机) 3.停机(流量池停机) 4.停机(套餐到期停机) 5.停机(主动停机) 6.停机(违规停机) 7.停机(机卡分离停机)"
+          },
+          "msisdn" : {
+            "type" : "string",
+            "example" : "8613912345678",
+            "description" : "MSISDN",
+            "maxLength" : 32
+          },
+          "imsi" : {
+            "type" : "string",
+            "example" : "460001234567890",
+            "description" : "IMSI",
+            "maxLength" : 32
+          },
+          "customer_attribute1" : {
+            "type" : "string",
+            "example" : "自定义属性一",
+            "description" : "自定义属性一",
+            "maxLength" : 100
+          },
+          "customer_attribute2" : {
+            "type" : "string",
+            "example" : "自定义属性二",
+            "description" : "自定义属性二",
+            "maxLength" : 100
+          },
+          "customer_attribute3" : {
+            "type" : "string",
+            "example" : "自定义属性三",
+            "description" : "自定义属性三",
+            "maxLength" : 100
+          },
+          "customer_attribute4" : {
+            "type" : "string",
+            "example" : "自定义属性四",
+            "description" : "自定义属性四",
+            "maxLength" : 100
+          },
+          "customer_attribute5" : {
+            "type" : "string",
+            "example" : "自定义属性五",
+            "description" : "自定义属性五",
+            "maxLength" : 100
+          },
+          "customer_attribute6" : {
+            "type" : "string",
+            "example" : "自定义属性六",
+            "description" : "自定义属性六",
+            "maxLength" : 100
+          },
+          "real_named" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否已实名认证: true表示是,false表示否,系统SIM卡实名认证状态非实时。"
+          },
+          "cut_net_flag" : {
+            "type" : "boolean",
+            "description" : "是否单独断网 true:断网,false:未断网 (当前只支持联通、移动的组池卡,电信卡不限制)"
+          },
+          "exceed_cut_net_flag" : {
+            "type" : "boolean",
+            "description" : "是否达量断网 true:达量断网,false:未达量断网 (当前只支持联通、移动的组池卡,电信卡不限制)"
+          },
+          "exceed_cut_net_quota" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "达量断网阈值(单位MB 当前仅电信卡支持)"
+          },
+          "imei_bind_remain_times" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1000,
+            "description" : "本月机卡绑定剩余次数(当前仅电信卡支持)"
+          },
+          "speed_value" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1024,
+            "description" : "网络限制速率(单位Kbps,当前电信联通卡支持)"
+          }
+        }
+      },
+      "SimDevicePageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 100,
+            "description" : "总数"
+          },
+          "sim_cards" : {
+            "type" : "array",
+            "description" : "sim卡数据集合",
+            "items" : {
+              "$ref" : "#/components/schemas/SimDeviceVO"
+            }
+          }
+        }
+      },
+      "NetworkSwitchPolicyVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 898768888789,
+            "description" : "策略主键id"
+          },
+          "policy_name" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "description" : "策略名称",
+            "example" : "优选移动策略"
+          },
+          "preferred_carrier" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 4,
+            "default" : 3,
+            "description" : "最优选运营商,1:移动、2:电信、3:联通、4:上次使用的运营商",
+            "example" : 1
+          },
+          "least_preferred_carrier" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 3,
+            "default" : 2,
+            "description" : "最不优选运营商,1:移动、2:电信、3:联通",
+            "example" : 2
+          },
+          "optimal_signal" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "最优信号选取策略是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "auto_switch" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "自动切卡是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "weak_signal_switch" : {
+            "type" : "boolean",
+            "description" : "弱信号切换策略是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "connect_ip" : {
+            "type" : "string",
+            "maxLength" : 64,
+            "description" : "连接延时切换策略,连接延时时需要ping的ip地址",
+            "example" : "www.baidu.com"
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间",
+            "example" : "2020-05-28T11:31:29.740Z"
+          },
+          "modify_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "修改时间",
+            "example" : "2020-05-28T11:31:29.740Z"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "状态,1:启用、0:禁用",
+            "example" : 0
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "策略类型,0:系统策略,1:私有策略",
+            "example" : 0
+          },
+          "used" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "策略是否已被使用过,即是否已被执行过策略切换,false:未被使用过,true:已被使用过",
+            "example" : true
+          },
+          "version" : {
+            "type" : "integer",
+            "description" : "版本枚举1-SDK版 2-无SDK版",
+            "example" : 1
+          },
+          "switch_order" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "切卡顺序,运营商以英文逗号分隔",
+            "example" : "1,2,3"
+          },
+          "blacklist" : {
+            "type" : "integer",
+            "description" : "黑名单,只支持单个运营商",
+            "example" : 1,
+            "minimum" : 0,
+            "maximum" : 3
+          }
+        }
+      },
+      "NetworkSwitchPolicyPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 10,
+            "maximum" : 500,
+            "description" : "每页的记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 1,
+            "maximum" : 1000000,
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1."
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "description" : "记录总数"
+          },
+          "network_switch_policy_list" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NetworkSwitchPolicyVO"
+            },
+            "description" : "网络切换策略实例列表"
+          }
+        }
+      },
+      "ProPricePlanPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页的记录数",
+            "minimum" : 10,
+            "maximum" : 500
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1.",
+            "minimum" : 1,
+            "maximum" : 1000000
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 100,
+            "description" : "记录总数",
+            "minimum" : 0
+          },
+          "price_plans" : {
+            "type" : "array",
+            "description" : "套餐列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ProPricePlanVo"
+            }
+          }
+        }
+      },
+      "ProPricePlanVo" : {
+        "type" : "object",
+        "properties" : {
+          "price_plan_id" : {
+            "type" : "string",
+            "example" : "100015",
+            "description" : "套餐ID"
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国香港每月10M联接服务",
+            "description" : "套餐名称"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "描述"
+          },
+          "flow_total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "流量总量(MB)"
+          },
+          "package_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "套餐类型 1基础套餐;2叠加包套餐;如果是国际漫游不区分基础套餐包和叠加包"
+          },
+          "period" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "套餐周期"
+          },
+          "period_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 50,
+            "description" : "套餐周期类型 10:日;20:月;30:季;40:半年;50:年"
+          },
+          "effect_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "套餐生效类型 1.订购后激活使用时生效 2.订购即时生效 3.订购下个月开始生效"
+          },
+          "silent_period_day" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 60,
+            "description" : "沉默期"
+          },
+          "silent_period_unit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3,
+            "description" : "沉默期单位 1.年 2.月 3.日"
+          },
+          "auto_renew" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否自动续订"
+          },
+          "location_desc" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "套餐适用区域"
+          },
+          "location_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "区域 1.中国 2.欧洲 3.大洋洲 4.非洲 5.亚太"
+          },
+          "sim_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "SIM卡类型 1.vSIM 2.eSIM 3.实体卡"
+          },
+          "carrier_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 501,
+            "description" : "运营商 101/1 中国移动/中国移动(实体卡) 102/2中国电信/中国电信(实体卡) 3中国联通(实体卡) 201.欧洲 501.中国香港 502.中国澳门 503.泰国 504.日本 505.柬埔寨 506.印度尼西亚 507.马来西亚 508.新加坡 509.斯里兰卡 510.中国台湾 511.孟加拉 "
+          },
+          "price" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 233,
+            "description" : "价格(分)"
+          }
+        }
+      },
+      "CutNetReq" : {
+        "type" : "object",
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "example" : "ADD",
+            "description" : "操作类型(ADD:断网,DEL:取消断网)",
+            "maxLength" : 10
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "minLength" : 19,
+            "maxLength" : 20
+          }
+        },
+        "example" : {
+          "action" : "ADD",
+          "iccid" : "89860622330010641805"
+        }
+      },
+      "WorkOrderCommonRsp" : {
+        "type" : "object",
+        "properties" : {
+          "work_order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "业务受理单号"
+          }
+        }
+      },
+      "BackPoolPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "当前查询条件的后向流量池总数"
+          },
+          "pools" : {
+            "type" : "array",
+            "description" : "当前页的后向流量池记录列表",
+            "items" : {
+              "$ref" : "#/components/schemas/BackPoolVO"
+            }
+          }
+        }
+      },
+      "BackPoolVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "流量池标识"
+          },
+          "pool_name" : {
+            "type" : "string",
+            "example" : "测试流量池",
+            "description" : "流量池名称",
+            "maxLength" : 100
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国电信每月10M联接服务",
+            "description" : "套餐名称",
+            "maxLength" : 128
+          },
+          "price_plan_id" : {
+            "type" : "string",
+            "example" : "100000",
+            "description" : "套餐标识",
+            "maxLength" : 36
+          },
+          "effective_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "生效时间"
+          },
+          "expired_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "失效时间"
+          },
+          "billing_cycle" : {
+            "type" : "string",
+            "example" : "2020-02",
+            "description" : "账期",
+            "maxLength" : 7
+          },
+          "pool_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "流量池状态: 2-在用,-1-已停用,-2已废弃"
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 2048.0,
+            "description" : "已用流量(查询账期所在月份), 单位MB",
+            "minimum" : 0
+          },
+          "status_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "状态变更时间"
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "流量池成员数量"
+          },
+          "modify_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "更新时间"
+          },
+          "order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "批次号"
+          },
+          "activated_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "已激活成员数量"
+          },
+          "inactive_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "未激活成员数量"
+          },
+          "disassembled_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "已拆机成员数量"
+          },
+          "order_ids" : {
+            "type" : "string",
+            "example" : "1580997433022,1580997433024",
+            "description" : "组成流量池的批次号列表",
+            "maxLength" : 400
+          }
+        }
+      },
+      "SimPoolVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "流量池标识"
+          },
+          "pool_name" : {
+            "type" : "string",
+            "example" : "测试流量池",
+            "description" : "流量池名称",
+            "maxLength" : 100
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国电信每月10M联接服务",
+            "description" : "套餐名称",
+            "maxLength" : 128
+          },
+          "price_plan_id" : {
+            "type" : "string",
+            "example" : "100000",
+            "description" : "套餐标识",
+            "maxLength" : 36
+          },
+          "effective_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "生效时间"
+          },
+          "expired_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "失效时间"
+          },
+          "billing_cycle" : {
+            "type" : "string",
+            "example" : "2020-02",
+            "description" : "账期",
+            "maxLength" : 7
+          },
+          "flow_total" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 1024.0,
+            "description" : "可用流量(查询账期所在月份),单位MB",
+            "minimum" : 0
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 2048.0,
+            "description" : "已用流量(查询账期所在月份), 单位MB",
+            "minimum" : 0
+          },
+          "flow_left" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 10.0,
+            "description" : "剩余流量(查询账期所在月份), 单位MB",
+            "minimum" : 0
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "流量池成员数量"
+          },
+          "modify_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-30T23:59:59.000Z",
+            "description" : "更新时间"
+          },
+          "order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "批次号"
+          },
+          "activated_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "已激活成员数量"
+          },
+          "inactive_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "未激活成员数量"
+          },
+          "disassembled_sim_quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "已拆机成员数量"
+          },
+          "order_ids" : {
+            "type" : "string",
+            "example" : "1580997433022,1580997433024",
+            "description" : "组成流量池的批次号列表",
+            "maxLength" : 400
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "流量池状态,0:废弃,1:在用",
+            "example" : "0"
+          }
+        }
+      },
+      "SimPoolPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "当前查询条件的流量池总数"
+          },
+          "pools" : {
+            "type" : "array",
+            "description" : "当前页的流量池记录列表",
+            "items" : {
+              "$ref" : "#/components/schemas/SimPoolVO"
+            }
+          }
+        }
+      },
+      "SetSpeedValueReq" : {
+        "type" : "object",
+        "required" : [ "speed_value" ],
+        "properties" : {
+          "speed_value" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1024,
+            "description" : "限制带宽速率,单位 Kbps,-1表示不限速,1Mbps=1024Kbps。正整数表示限制到当前速率,电信支持限制速率:1Kbps,64 Kbps,256 Kbps,512Kbps,1Mbs,3Mbs,5Mbs,7Mbs,10Mbs,20Mbs,30Mbs,40Mbs,50Mbs,60Mbs,70Mbs,80Mbs,90Mbs,100Mbs,110Mbs,120Mbs,130Mbs,140Mbs,150Mbs。联通支持限制速率:256Kbps,512Kbps,1Mbps,2Mbps,7.25Mbps。",
+            "minimum" : -1
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "minLength" : 19,
+            "maxLength" : 20
+          }
+        },
+        "example" : {
+          "speed_value" : 1024,
+          "iccid" : "89860622330010641805"
+        }
+      },
+      "ShowMonthUsageReq" : {
+        "type" : "object",
+        "required" : [ "billing_cycles" ],
+        "properties" : {
+          "sim_card_ids" : {
+            "type" : "array",
+            "example" : "4700000000000000",
+            "description" : "sim卡id列表,最多支持传入500个SIM卡id。sim_card_ids与iccids不能同时为空,sim_card_ids参数为空则根据iccids参数处理",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0
+            },
+            "maxItems" : 500,
+            "minItems" : 0
+          },
+          "iccids" : {
+            "type" : "array",
+            "example" : [ "A4700000000000000123", "A4700000000000000124" ],
+            "description" : "iccid列表,最多支持传入500个iccid。sim_card_ids与iccids不能同时为空,sim_card_ids参数为空则根据iccids参数处理",
+            "items" : {
+              "type" : "string",
+              "example" : "A4700000000000000123",
+              "minLength" : 19,
+              "maxLength" : 20
+            },
+            "maxItems" : 500,
+            "minItems" : 0
+          },
+          "billing_cycles" : {
+            "type" : "array",
+            "example" : "2022-02",
+            "description" : "账期,最多支持传入本月在内的6个月账期,例如[2022-07, 2022-06],不支持传入未来账期。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 7,
+              "pattern" : "^[一-龥a-zA-Z0-9_.-]{0,2000}$"
+            },
+            "maxItems" : 6,
+            "minItems" : 0
+          }
+        },
+        "example" : {
+          "sim_card_ids" : [ 10000001, 10000002 ],
+          "iccids" : [ ],
+          "billing_cycles" : [ "2022-02", "2022-03" ]
+        }
+      },
+      "ShowMonthUsageResp" : {
+        "type" : "object",
+        "properties" : {
+          "month_usages" : {
+            "type" : "array",
+            "description" : "月用量列表",
+            "items" : {
+              "$ref" : "#/components/schemas/MonthUsageVo"
+            }
+          }
+        }
+      },
+      "MonthUsageVo" : {
+        "type" : "object",
+        "properties" : {
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "SIM卡ID",
+            "minimum" : 0
+          },
+          "iccid" : {
+            "type" : "string",
+            "description" : "iccid",
+            "minLength" : 0
+          },
+          "flow_usages" : {
+            "type" : "array",
+            "description" : "月用量",
+            "items" : {
+              "$ref" : "#/components/schemas/FlowUsageVo"
+            }
+          }
+        }
+      },
+      "FlowUsageVo" : {
+        "type" : "object",
+        "properties" : {
+          "billing_cycle" : {
+            "type" : "string",
+            "example" : "202002",
+            "description" : "账期"
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 2.0,
+            "description" : "已用流量(MB)"
+          }
+        }
+      },
+      "NetworkSwitchReq" : {
+        "type" : "object",
+        "required" : [ "carrier_type" ],
+        "properties" : {
+          "cid" : {
+            "type" : "string",
+            "maxLength" : 256,
+            "description" : "容器ID",
+            "example" : "5435340572050112"
+          },
+          "carrier_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "切换的目标网络",
+            "example" : 1
+          }
+        }
+      },
+      "AddOrModifyAttributeReq" : {
+        "type" : "object",
+        "required" : [ "cust_attr_name" ],
+        "properties" : {
+          "cust_attr_name" : {
+            "type" : "string",
+            "example" : "广东深圳",
+            "description" : "自定义属性名称",
+            "maxLength" : 32
+          }
+        },
+        "example" : {
+          "cust_attr_name" : "新建的自定义属性名"
+        }
+      },
+      "CmAttributeRsp" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "自定义属性标识"
+          }
+        }
+      },
+      "PoolMemPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "当前流量池的成员总数"
+          },
+          "pool_members" : {
+            "type" : "array",
+            "description" : "查询出来的流量池成员记录列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PoolMemVO"
+            }
+          }
+        }
+      },
+      "PoolMemVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "流量池标识"
+          },
+          "cid" : {
+            "type" : "string",
+            "example" : "dn1580976281111",
+            "description" : "容器ID",
+            "maxLength" : 64
+          },
+          "sim_price_plan_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089666,
+            "description" : "套餐订购实例ID"
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 2048.0,
+            "description" : "已用流量(查询账期所在月份), 单位MB",
+            "minimum" : 0
+          }
+        }
+      },
+      "SimDeviceMultiplyPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "每页记录数",
+            "example" : 10
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "页码",
+            "example" : 1
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "总数",
+            "example" : 100
+          },
+          "sim_cards" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SimDeviceMultiplyVO"
+            },
+            "description" : "三网卡数据集合"
+          }
+        }
+      },
+      "SimDeviceMultiplyVO" : {
+        "type" : "object",
+        "properties" : {
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "sim卡id",
+            "example" : 158123456
+          },
+          "cid" : {
+            "type" : "string",
+            "description" : "三网卡标识",
+            "example" : "TN123xxx"
+          },
+          "online_carrier" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "在线运营商标识",
+            "example" : 1
+          },
+          "network_switch_policy_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "网络切换策略id",
+            "example" : 3639843601089536
+          },
+          "policy_name" : {
+            "type" : "string",
+            "description" : "网络切换策略名称",
+            "example" : "默认策略"
+          },
+          "version" : {
+            "type" : "integer",
+            "description" : "版本信息",
+            "example" : "SDK版"
+          },
+          "iccid_mobile" : {
+            "type" : "string",
+            "description" : "移动网络iccid",
+            "example" : "TN121xxx"
+          },
+          "iccid_unicom" : {
+            "type" : "string",
+            "description" : "联通网络iccid",
+            "example" : "TN122xxx"
+          },
+          "iccid_telcom" : {
+            "type" : "string",
+            "description" : "电信网络iccid",
+            "example" : "TN123xxx"
+          },
+          "order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "批次号"
+          }
+        }
+      },
+      "CreateSendSmsReq" : {
+        "type" : "object",
+        "required" : [ "sms_content" ],
+        "properties" : {
+          "template_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 4316454412354560,
+            "description" : "模板id"
+          },
+          "sms_content" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "短信内容",
+            "maxLength" : 1000
+          },
+          "cids" : {
+            "type" : "array",
+            "example" : "580888381830",
+            "description" : "容器ID",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "批次号"
+          },
+          "file_temp_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "临时文件ID"
+          }
+        },
+        "example" : {
+          "sms_content" : "测试",
+          "cids" : [ "89861120247XXXXXXXX", "89861120247XXXXXXXX" ]
+        }
+      },
+      "CmTagPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 20,
+            "description" : "记录总数"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签记录",
+            "items" : {
+              "$ref" : "#/components/schemas/CmTagVO"
+            }
+          }
+        }
+      },
+      "SimPricePlanVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3860805203123456,
+            "description" : "套餐实例id",
+            "minimum" : 0
+          },
+          "account_id" : {
+            "type" : "string",
+            "example" : "04eef8424xxxxx",
+            "description" : "账户id",
+            "maxLength" : 128
+          },
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3860805201234,
+            "description" : "sim卡id",
+            "minimum" : 0
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "套餐状态:0 已删除 1 可激活 2 在用 3. 使用完 4. 可激活 5 已停用 6. 启用失败",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "price_plan_id" : {
+            "type" : "string",
+            "example" : "100054",
+            "description" : "套餐id",
+            "maxLength" : 128
+          },
+          "cid" : {
+            "type" : "string",
+            "example" : "89860469101980624111",
+            "description" : "容器ID:不同类型卡含义如下 iccid(实体卡),eid(eSIM)cid(vSIM)",
+            "maxLength" : 128
+          },
+          "order_id" : {
+            "type" : "string",
+            "example" : "20200824075755181148",
+            "description" : "订单id",
+            "maxLength" : 128
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-08-24T07:57:56.000Z",
+            "description" : "创建时间 例如2020-08-24T07:57:56.000Z"
+          },
+          "active_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-10-31T16:00:00.000Z",
+            "description" : "激活时间 例如2020-10-31T16:00:00.000Z"
+          },
+          "stop_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2021-10-31T16:00:00.000",
+            "description" : "停用时间 2021-10-31T16:00:00.000Z"
+          },
+          "flow_total" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 1024.0,
+            "description" : "总流量(MB)",
+            "minimum" : 0
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.0,
+            "description" : "已使用流量(MB)",
+            "minimum" : 0
+          },
+          "flow_left" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 1024.0,
+            "description" : "剩余流量(MB)"
+          },
+          "using" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "是否使用中(0:否 1:是)",
+            "maxLength" : 128
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国电信每月1G联接服务",
+            "description" : "套餐名",
+            "maxLength" : 128
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述",
+            "maxLength" : 128
+          },
+          "package_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "套餐类型: 0.非自动续费 1.自动续费",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "effect_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "生效类型: 1.订购后激活使用时生效 2.订购即时生效 3.订购下个月开始生效 ",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "silent_period_day" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 60,
+            "description" : "沉默期",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "silent_period_unit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "沉默期单位: 1.年 2.月 3.日 ",
+            "minimum" : 1,
+            "maximum" : 3
+          },
+          "auto_renew" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "自动续订: 0.不自动续订 1.继续续订",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "location_desc" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "位置信息:1.  中国 2.  欧洲 3.  大洋洲 4.  非洲5.  亚太",
+            "maxLength" : 128
+          }
+        }
+      },
+      "BackPoolMemVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089536,
+            "description" : "流量池标识"
+          },
+          "cid" : {
+            "type" : "string",
+            "example" : "dn1580976281111",
+            "description" : "容器ID",
+            "maxLength" : 64
+          },
+          "sim_price_plan_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3639843601089666,
+            "description" : "套餐订购实例ID"
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 2048.0,
+            "description" : "已用流量(查询账期所在月份), 单位MB",
+            "minimum" : 0
+          },
+          "sim_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20,
+            "description" : "卡当前状态:11-未激活,13-可激活,14-已停用,20-在用,30-已拆机"
+          }
+        }
+      },
+      "BackPoolMemPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "当前流量池的成员总数"
+          },
+          "pool_members" : {
+            "type" : "array",
+            "description" : "查询出来的流量池成员记录列表",
+            "items" : {
+              "$ref" : "#/components/schemas/BackPoolMemVO"
+            }
+          }
+        }
+      },
+      "WorkOrderPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "每页的记录数",
+            "minimum" : 10,
+            "maximum" : 500
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1.",
+            "minimum" : 1,
+            "maximum" : 1000000
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "记录总数",
+            "minimum" : 0
+          },
+          "work_orders" : {
+            "type" : "array",
+            "description" : "业务受理单列表",
+            "items" : {
+              "$ref" : "#/components/schemas/WorkOrderVo"
+            }
+          }
+        }
+      },
+      "WorkOrderVo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "业务受理ID"
+          },
+          "sim_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "SIM卡类型:3.实体卡"
+          },
+          "work_order_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理类型:1.批量激活实体卡 2.批量转移实体卡 3.创建流量池 4.实体卡复机 5.实体卡停机 6.批量启用或复机 7.批量停用或停机 8.批量订购 9.批量退订 10.实体卡激活 11.申请断网 12.达量断网 13.机卡重绑 14.实名制信息清除 15.实体卡限速 16.批量补卡 17.批量机卡重绑 18.重启已废弃后向流量池 19.批量达量断网 20断网恢复 21取消达量断网 22批量取消达量断网 23批量拆机"
+          },
+          "req_detail" : {
+            "type" : "string",
+            "description" : "请求详情"
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理明细总数"
+          },
+          "success_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理明细成功数"
+          },
+          "fail_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理明细失败数"
+          },
+          "process_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理明细处理中数"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理状态:1审核中、2已审核、3处理中、4已完成、5已取消、6失败、7 审核不通过"
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间"
+          },
+          "finish_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "完成时间"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "description" : "失败原因"
+          },
+          "response" : {
+            "type" : "string",
+            "description" : "响应内容"
+          },
+          "work_order_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理单来源,1:运营人员生成,2:用户操作生成(console),3:自动化规则生成,4:后向流量池超阈值停用次月自动复机任务,5:单卡没流量停机定时任务,6:SIM卡到期自动停机定时任务,7:流量池停机定时任务,8:用户操作生成(api)"
+          },
+          "work_order_source_desc" : {
+            "type" : "string",
+            "description" : "业务受理单来源描述"
+          }
+        }
+      },
+      "DownUpTimeForSimCardReq" : {
+        "type" : "object",
+        "properties" : {
+          "down_up_switch" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "启用停用开关",
+            "minimum" : 0,
+            "maximum" : 2147483647
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "minLength" : 19,
+            "maxLength" : 20
+          }
+        },
+        "example" : {
+          "down_up_switch" : 2,
+          "iccid" : "89860622330010641805"
+        }
+      },
+      "StopResumeRsp" : {
+        "type" : "object",
+        "properties" : {
+          "work_order_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "业务受理单号"
+          }
+        }
+      },
+      "NetworkSwitchPolicyDTO" : {
+        "type" : "object",
+        "required" : [ "version" ],
+        "properties" : {
+          "policy_name" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "description" : "策略名称",
+            "example" : "优选移动策略"
+          },
+          "preferred_carrier" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 4,
+            "default" : 3,
+            "description" : "最优选运营商,1:移动、2:电信、3:联通、4:上次使用的运营商",
+            "example" : 1
+          },
+          "least_preferred_carrier" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1,
+            "maximum" : 3,
+            "default" : 2,
+            "description" : "最不优选运营商,1:移动、2:电信、3:联通",
+            "example" : 2
+          },
+          "optimal_signal" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "最优信号选取策略是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "auto_switch" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "自动切卡是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "weak_signal_switch" : {
+            "type" : "boolean",
+            "description" : "弱信号切换策略是否开启,true:开启,false:不开启",
+            "example" : true
+          },
+          "connect_ip" : {
+            "type" : "string",
+            "maxLength" : 64,
+            "description" : "连接延时切换策略,连接延时时需要ping的ip地址",
+            "example" : "www.baidu.com"
+          },
+          "version" : {
+            "type" : "integer",
+            "description" : "版本枚举1-SDK版 2-无SDK版",
+            "example" : 1
+          },
+          "switch_order" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "description" : "切卡顺序,运营商以英文逗号分隔",
+            "example" : "1,2,3"
+          },
+          "blacklist" : {
+            "type" : "integer",
+            "description" : "黑名单,只支持单个运营商",
+            "example" : 1,
+            "minimum" : 0,
+            "maximum" : 3
+          }
+        }
+      },
+      "SimCardFlowItem" : {
+        "type" : "object",
+        "properties" : {
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "sim卡标识",
+            "example" : 5713695186830784
+          },
+          "iccid" : {
+            "type" : "string",
+            "description" : "容器ID",
+            "example" : 89860812192370190847
+          },
+          "flow" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "流量",
+            "example" : 100.0
+          }
+        }
+      },
+      "SimCardFlowPerDayReq" : {
+        "type" : "object",
+        "properties" : {
+          "sim_card_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "description" : "sim卡标识",
+              "example" : 5713695186830784
+            }
+          },
+          "iccids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 128,
+              "description" : "容器ID",
+              "example" : 89860812192370190847
+            }
+          },
+          "month" : {
+            "type" : "string",
+            "minLength" : 6,
+            "maxLength" : 6,
+            "description" : "月份",
+            "example" : 202408
+          },
+          "date" : {
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 8,
+            "description" : "日期",
+            "example" : 20240809
+          }
+        }
+      },
+      "SimCardFlowPerDayRsp" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "description" : "日期",
+            "example" : 20240809
+          },
+          "sim_flow" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SimCardFlowItem"
+            }
+          }
+        }
+      },
+      "CmAttributeVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "自定义属性标识"
+          },
+          "default_attr_name_cn" : {
+            "type" : "string",
+            "example" : "自定义属性一",
+            "description" : "默认属性名称中文",
+            "maxLength" : 32,
+            "pattern" : "^[一-龥a-zA-Z0-9_.-]{0,2000}$"
+          },
+          "default_attr_name_en" : {
+            "type" : "string",
+            "example" : "customer_attributes1",
+            "description" : "默认属性名称英文",
+            "maxLength" : 32,
+            "pattern" : "^[一-龥a-zA-Z0-9_.-]{0,2000}$"
+          },
+          "cust_attr_name" : {
+            "type" : "string",
+            "example" : "广东深圳",
+            "description" : "自定义属性名称",
+            "maxLength" : 32
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "自定义属性状态:0 未启用,1 已启用。"
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "232323",
+            "description" : "创建时间"
+          },
+          "modify_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "232323",
+            "description" : "更新时间"
+          }
+        }
+      },
+      "CmAttributePageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10,
+            "description" : "每页记录数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 20,
+            "description" : "记录总数"
+          },
+          "attributes" : {
+            "type" : "array",
+            "description" : "自定义属性记录",
+            "items" : {
+              "$ref" : "#/components/schemas/CmAttributeVO"
+            }
+          }
+        }
+      },
+      "ListFlowBySimCardsReq" : {
+        "type" : "object",
+        "example" : {
+          "iccids" : [ "89861120247XXXXXXXX", "89861120247XXXXXXXX" ],
+          "sim_card_ids" : [ 100000000000, 100000000001 ]
+        },
+        "properties" : {
+          "iccids" : {
+            "type" : "array",
+            "description" : "iccid列表(三网卡不支持),最大支持50,且iccid和sim_card_id列表二选一",
+            "example" : [ "898611202470420XXXX", "898611202470421XXXX" ],
+            "items" : {
+              "type" : "string",
+              "maxLength" : 64,
+              "pattern" : "^[一-龥a-zA-Z0-9_.-]{0,2000}$"
+            },
+            "minItems" : 0,
+            "maxItems" : 50
+          },
+          "sim_card_ids" : {
+            "type" : "array",
+            "description" : "sim_card_id列表,最大支持50,且iccid和sim_card_id列表二选一",
+            "example" : [ 100000000000, 100000000001 ],
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0
+            },
+            "minItems" : 0,
+            "maxItems" : 50
+          }
+        }
+      },
+      "SimCardsFlowVO" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3860805203123456,
+            "description" : "套餐实例ID",
+            "minimum" : 0
+          },
+          "account_id" : {
+            "type" : "string",
+            "example" : "04eef8424xxxxx",
+            "description" : "账户ID",
+            "maxLength" : 128
+          },
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3860805201234,
+            "description" : "sim卡ID",
+            "minimum" : 0
+          },
+          "price_plan_id" : {
+            "type" : "string",
+            "example" : "100054",
+            "description" : "套餐ID",
+            "maxLength" : 128
+          },
+          "price_plan_name" : {
+            "type" : "string",
+            "example" : "中国电信每月1G联接服务",
+            "description" : "套餐名称",
+            "maxLength" : 128
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "898611202470420XXXX",
+            "description" : "ICCID",
+            "maxLength" : 64
+          },
+          "flow_total" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 1024.0,
+            "description" : "总流量(MB),两位小数",
+            "minimum" : 0
+          },
+          "flow_used" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.0,
+            "description" : "已使用流量(MB),两位小数",
+            "minimum" : 0
+          },
+          "flow_left" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 1024.0,
+            "description" : "剩余流量(MB),两位小数"
+          }
+        }
+      },
+      "SmsSendDetailQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "每页的记录数",
+            "minimum" : 10,
+            "maximum" : 500
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1.",
+            "minimum" : 1,
+            "maximum" : 1000000
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "记录总数",
+            "minimum" : 0
+          },
+          "sms_details" : {
+            "type" : "array",
+            "description" : "短信发送详情列表",
+            "items" : {
+              "$ref" : "#/components/schemas/SmsSendDetailQueryVo"
+            }
+          }
+        }
+      },
+      "SmsSendDetailQueryVo" : {
+        "type" : "object",
+        "properties" : {
+          "cid" : {
+            "type" : "string",
+            "example" : "580888381830",
+            "description" : "容器ID"
+          },
+          "msisdn" : {
+            "type" : "string",
+            "example" : "8613912345678",
+            "description" : "MSISDN",
+            "maxLength" : 32
+          },
+          "sent_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-07T00:00:00Z",
+            "description" : "发送时间"
+          },
+          "received_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2020-04-07T00:00:00Z",
+            "description" : "接收时间"
+          },
+          "sms_status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "短信状态:1发送中 2.已送达 3.失败"
+          },
+          "sms_content" : {
+            "type" : "string",
+            "example" : "测试短信",
+            "description" : "短信内容",
+            "maxLength" : 1024
+          }
+        }
+      },
+      "WorkOrderDetailVo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "业务受理ID"
+          },
+          "sim_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "SIM卡类型:3.实体卡"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "业务受理明细状态:1成功、2处理中、3失败"
+          },
+          "cid" : {
+            "type" : "string",
+            "description" : "容器ID"
+          },
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "SIM卡标识"
+          },
+          "create_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间"
+          },
+          "finish_time" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "完成时间"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述"
+          }
+        }
+      },
+      "WorkOrderDetailPageQueryRsp" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "每页的记录数",
+            "minimum" : 10,
+            "maximum" : 500
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1.",
+            "minimum" : 1,
+            "maximum" : 1000000
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "记录总数",
+            "minimum" : 0
+          },
+          "work_order_details" : {
+            "type" : "array",
+            "description" : "业务受理明细列表",
+            "items" : {
+              "$ref" : "#/components/schemas/WorkOrderDetailVo"
+            }
+          }
+        }
+      },
+      "ShowRealNamedRsp" : {
+        "type" : "object",
+        "properties" : {
+          "iccid" : {
+            "type" : "string",
+            "example" : "1234567890",
+            "description" : "ICCID"
+          },
+          "real_named" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否已实名认证: true表示是,false表示否。"
+          }
+        }
+      },
+      "NetworkSwitchPolicyReq" : {
+        "type" : "object",
+        "required" : [ "network_switch_policy_id" ],
+        "properties" : {
+          "cid" : {
+            "type" : "string",
+            "maxLength" : 256,
+            "description" : "容器ID",
+            "example" : "5435340572050112"
+          },
+          "network_switch_policy_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "网络切换策略标识",
+            "example" : 5435340572050112
+          }
+        }
+      },
+      "BatchSetAttributesReq" : {
+        "type" : "object",
+        "properties" : {
+          "file_temp_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "临时文件ID,如果通过接口调用,此字段为空"
+          },
+          "attributes" : {
+            "type" : "array",
+            "description" : "自定义属性集合",
+            "items" : {
+              "$ref" : "#/components/schemas/AttributeReq"
+            },
+            "maxItems" : 500,
+            "minItems" : 1
+          }
+        },
+        "example" : {
+          "file_temp_id" : "null,",
+          "attributes" : [ {
+            "sim_card_id" : 111111,
+            "customer_attribute1" : "attr1",
+            "customer_attribute2" : "attr2",
+            "customer_attribute3" : "attr3",
+            "customer_attribute4" : "attr4",
+            "customer_attribute5" : "attr5",
+            "customer_attribute6" : "attr6"
+          }, {
+            "sim_card_id" : 111111,
+            "customer_attribute1" : "attr1",
+            "customer_attribute2" : "attr2",
+            "customer_attribute3" : "attr3",
+            "customer_attribute4" : "attr4",
+            "customer_attribute5" : "attr5",
+            "customer_attribute6" : "attr6"
+          } ]
+        }
+      },
+      "AttributeReq" : {
+        "type" : "object",
+        "required" : [ "sim_card_id" ],
+        "properties" : {
+          "sim_card_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。"
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,如果SIM卡标识传0则表示需要根据iccid处理。",
+            "minLength" : 19,
+            "maxLength" : 20
+          },
+          "customer_attribute1" : {
+            "type" : "string",
+            "example" : "attr1",
+            "description" : "自定义属性一",
+            "maxLength" : 100
+          },
+          "customer_attribute2" : {
+            "type" : "string",
+            "example" : "attr2",
+            "description" : "自定义属性二",
+            "maxLength" : 100
+          },
+          "customer_attribute3" : {
+            "type" : "string",
+            "example" : "attr3",
+            "description" : "自定义属性三",
+            "maxLength" : 100
+          },
+          "customer_attribute4" : {
+            "type" : "string",
+            "example" : "attr4",
+            "description" : "自定义属性四",
+            "maxLength" : 100
+          },
+          "customer_attribute5" : {
+            "type" : "string",
+            "example" : "attr5",
+            "description" : "自定义属性五",
+            "maxLength" : 100
+          },
+          "customer_attribute6" : {
+            "type" : "string",
+            "example" : "attr6",
+            "description" : "自定义属性六",
+            "maxLength" : 100
+          }
+        }
+      },
+      "RegisterImeiReq" : {
+        "type" : "object",
+        "required" : [ "bind_type" ],
+        "properties" : {
+          "bind_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "绑定类型(1:普通机卡重绑,2:固定机卡重绑)",
+            "minimum" : 1,
+            "maximum" : 2
+          },
+          "imei" : {
+            "type" : "string",
+            "example" : "84584xxxxxx",
+            "description" : "设备IMEI,84584xxxxxx",
+            "pattern" : "^[0-9a-zA-Z]{0,20}$"
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "minLength" : 19,
+            "maxLength" : 20
+          }
+        },
+        "example" : {
+          "bind_type" : 1,
+          "imei" : "84584xxxxxx",
+          "iccid" : "89860622330010641805"
+        }
+      },
+      "ExceedCutNetReq" : {
+        "type" : "object",
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "操作类型(1:设置达量断网域值,2:取消达量断网域值)",
+            "minimum" : 1,
+            "maximum" : 2
+          },
+          "quota" : {
+            "type" : "string",
+            "example" : "1024",
+            "description" : "阈值,只能是0,-1,正整数,-1表示无限制,0表示有上网流量产生就会立即断网,取消达量断网功能时可不传,单位MB",
+            "pattern" : "^0$|^-1$|^[0-9]{1,10}$"
+          },
+          "iccid" : {
+            "type" : "string",
+            "example" : "89860622330010641805",
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "minLength" : 19,
+            "maxLength" : 20
+          }
+        },
+        "example" : {
+          "action" : 1,
+          "quota" : -1,
+          "iccid" : "89860622330010641805"
+        }
+      },
+      "BatchSetTagsReq" : {
+        "type" : "object",
+        "properties" : {
+          "file_temp_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 158123456,
+            "description" : "临时文件ID"
+          },
+          "sim_card_ids" : {
+            "type" : "array",
+            "example" : [ 123456, 123421 ],
+            "description" : "SIM卡id列表,最多500.sim_card_ids与iccids不能同时为空,sim_card_ids参数为空则根据iccids参数处理",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0
+            },
+            "maxItems" : 500,
+            "minItems" : 0
+          },
+          "iccids" : {
+            "type" : "array",
+            "example" : [ "A4700000000000000123", "A4700000000000000124" ],
+            "description" : "iccid列表,最多支持传入500个iccid。sim_card_ids与iccids不能同时为空,sim_card_ids参数为空则根据iccids参数处理",
+            "items" : {
+              "type" : "string",
+              "example" : "A4700000000000000123",
+              "minLength" : 19,
+              "maxLength" : 20
+            },
+            "maxItems" : 500,
+            "minItems" : 0
+          },
+          "tag_ids" : {
+            "type" : "array",
+            "example" : [ 123456, 123421 ],
+            "description" : "绑定的标签id列表,最多10",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        },
+        "example" : {
+          "file_temp_id" : "null,",
+          "sim_card_ids" : [ 12345678, 23456789 ],
+          "iccids" : [ ],
+          "tag_ids" : [ 123, 456 ]
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateTag" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "用户添加标签",
+        "description" : "添加标签接口",
+        "operationId" : "CreateTag",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CmTagVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddOrModifyTagReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTag",
+      "x-url" : "{endpoint}/v1/tags"
+    },
+    "/ListSimCards" : {
+      "get" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "查询SIM卡列表",
+        "description" : "查询SIM卡列表",
+        "operationId" : "ListSimCards",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimDevicePageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "main_search_type",
+          "in" : "query",
+          "description" : "查询关键标识类型: 1.容器ID(不同类型卡含义如下:ICCID(实体卡),EID(eSIM)CID(vSIM)) 2.批次号 3.设备IMEI",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "查询关键标识类型: 1.容器ID(不同类型卡含义如下:ICCID(实体卡),EID(eSIM)CID(vSIM)) 2.批次号 3.设备IMEI",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "main_search_key",
+          "in" : "query",
+          "description" : "查询关键标识值:根据查询关键标识类型进行查询,例如想根据ICCID=xxx进行查询,则main_search_type=1&main_search_key=xxx",
+          "required" : false,
+          "schema" : {
+            "example" : "123456",
+            "description" : "查询关键标识值:根据查询关键标识类型进行查询,例如想根据ICCID=xxx进行查询,则main_search_type=1&main_search_key=xxx",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 0
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "sim_status",
+          "in" : "query",
+          "description" : "sim卡状态:",
+          "required" : false,
+          "schema" : {
+            "example" : 20,
+            "description" : "sim卡状态:",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "device_status",
+          "in" : "query",
+          "description" : "设备状态: 1.注册 2.重启 3.在线 4.离线",
+          "required" : false,
+          "schema" : {
+            "example" : 3,
+            "description" : "设备状态: 1.注册 2.重启 3.在线 4.离线",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "tag_id",
+          "in" : "query",
+          "description" : "标签ID,最多支持传10个",
+          "required" : false,
+          "schema" : {
+            "description" : "标签ID,最多支持传10个",
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64"
+            },
+            "collectionFormat" : "multi",
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        }, {
+          "name" : "sim_type",
+          "in" : "query",
+          "description" : "sim卡类型:",
+          "required" : false,
+          "schema" : {
+            "example" : 3,
+            "description" : "sim卡类型:",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "order",
+          "in" : "query",
+          "description" : "排序的顺序,asc表示顺序排序,desc表示倒序排序,不传则默认asc",
+          "required" : false,
+          "schema" : {
+            "description" : "排序的顺序,asc表示顺序排序,desc表示倒序排序,不传则默认asc",
+            "type" : "string",
+            "default" : "asc",
+            "enum" : [ "asc", "desc" ]
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "排序的属性,目前支持:cid(容器ID)、flow_used(已用流量)、flow_left(剩余流量)、act_date(激活时间)、expire_time(到期时间)",
+          "required" : false,
+          "schema" : {
+            "description" : "排序的属性,目前支持:cid(容器ID)、flow_used(已用流量)、flow_left(剩余流量)、act_date(激活时间)、expire_time(到期时间)",
+            "type" : "string",
+            "enum" : [ "cid", "flow_used", "flow_left", "act_date", "expire_time" ]
+          }
+        }, {
+          "name" : "msisdn",
+          "in" : "query",
+          "description" : "MSISDN",
+          "required" : false,
+          "schema" : {
+            "description" : "MSISDN",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute1",
+          "in" : "query",
+          "description" : "自定义属性一",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性一",
+            "description" : "自定义属性一",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute2",
+          "in" : "query",
+          "description" : "自定义属性二",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性二",
+            "description" : "自定义属性二",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute3",
+          "in" : "query",
+          "description" : "自定义属性三",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性三",
+            "description" : "自定义属性三",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute4",
+          "in" : "query",
+          "description" : "自定义属性四",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性四",
+            "description" : "自定义属性四",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute5",
+          "in" : "query",
+          "description" : "自定义属性五",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性五",
+            "description" : "自定义属性五",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "customer_attribute6",
+          "in" : "query",
+          "description" : "自定义属性六",
+          "required" : false,
+          "schema" : {
+            "example" : "自定义属性六",
+            "description" : "自定义属性六",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "min_used_flow",
+          "in" : "query",
+          "description" : "最小使用流量(MB)",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "最小使用流量(MB)",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "max_used_flow",
+          "in" : "query",
+          "description" : "最大使用流量(MB)",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "最大使用流量(MB)",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "min_left_flow",
+          "in" : "query",
+          "description" : "最小剩余流量(MB)",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "最小剩余流量(MB)",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "max_left_flow",
+          "in" : "query",
+          "description" : "最大剩余流量(MB)",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "最大剩余流量(MB)",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "real_named",
+          "in" : "query",
+          "description" : "是否已实名认证: true表示是,false表示否,系统SIM卡实名认证状态非实时。",
+          "required" : false,
+          "schema" : {
+            "description" : "是否已实名认证: true表示是,false表示否,系统SIM卡实名认证状态非实时。",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "order_id",
+          "in" : "query",
+          "description" : "订单号",
+          "required" : false,
+          "schema" : {
+            "example" : "354564654321331231",
+            "description" : "订单号",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 9223372036854774784,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "filter_downtime_period",
+          "in" : "query",
+          "description" : "是否过滤停机保号的卡",
+          "required" : false,
+          "schema" : {
+            "example" : true,
+            "description" : "是否过滤停机保号的卡",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "order_ids",
+          "in" : "query",
+          "description" : "订单批次号集合",
+          "required" : false,
+          "schema" : {
+            "description" : "订单批次号集合",
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64"
+            },
+            "collectionFormat" : "multi"
+          }
+        }, {
+          "name" : "price_plan_id",
+          "in" : "query",
+          "description" : "套餐id集合,最多支持传30个",
+          "required" : false,
+          "schema" : {
+            "description" : "套餐id集合,最多支持传30个",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "collectionFormat" : "multi"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimCards",
+      "x-url" : "{endpoint}/v1/sim-cards"
+    },
+    "/ListNetworkSwitchPolicies" : {
+      "get" : {
+        "tags" : [ "NetworkSwitchPolicies" ],
+        "summary" : "查询策略列表",
+        "description" : "查询策略列表",
+        "operationId" : "ListNetworkSwitchPolicies",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NetworkSwitchPolicyPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "policy_name",
+          "in" : "query",
+          "description" : "策略名称",
+          "schema" : {
+            "description" : "策略名称",
+            "type" : "string",
+            "maxLength" : 32
+          }
+        }, {
+          "name" : "version",
+          "in" : "query",
+          "description" : "三网卡版本信息",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "三网卡版本信息",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2,
+            "minimum" : 1
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNetworkSwitchPolicies",
+      "x-url" : "{endpoint}/v1/network-switch-policies"
+    },
+    "/ListProPricePlans" : {
+      "get" : {
+        "tags" : [ "PricePlans" ],
+        "summary" : "查询套餐列表信息",
+        "description" : "查询套餐列表信息",
+        "operationId" : "ListProPricePlans",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProPricePlanPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "main_search_key",
+          "in" : "query",
+          "description" : "查询关键标识类型:套餐名称 例如中国香港每月10M联接服务",
+          "required" : false,
+          "schema" : {
+            "example" : "中国香港每月10M联接服务",
+            "description" : "查询关键标识类型:套餐名称 例如中国香港每月10M联接服务",
+            "type" : "string",
+            "maxLength" : 256
+          }
+        }, {
+          "name" : "flow_total",
+          "in" : "query",
+          "description" : "流量总量(MB)",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "流量总量(MB)",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "network_type",
+          "in" : "query",
+          "description" : "网络制式 1.2g,3g,4g 2.NB",
+          "required" : false,
+          "schema" : {
+            "description" : "网络制式 1.2g,3g,4g 2.NB",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "location_type",
+          "in" : "query",
+          "description" : "覆盖区域:1.  中国 2.  欧洲 3.  大洋洲 4.  非洲 5.  亚太",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "覆盖区域:1.  中国 2.  欧洲 3.  大洋洲 4.  非洲 5.  亚太",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "carrier_type",
+          "in" : "query",
+          "description" : "运营商 101/1 中国移动/中国移动(实体卡) 102/2中国电信/中国电信(实体卡) 3中国联通(实体卡) 201.欧洲 501.中国香港 502.中国澳门 503.泰国 504.日本 505.柬埔寨 506.印度尼西亚 507.马来西亚 508.新加坡 509.斯里兰卡 510.中国台湾 511.孟加拉",
+          "required" : false,
+          "schema" : {
+            "example" : "501",
+            "description" : "运营商 101/1 中国移动/中国移动(实体卡) 102/2中国电信/中国电信(实体卡) 3中国联通(实体卡) 201.欧洲 501.中国香港 502.中国澳门 503.泰国 504.日本 505.柬埔寨 506.印度尼西亚 507.马来西亚 508.新加坡 509.斯里兰卡 510.中国台湾 511.孟加拉",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "country_type",
+          "in" : "query",
+          "description" : "国家/地区 1中国香港,2中国澳门,3泰国,4日本,5,柬埔寨,6印尼,7马来西亚,8新加坡,9斯里兰卡,10中国台湾,11孟加拉",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "国家/地区 1中国香港,2中国澳门,3泰国,4日本,5,柬埔寨,6印尼,7马来西亚,8新加坡,9斯里兰卡,10中国台湾,11孟加拉",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProPricePlans",
+      "x-url" : "{endpoint}/v1/price-plans"
+    },
+    "/StartStopNet" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "SIM卡申请断网/恢复在用",
+        "description" : "SIM卡申请断网/恢复在用,接口仅支持中国电信卡调用。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "StartStopNet",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CutNetReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartStopNet",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/cut-net"
+    },
+    "/ListBackPools" : {
+      "get" : {
+        "tags" : [ "BackPool" ],
+        "summary" : "查询后向流量池列表",
+        "description" : "查询后向流量池列表",
+        "operationId" : "ListBackPools",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BackPoolPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "pool_name",
+          "in" : "query",
+          "description" : "流量池名称",
+          "required" : false,
+          "schema" : {
+            "description" : "流量池名称",
+            "type" : "string",
+            "maxLength" : 100
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "billing_cycle",
+          "in" : "query",
+          "description" : "账期,例如:2021-04",
+          "required" : false,
+          "schema" : {
+            "description" : "账期,例如:2021-04",
+            "type" : "string",
+            "maxLength" : 7,
+            "minLength" : 7
+          }
+        }, {
+          "name" : "all_billing_cycle",
+          "in" : "query",
+          "description" : "是否查询近六个月账期标识",
+          "required" : false,
+          "schema" : {
+            "description" : "是否查询近六个月账期标识",
+            "type" : "boolean",
+            "default" : false
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBackPools",
+      "x-url" : "{endpoint}/v1/back-pools"
+    },
+    "/ListSimPools" : {
+      "get" : {
+        "tags" : [ "SimPool" ],
+        "summary" : "查询流量池列表",
+        "description" : "查询流量池列表",
+        "operationId" : "ListSimPools",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimPoolPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "pool_name",
+          "in" : "query",
+          "description" : "流量池名称",
+          "required" : false,
+          "schema" : {
+            "description" : "流量池名称",
+            "type" : "string",
+            "maxLength" : 100
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "billing_cycle",
+          "in" : "query",
+          "description" : "账期,例如:2021-04",
+          "required" : false,
+          "schema" : {
+            "description" : "账期,例如:2021-04",
+            "type" : "string",
+            "maxLength" : 7,
+            "minLength" : 7,
+            "pattern" : "^[一-龥a-zA-Z0-9_.-]{0,2000}$"
+          }
+        }, {
+          "name" : "all_billing_cycle",
+          "in" : "query",
+          "description" : "是否查询近六个月账期标识",
+          "required" : false,
+          "schema" : {
+            "description" : "是否查询近六个月账期标识",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "流量池状态",
+          "schema" : {
+            "description" : "流量池状态",
+            "type" : "array",
+            "items" : {
+              "minimum" : 0,
+              "maximum" : 1,
+              "type" : "integer"
+            },
+            "maxItems" : 9,
+            "minItems" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimPools",
+      "x-url" : "{endpoint}/v1/sim-pools"
+    },
+    "/SetSpeedValue" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "实体卡限速",
+        "description" : "实体卡限速接口,接口仅支持中国电信和中国联通实体卡调用。中国联通卡需要个人实名认证后才能使用限速功能。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "SetSpeedValue",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SetSpeedValueReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetSpeedValue",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/speed-limit"
+    },
+    "/ShowMonthUsages" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "月用量统计",
+        "description" : "设备月用量统计",
+        "operationId" : "ShowMonthUsages",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowMonthUsageResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowMonthUsageReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowMonthUsages",
+      "x-url" : "{endpoint}/v1/sim-cards/month-usages"
+    },
+    "/SwitchNetwork" : {
+      "post" : {
+        "tags" : [ "SimDeviceMultiply" ],
+        "summary" : "切换网络",
+        "description" : "切换网络",
+        "operationId" : "SwitchNetwork",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "sim卡id",
+          "required" : true,
+          "schema" : {
+            "description" : "sim卡id",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSwitchReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchNetwork",
+      "x-url" : "{endpoint}/v1/sim-cards-multiply/{sim_card_id}/switch-network"
+    },
+    "/CreateAttribute" : {
+      "post" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "用户新增自定义属性接口",
+        "description" : "用户新增自定义属性接口",
+        "operationId" : "CreateAttribute",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CmAttributeRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddOrModifyAttributeReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAttribute",
+      "x-url" : "{endpoint}/v1/attributes"
+    },
+    "/ListSimPoolMembers" : {
+      "get" : {
+        "tags" : [ "SimPool" ],
+        "summary" : "查询流量池成员列表",
+        "description" : "查询流量池成员列表",
+        "operationId" : "ListSimPoolMembers",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PoolMemPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_pool_id",
+          "in" : "path",
+          "description" : "流量池标识",
+          "required" : true,
+          "schema" : {
+            "description" : "流量池标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "cid",
+          "in" : "query",
+          "description" : "容器ID",
+          "required" : false,
+          "schema" : {
+            "description" : "容器ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "每页记录数",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 1,
+            "maximum" : 1000000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "billing_cycle",
+          "in" : "query",
+          "description" : "账期,例如:2021-04",
+          "required" : true,
+          "schema" : {
+            "description" : "账期,例如:2021-04",
+            "type" : "string",
+            "maxLength" : 7,
+            "minLength" : 7
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimPoolMembers",
+      "x-url" : "{endpoint}/v1/sim-pools/{sim_pool_id}/members"
+    },
+    "/ListSimDeviceMultiply" : {
+      "get" : {
+        "tags" : [ "SimDeviceMultiply" ],
+        "summary" : "查询三网卡列表",
+        "description" : "通过cid或全量查询三网卡列表",
+        "operationId" : "ListSimDeviceMultiply",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimDeviceMultiplyPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "cid",
+          "in" : "query",
+          "description" : "cid",
+          "required" : false,
+          "schema" : {
+            "example" : "A12385778661181234",
+            "description" : "cid",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "online_carrier",
+          "in" : "query",
+          "description" : "在线运营商标识",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "在线运营商标识",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 3,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "sim_card_id",
+          "in" : "query",
+          "description" : "sim卡id",
+          "required" : false,
+          "schema" : {
+            "example" : 158123456,
+            "description" : "sim卡id",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "order_id",
+          "in" : "query",
+          "description" : "批次号",
+          "required" : false,
+          "schema" : {
+            "example" : 3639843601089536,
+            "description" : "批次号",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "version",
+          "in" : "query",
+          "description" : "三网卡版本信息",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "三网卡版本信息",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 2,
+            "minimum" : 1
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimDeviceMultiply",
+      "x-url" : "{endpoint}/v1/sim-cards-multiply"
+    },
+    "/DeleteRealName" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "清除实名认证信息",
+        "description" : "清除实名认证信息,接口仅支持中国电信卡调用。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "DeleteRealName",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "iccid",
+          "in" : "query",
+          "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+          "required" : false,
+          "schema" : {
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 19
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRealName",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/clear-real-name"
+    },
+    "/SendSms" : {
+      "post" : {
+        "tags" : [ "Sms" ],
+        "summary" : "发送短信",
+        "description" : "发送短信,接口仅支持开通短信套餐的中国移动与中国电信卡调用。",
+        "operationId" : "SendSms",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateSendSmsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SendSms",
+      "x-url" : "{endpoint}/v1/sms-send-infos"
+    },
+    "/ListTags" : {
+      "get" : {
+        "tags" : [ "Tag" ],
+        "summary" : "查询标签列表",
+        "description" : "查询标签列表",
+        "operationId" : "ListTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CmTagPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "tag_name",
+          "in" : "query",
+          "description" : "标签名称",
+          "required" : false,
+          "schema" : {
+            "description" : "标签名称",
+            "type" : "string",
+            "maxLength" : 256
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "标签状态,0未使用,1使用中。",
+          "required" : false,
+          "schema" : {
+            "description" : "标签状态,0未使用,1使用中。",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTags",
+      "x-url" : "{endpoint}/v1/tags"
+    },
+    "/ListSimPricePlans" : {
+      "get" : {
+        "tags" : [ "SimPricePlans" ],
+        "summary" : "sim卡套餐列表查询",
+        "description" : "SIM卡套餐列表查询,实体卡只会有一个套餐,eSIM/vSIM可能会有多个套餐",
+        "operationId" : "ListSimPricePlans",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SimPricePlanVO"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "query",
+          "description" : "SIM卡标识,可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "example" : "3857786611811123",
+            "description" : "SIM卡标识,可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "iccid",
+          "in" : "query",
+          "description" : "iccid,传入的SIM卡标识(sim_card_id)为0,则根据iccid进行处理",
+          "required" : false,
+          "schema" : {
+            "example" : "A857786611811123C12",
+            "description" : "iccid,传入的SIM卡标识(sim_card_id)为0,则根据iccid进行处理",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 19
+          }
+        }, {
+          "name" : "real_time",
+          "in" : "query",
+          "description" : "是否查实时流量",
+          "required" : false,
+          "schema" : {
+            "description" : "是否查实时流量",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimPricePlans",
+      "x-url" : "{endpoint}/v1/sim-price-plans"
+    },
+    "/EnableAttribute" : {
+      "post" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "启用自定义属性接口",
+        "description" : "启用自定义属性接口",
+        "operationId" : "EnableAttribute",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "attribute_id",
+          "in" : "path",
+          "description" : "自定义属性标识",
+          "required" : true,
+          "schema" : {
+            "description" : "自定义属性标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableAttribute",
+      "x-url" : "{endpoint}/v1/attributes/{attribute_id}/enable"
+    },
+    "/ShowSimCard" : {
+      "get" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "查询SIM卡详情",
+        "description" : "查询SIM卡详情",
+        "operationId" : "ShowSimCard",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimDeviceVO"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "example" : 385778661181234,
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "iccid",
+          "in" : "query",
+          "description" : "iccid",
+          "required" : false,
+          "schema" : {
+            "example" : "A12385778661181234",
+            "description" : "iccid",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 19
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSimCard",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}"
+    },
+    "/ListBackPoolMembers" : {
+      "get" : {
+        "tags" : [ "BackPool" ],
+        "summary" : "查询后向流量池成员列表",
+        "description" : "查询后向流量池成员列表",
+        "operationId" : "ListBackPoolMembers",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BackPoolMemPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "back_pool_id",
+          "in" : "path",
+          "description" : "流量池标识",
+          "required" : true,
+          "schema" : {
+            "description" : "流量池标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "cid",
+          "in" : "query",
+          "description" : "容器ID",
+          "required" : false,
+          "schema" : {
+            "description" : "容器ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "每页记录数",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 1,
+            "maximum" : 1000000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "billing_cycle",
+          "in" : "query",
+          "description" : "账期,例如:2021-04",
+          "required" : true,
+          "schema" : {
+            "description" : "账期,例如:2021-04",
+            "type" : "string",
+            "maxLength" : 7,
+            "minLength" : 7
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBackPoolMembers",
+      "x-url" : "{endpoint}/v1/back-pools/{back_pool_id}/members"
+    },
+    "/ListWorkOrders" : {
+      "get" : {
+        "tags" : [ "WorkOrder" ],
+        "summary" : "分页查询业务受理单",
+        "description" : "分页查询业务受理单",
+        "operationId" : "ListWorkOrders",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "main_search_key",
+          "in" : "query",
+          "description" : "业务受理ID",
+          "required" : false,
+          "schema" : {
+            "description" : "业务受理ID",
+            "type" : "string",
+            "maxLength" : 17,
+            "minLength" : 0,
+            "pattern" : "^[0-9]{1,17}$"
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "sim_type",
+          "in" : "query",
+          "description" : "SIM卡类型:3.实体卡",
+          "required" : false,
+          "schema" : {
+            "description" : "SIM卡类型:3.实体卡",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 10,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "work_order_type",
+          "in" : "query",
+          "description" : "业务受理类型:1.批量激活实体卡 2.批量转移实体卡 3.创建流量池 4.实体卡复机 5.实体卡停机 6.批量启用或复机 7.批量停用或停机 8.批量订购 9.批量退订 10.实体卡激活 11.申请断网 12.达量断网 13.机卡重绑 14.实名制信息清除 15.实体卡限速 16.批量补卡 17.批量机卡重绑 18.重启已废弃后向流量池 19.批量达量断网 20断网恢复 21取消达量断网 22批量取消达量断网 23批量拆机",
+          "required" : false,
+          "schema" : {
+            "description" : "业务受理类型:1.批量激活实体卡 2.批量转移实体卡 3.创建流量池 4.实体卡复机 5.实体卡停机 6.批量启用或复机 7.批量停用或停机 8.批量订购 9.批量退订 10.实体卡激活 11.申请断网 12.达量断网 13.机卡重绑 14.实名制信息清除 15.实体卡限速 16.批量补卡 17.批量机卡重绑 18.重启已废弃后向流量池 19.批量达量断网 20断网恢复 21取消达量断网 22批量取消达量断网 23批量拆机",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 99,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "业务受理状态::1审核中、2已审核、3处理中、4已完成、5已取消、6失败、7 审核不通过",
+          "required" : false,
+          "schema" : {
+            "description" : "业务受理状态::1审核中、2已审核、3处理中、4已完成、5已取消、6失败、7 审核不通过",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 7,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListWorkOrders",
+      "x-url" : "{endpoint}/v1/work-orders"
+    },
+    "/StopSimCard" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "SIM卡单卡停机",
+        "description" : "创建停机申请,返回业务受理单号。1~2个工作日完成停机操作。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "StopSimCard",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StopResumeRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DownUpTimeForSimCardReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopSimCard",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/stop"
+    },
+    "/DisableAttribute" : {
+      "post" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "停用自定义属性接口",
+        "description" : "停用自定义属性接口",
+        "operationId" : "DisableAttribute",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "attribute_id",
+          "in" : "path",
+          "description" : "自定义属性标识",
+          "required" : true,
+          "schema" : {
+            "description" : "自定义属性标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableAttribute",
+      "x-url" : "{endpoint}/v1/attributes/{attribute_id}/disable"
+    },
+    "/DeleteTag" : {
+      "delete" : {
+        "tags" : [ "Tag" ],
+        "summary" : "删除标签",
+        "description" : "删除标签",
+        "operationId" : "DeleteTag",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "tag_id",
+          "in" : "path",
+          "description" : "标签标识",
+          "required" : true,
+          "schema" : {
+            "description" : "标签标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTag",
+      "x-url" : "{endpoint}/v1/tags/{tag_id}"
+    },
+    "/AddNetworkSwitchPolicy" : {
+      "post" : {
+        "tags" : [ "NetworkSwitchPolicies" ],
+        "summary" : "新增网络切换策略",
+        "description" : "新增网络切换策略",
+        "operationId" : "AddNetworkSwitchPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "example" : true
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSwitchPolicyDTO"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddNetworkSwitchPolicy",
+      "x-url" : "{endpoint}/v1/network-switch-policies"
+    },
+    "/EnableSimCard" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "激活实体卡",
+        "description" : "创建激活实体卡申请,返回业务受理单号。1~2个工作日完成激活操作。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "EnableSimCard",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "iccid",
+          "in" : "query",
+          "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+          "required" : false,
+          "schema" : {
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 19
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableSimCard",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/enable"
+    },
+    "/ListSimCardFlowPerDay" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "批量查询SIM卡日用量",
+        "description" : "批量查询SIM卡日用量接口,支持按天或按月查询。SIM卡标识和容器ID只能选一个参数,天和月也只能选一个参数",
+        "operationId" : "ListSimCardFlowPerDay",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SimCardFlowPerDayRsp"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SimCardFlowPerDayReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSimCardFlowPerDay",
+      "x-url" : "{endpoint}/v1/sim-cards/batch-daily-flow"
+    },
+    "/ListAttributes" : {
+      "get" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "查询自定义属性列表接口",
+        "description" : "查询自定义属性列表接口",
+        "operationId" : "ListAttributes",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CmAttributePageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "cust_attr_name",
+          "in" : "query",
+          "description" : "自定义属性名称",
+          "required" : false,
+          "schema" : {
+            "description" : "自定义属性名称",
+            "type" : "string",
+            "maxLength" : 32
+          }
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "自定义属性状态:0 未启用,1 已启用。",
+          "required" : false,
+          "schema" : {
+            "description" : "自定义属性状态:0 未启用,1 已启用。",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAttributes",
+      "x-url" : "{endpoint}/v1/attributes"
+    },
+    "/UpdateAttribute" : {
+      "put" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "修改自定义属性接口",
+        "description" : "修改自定义属性接口",
+        "operationId" : "UpdateAttribute",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "attribute_id",
+          "in" : "path",
+          "description" : "自定义属性标识",
+          "required" : true,
+          "schema" : {
+            "description" : "自定义属性标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddOrModifyAttributeReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAttribute",
+      "x-url" : "{endpoint}/v1/attributes/{attribute_id}"
+    },
+    "/ListFlowBySimCards" : {
+      "post" : {
+        "tags" : [ "SimPricePlans" ],
+        "summary" : "批量查询实体卡流量",
+        "description" : "批量查询实体卡流量",
+        "operationId" : "ListFlowBySimCards",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SimCardsFlowVO"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListFlowBySimCardsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFlowBySimCards",
+      "x-url" : "{endpoint}/v1/sim-price-plans/usage/batch-query"
+    },
+    "/ListSmsDetails" : {
+      "get" : {
+        "tags" : [ "Sms" ],
+        "summary" : "短信发送详情",
+        "description" : "短信发送详情,接口仅支持开通短信套餐的中国移动与中国电信卡调用",
+        "operationId" : "ListSmsDetails",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsSendDetailQueryRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/offset"
+        }, {
+          "name" : "cid",
+          "in" : "query",
+          "description" : "容器ID",
+          "required" : false,
+          "schema" : {
+            "description" : "容器ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "开始时间",
+          "required" : false,
+          "schema" : {
+            "description" : "开始时间",
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间",
+          "required" : false,
+          "schema" : {
+            "description" : "结束时间",
+            "type" : "string",
+            "format" : "date-time"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSmsDetails",
+      "x-url" : "{endpoint}/v1/sms-send-infos/details"
+    },
+    "/ListWorkOrderDetails" : {
+      "get" : {
+        "tags" : [ "WorkOrder" ],
+        "summary" : "分页查询业务受理明细",
+        "description" : "分页查询业务受理明细",
+        "operationId" : "ListWorkOrderDetails",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderDetailPageQueryRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "work_order_id",
+          "in" : "path",
+          "description" : "业务受理ID",
+          "required" : true,
+          "schema" : {
+            "description" : "业务受理ID",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "main_search_key",
+          "in" : "query",
+          "description" : "容器ID",
+          "required" : false,
+          "schema" : {
+            "description" : "容器ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页的记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "每页的记录数",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码,最小值是1,最大值为1000000。默认值是1",
+          "required" : false,
+          "schema" : {
+            "description" : "页码,最小值是1,最大值为1000000。默认值是1",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 1,
+            "maximum" : 1000000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "sim_type",
+          "in" : "query",
+          "description" : "SIM卡类型:3.实体卡",
+          "required" : false,
+          "schema" : {
+            "description" : "SIM卡类型:3.实体卡",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 10,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "业务受理明细状态:1成功、2处理中、3失败",
+          "required" : false,
+          "schema" : {
+            "description" : "业务受理明细状态:1成功、2处理中、3失败",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 3,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListWorkOrderDetails",
+      "x-url" : "{endpoint}/v1/work-orders/{work_order_id}/details"
+    },
+    "/ShowRealNamed" : {
+      "get" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "查询SIM卡实名认证信息",
+        "description" : "实时查询SIM卡实名认证信息,接口仅支持查询中国大陆运营商卡片的实名认证信息。",
+        "operationId" : "ShowRealNamed",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowRealNamedRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "iccid",
+          "in" : "query",
+          "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+          "required" : false,
+          "schema" : {
+            "description" : "iccid,传入的sim_card_id为0,则根据iccid进行处理",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 19
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRealNamed",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/real-named"
+    },
+    "/SetNetworkSwitchPolicy" : {
+      "post" : {
+        "tags" : [ "SimDeviceMultiply" ],
+        "summary" : "SIM卡设置网络切换策略",
+        "description" : "SIM卡设置网络切换策略,接口仅支持三网卡调用。",
+        "operationId" : "SetNetworkSwitchPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSwitchPolicyReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetNetworkSwitchPolicy",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/network-switch-policy/set"
+    },
+    "/BatchSetAttributes" : {
+      "post" : {
+        "tags" : [ "Attribute" ],
+        "summary" : "批量设置自定义属性接口",
+        "description" : "批量设置自定义属性接口",
+        "operationId" : "BatchSetAttributes",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchSetAttributesReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchSetAttributes",
+      "x-url" : "{endpoint}/v1/sim-cards/attributes/batch-set"
+    },
+    "/RegisterImei" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "SIM卡机卡重绑",
+        "description" : "支持固定机卡重绑(需要上传IMEI,将SIM卡绑定到指定IMEI的设备)和普通机卡重绑(会清除之前绑定的设备,将SIM卡绑定到正在使用的设备),接口仅支持中国电信卡,中国移动卡调用。中国电信卡单卡每月只允许重绑2次,中国移动卡仅支持普通机卡重绑。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "RegisterImei",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterImeiReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RegisterImei",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/bind-device"
+    },
+    "/SetExceedCutNet" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "SIM卡达量断网/取消达量断网",
+        "description" : "SIM卡达量断网/取消达量断网,接口仅支持中国电信的卡以及中国联通、中国移动的组池卡调用。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "SetExceedCutNet",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WorkOrderCommonRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExceedCutNetReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetExceedCutNet",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/exceed-cut-net"
+    },
+    "/ResetSimCard" : {
+      "post" : {
+        "tags" : [ "SimCards" ],
+        "summary" : "SIM卡单卡复机",
+        "description" : "创建复机申请,返回业务受理单号。1~2个工作日完成复机操作。注:由于运营商侧业务限制,建议您同一张SIM卡不要同时执行多种不同业务的操作。",
+        "operationId" : "ResetSimCard",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StopResumeRsp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "name" : "sim_card_id",
+          "in" : "path",
+          "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+          "required" : true,
+          "schema" : {
+            "description" : "SIM卡标识,如果SIM卡标识传0则表示需要根据iccid处理。可通过[查询SIM卡列表接口](https://support.huaweicloud.com/api-ocgsl/gsl_07_0008.html)获取",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DownUpTimeForSimCardReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResetSimCard",
+      "x-url" : "{endpoint}/v1/sim-cards/{sim_card_id}/reset"
+    },
+    "/BatchSetTags" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "批量设置/取消设置标签接口",
+        "description" : "批量设置/取消设置标签接口",
+        "operationId" : "BatchSetTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Parameter Invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchSetTagsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchSetTags",
+      "x-url" : "{endpoint}/v1/sim-tags/batch-set"
+    }
+  }
+}

@@ -1,0 +1,2906 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "EPS-企业项目管理操作",
+    "title" : "EPS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "QuotasDetail" : {
+        "required" : [ "resources" ],
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "description" : "资源配额",
+            "items" : {
+              "$ref" : "#/components/schemas/EpQuotas"
+            }
+          }
+        },
+        "description" : "配额信息",
+        "type" : "object"
+      },
+      "EpQuotas" : {
+        "required" : [ "quota", "type", "used" ],
+        "properties" : {
+          "quota" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总配额"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "qutoa的资源类型"
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "配额使用量"
+          }
+        },
+        "description" : "企业项目配额响应",
+        "type" : "object"
+      },
+      "RespEpQuotas" : {
+        "required" : [ "quotas" ],
+        "properties" : {
+          "quotas" : {
+            "description" : "企业项目配额",
+            "$ref" : "#/components/schemas/QuotasDetail"
+          }
+        },
+        "description" : "企业项目配额响应",
+        "type" : "object"
+      },
+      "RespBadRequest" : {
+        "required" : [ "error" ],
+        "properties" : {
+          "error" : {
+            "description" : "错误请求信息",
+            "$ref" : "#/components/schemas/RespErrorMessage"
+          }
+        },
+        "description" : "错误请求响应",
+        "type" : "object"
+      },
+      "RespErrorMessage" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误信息"
+          }
+        },
+        "description" : "响应错误信息",
+        "type" : "object"
+      },
+      "EnableAction" : {
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "启用操作",
+            "enum" : [ "enable" ],
+            "default" : "enable"
+          }
+        },
+        "description" : "停用启用企业项目操作",
+        "type" : "object"
+      },
+      "EP" : {
+        "required" : [ "enterprise_project" ],
+        "properties" : {
+          "enterprise_project" : {
+            "description" : "企业项目。",
+            "$ref" : "#/components/schemas/EpDetail"
+          }
+        },
+        "description" : "企业项目",
+        "type" : "object"
+      },
+      "EpDetail" : {
+        "required" : [ "created_at", "description", "id", "name", "status", "type", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "企业项目ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "企业项目名称"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "企业项目描述"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "企业项目状态。1启用,2停用"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "创建时间,格式为UTC格式。如:2018-05-18T06:49:06Z。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "修改时间,格式为UTC格式。如:2018-05-28T02:21:36Z。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "项目类型:",
+            "enum" : [ "prod", "poc" ]
+          }
+        },
+        "description" : "企业项目详情",
+        "type" : "object"
+      },
+      "EnterpriseProject" : {
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "enterprise_project1",
+            "description" : "只能由中文字符、英文字母(a~zA~Z)、数字(0~9)、下划线(_)、中划线(-)组成,且长度为[1-64]个字符。名称不能为大小写混合的default,且在租户账号内唯一。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "描述",
+            "description" : "最大长度512个字符。",
+            "maxLength" : 512
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "企业项目类型",
+            "default" : "prod"
+          }
+        },
+        "description" : "企业项目",
+        "type" : "object"
+      },
+      "Version" : {
+        "required" : [ "version" ],
+        "properties" : {
+          "version" : {
+            "description" : "版本详情",
+            "$ref" : "#/components/schemas/VersionDetail"
+          }
+        },
+        "description" : "API版本",
+        "type" : "object"
+      },
+      "Link" : {
+        "required" : [ "href", "rel" ],
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "description" : "API的URL地址。"
+          },
+          "rel" : {
+            "type" : "string",
+            "description" : "self。"
+          }
+        },
+        "description" : "API的URL地址。",
+        "type" : "object"
+      },
+      "VersionDetail" : {
+        "required" : [ "id", "links", "min_version", "status", "updated", "version" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "版本ID(版本号),如v1.0。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "API的URL地址。",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "若该版本API支持微版本,则返回支持的最大微版本号,如果不支持微版本,则返回空。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "版本状态,为如下3种:",
+            "enum" : [ "CURRENT", "SUPPORTED", "DEPRECATED" ]
+          },
+          "updated" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "版本发布时间,采用UTC时间表示。如v1.0发布的时间2016-12-09T00:00:00Z。"
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "若该版本API 支持微版本,则返回支持的最小微版本号, 如果不支持微版本,则返回空。"
+          }
+        },
+        "description" : "版本详情",
+        "type" : "object"
+      },
+      "MigrateResource" : {
+        "required" : [ "resource_id", "resource_type" ],
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "资源所属RegionID。迁移OBS服务资源时为必选项。"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。resource_type为region级别服务时为必选项。"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          },
+          "associated" : {
+            "type" : "boolean",
+            "description" : "是否关联迁移。目前仅支持ECS关联资源EVS、EIP迁移。",
+            "default" : false
+          }
+        },
+        "description" : "迁移资源",
+        "type" : "object"
+      },
+      "Versions" : {
+        "required" : [ "versions" ],
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "版本列表",
+            "items" : {
+              "$ref" : "#/components/schemas/VersionDetail"
+            }
+          }
+        },
+        "description" : "版本列表。",
+        "type" : "object"
+      },
+      "DisableAction" : {
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "停用操作",
+            "enum" : [ "disable" ],
+            "default" : "disable"
+          }
+        },
+        "description" : "停用企业项目操作",
+        "type" : "object"
+      },
+      "ResqEpResouce" : {
+        "required" : [ "resource_types" ],
+        "properties" : {
+          "projects" : {
+            "type" : "array",
+            "description" : "项目ID列表。resource_types中包含region级别服务时为必选项。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "resource_types" : {
+            "type" : "array",
+            "description" : "资源类型列表, 此参数为可输入的值(区分大小写)。例如:ecs,scaling_group, images, disk, vpcs,security-groups, shared_bandwidth,",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "索引位置, 从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询记录数,不传默认为1000,limit最多为1000, 最小值为1。"
+          },
+          "matches" : {
+            "type" : "array",
+            "description" : "搜索字段,key为要匹配的字段,固定为resource_name,value为匹配的值,不传则表示无匹配条件。",
+            "items" : {
+              "$ref" : "#/components/schemas/Match"
+            }
+          }
+        },
+        "description" : "获取企业项目下资源请求",
+        "type" : "object"
+      },
+      "Resources" : {
+        "required" : [ "enterprise_project_id", "project_id", "project_name", "resource_detail", "resource_id", "resource_name", "resource_type" ],
+        "properties" : {
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "ProjectID"
+          },
+          "project_name" : {
+            "type" : "string",
+            "description" : "Project名称"
+          },
+          "resource_detail" : {
+            "type" : "object",
+            "description" : "资源详情"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "资源名称"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          }
+        },
+        "description" : "资源列表",
+        "type" : "object"
+      },
+      "RespEpResourceList" : {
+        "required" : [ "errors", "resources", "total_count" ],
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "description" : "资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Resources"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "description" : "查询失败的企业项目下的资源",
+            "items" : {
+              "$ref" : "#/components/schemas/Errors"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "企业项目下的资源总数"
+          }
+        },
+        "description" : "企业项目下绑定的资源",
+        "type" : "object"
+      },
+      "Errors" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误描述"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "ProjectID"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型"
+          }
+        },
+        "description" : "错误列表",
+        "type" : "object"
+      },
+      "Match" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。有matches参数时,该字段为必填,固定为resource_name。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。即资源名称,有matches参数时,该字段为必填,且默认为模糊搜索,如”message.com”。每个值最大长度255个字符。",
+            "maxLength" : 255
+          }
+        },
+        "description" : "匹配字段",
+        "type" : "object"
+      },
+      "ProviderListResponse" : {
+        "required" : [ "providers", "total_count" ],
+        "properties" : {
+          "providers" : {
+            "type" : "array",
+            "description" : "云服务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ProviderResponseBody"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前支持的云服务总数"
+          }
+        },
+        "type" : "object"
+      },
+      "ResourceTypeBody" : {
+        "required" : [ "resource_type", "resource_type_i18n_display_name", "regions", "global" ],
+        "properties" : {
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型名称"
+          },
+          "resource_type_i18n_display_name" : {
+            "type" : "string",
+            "description" : "资源类型显示名称,可以通过参数中'locale'设置语言"
+          },
+          "regions" : {
+            "type" : "array",
+            "description" : "支持的region列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "global" : {
+            "type" : "boolean",
+            "description" : "是否是全局类型的资源"
+          }
+        },
+        "type" : "object"
+      },
+      "ProviderResponseBody" : {
+        "required" : [ "provider", "provider_i18n_display_name", "resource_types" ],
+        "properties" : {
+          "provider" : {
+            "type" : "string",
+            "description" : "云服务名称"
+          },
+          "provider_i18n_display_name" : {
+            "type" : "string",
+            "description" : "云服务显示名称,可以通过参数中的'locale'设置语言"
+          },
+          "resource_types" : {
+            "type" : "array",
+            "description" : "资源类型列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTypeBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RespEpList" : {
+        "required" : [ "enterprise_projects", "total_count" ],
+        "properties" : {
+          "enterprise_projects" : {
+            "type" : "array",
+            "description" : "企业项目列表",
+            "items" : {
+              "$ref" : "#/components/schemas/EpDetail"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "企业项目总数"
+          }
+        },
+        "description" : "获取企业项目列表响应",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowEnterpriseProjectQuota" : {
+      "get" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "查询企业项目配额",
+        "description" : "查询企业项目的配额信息。",
+        "operationId" : "ShowEnterpriseProjectQuota",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespEpQuotas"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEnterpriseProjectQuota",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/quotas"
+    },
+    "/EnableEnterpriseProject" : {
+      "post" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "启用企业项目",
+        "description" : "启用企业项目。",
+        "operationId" : "EnableEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "企业项目ID,不能为0。",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID,不能为0。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EnableAction"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}/action"
+    },
+    "/ShowEnterpriseProject" : {
+      "get" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "查询企业项目详情",
+        "description" : "查询企业项目详情。",
+        "operationId" : "ShowEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EP"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "企业项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}"
+    },
+    "/UpdateEnterpriseProject" : {
+      "put" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "修改企业项目",
+        "description" : "修改企业项目。当前仅支持修改名称和描述。",
+        "operationId" : "UpdateEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EP"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "企业项目ID,不能为0。",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID,不能为0。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EnterpriseProject"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}"
+    },
+    "/ShowApiVersion" : {
+      "get" : {
+        "tags" : [ "查询版本操作" ],
+        "summary" : "查询API版本号详情",
+        "description" : "查询指定的企业项目API版本号详情",
+        "operationId" : "ShowApiVersion",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Version"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "api_version",
+          "in" : "path",
+          "description" : "版本ID(版本号),如v1.0。",
+          "required" : true,
+          "schema" : {
+            "description" : "版本ID(版本号),如v1.0。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApiVersion",
+      "x-url" : "{endpoint}/{api_version}"
+    },
+    "/MigrateResource" : {
+      "post" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "迁移资源",
+        "description" : "迁移资源到目标企业项目。",
+        "operationId" : "MigrateResource",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "目标企业项目ID,enterprise_project_id为0时表示迁移资源到默认资源组default。注:实际迁移时,会将资源所属的【当前企业项目ID】替换为【目标企业项目ID】,所以不需要指定【当前企业项目ID】。",
+          "required" : true,
+          "schema" : {
+            "description" : "目标企业项目ID,enterprise_project_id为0时表示迁移资源到默认资源组default。注:实际迁移时,会将资源所属的【当前企业项目ID】替换为【目标企业项目ID】,所以不需要指定【当前企业项目ID】。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MigrateResource"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "MigrateResource",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}/resources-migrate"
+    },
+    "/ListApiVersions" : {
+      "get" : {
+        "tags" : [ "查询版本操作" ],
+        "summary" : "查询API版本列表",
+        "description" : "查询企业项目的API版本列表。",
+        "operationId" : "ListApiVersions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Versions"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "410" : {
+            "description" : "Gone",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Precondition Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "Too Many Requests",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApiVersions",
+      "x-url" : "{endpoint}/"
+    },
+    "/CreateEnterpriseProject" : {
+      "post" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "创建企业项目",
+        "description" : "创建企业项目。",
+        "operationId" : "CreateEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EP"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EnterpriseProject"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects"
+    },
+    "/DisableEnterpriseProject" : {
+      "post" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "停用企业项目",
+        "description" : "停用企业项目。",
+        "operationId" : "DisableEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DisableAction"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}/action"
+    },
+    "/ShowResourceBindEnterpriseProject" : {
+      "post" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "查询企业项目绑定的资源列表",
+        "description" : "查询企业项目下绑定的资源详情。",
+        "operationId" : "ShowResourceBindEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespEpResourceList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "enterprise_project_id",
+          "in" : "path",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "5aa119a8-d25b-45a7-8d1b-88e127885635",
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResqEpResouce"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResourceBindEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/{enterprise_project_id}/resources/filter"
+    },
+    "/ListProviders" : {
+      "get" : {
+        "tags" : [ "查询企业项目支持的服务" ],
+        "summary" : "查询企业项目支持的服务",
+        "description" : "查询企业项目支持的服务",
+        "operationId" : "ListProviders",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProviderListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "locale",
+          "in" : "query",
+          "description" : "指定显示语言",
+          "required" : false,
+          "schema" : {
+            "description" : "指定显示语言",
+            "type" : "string",
+            "default" : "zh-cn",
+            "enum" : [ "zh-cn", "en-us" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数默认为200,limit最多为200, 最小值为1",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数默认为200,limit最多为200, 最小值为1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0",
+          "required" : false,
+          "schema" : {
+            "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "provider",
+          "in" : "query",
+          "description" : "云服务名称",
+          "required" : false,
+          "schema" : {
+            "description" : "云服务名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProviders",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects/providers"
+    },
+    "/ListEnterpriseProject" : {
+      "get" : {
+        "tags" : [ "企业项目管理操作" ],
+        "summary" : "查询企业项目列表",
+        "description" : "查询当前用户已授权的企业项目列表,用户可以使用企业项目绑定资源。",
+        "operationId" : "ListEnterpriseProject",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespEpList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "402" : {
+            "description" : "Payment Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Method Not Allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "406" : {
+            "description" : "Not Acceptable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "407" : {
+            "description" : "Proxy Authentication Required",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "408" : {
+            "description" : "Request Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "Not Implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Bad Gateway",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          },
+          "504" : {
+            "description" : "Gateway Timeout",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RespBadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "企业项目ID,0表示默认企业项目",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID,0表示默认企业项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数默认为1000,limit最多为1000, 最小值为1",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数默认为1000,limit最多为1000, 最小值为1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "企业项目名称,支持模糊搜索",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目名称,支持模糊搜索",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0",
+          "required" : false,
+          "schema" : {
+            "description" : "索引位置,从offset指定的下一条数据开始查询,必须为数字,不能为负数,默认为0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "降序或升序,默认为“desc”",
+          "required" : false,
+          "schema" : {
+            "description" : "降序或升序,默认为“desc”",
+            "type" : "string",
+            "enum" : [ "desc", "asc" ]
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "返回结果按该关键字排序(支持updated_at等关键字,默认为“created_at”)",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果按该关键字排序(支持updated_at等关键字,默认为“created_at”)",
+            "type" : "string",
+            "enum" : [ "created_at", "updated_at" ]
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "企业项目状态。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目状态。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。说明:由于EPS是全局服务,因此调用IAM服务获取用户Token接口时需要注意作用域即scope字段应该设置为domain。响应消息头中X-Subject-Token的值即为用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEnterpriseProject",
+      "x-url" : "{endpoint}/v1.0/enterprise-projects"
+    }
+  }
+}

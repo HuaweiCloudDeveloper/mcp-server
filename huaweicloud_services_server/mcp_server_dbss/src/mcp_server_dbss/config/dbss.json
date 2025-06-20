@@ -1,0 +1,6011 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "DBSS-审计Agent",
+    "title" : "DBSS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "SuccessResponse" : {
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "响应状态"
+          }
+        },
+        "type" : "object"
+      },
+      "Error" : {
+        "properties" : {
+          "error" : {
+            "description" : "错误信息返回体。",
+            "items" : {
+              "$ref" : "#/components/schemas/ErrorDetail"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ErrorDetail" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 36,
+            "description" : "错误请求返回的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "description" : "错误请求返回的错误信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "AuditAgentRespoonse" : {
+        "type" : "object",
+        "required" : [ "agents" ],
+        "properties" : {
+          "agents" : {
+            "items" : {
+              "required" : [ "agent_id", "agent_type", "agent_os", "agent_ip" ],
+              "properties" : {
+                "agent_id" : {
+                  "type" : "string",
+                  "example" : "X1miCo8BDdIO3rwSbhug",
+                  "description" : "agent ID"
+                },
+                "agent_type" : {
+                  "type" : "string",
+                  "example" : "DB",
+                  "description" : "agent 类型"
+                },
+                "agent_os" : {
+                  "type" : "string",
+                  "example" : "LINUX64_X86",
+                  "description" : "agent OS"
+                },
+                "agent_ip" : {
+                  "type" : "string",
+                  "example" : "2407:c080:11f0:23b:59d5:7ddf:5650:447b",
+                  "description" : "agent安装节点IP"
+                },
+                "mem_threshold" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : 80,
+                  "description" : "内存阈值"
+                },
+                "cpu_threshold" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : 80,
+                  "description" : "cpu阈值"
+                },
+                "status" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : 1,
+                  "description" : "agent状态"
+                },
+                "agent_nic" : {
+                  "type" : "string",
+                  "example" : "",
+                  "description" : "agent网卡"
+                },
+                "db_name" : {
+                  "type" : "string",
+                  "example" : "",
+                  "description" : "数据库名称"
+                },
+                "datacap_status" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : 1,
+                  "description" : "数据流量抓取状态"
+                },
+                "agent_url" : {
+                  "type" : "string",
+                  "example" : "/opt/dbss_audit/audit_server/agent/",
+                  "description" : "agent安装地址"
+                },
+                "universal" : {
+                  "type" : "boolean",
+                  "example" : false,
+                  "description" : "是否CCE场景"
+                },
+                "sha256" : {
+                  "type" : "string",
+                  "example" : "2619a4fc8ff3b3dda48c4347630bc8d7ece2e1f046eab7ac044e7d0df49886e3",
+                  "description" : "sha256值"
+                }
+              }
+            },
+            "description" : "agent列表",
+            "type" : "array"
+          }
+        }
+      },
+      "JobBean" : {
+        "type" : "object",
+        "required" : [ "job_id", "status", "job_type", "server_id", "server_name", "resource_id", "begin_time", "end_time", "charge_mode" ],
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "任务状态"
+          },
+          "job_type" : {
+            "type" : "string",
+            "description" : "类型"
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "虚拟机ID"
+          },
+          "server_name" : {
+            "type" : "string",
+            "description" : "虚拟机名称"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "begin_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "开始时间"
+          },
+          "end_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "结束时间"
+          },
+          "charge_mode" : {
+            "type" : "string",
+            "description" : "计费模式"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "description" : "失败原因"
+          },
+          "ha_id" : {
+            "type" : "string",
+            "description" : "防护实例ID,该字段已废弃"
+          },
+          "ha_name" : {
+            "type" : "string",
+            "description" : "防护实例名称,该字段已废弃"
+          }
+        }
+      },
+      "AuditInstanceJobResponse" : {
+        "type" : "object",
+        "required" : [ "jobs" ],
+        "properties" : {
+          "jobs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobBean"
+            },
+            "description" : "实例创建任务列表"
+          }
+        }
+      },
+      "RdsDbResponse" : {
+        "type" : "object",
+        "required" : [ "ret_list" ],
+        "properties" : {
+          "ret_list" : {
+            "items" : {
+              "required" : [ "id", "ret_status", "ret_message" ],
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "123751d3ee2f47aea64822e98318c6a8in01",
+                  "description" : "rds数据库id"
+                },
+                "ret_status" : {
+                  "type" : "string",
+                  "example" : "success",
+                  "description" : "状态"
+                },
+                "ret_message" : {
+                  "type" : "string",
+                  "description" : "描述"
+                }
+              }
+            },
+            "description" : "结果列表",
+            "type" : "array"
+          }
+        }
+      },
+      "RdsDbRequest" : {
+        "type" : "object",
+        "required" : [ "databases" ],
+        "properties" : {
+          "databases" : {
+            "items" : {
+              "required" : [ "id", "type" ],
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "123751d3ee2f47aea64822e98318c6a8in01",
+                  "description" : "rds数据库id,可在查询rds数据库列表接口的ID字段获取。"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "MYSQL",
+                  "description" : "数据库类型"
+                }
+              }
+            },
+            "description" : "数据库列表",
+            "type" : "array"
+          }
+        }
+      },
+      "AvailabilityZoneResponse" : {
+        "type" : "object",
+        "required" : [ "azs" ],
+        "properties" : {
+          "azs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AzInfo"
+            },
+            "description" : "可用区集合"
+          }
+        }
+      },
+      "AzInfo" : {
+        "type" : "object",
+        "required" : [ "zone_name", "zone_number", "az_type", "alias", "alias_us" ],
+        "properties" : {
+          "zone_name" : {
+            "type" : "string",
+            "description" : "可用区名称"
+          },
+          "zone_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "可用区编号"
+          },
+          "az_type" : {
+            "type" : "string",
+            "description" : "可用区类型"
+          },
+          "alias" : {
+            "type" : "string",
+            "description" : "可用区中文别名"
+          },
+          "alias_us" : {
+            "type" : "string",
+            "description" : "可用区英文别名"
+          }
+        }
+      },
+      "StatusResponse" : {
+        "type" : "object",
+        "description" : "成功",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "响应状态"
+          }
+        }
+      },
+      "BatchSwitchesRequest" : {
+        "properties" : {
+          "ids" : {
+            "description" : "规则ID,多个ID中间逗号分隔。可在查询风险规则策略接口ID字段获取。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "开关状态",
+            "type" : "string",
+            "enum" : [ "OFF", "ON" ]
+          }
+        },
+        "title" : "BatchSwitchesRequest",
+        "type" : "object"
+      },
+      "SqlRuleResponse" : {
+        "type" : "object",
+        "properties" : {
+          "rules" : {
+            "items" : {
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "zX4W2ngBo47GiyUSBuNs",
+                  "description" : "SQL规则ID"
+                },
+                "name" : {
+                  "type" : "string",
+                  "example" : "MYSQL报错型SQL注入",
+                  "description" : "SQL规则名称"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : "ON",
+                  "description" : "规则的状态:"
+                },
+                "risk_level" : {
+                  "type" : "string",
+                  "example" : "HIGH",
+                  "description" : "风险级别"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "SYSTEM",
+                  "description" : "风险类型"
+                },
+                "rank" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : 1,
+                  "description" : "优先级。数字越小优先级越高。"
+                },
+                "feature" : {
+                  "type" : "string",
+                  "example" : "正则表达式",
+                  "description" : "SQL命令特征"
+                },
+                "regex" : {
+                  "type" : "string",
+                  "example" : "((.*)?(select)\\s+[0-9]+\\s+from\\s+\\(\\s*select\\s+count(.*)?(concat)\\s*(.*)?(from)\\s*(information_schema.tables)(.*)?(group)\\s+(by)(.*)?)",
+                  "description" : "正则表达式"
+                }
+              }
+            },
+            "description" : "SQL规则列表",
+            "type" : "array"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "总数"
+          }
+        }
+      },
+      "SqlRuleRequest" : {
+        "type" : "object",
+        "properties" : {
+          "risk_levels" : {
+            "type" : "string",
+            "example" : "HIGH",
+            "description" : "风险级别"
+          }
+        }
+      },
+      "AuditSummaryResponse" : {
+        "type" : "object",
+        "description" : "审计汇总信息应答",
+        "required" : [ "project_id", "audit_duration", "total_sql", "total_risk", "today_sql", "today_risk", "today_session", "update_time", "data_list", "total" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "example" : "b9351f98c724428794ba7d105fa3558d",
+            "description" : "项目ID"
+          },
+          "audit_duration" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 99423,
+            "description" : "审计总时长"
+          },
+          "total_sql" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 120267839,
+            "description" : "语句总量"
+          },
+          "total_risk" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1597508,
+            "description" : "风险总量"
+          },
+          "today_sql" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 4354,
+            "description" : "今日语句"
+          },
+          "today_risk" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 4354,
+            "description" : "今日风险"
+          },
+          "today_session" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 4350,
+            "description" : "今日会话"
+          },
+          "update_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1712570404644,
+            "description" : "更新时间"
+          },
+          "data_list" : {
+            "items" : {
+              "properties" : {
+                "id" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 235049,
+                  "description" : "ID"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : 1,
+                  "description" : "状态"
+                },
+                "project_id" : {
+                  "type" : "string",
+                  "example" : "b9351f98c724428794ba7d105fa3558d",
+                  "description" : "项目ID"
+                },
+                "instance_id" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 5542,
+                  "description" : "实例ID"
+                },
+                "instance_name" : {
+                  "type" : "string",
+                  "example" : "DBSS-mysql8-test",
+                  "description" : "实例名称"
+                },
+                "audit_duration" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 99423,
+                  "description" : "审计时长"
+                },
+                "total_sql" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 3537,
+                  "description" : "语句总量"
+                },
+                "total_risk" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 380,
+                  "description" : "风险总量"
+                },
+                "today_sql" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 0,
+                  "description" : "今日语句"
+                },
+                "today_risk" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 0,
+                  "description" : "今日风险"
+                },
+                "today_session" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 0,
+                  "description" : "今日会话"
+                },
+                "update_time" : {
+                  "type" : "integer",
+                  "format" : "int64",
+                  "example" : 1712570404093,
+                  "description" : "更新时间"
+                },
+                "reserve1" : {
+                  "type" : "string",
+                  "example" : null,
+                  "description" : "保留字1"
+                },
+                "reserve2" : {
+                  "type" : "string",
+                  "example" : null,
+                  "description" : "保留字2"
+                }
+              }
+            },
+            "description" : "列表信息",
+            "type" : "array"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          }
+        }
+      },
+      "RuleRiskInfoBean" : {
+        "type" : "object",
+        "properties" : {
+          "rule_id" : {
+            "type" : "string",
+            "example" : "AWT0HznX7At9UslqwTfm",
+            "description" : "风险规则ID"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "example" : "risk_rule_name_00",
+            "description" : "风险名称"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "OFF",
+            "description" : "风险规则状态"
+          },
+          "action" : {
+            "type" : "string",
+            "example" : "LOGIN,SELECT,INSERT",
+            "description" : "操作集合, 中间逗号分隔。"
+          },
+          "schemas" : {
+            "items" : {
+              "properties" : {
+                "schema" : {
+                  "type" : "string",
+                  "example" : "dbss_audit",
+                  "description" : "schema名称"
+                },
+                "table" : {
+                  "type" : "string",
+                  "example" : null,
+                  "description" : "表名"
+                },
+                "column" : {
+                  "type" : "string",
+                  "example" : null,
+                  "description" : "列名"
+                }
+              }
+            },
+            "description" : "Schema列表",
+            "type" : "array"
+          },
+          "rank" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 6,
+            "description" : "风险规则优先级。数字越小优先级越高。"
+          },
+          "ignore_case" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否忽略大小写"
+          },
+          "risk_level" : {
+            "type" : "string",
+            "example" : "MEDIUM",
+            "description" : "风险级别"
+          },
+          "db_ids" : {
+            "type" : "string",
+            "example" : "11111,22222",
+            "description" : "数据库id,中间逗号分隔(单个id 小于256位)"
+          },
+          "execution_symbol" : {
+            "type" : "string",
+            "example" : "GREATER",
+            "description" : "执行时长对执行时长阈值的关系"
+          },
+          "execution_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10000,
+            "description" : "设定的执行时长阈值"
+          },
+          "affect_symbol" : {
+            "type" : "string",
+            "example" : "GREATER",
+            "description" : "影响行数对行数阈值的关系: "
+          },
+          "affect_rows" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 30,
+            "description" : "设定的影响行数阈值"
+          },
+          "client_ips" : {
+            "type" : "string",
+            "example" : "192.168.0.1",
+            "description" : "客户端IP段: IP-IP格式,或IP/XX 格式。 各个IP段使用逗号连接"
+          }
+        },
+        "required" : [ "rule_id", "rule_name", "status", "ignore_case", "risk_level", "db_ids", "execution_symbol", "affect_symbol", "client_ips" ]
+      },
+      "RdsDbListResponse" : {
+        "type" : "object",
+        "required" : [ "databases", "total_count" ],
+        "properties" : {
+          "databases" : {
+            "items" : {
+              "required" : [ "id", "db_name", "status", "port", "ip", "type", "version", "is_supported" ],
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "5a5c4ca8b10f4b00bc88e03866fe3fd4in01",
+                  "description" : "ID"
+                },
+                "db_name" : {
+                  "type" : "string",
+                  "example" : "rds-cwx1216198",
+                  "description" : "数据库名称"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : "ACTIVE",
+                  "description" : "实例状态。"
+                },
+                "port" : {
+                  "type" : "string",
+                  "example" : 3306,
+                  "description" : "数据库端口"
+                },
+                "ip" : {
+                  "type" : "string",
+                  "example" : "192.168.0.159",
+                  "description" : "数据库IP"
+                },
+                "instance_name" : {
+                  "type" : "string",
+                  "example" : "rds-cwx1216198",
+                  "description" : "rds实例名称"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "MySQL",
+                  "description" : "数据库类型"
+                },
+                "version" : {
+                  "type" : "string",
+                  "example" : 5.7,
+                  "description" : "版本"
+                },
+                "is_supported" : {
+                  "type" : "boolean",
+                  "example" : null,
+                  "description" : "是否支持免agent审计"
+                },
+                "enterprise_id" : {
+                  "type" : "string",
+                  "example" : 0,
+                  "description" : "企业项目ID"
+                }
+              }
+            },
+            "description" : "rds数据库列表",
+            "type" : "array"
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 7,
+            "description" : "总数"
+          }
+        }
+      },
+      "RuleScopeInfo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "zX4W2ngBo47GiyUSBuNs",
+            "description" : "审计范围规则ID"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "全审计规则",
+            "description" : "审计范围名称"
+          },
+          "action" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "审计范围动作"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "ON",
+            "description" : "审计范围规则状态"
+          },
+          "exception_ips" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "审计范围例外IP"
+          },
+          "source_ips" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "审计范围规则源IP"
+          },
+          "source_ports" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "审计范围源端口"
+          },
+          "db_ids" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "数据库ID"
+          },
+          "db_names" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "数据库名称"
+          },
+          "db_users" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "数据库用户"
+          },
+          "all_audit" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否全审计"
+          }
+        }
+      },
+      "RuleScopesResponse" : {
+        "type" : "object",
+        "properties" : {
+          "scopes" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RuleScopeInfo"
+            },
+            "description" : "审计范围规则列表",
+            "type" : "array"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "总数"
+          }
+        },
+        "required" : [ "scopes", "total" ]
+      },
+      "DeleteInstanceDemandRequest" : {
+        "type" : "object",
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "75abd6de-657b-444b-a867-c740ad2b66ec",
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。"
+          },
+          "delete_publicip" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否删除弹性IP"
+          },
+          "delete_volume" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否删除磁盘"
+          }
+        }
+      },
+      "SecurityGroupRequest" : {
+        "type" : "object",
+        "required" : [ "instance_id", "securitygroup_ids" ],
+        "properties" : {
+          "instance_id" : {
+            "type" : "string",
+            "example" : "062212d8-8e30-4783-9671-43f3f1f3bb1e",
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。"
+          },
+          "securitygroup_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "f0fbec06-bcf6-4c7e-99fa-f0ddfbb1d9bd" ],
+            "description" : "安全组ID列表(目前只支持传一个ID)"
+          }
+        }
+      },
+      "ResourceTagDeleteRequest" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "required" : [ "key" ],
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "键。最大长度128个字符。"
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "值。每个值最大长度255个字符。"
+                }
+              }
+            },
+            "description" : "标签列表",
+            "type" : "array"
+          },
+          "sys_tags" : {
+            "items" : {
+              "required" : [ "key" ],
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "键。最大长度128个字符。"
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "值。每个值最大长度255个字符。"
+                }
+              }
+            },
+            "description" : "系统标签列表",
+            "type" : "array"
+          }
+        }
+      },
+      "AuditQuotaResponse" : {
+        "type" : "object",
+        "description" : "账户配额响应体。",
+        "required" : [ "project_id", "audit_quota", "cpu", "ram" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。"
+          },
+          "audit_quota" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "审计实例剩余配额。"
+          },
+          "cpu" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "CPU剩余配额。"
+          },
+          "ram" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "内存剩余配额。"
+          }
+        }
+      },
+      "DataBaseBean" : {
+        "type" : "object",
+        "required" : [ "database" ],
+        "properties" : {
+          "database" : {
+            "description" : "数据库信息",
+            "$ref" : "#/components/schemas/DataBase"
+          }
+        }
+      },
+      "DataBase" : {
+        "type" : "object",
+        "description" : "数据库信息",
+        "required" : [ "name", "type", "version", "charset", "ip", "port", "os", "status", "instance_name", "db_classification" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "数据库ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "数据库名称"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "添加的数据库类型:"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "数据库版本"
+          },
+          "charset" : {
+            "type" : "string",
+            "description" : "数据库字符集"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "数据库IP"
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "数据库端口"
+          },
+          "os" : {
+            "type" : "string",
+            "description" : "数据库操作系统"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "实例状态"
+          },
+          "instance_name" : {
+            "type" : "string",
+            "description" : "数据库实例名"
+          },
+          "audit_status" : {
+            "type" : "string",
+            "description" : "数据库的运行状态"
+          },
+          "agent_url" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "agent的唯一ID"
+          },
+          "db_classification" : {
+            "type" : "string",
+            "description" : "数据库分类"
+          },
+          "rds_audit_switch_mismatch" : {
+            "type" : "boolean",
+            "description" : "rds实例审计开关状态不匹配。当数据库审计开启且rds侧日志上传开关关闭时该字段为true。"
+          },
+          "rds_id" : {
+            "type" : "string",
+            "description" : "RDS数据库的ID。"
+          },
+          "rds_obj_info" : {
+            "type" : "string",
+            "description" : "RDS数据库信息。"
+          },
+          "dws_obj_info" : {
+            "type" : "string",
+            "description" : "DWS数据库信息。"
+          },
+          "clouddb_obj_info" : {
+            "type" : "string",
+            "description" : "云数据库信息,该字段已废弃。"
+          }
+        }
+      },
+      "DataBaseResponse" : {
+        "type" : "object",
+        "properties" : {
+          "databases" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DataBaseBean"
+            },
+            "description" : "数据库信息列表"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          }
+        },
+        "required" : [ "databases", "total" ]
+      },
+      "ResourceInstanceResponse" : {
+        "type" : "object",
+        "required" : [ "resources", "total_count" ],
+        "properties" : {
+          "resources" : {
+            "items" : {
+              "required" : [ "resource_id", "resource_name", "resource_detail", "tags" ],
+              "properties" : {
+                "resource_id" : {
+                  "type" : "string",
+                  "example" : "cdfs_cefs_wesas_12_dsad",
+                  "description" : "资源ID"
+                },
+                "resource_name" : {
+                  "type" : "string",
+                  "example" : "resouece1",
+                  "description" : "资源名称,资源没有名称时默认为空字符串,eip返回ip地址。"
+                },
+                "resource_detail" : {
+                  "type" : "object",
+                  "example" : null,
+                  "description" : "资源详情。 资源对象,用于扩展,默认为空。"
+                },
+                "tags" : {
+                  "items" : {
+                    "properties" : {
+                      "key" : {
+                        "type" : "string",
+                        "example" : "key1",
+                        "description" : "键"
+                      },
+                      "value" : {
+                        "type" : "string",
+                        "example" : "value1",
+                        "description" : "值"
+                      }
+                    }
+                  },
+                  "description" : "标签列表,没有标签默认为空数组",
+                  "type" : "array"
+                },
+                "sys_tags" : {
+                  "items" : {
+                    "properties" : {
+                      "key" : {
+                        "type" : "string",
+                        "example" : "_sys_enterprise_project_id",
+                        "description" : "键"
+                      },
+                      "value" : {
+                        "type" : "string",
+                        "example" : "5aa119a8-d25b-45a7-8d1b-88e127885635",
+                        "description" : "值"
+                      }
+                    }
+                  },
+                  "description" : "仅op_service权限才可以可以获取此字段:",
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "资源实例列表",
+            "type" : "array"
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1000,
+            "description" : "总记录数"
+          }
+        }
+      },
+      "ResourceInstanceTagRequest" : {
+        "type" : "object",
+        "properties" : {
+          "matches" : {
+            "items" : {
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "resource_name",
+                  "description" : "键,目前仅支持:resource_name"
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "resource1",
+                  "description" : "值,需要匹配的资源名称"
+                }
+              },
+              "required" : [ "key", "value" ]
+            },
+            "description" : "搜索字段,key为要匹配的字段,如resource_name等。value为匹配的值。key为固定字典值,不能包含重复的key或不支持的key。 根据key的值确认是否需要模糊匹配,如resource_name默认为模糊搜索(不区分大小写),如果value为空字符串精确匹配(多数服务不存在资源名称为空的情况,因此此类情况返回空列表)。resource_id为精确匹配。第一期只做resource_name,后续再扩展。",
+            "type" : "array"
+          },
+          "not_tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagKeyValuesBean"
+            },
+            "description" : "不包含标签,最多包含50个key,每个key下面的value最多10个, 每个key对应的value可以为空数组但结构体不能缺失。Key不能重复,同一个key中values不能重复。结果返回不包含标签的资源列表,key之间是与的关系,key-value结构中value是或的关系。无过滤条件时返回全量数据",
+            "type" : "array"
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagKeyValuesBean"
+            },
+            "description" : "包含标签,最多包含50个key,每个key下面的value最多10个,每个key对应的value可以为空数组但结构体不能缺失。Key不能重复,同一个key中values不能重复。结果返回包含所有标签的资源列表,key之间是与的关系,key-value结构中value是或的关系。无tag过滤条件时返回全量数据",
+            "type" : "array"
+          },
+          "tags_any" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagKeyValuesBean"
+            },
+            "description" : "包含任意标签,最多包含50个key,每个key下面的value最多10个, 每个key对应的value可以为空数组但结构体不能缺失。Key不能重复,同一个key中values不能重复。结果返回包含标签的资源列表,key之间是或的关系,key-value结构中value是或的关系。无过滤条件时返回全量数据",
+            "type" : "array"
+          },
+          "not_tags_any" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagKeyValuesBean"
+            },
+            "description" : "不包含任意标签,最多包含50个key,每个key下面的value最多10个, 每个key对应的value可以为空数组但结构体不能缺失。Key不能重复,同一个key中values不能重复。结果返回不包含标签的资源列表,key之间是或的关系,key-value结构中value是或的关系。无过滤条件时返回全量数据",
+            "type" : "array"
+          },
+          "sys_tags" : {
+            "description" : "仅op_service权限可以使用此字段做资源实例过滤条件。",
+            "$ref" : "#/components/schemas/TagKeyValuesBean"
+          },
+          "without_any_tag" : {
+            "type" : "boolean",
+            "description" : "不包含任意一个标签,该字段为true时查询所有不带标签的资源,此时忽略 “tags”、“tags_any”、“not_tags”、“not_tags_any”字段"
+          }
+        }
+      },
+      "TagKeyValuesBean" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "example" : "key1",
+            "description" : "键。最大长度128个unicode字符。 key不能为空。(搜索时不对此参数做字符集校验),key不能为空或者空字符串,不能为空格,校验和使用之前先trim 前后半角空格"
+          },
+          "values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "*value1", "value2" ],
+            "description" : "值列表。每个值最大长度255个unicode字符,校验和使用之前先trim 前后半角空格。"
+          }
+        },
+        "required" : [ "key", "values" ]
+      },
+      "RdsNoAgentDbRequest" : {
+        "type" : "object",
+        "required" : [ "databases" ],
+        "properties" : {
+          "databases" : {
+            "items" : {
+              "required" : [ "id", "db_name", "status", "port", "ip", "instance_name", "version", "type", "enterprise_id" ],
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "123751d3ee2f47aea64822e98318c6a8in01",
+                  "description" : "数据库ID"
+                },
+                "db_name" : {
+                  "type" : "string",
+                  "example" : "rds1",
+                  "description" : "数据库名称"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : "ACTIVE",
+                  "description" : "数据库状态"
+                },
+                "port" : {
+                  "type" : "string",
+                  "example" : 3306,
+                  "description" : "数据库端口"
+                },
+                "ip" : {
+                  "type" : "string",
+                  "example" : "192.168.0.119",
+                  "description" : "数据库IP"
+                },
+                "instance_name" : {
+                  "type" : "string",
+                  "example" : "rds1",
+                  "description" : "数据库实例名称"
+                },
+                "version" : {
+                  "type" : "string",
+                  "example" : 8.0,
+                  "description" : "数据库版本"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "MySQL",
+                  "description" : "数据库类型"
+                },
+                "enterprise_id" : {
+                  "type" : "string",
+                  "example" : 0,
+                  "description" : "企业项目ID"
+                },
+                "enterprise_name" : {
+                  "type" : "string",
+                  "example" : "default",
+                  "description" : "企业项目名称"
+                }
+              }
+            },
+            "description" : "添加数据库信息列表",
+            "type" : "array"
+          },
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          }
+        }
+      },
+      "RdsNoAgentDbResponse" : {
+        "type" : "object",
+        "required" : [ "illegal_db_id", "legal_db_id" ],
+        "properties" : {
+          "illegal_db_id" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "添加失败的数据库实例id"
+          },
+          "legal_db_id" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "123751d3ee2f47aea64822e98318c6a8in01", "2343f7285d684fed8b09fac201c3fc7ain01" ],
+            "description" : "添加成功的数据库实例id"
+          }
+        }
+      },
+      "ServerIdBean" : {
+        "type" : "object",
+        "description" : "ServerIdBean",
+        "required" : [ "instance_id" ],
+        "properties" : {
+          "instance_id" : {
+            "type" : "string",
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。"
+          }
+        }
+      },
+      "SwitchAuditDbRequest" : {
+        "type" : "object",
+        "required" : [ "id", "status" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "Gadr-Y4B51p4J06s5s5B",
+            "description" : "数据库ID,可在查询数据库列表接口的ID字段获取。"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "开关状态",
+            "enum" : [ "ON", "OFF" ]
+          },
+          "lts_audit_switch" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "是否关闭LTS审计,DWS数据库场景使用。若用户未选择关闭LTS审计,则不做操作。"
+          }
+        }
+      },
+      "ProjectResourceTagResponse" : {
+        "type" : "object",
+        "required" : [ "tags" ],
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "key1",
+                  "description" : "键。最大长度128个字符。"
+                },
+                "values" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  },
+                  "example" : [ "value1", "value2" ],
+                  "description" : "值列表。每个值最大长度255个字符。"
+                }
+              }
+            },
+            "description" : "标签列表",
+            "type" : "array"
+          }
+        }
+      },
+      "CreateInstancePeriodResponse" : {
+        "type" : "object",
+        "required" : [ "description", "code", "order_id" ],
+        "properties" : {
+          "description" : {
+            "type" : "string",
+            "example" : " Success",
+            "description" : "描述"
+          },
+          "code" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "返回码"
+          },
+          "order_id" : {
+            "type" : "string",
+            "example" : "CS1710190909OGQIS",
+            "description" : "订单ID"
+          }
+        }
+      },
+      "CreateInstancePeriodRequest" : {
+        "type" : "object",
+        "required" : [ "name", "flavor_ref", "vpc_id", "availability_zone", "nics", "security_groups", "region", "cloud_service_type", "charging_mode", "period_type", "period_num", "subscription_num", "product_infos" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "period",
+            "description" : "实例名称。取值范围:"
+          },
+          "flavor_ref" : {
+            "type" : "string",
+            "example" : "s2.xlarge.2",
+            "description" : "云服务器使用的规格ID"
+          },
+          "vpc_id" : {
+            "type" : "string",
+            "example" : "1e521e76-ea11-4f8c-a3a4-b93f31c775e4",
+            "description" : "虚拟私有云的ID"
+          },
+          "availability_zone" : {
+            "type" : "string",
+            "example" : "az1.dc1",
+            "description" : "云服务器对应可用分区信息。(两个主备分区,中间用“,”分割,例如az1.dc1,az2.dc2)。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID。对接EPS必输。"
+          },
+          "nics" : {
+            "items" : {
+              "required" : [ "subnet_id" ],
+              "properties" : {
+                "subnet_id" : {
+                  "type" : "string",
+                  "example" : "d13adb5e-be13-4c5b-97ee-30e2bfa7d35c",
+                  "description" : "网卡对应的子网ID"
+                },
+                "ip_address" : {
+                  "type" : "string",
+                  "description" : "IP地址,不填或空字符串为自动分配"
+                }
+              }
+            },
+            "description" : "云服务器对应的网卡信息",
+            "type" : "array"
+          },
+          "security_groups" : {
+            "items" : {
+              "required" : [ "id" ],
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "8c7bbdbe-6b32-4ad3-8c78-63076db20817",
+                  "description" : "云服务器对应的安全组ID,会对创建云服务器中配置的网卡生效"
+                }
+              }
+            },
+            "description" : "云服务器对应安全组信息",
+            "type" : "array"
+          },
+          "comment" : {
+            "type" : "string",
+            "example" : "period-create",
+            "description" : "备注信息"
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "southchina",
+            "description" : "云服务器所在区域ID"
+          },
+          "cloud_service_type" : {
+            "type" : "string",
+            "example" : "hws.service.type.dbss",
+            "description" : "服务类型:"
+          },
+          "charging_mode" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "计费模式:"
+          },
+          "period_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "-订购周期类型"
+          },
+          "period_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3,
+            "description" : "订购周期数"
+          },
+          "subscription_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "订购数量:"
+          },
+          "product_infos" : {
+            "items" : {
+              "required" : [ "product_id", "cloud_service_type", "resource_type", "resource_spec_code" ],
+              "properties" : {
+                "product_id" : {
+                  "type" : "string",
+                  "example" : "00301-123210-0--0",
+                  "description" : "产品ID"
+                },
+                "cloud_service_type" : {
+                  "type" : "string",
+                  "example" : "hws.service.type.dbss",
+                  "description" : "服务类型:"
+                },
+                "resource_type" : {
+                  "type" : "string",
+                  "example" : "hws.resource.type.dbss",
+                  "description" : "资源类型:"
+                },
+                "resource_spec_code" : {
+                  "type" : "string",
+                  "example" : " dbss.oracle_audit. low ",
+                  "description" : "资源规格:"
+                },
+                "product_spec_desc" : {
+                  "type" : "string",
+                  "description" : "产品规格描述。json字符串格式 :{\"specDesc\":{\"zh-cn\":{\"key1\":\"value1\"},\"en-us\":{\"key1\":\"value1\"}}}。key和value为用户自定义希望展示的产品描述信息。"
+                }
+              }
+            },
+            "description" : "产品信息列表",
+            "type" : "array"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValueBean"
+            },
+            "description" : "资源标签"
+          },
+          "promotion_info" : {
+            "type" : "string",
+            "description" : "折扣信息"
+          },
+          "is_auto_renew" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "自动续费"
+          }
+        }
+      },
+      "KeyValueBean" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值"
+          }
+        },
+        "required" : [ "key" ]
+      },
+      "AuditAgentRequest" : {
+        "type" : "object",
+        "required" : [ "db_id", "mode", "agent_type", "agent_os" ],
+        "properties" : {
+          "db_id" : {
+            "type" : "string",
+            "example" : "Gadr-Y4B51p4J06s5s5B",
+            "description" : "数据库ID, 可在查询数据库列表接口的ID字段获取。"
+          },
+          "mode" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "模式",
+            "enum" : [ 0, 1 ]
+          },
+          "agent_id" : {
+            "type" : "string",
+            "description" : "选择已有agent时必输"
+          },
+          "agent_type" : {
+            "type" : "string",
+            "example" : "DB",
+            "description" : "agent类型",
+            "enum" : [ "APP", "DB" ]
+          },
+          "agent_os" : {
+            "type" : "string",
+            "example" : "LINUX64_X86",
+            "description" : "agent OS类型:",
+            "enum" : [ "LINUX64_X86", "LINUX64_ARM", "WINDOWS64" ]
+          },
+          "agent_ip" : {
+            "type" : "string",
+            "description" : "agent IP,安装节点类型为应用端时必输。"
+          },
+          "agent_nic" : {
+            "type" : "string",
+            "description" : "agent审计网卡名称"
+          },
+          "cpu_threshold" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 80,
+            "description" : "CPU阈值"
+          },
+          "mem_threshold" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 80,
+            "description" : "内存阈值"
+          }
+        }
+      },
+      "AuditInstanceListBean" : {
+        "type" : "object",
+        "description" : "审计实例列表bean",
+        "required" : [ "charge_model", "comment", "config_num", "connect_ip", "connect_ipv6", "cpu", "created", "database_limit", "effect", "expired", "id", "keep_days", "name", "new_version", "port_id", "ram", "region", "remain_days", "resource_id", "resource_spec_code", "scene", "security_group_id", "specification", "status", "subnet_id", "task", "version", "vpc_id", "zone" ],
+        "properties" : {
+          "charge_model" : {
+            "type" : "string",
+            "description" : "付费模式 "
+          },
+          "comment" : {
+            "type" : "string",
+            "description" : "备注信息。"
+          },
+          "config_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "配置的数据库总数。"
+          },
+          "connect_ip" : {
+            "type" : "string",
+            "description" : "连接地址。"
+          },
+          "connect_ipv6" : {
+            "type" : "string",
+            "description" : "ipv6连接地址。"
+          },
+          "cpu" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "CPU个数"
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "database_limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "支持的数据库总数"
+          },
+          "effect" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "实例结果状态"
+          },
+          "expired" : {
+            "type" : "string",
+            "description" : "过期时间"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "ID"
+          },
+          "keep_days" : {
+            "type" : "string",
+            "description" : "剩余天数"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "实例别名"
+          },
+          "new_version" : {
+            "type" : "string",
+            "description" : "如果有返回,则需要升级,如果没有,则为null。"
+          },
+          "port_id" : {
+            "type" : "string",
+            "description" : "绑定弹性IP的port ID"
+          },
+          "ram" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "内存"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "实例所在region"
+          },
+          "remain_days" : {
+            "type" : "string",
+            "description" : "到期天数"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID"
+          },
+          "resource_spec_code" : {
+            "type" : "string",
+            "description" : "实例的规格"
+          },
+          "scene" : {
+            "type" : "string",
+            "description" : "场景"
+          },
+          "security_group_id" : {
+            "type" : "string",
+            "description" : "安全组"
+          },
+          "specification" : {
+            "type" : "string",
+            "description" : "实例规格"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "实例状态"
+          },
+          "subnet_id" : {
+            "type" : "string",
+            "description" : "子网ID"
+          },
+          "task" : {
+            "type" : "string",
+            "description" : "任务状态"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "实例的当前版本"
+          },
+          "vpc_id" : {
+            "type" : "string",
+            "description" : "虚拟私有云"
+          },
+          "zone" : {
+            "type" : "string",
+            "description" : "可用区"
+          }
+        }
+      },
+      "AuditInstancesResponse" : {
+        "type" : "object",
+        "description" : "查新实例列表应答",
+        "required" : [ "servers", "total" ],
+        "properties" : {
+          "servers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AuditInstanceListBean"
+            },
+            "description" : "实例信息列表"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          }
+        }
+      },
+      "EcsSpecificationResponse" : {
+        "type" : "object",
+        "required" : [ "specification" ],
+        "properties" : {
+          "specification" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EcsSpecificationBean"
+            },
+            "description" : "ecs规格集合"
+          }
+        }
+      },
+      "EcsSpecificationBean" : {
+        "type" : "object",
+        "required" : [ "azs", "id", "level", "name", "proxy", "ram", "vcpus" ],
+        "properties" : {
+          "azs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "ECS规格所在的可用区集合"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "规格ID"
+          },
+          "level" : {
+            "type" : "string",
+            "description" : "规格等级,支持的等级以局点配置为准。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "规格名称"
+          },
+          "proxy" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "规格可添加的数据库数量"
+          },
+          "ram" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "内存"
+          },
+          "vcpus" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "CPU"
+          },
+          "az_type" : {
+            "type" : "string",
+            "description" : "可用区类型"
+          }
+        }
+      },
+      "UpdateAuditBean" : {
+        "type" : "object",
+        "description" : "修改审计实例信息bean",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "实例名称。只能由中文字符,英文字母,数字,下划线,中划线组成的字符串,长度小于等于64。不能为空字符串。"
+          },
+          "comment" : {
+            "type" : "string",
+            "description" : "实例描述信息,只能由中文字符,英文字母,数字,下划线,中划线,空格组成的字符串,长度小于等于255。可以为空字符串。"
+          }
+        }
+      },
+      "ResourceTagRequest" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "required" : [ "key", "value" ],
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "键。最大长度128个字符。"
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "值。每个值最大长度255个字符。"
+                }
+              }
+            },
+            "description" : "标签列表",
+            "type" : "array"
+          },
+          "sys_tags" : {
+            "items" : {
+              "required" : [ "key", "value" ],
+              "properties" : {
+                "key" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "键。最大长度128个字符。"
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : "string",
+                  "description" : "值。每个值最大长度255个字符。"
+                }
+              }
+            },
+            "description" : "系统标签列表",
+            "type" : "array"
+          }
+        }
+      },
+      "RuleRiskResponse" : {
+        "type" : "object",
+        "required" : [ "rules", "total" ],
+        "properties" : {
+          "rules" : {
+            "items" : {
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "xX4W2ngBo47GiyUSBeOy",
+                  "description" : "风险规则ID"
+                },
+                "name" : {
+                  "type" : "string",
+                  "example" : "Database_drag_detection",
+                  "description" : "风险规则名称"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "OPERATE",
+                  "description" : "风险规则类型"
+                },
+                "feature" : {
+                  "type" : "string",
+                  "example" : "CLIENT[Any]OPERATE[[SELECT]OBJECT[Any]",
+                  "description" : "风险规则特征"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : "ON",
+                  "description" : "风险规则状态。"
+                },
+                "rank" : {
+                  "type" : "integer",
+                  "format" : "int32",
+                  "example" : -1,
+                  "description" : "风险规则优先级。数字越小优先级越高。"
+                },
+                "risk_level" : {
+                  "type" : "string",
+                  "example" : "HIGH",
+                  "description" : "风险级别"
+                },
+                "rule_type" : {
+                  "type" : "string",
+                  "description" : "规则类型"
+                }
+              },
+              "required" : [ "id", "name", "type", "status" ]
+            },
+            "description" : "风险规则列表",
+            "type" : "array"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "总数"
+          }
+        }
+      },
+      "SensitiveMaskResponse" : {
+        "type" : "object",
+        "required" : [ "rules", "total" ],
+        "properties" : {
+          "rules" : {
+            "items" : {
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "n34W2ngBo47GiyUSKOVl",
+                  "description" : "规则ID"
+                },
+                "name" : {
+                  "type" : "string",
+                  "example" : "Passport NO.",
+                  "description" : "规则名称"
+                },
+                "type" : {
+                  "type" : "string",
+                  "example" : "BUILD_IN",
+                  "description" : "规则类型"
+                },
+                "regex" : {
+                  "type" : "string",
+                  "example" : "-",
+                  "description" : "规则正则表达式"
+                },
+                "mask_value" : {
+                  "type" : "string",
+                  "example" : "###",
+                  "description" : "替换值"
+                },
+                "status" : {
+                  "type" : "string",
+                  "example" : "ON",
+                  "description" : "规则状态"
+                },
+                "operate_time" : {
+                  "type" : "string",
+                  "example" : "2030-01-01 00:00:06",
+                  "description" : "操作时间"
+                }
+              }
+            },
+            "description" : "规则列表",
+            "type" : "array"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 6,
+            "description" : "总数"
+          }
+        }
+      },
+      "OperateLogInfo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "操作日志ID"
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "操作日志用户名"
+          },
+          "time" : {
+            "type" : "string",
+            "description" : "该条记录发生的时间,格式为时间戳。"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "该条记录的操作类型"
+          },
+          "function" : {
+            "type" : "string",
+            "description" : "该条记录的功能类型"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "该条记录对应的用户操作对象"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "该条记录具体的描述"
+          },
+          "result" : {
+            "type" : "string",
+            "description" : "该条记录对应用户执行的结果"
+          }
+        }
+      },
+      "TimeRangeBean" : {
+        "type" : "object",
+        "properties" : {
+          "end_time" : {
+            "type" : "string",
+            "description" : "开始时间,必须和end_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+          },
+          "start_time" : {
+            "type" : "string",
+            "description" : "结束时间,必须和start_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+          },
+          "time_range" : {
+            "type" : "string",
+            "description" : "请求查询的时间段,和start_time,end_time不能同时使用,同时传该参数优先级更高。",
+            "enum" : [ "HALF_HOUR", " HOUR", " THREE_HOUR", " TWELVE_HOUR", " DAY", " WEEK", " MONTH" ]
+          }
+        }
+      },
+      "OperateLogGetRequest" : {
+        "type" : "object",
+        "properties" : {
+          "time" : {
+            "description" : "查询时间范围",
+            "$ref" : "#/components/schemas/TimeRangeBean"
+          },
+          "user_name" : {
+            "type" : "string",
+            "description" : "操作日志用户名"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "动作名称",
+            "enum" : [ "CREATE", "DELETE", "DOWNLOAD", "UPDATE" ]
+          },
+          "result" : {
+            "type" : "string",
+            "description" : "执行结果",
+            "enum" : [ "success", "fail" ],
+            "readOnly" : true
+          },
+          "page" : {
+            "type" : "string",
+            "description" : "页数"
+          },
+          "size" : {
+            "type" : "string",
+            "description" : "每页条数"
+          }
+        }
+      },
+      "OperateLogResponse" : {
+        "type" : "object",
+        "required" : [ "total_num", "operate_log" ],
+        "properties" : {
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          },
+          "operate_log" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/OperateLogInfo"
+            },
+            "description" : "操作日志列表"
+          }
+        }
+      },
+      "AlarmLogResponse" : {
+        "type" : "object",
+        "required" : [ "total_num", "alarm_log" ],
+        "properties" : {
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3,
+            "description" : "总条数"
+          },
+          "alarm_log" : {
+            "items" : {
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "example" : "99AJFI8BZEbGVdGbOczC",
+                  "description" : "告警ID"
+                },
+                "alarmLife" : {
+                  "type" : "string",
+                  "example" : "ON",
+                  "description" : "告警状态"
+                },
+                "sendEmail" : {
+                  "type" : "boolean",
+                  "example" : true,
+                  "description" : "是否发送邮件"
+                },
+                "alarm_time" : {
+                  "type" : "string",
+                  "example" : "2024-04-25 06:55:00",
+                  "description" : "告警发生时间"
+                },
+                "alarm_type" : {
+                  "type" : "string",
+                  "example" : "RISK_DISK",
+                  "description" : "告警类型"
+                },
+                "alarm_fix_time" : {
+                  "type" : "string",
+                  "example" : null,
+                  "description" : "告警恢复时间"
+                },
+                "alarm_status" : {
+                  "type" : "string",
+                  "example" : "UNDO",
+                  "description" : "告警确认状态"
+                },
+                "alarm_risk" : {
+                  "type" : "string",
+                  "example" : "HIGH",
+                  "description" : "告警风险等级"
+                },
+                "alarm_description" : {
+                  "type" : "string",
+                  "example" : "DISK USAGE 5%",
+                  "description" : "告警描述信息"
+                }
+              }
+            },
+            "description" : "告警列表",
+            "type" : "array"
+          }
+        }
+      },
+      "AlarmLogRequest" : {
+        "type" : "object",
+        "required" : [ "time" ],
+        "properties" : {
+          "time" : {
+            "description" : "时间",
+            "properties" : {
+              "time_range" : {
+                "type" : "string",
+                "example" : "DAY",
+                "description" : "时间范围。和start_time,end_time不能同时使用,同时传该参数优先级更高。枚举值",
+                "enum" : [ "HALF_HOUR", " HOUR", " THREE_HOUR", " TWELVE_HOUR", " DAY", " WEEK", " MONTH;" ]
+              },
+              "start_time" : {
+                "type" : "string",
+                "example" : null,
+                "description" : "开始时间,必须和end_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+              },
+              "end_time" : {
+                "type" : "string",
+                "example" : null,
+                "description" : "结束时间,必须和start_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+              }
+            }
+          },
+          "risk" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "风险级别",
+            "enum" : [ "LOW", "MEDIUM", "HIGH" ]
+          },
+          "type" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "告警类型"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "告警确认状态",
+            "enum" : [ "DONE", "UNDO" ]
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 100,
+            "description" : "每页条数"
+          }
+        }
+      },
+      "AuditSqlRequest" : {
+        "type" : "object",
+        "required" : [ "time" ],
+        "properties" : {
+          "time" : {
+            "description" : "查询时间范围",
+            "properties" : {
+              "time_range" : {
+                "type" : "string",
+                "example" : "DAY",
+                "description" : "时间范围。和start_time,end_time不能同时使用,同时传该参数优先级更高。"
+              },
+              "start_time" : {
+                "type" : "string",
+                "example" : null,
+                "description" : "开始时间,必须和end_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+              },
+              "end_time" : {
+                "type" : "string",
+                "example" : null,
+                "description" : "结束时间,必须和start_time成对出现。格式必须为yyyy-MM-dd HH:mm:ss。UTC时间"
+              }
+            }
+          },
+          "risk_levels" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "风险级别",
+            "enum" : [ "HIGH", "MEDIUM", "LOW", "NO_RISK" ]
+          },
+          "client_ip" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "客户端IP"
+          },
+          "client_name" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "客户端名称"
+          },
+          "db_ip" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "数据库IP"
+          },
+          "db_user" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "数据库用户"
+          },
+          "query_type" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "查询类型"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "规则名称"
+          },
+          "sql_statement" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "sql语句"
+          },
+          "sql_response" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "响应结果"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "页码"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 50,
+            "description" : "条数"
+          },
+          "time_order" : {
+            "type" : "string",
+            "example" : "DESC",
+            "description" : "时间顺序"
+          }
+        }
+      },
+      "AuditSqlResponse" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "总数"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 2,
+            "description" : "总数"
+          },
+          "sqls" : {
+            "items" : {
+              "properties" : {
+                "sql" : {
+                  "properties" : {
+                    "id" : {
+                      "type" : "string",
+                      "example" : "o1n8BI8BDdIO3rwS4Rea",
+                      "description" : "ID"
+                    },
+                    "sql_statement" : {
+                      "type" : "string",
+                      "example" : "create table test(name varchar(1000), age int)",
+                      "description" : "sql语句"
+                    },
+                    "client_ip" : {
+                      "type" : "string",
+                      "example" : "fe80::f816:3eff:feca:22f5",
+                      "description" : "客户端IP"
+                    },
+                    "client_name" : {
+                      "type" : "string",
+                      "example" : "",
+                      "description" : "客户端名称"
+                    },
+                    "db_ip" : {
+                      "type" : "string",
+                      "example" : "fe80::f816:3eff:feca:22f5",
+                      "description" : "数据库IP"
+                    },
+                    "db_user" : {
+                      "type" : "string",
+                      "example" : "root",
+                      "description" : "数据库用户名"
+                    },
+                    "query_type" : {
+                      "type" : "string",
+                      "example" : "SELECT",
+                      "description" : "查询类型"
+                    },
+                    "operated_obj_info" : {
+                      "items" : {
+                        "properties" : {
+                          "column_name" : {
+                            "type" : "string",
+                            "example" : "",
+                            "description" : "列名"
+                          },
+                          "object_type" : {
+                            "type" : "string",
+                            "example" : "TABLE",
+                            "description" : "操作对象类型"
+                          },
+                          "schema_name" : {
+                            "type" : "string",
+                            "example" : "test",
+                            "description" : "schema名称"
+                          },
+                          "sql_type" : {
+                            "type" : "string",
+                            "example" : "CREATE TABLE",
+                            "description" : "sql类型"
+                          },
+                          "sys_name" : {
+                            "type" : "string",
+                            "example" : "",
+                            "description" : "系统名称"
+                          },
+                          "table_name" : {
+                            "type" : "string",
+                            "example" : "test",
+                            "description" : "表名"
+                          }
+                        }
+                      },
+                      "type" : "array",
+                      "description" : "操作对象列表"
+                    },
+                    "rule_name" : {
+                      "type" : "string",
+                      "example" : "全审计规则",
+                      "description" : "规则名称"
+                    },
+                    "risk_level" : {
+                      "type" : "string",
+                      "example" : "",
+                      "description" : "风险级别"
+                    },
+                    "start_time" : {
+                      "type" : "string",
+                      "example" : "2024-04-22 08:46:02",
+                      "description" : "审计开始时间"
+                    },
+                    "sql_response" : {
+                      "type" : "string",
+                      "example" : "SUCCESS",
+                      "description" : "响应结果"
+                    },
+                    "db_instance" : {
+                      "type" : "string",
+                      "example" : "",
+                      "description" : "数据库实例"
+                    }
+                  },
+                  "description" : "sql信息",
+                  "required" : [ "id", "sql_response" ]
+                }
+              },
+              "required" : [ "sql" ]
+            },
+            "description" : "sql语句列表",
+            "type" : "array"
+          }
+        },
+        "required" : [ "sqls" ]
+      },
+      "DatabaseIdBean" : {
+        "type" : "object",
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "Fadq-Y4B51p4J06sRc4F",
+            "description" : "数据库ID"
+          }
+        }
+      },
+      "CreateDatabaseRequest" : {
+        "type" : "object",
+        "required" : [ "database" ],
+        "properties" : {
+          "database" : {
+            "description" : "数据库信息",
+            "required" : [ "db_classification", "name", "type", "version", "charset", "ip", "port", "os" ],
+            "properties" : {
+              "db_classification" : {
+                "type" : "string",
+                "example" : "ECS",
+                "description" : "数据库分类"
+              },
+              "name" : {
+                "type" : "string",
+                "example" : "test",
+                "description" : "数据库名称"
+              },
+              "type" : {
+                "type" : "string",
+                "example" : "POSTGRESQL",
+                "description" : "数据库类型"
+              },
+              "version" : {
+                "type" : "string",
+                "example" : 7.4,
+                "description" : "数据库版本"
+              },
+              "charset" : {
+                "type" : "string",
+                "example" : "UTF8",
+                "description" : "字符集。",
+                "enum" : [ "GBK", "UTF8" ]
+              },
+              "ip" : {
+                "type" : "string",
+                "example" : "1.1.1.1",
+                "description" : "数据库IP"
+              },
+              "port" : {
+                "type" : "string",
+                "example" : 66,
+                "description" : "数据库端口"
+              },
+              "os" : {
+                "type" : "string",
+                "example" : "LINUX64,WINDOWS64,UNIX",
+                "description" : "数据库操作系统"
+              },
+              "instance_name" : {
+                "type" : "string",
+                "example" : "testaaa",
+                "description" : "数据库实例名称"
+              }
+            }
+          }
+        }
+      },
+      "AgentSwitchRequest" : {
+        "type" : "object",
+        "required" : [ "agent_id", "status" ],
+        "properties" : {
+          "agent_id" : {
+            "type" : "string",
+            "description" : "审计agent的ID。可在查询数据库agent列表接口ID字段获取。"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Agent开关状态",
+            "enum" : [ 0, 1 ]
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DownloadAuditAgent" : {
+      "get" : {
+        "tags" : [ "审计Agent" ],
+        "summary" : "下载审计Agent",
+        "description" : "下载审计Agent",
+        "operationId" : "DownloadAuditAgent",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "agent_id",
+          "in" : "path",
+          "description" : "agent ID。可在查询数据库agent列表接口ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "agent ID。可在查询数据库agent列表接口ID字段获取。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadAuditAgent",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/agents/{agent_id}"
+    },
+    "/DeleteAuditDatabase" : {
+      "delete" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "删除数据库",
+        "description" : "删除数据库",
+        "operationId" : "DeleteAuditDatabase",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "db_id",
+          "in" : "path",
+          "description" : "数据库ID,可在查询数据库列表接口ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "数据库ID,可在查询数据库列表接口ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAuditDatabase",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/databases/{db_id}"
+    },
+    "/ListAuditAgent" : {
+      "get" : {
+        "tags" : [ "审计Agent" ],
+        "summary" : "查询数据库Agent列表",
+        "description" : "查询数据库Agent列表",
+        "operationId" : "ListAuditAgent",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditAgentRespoonse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "db_id",
+          "in" : "query",
+          "description" : "数据库ID,可在查询数据库列表接口ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "数据库ID,可在查询数据库列表接口ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditAgent",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/agents"
+    },
+    "/ListAuditInstanceJobs" : {
+      "get" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "查询实例创建任务信息",
+        "description" : "查询实例创建任务信息",
+        "operationId" : "ListAuditInstanceJobs",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditInstanceJobResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID。可在查询实例列表接口的resource_id获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID。可在查询实例列表接口的resource_id获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditInstanceJobs",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/jobs/{resource_id}"
+    },
+    "/AddRdsDatabase" : {
+      "post" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "添加RDS数据库",
+        "description" : "添加RDS数据库",
+        "operationId" : "AddRdsDatabase",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RdsDbResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RdsDbRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddRdsDatabase",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/databases/rds"
+    },
+    "/ListAvailabilityZoneInfos" : {
+      "get" : {
+        "tags" : [ "管理侧查询" ],
+        "summary" : "查询可用区信息",
+        "description" : "查询可用区信息",
+        "operationId" : "ListAvailabilityZoneInfos",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AvailabilityZoneResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAvailabilityZoneInfos",
+      "x-url" : "{endpoint}/v2/{project_id}/dbss/audit/availability-zone"
+    },
+    "/SwitchRiskRule" : {
+      "post" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "开启关闭风险规则",
+        "description" : "开启关闭风险规则",
+        "operationId" : "SwitchRiskRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchSwitchesRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchRiskRule",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/audit/rule/risk/switch"
+    },
+    "/ListSqlInjectionRules" : {
+      "post" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "查询SQL注入规则策略",
+        "description" : "查询SQL注入规则策略",
+        "operationId" : "ListSqlInjectionRules",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SqlRuleResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SqlRuleRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSqlInjectionRules",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/rule/sql-injections"
+    },
+    "/ListAuditSummaryInfos" : {
+      "get" : {
+        "tags" : [ "数据分析" ],
+        "summary" : "查询审计汇总信息",
+        "description" : "查询审计汇总信息",
+        "operationId" : "ListAuditSummaryInfos",
+        "responses" : {
+          "200" : {
+            "description" : "审计汇总信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditSummaryResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditSummaryInfos",
+      "x-url" : "{endpoint}/v2/{project_id}/audit/summary/info"
+    },
+    "/ShowAuditRuleRisk" : {
+      "get" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "查询指定风险规则策略",
+        "description" : "查询指定风险规则策略",
+        "operationId" : "ShowAuditRuleRisk",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RuleRiskInfoBean"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "risk_id",
+          "in" : "path",
+          "description" : "风险规则ID。可在查询风险规则策略接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "风险规则ID。可在查询风险规则策略接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAuditRuleRisk",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/rule/risk/{risk_id}"
+    },
+    "/ListRdsDatabases" : {
+      "get" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "查询RDS数据库列表",
+        "description" : "查询RDS数据库列表",
+        "operationId" : "ListRdsDatabases",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RdsDbListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "db_type",
+          "in" : "query",
+          "description" : "数据库类型",
+          "required" : true,
+          "schema" : {
+            "description" : "数据库类型",
+            "type" : "string",
+            "enum" : [ "MYSQL", "POSTGRESQL", "SQLSERVER", "TAURUS", "DWS", "MARIADB", "GAUSSDBOPENGAUSS" ]
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,从第一条数据偏移offset条数据后开始查询,默认为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,从第一条数据偏移offset条数据后开始查询,默认为0。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数,默认为100。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数,默认为100。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRdsDatabases",
+      "x-url" : "{endpoint}/v2/{project_id}/audit/databases/rds"
+    },
+    "/ListAuditRuleScopes" : {
+      "get" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "查询审计范围策略列表",
+        "description" : "查询审计范围策略列表",
+        "operationId" : "ListAuditRuleScopes",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RuleScopesResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditRuleScopes",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/rule/scopes"
+    },
+    "/DeleteInstances" : {
+      "delete" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "删除审计实例",
+        "description" : "只有按需计费模式实例没有任务时 或 包周期模式实例状态为故障时,才能执行此操作。",
+        "operationId" : "DeleteInstances",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteInstanceDemandRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instances"
+    },
+    "/UpdateAuditSecurityGroup" : {
+      "post" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "修改实例安全组",
+        "description" : "修改实例安全组",
+        "operationId" : "UpdateAuditSecurityGroup",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SecurityGroupRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAuditSecurityGroup",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/security-group"
+    },
+    "/BatchDeleteResourceTag" : {
+      "delete" : {
+        "tags" : [ "TMS标签" ],
+        "summary" : "批量删除资源标签",
+        "description" : "批量删除资源标签",
+        "operationId" : "BatchDeleteResourceTag",
+        "responses" : {
+          "204" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "auditInstance" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID。可在查询实例列表接口的resource_id字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID。可在查询实例列表接口的resource_id字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceTagDeleteRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteResourceTag",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/{resource_id}/tags/delete"
+    },
+    "/ShowAuditQuota" : {
+      "get" : {
+        "tags" : [ "管理侧查询" ],
+        "summary" : "查询账户配额信息",
+        "description" : "查询账户配额信息",
+        "operationId" : "ShowAuditQuota",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditQuotaResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAuditQuota",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/quota"
+    },
+    "/ListAuditDatabases" : {
+      "get" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "查询数据库列表",
+        "description" : "查询数据库列表",
+        "operationId" : "ListAuditDatabases",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DataBaseResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "实例状态",
+          "required" : false,
+          "schema" : {
+            "description" : "实例状态",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,从第一条数据偏移offset条数据后开始查询,默认为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,从第一条数据偏移offset条数据后开始查询,默认为0。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数,默认为100。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数,默认为100。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditDatabases",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/databases"
+    },
+    "/CountResourceInstanceByTag" : {
+      "post" : {
+        "tags" : [ "TMS标签" ],
+        "summary" : "根据标签查询资源实例数量",
+        "description" : "根据标签查询资源实例数量",
+        "operationId" : "CountResourceInstanceByTag",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResourceInstanceResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "auditInstance" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceInstanceTagRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountResourceInstanceByTag",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/resource-instances/count"
+    },
+    "/AddRdsNoAgentDatabase" : {
+      "post" : {
+        "tags" : [ "待下线接口" ],
+        "summary" : "添加RDS数据库(V1待下线)",
+        "description" : "添加RDS数据库。V1版本已不再维护,待下线。",
+        "operationId" : "AddRdsNoAgentDatabase",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RdsNoAgentDbResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RdsNoAgentDbRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddRdsNoAgentDatabase",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/databases/rds"
+    },
+    "/RebootAuditInstance" : {
+      "post" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "重启审计实例",
+        "description" : "重启审计实例",
+        "operationId" : "RebootAuditInstance",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServerIdBean"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RebootAuditInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instance/reboot"
+    },
+    "/SwitchAuditDatabase" : {
+      "post" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "开启关闭数据库",
+        "description" : "开启关闭数据库",
+        "operationId" : "SwitchAuditDatabase",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SwitchAuditDbRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchAuditDatabase",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/databases/switch"
+    },
+    "/ListProjectResourceTags" : {
+      "get" : {
+        "tags" : [ "TMS标签" ],
+        "summary" : "查询项目标签",
+        "description" : "查询项目标签",
+        "operationId" : "ListProjectResourceTags",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectResourceTagResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "auditInstance" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProjectResourceTags",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/tags"
+    },
+    "/ListResourceInstanceByTag" : {
+      "post" : {
+        "tags" : [ "TMS标签" ],
+        "summary" : "根据标签查询资源实例列表",
+        "description" : "根据标签查询资源实例列表",
+        "operationId" : "ListResourceInstanceByTag",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResourceInstanceResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "auditInstance" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数(action为count时无此参数)如果action为filter默认为1000,limit最多为1000,不能为负数,最小值为1。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数(action为count时无此参数)如果action为filter默认为1000,limit最多为1000,不能为负数,最小值为1。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,偏移量(action为count时无此参数)从第一条数据偏移offset条数据后开始查询,如果action为filter默认为0(偏移0条数据,表示从第一条数据开始查询),必须为数字,不能为负数。",
+          "required" : false,
+          "schema" : {
+            "description" : "索引位置,偏移量(action为count时无此参数)从第一条数据偏移offset条数据后开始查询,如果action为filter默认为0(偏移0条数据,表示从第一条数据开始查询),必须为数字,不能为负数。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceInstanceTagRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceInstanceByTag",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/resource-instances/filter"
+    },
+    "/CreateInstancesPeriodOrder" : {
+      "post" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "包年包月计费模式创建审计实例",
+        "description" : "包年包月计费模式创建审计实例",
+        "operationId" : "CreateInstancesPeriodOrder",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateInstancePeriodResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateInstancePeriodRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateInstancesPeriodOrder",
+      "x-url" : "{endpoint}/v2/{project_id}/dbss/audit/charge/period/order"
+    },
+    "/StopAuditInstance" : {
+      "post" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "关闭审计实例",
+        "description" : "关闭审计实例",
+        "operationId" : "StopAuditInstance",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServerIdBean"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopAuditInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instance/stop"
+    },
+    "/AddAuditAgent" : {
+      "post" : {
+        "tags" : [ "审计Agent" ],
+        "summary" : "添加审计数据库Agent",
+        "description" : "添加审计数据库Agent",
+        "operationId" : "AddAuditAgent",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AuditAgentRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddAuditAgent",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/agents"
+    },
+    "/DeleteAuditAgent" : {
+      "delete" : {
+        "tags" : [ "审计Agent" ],
+        "summary" : "删除数据库Agent",
+        "description" : "删除数据库Agent",
+        "operationId" : "DeleteAuditAgent",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "agent_id",
+          "in" : "path",
+          "description" : "agent ID。可在查询数据库agent列表接口ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "agent ID。可在查询数据库agent列表接口ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "db_id",
+          "in" : "query",
+          "description" : "数据库ID, 可在查询数据库列表接口ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "数据库ID, 可在查询数据库列表接口ID字段获取。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAuditAgent",
+      "x-url" : "{endpoint}/v2/{project_id}/{instance_id}/audit/agents/{agent_id}"
+    },
+    "/ListAuditInstances" : {
+      "get" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "查询审计实例列表",
+        "description" : "查询审计实例列表",
+        "operationId" : "ListAuditInstances",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditInstancesResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,默认0。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,默认0。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数,默认100,最大1000。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数,默认100,最大1000。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instances"
+    },
+    "/ListEcsSpecification" : {
+      "get" : {
+        "tags" : [ "管理侧查询" ],
+        "summary" : "查询ECS服务器规格信息",
+        "description" : "查询ECS服务器规格信息",
+        "operationId" : "ListEcsSpecification",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EcsSpecificationResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEcsSpecification",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/specification"
+    },
+    "/UpdateAuditInstance" : {
+      "put" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "更新审计实例信息",
+        "description" : "更新审计实例信息",
+        "operationId" : "UpdateAuditInstance",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateAuditBean"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAuditInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instances/{instance_id}"
+    },
+    "/BatchAddResourceTag" : {
+      "post" : {
+        "tags" : [ "TMS标签" ],
+        "summary" : "批量添加资源标签",
+        "description" : "批量添加资源标签",
+        "operationId" : "BatchAddResourceTag",
+        "responses" : {
+          "204" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "auditInstance" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID。可在查询实例列表接口的resource_id字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID。可在查询实例列表接口的resource_id字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceTagRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddResourceTag",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/{resource_id}/tags/create"
+    },
+    "/ListAuditRuleRisks" : {
+      "get" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "查询风险规则策略",
+        "description" : "查询风险规则策略",
+        "operationId" : "ListAuditRuleRisks",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RuleRiskResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "风险名称",
+          "required" : false,
+          "schema" : {
+            "description" : "风险名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "risk_levels",
+          "in" : "query",
+          "description" : "风险级别",
+          "required" : false,
+          "schema" : {
+            "description" : "风险级别",
+            "type" : "string",
+            "enum" : [ "LOW", "MEDIUM", "HIGH", "NO_RISK" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditRuleRisks",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/rule/risk"
+    },
+    "/ListAuditSensitiveMasks" : {
+      "get" : {
+        "tags" : [ "审计规则" ],
+        "summary" : "查询隐私数据脱敏规则",
+        "description" : "查询隐私数据脱敏规则",
+        "operationId" : "ListAuditSensitiveMasks",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SensitiveMaskResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询记录数",
+          "required" : false,
+          "schema" : {
+            "description" : "查询记录数",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditSensitiveMasks",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/sensitive/masks"
+    },
+    "/ListAuditOperateLogs" : {
+      "post" : {
+        "tags" : [ "管理侧查询" ],
+        "summary" : "查询用户操作日志信息",
+        "description" : "查询用户操作日志信息",
+        "operationId" : "ListAuditOperateLogs",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateLogResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OperateLogGetRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditOperateLogs",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/dbss/audit/operate-log"
+    },
+    "/ListAuditAlarmLog" : {
+      "post" : {
+        "tags" : [ "数据分析" ],
+        "summary" : "查询审计告警信息",
+        "description" : "查询审计告警信息",
+        "operationId" : "ListAuditAlarmLog",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AlarmLogResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlarmLogRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditAlarmLog",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/audit/alarm-log"
+    },
+    "/StartAuditInstance" : {
+      "post" : {
+        "tags" : [ "审计实例" ],
+        "summary" : "开启审计实例",
+        "description" : "开启审计实例",
+        "operationId" : "StartAuditInstance",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServerIdBean"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartAuditInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/dbss/audit/instance/start"
+    },
+    "/ListAuditSqls" : {
+      "post" : {
+        "tags" : [ "数据分析" ],
+        "summary" : "查询审计SQL语句",
+        "description" : "查询审计SQL语句",
+        "operationId" : "ListAuditSqls",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditSqlResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AuditSqlRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAuditSqls",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/audit/sqls"
+    },
+    "/AddAuditDatabase" : {
+      "post" : {
+        "tags" : [ "审计数据库" ],
+        "summary" : "添加自建数据库",
+        "description" : "添加自建数据库",
+        "operationId" : "AddAuditDatabase",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DatabaseIdBean"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务查询用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDatabaseRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddAuditDatabase",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/audit/databases"
+    },
+    "/SwitchAgent" : {
+      "post" : {
+        "tags" : [ "审计Agent" ],
+        "summary" : "开启关闭Agent",
+        "description" : "用于开启和关闭Agent审计的功能,当开启后,开始抓取用户的访问信息。",
+        "operationId" : "SwitchAgent",
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID。可在查询实例列表接口的ID字段获取。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AgentSwitchRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchAgent",
+      "x-url" : "{endpoint}/v1/{project_id}/{instance_id}/audit/agent/switch"
+    }
+  }
+}

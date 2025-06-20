@@ -1,0 +1,5 @@
+service_code: eps
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8857 # sse 模式需要设定端口
+
+ 

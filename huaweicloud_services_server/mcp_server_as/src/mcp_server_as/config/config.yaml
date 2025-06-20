@@ -1,0 +1,7 @@
+# Configuration file for mcp_server_aom
+service_code: as
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8004 # sse 模式需要设定端口
+
+
+ # Configuration file for mcp_server_as

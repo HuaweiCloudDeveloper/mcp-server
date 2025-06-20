@@ -1,0 +1,1170 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "IVS-人证核身标准版(三要素)",
+    "title" : "IVS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "StandardReqDataByNameAndId" : {
+        "properties" : {
+          "verification_name" : {
+            "description" : "被验证人的姓名。",
+            "type" : "string"
+          },
+          "verification_id" : {
+            "description" : "被验证人的身份证号码。",
+            "type" : "string"
+          },
+          "face_image" : {
+            "description" : "现场人像图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "detail" : {
+            "description" : "响应参数similarity是否详细显示,默认为false。",
+            "type" : "boolean"
+          },
+          "crop" : {
+            "description" : "是否允许对入参face_image进行人脸检测及图片裁剪,默认为true,表示允许。",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "verification_name", "verification_id", "face_image" ],
+        "type" : "object"
+      },
+      "IvsStandardByNameAndIdResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/StandardRespDataByNameAndId",
+                  "type" : "object"
+                }
+              }
+            },
+            "required" : [ "service_name", "count", "resp_data" ]
+          }
+        },
+        "required" : [ "meta", "result" ],
+        "type" : "object"
+      },
+      "Meta" : {
+        "properties" : {
+          "uuid" : {
+            "required" : true,
+            "description" : "唯一标识此次请求的ID,用户自定义,不超过64位。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "IvsStandardByNameAndIdRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/StandardReqDataByNameAndId",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "IvsErrorResponseBody" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参考[错误码](https://support.huaweicloud.com/api-ivs/ivs_02_0021.html)。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "StandardRespDataByNameAndId" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "similarity" : {
+            "type" : "string",
+            "description" : "人像相识度,取值默认范围为[0,100],当入参detail为true时,取值范围为[0,1000]。"
+          }
+        },
+        "required" : [ "verification_result", "verification_message", "verification_code", "similarity" ],
+        "type" : "object"
+      },
+      "IvsStandardByIdCardImageRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ReqDataByIdCardImage",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "ReqDataByIdCardImage" : {
+        "properties" : {
+          "idcard_image1" : {
+            "description" : "身份证人像面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "idcard_image2" : {
+            "description" : "身份证国徽面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "face_image" : {
+            "description" : "现场人像图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "detail" : {
+            "description" : "响应参数similarity是否详细显示,默认为false。",
+            "type" : "boolean"
+          },
+          "crop" : {
+            "description" : "是否允许对入参face_image进行人脸检测及图片裁剪,默认为true,表示允许。",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "idcard_image1", "face_image" ],
+        "type" : "object"
+      },
+      "IdcardResult" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "身份证上识别的名称。"
+          },
+          "number" : {
+            "type" : "string",
+            "description" : "身份证号。"
+          },
+          "sex" : {
+            "type" : "string",
+            "description" : "性别。"
+          },
+          "birth" : {
+            "type" : "string",
+            "description" : "出生日期。"
+          },
+          "ethnicity" : {
+            "type" : "string",
+            "description" : "民族。"
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "地址。"
+          },
+          "issue" : {
+            "type" : "string",
+            "description" : "发证机关。"
+          },
+          "valid_from" : {
+            "type" : "string",
+            "description" : "有效起始日期。"
+          },
+          "valid_to" : {
+            "type" : "string",
+            "description" : "有效结束日期。"
+          }
+        },
+        "required" : [ "name", "number", "sex", "birth", "ethnicity", "address" ],
+        "type" : "object"
+      },
+      "IvsStandardByIdCardImageResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/RespDataByIdCardImage",
+                  "type" : "object"
+                }
+              }
+            },
+            "required" : [ "service_name", "count", "resp_data" ]
+          }
+        },
+        "required" : [ "meta", "result" ],
+        "type" : "object"
+      },
+      "RespDataByIdCardImage" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "similarity" : {
+            "type" : "string",
+            "description" : "人像相识度,取值默认范围为[0,100],当入参detail为true时,取值范围为[0,1000]。"
+          },
+          "idcard_result" : {
+            "description" : "身份证图像的文字识别结果,具体参见[IdcardResult](https://support.huaweicloud.com/api-ivs/ivs_02_0018.html)。",
+            "$ref" : "#/components/schemas/IdcardResult"
+          }
+        },
+        "required" : [ "verification_result", "verification_message", "verification_code", "similarity", "idcard_result" ],
+        "type" : "object"
+      },
+      "IvsExtentionByNameAndIdResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ExtentionRespDataByNameAndId",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ExtentionReqDataByNameAndId" : {
+        "properties" : {
+          "verification_name" : {
+            "description" : "被验证人的姓名。",
+            "type" : "string"
+          },
+          "verification_id" : {
+            "description" : "被验证人的身份证号码。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "verification_name", "verification_id" ],
+        "type" : "object"
+      },
+      "IvsExtentionByNameAndIdRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ExtentionReqDataByNameAndId",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "ExtentionRespDataByNameAndId" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          }
+        },
+        "type" : "object"
+      },
+      "ReqDataByVideoAndIdCardImage" : {
+        "properties" : {
+          "idcard_image1" : {
+            "description" : "身份证人像面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "idcard_image2" : {
+            "description" : "身份证国徽面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "video" : {
+            "description" : "现场拍摄人像视频数据,使用base64编码,要求base64编码后大小不超过10M。",
+            "type" : "string"
+          },
+          "actions" : {
+            "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+            "type" : "string"
+          },
+          "nod_threshold" : {
+            "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "detail" : {
+            "description" : "响应参数similarity是否详细显示,默认为false。",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "idcard_image1", "video", "actions" ],
+        "type" : "object"
+      },
+      "ActionsList" : {
+        "properties" : {
+          "confidence" : {
+            "format" : "double",
+            "description" : "置信度,取值范围0~1。",
+            "type" : "number"
+          },
+          "action" : {
+            "description" : "动作编号,取值范围:[1,2,3,4],其中:",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "action", "confidence" ],
+        "type" : "object"
+      },
+      "RespDataByVideoAndIdCardImage" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "similarity" : {
+            "type" : "string",
+            "description" : "人像相识度,取值默认范围为[0,100],当入参detail为true时,取值范围为[0,1000]。"
+          },
+          "idcard_result" : {
+            "description" : "身份证图像的文字识别结果,具体参见[IdcardResult](https://support.huaweicloud.com/api-ivs/ivs_02_0018.html)。",
+            "$ref" : "#/components/schemas/IdcardResult"
+          },
+          "video_result" : {
+            "description" : "动作活体检测的检测结果。",
+            "$ref" : "#/components/schemas/VideoResult"
+          }
+        },
+        "required" : [ "verification_result", "verification_message", "verification_code", "similarity", "idcard_result", "video_result" ],
+        "type" : "object"
+      },
+      "VideoResult" : {
+        "properties" : {
+          "alive" : {
+            "description" : "是否是活体。",
+            "type" : "boolean"
+          },
+          "actions" : {
+            "description" : "动作列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ActionsList"
+            }
+          },
+          "picture" : {
+            "description" : "检测出最大人脸的图片base64。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "alive", "actions", "picture" ],
+        "type" : "object"
+      },
+      "IvsStandardByVideoAndIdCardImageRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ReqDataByVideoAndIdCardImage",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "IvsStandardByVideoAndIdCardImageResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/RespDataByVideoAndIdCardImage",
+                  "type" : "object"
+                }
+              }
+            },
+            "required" : [ "service_name", "count", "resp_data" ]
+          }
+        },
+        "required" : [ "meta", "result" ],
+        "type" : "object"
+      },
+      "IvsExtentionByIdCardImageResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ExtentionRespDataByIdCardImage",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ExtentionRespDataByIdCardImage" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "idcard_result" : {
+            "description" : "身份证图像的文字识别结果,具体参见[IdcardResult](https://support.huaweicloud.com/api-ivs/ivs_02_0018.html)。",
+            "$ref" : "#/components/schemas/IdcardResult"
+          }
+        },
+        "type" : "object"
+      },
+      "ExtentionReqDataByIdCardImage" : {
+        "properties" : {
+          "idcard_image1" : {
+            "description" : "身份证人像面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          },
+          "idcard_image2" : {
+            "description" : "身份证国徽面图像数据,使用base64编码,要求base64编码后大小不超过4M。图像各边的像素大小在300到4000之间,支持JPG格式。",
+            "type" : "string"
+          }
+        },
+        "required" : [ "idcard_image1" ],
+        "type" : "object"
+      },
+      "IvsExtentionByIdCardImageRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ExtentionReqDataByIdCardImage",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "StandardReqDataByVideoAndNameAndId" : {
+        "properties" : {
+          "verification_name" : {
+            "description" : "被验证人的姓名。",
+            "type" : "string"
+          },
+          "verification_id" : {
+            "description" : "被验证人的身份证号码。",
+            "type" : "string"
+          },
+          "video" : {
+            "description" : "现场拍摄人像视频数据,使用base64编码,要求base64编码后大小不超过10M。",
+            "type" : "string"
+          },
+          "actions" : {
+            "description" : "动作代码顺序列表,英文逗号(,)分隔。建议单动作,目前支持的动作有:",
+            "type" : "string"
+          },
+          "nod_threshold" : {
+            "description" : "该参数为点头动作幅度的判断门限,取值范围:[1,90],默认为10,单位为度。该值设置越大,则越难判断为点头。",
+            "type" : "number",
+            "format" : "double"
+          },
+          "detail" : {
+            "description" : "响应参数similarity是否详细显示,默认为false。",
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "verification_name", "verification_id", "video", "actions" ],
+        "type" : "object"
+      },
+      "IvsStandardByVideoAndNameAndIdRequestBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "data" : {
+            "description" : "请求消息的数据部分。",
+            "properties" : {
+              "req_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/StandardReqDataByVideoAndNameAndId",
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "required" : [ "meta", "data" ],
+        "type" : "object"
+      },
+      "StandardRespDataByVideoAndNameAndId" : {
+        "properties" : {
+          "verification_result" : {
+            "type" : "string",
+            "description" : "审核校验结果:"
+          },
+          "verification_message" : {
+            "type" : "string",
+            "description" : "审核校验信息,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "verification_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "审核校验代码,具体参考[校验信息说明](https://support.huaweicloud.com/api-ivs/ivs_02_0017.html)"
+          },
+          "similarity" : {
+            "type" : "string",
+            "description" : "人像相识度,取值默认范围为[0,100],当入参detail为true时,取值范围为[0,1000]。"
+          },
+          "video_result" : {
+            "description" : "动作活体检测的检测结果。",
+            "$ref" : "#/components/schemas/VideoResult"
+          }
+        },
+        "required" : [ "verification_result", "verification_message", "verification_code", "similarity", "video_result" ],
+        "type" : "object"
+      },
+      "IvsStandardByVideoAndNameAndIdResponseBody" : {
+        "properties" : {
+          "meta" : {
+            "description" : "请求元数据,例如表征本次请求的唯一标注uuid。",
+            "$ref" : "#/components/schemas/Meta"
+          },
+          "result" : {
+            "description" : "调用返回结果。",
+            "properties" : {
+              "service_name" : {
+                "description" : "子服务名称。",
+                "type" : "string"
+              },
+              "count" : {
+                "description" : "成功的结果数量,与resp_data字段对应。",
+                "type" : "integer",
+                "format" : "int32"
+              },
+              "resp_data" : {
+                "description" : "请求列表,用于支持批量调用。目前暂时只支持单个数据查询。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/StandardRespDataByVideoAndNameAndId",
+                  "type" : "object"
+                }
+              }
+            },
+            "required" : [ "service_name", "count", "resp_data" ]
+          }
+        },
+        "required" : [ "meta", "result" ],
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DetectStandardByNameAndId" : {
+      "post" : {
+        "tags" : [ "人证核身标准版(三要素)" ],
+        "summary" : "人证核身标准版(三要素)",
+        "description" : "使用姓名、身份证号文本和人脸图片进行三要素身份审核。",
+        "operationId" : "DetectStandardByNameAndId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsStandardByNameAndIdResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsStandardByNameAndIdRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectStandardByNameAndId",
+      "x-url" : "{endpoint}/v2.0/ivs-standard"
+    },
+    "/DetectStandardByIdCardImage" : {
+      "post" : {
+        "tags" : [ "人证核身标准版(三要素)" ],
+        "summary" : "人证核身标准版(三要素)",
+        "description" : "使用身份证正反面图片提取姓名和身份证号码,与人脸图片进行三要素身份审核。",
+        "operationId" : "DetectStandardByIdCardImage",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsStandardByIdCardImageResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsStandardByIdCardImageRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectStandardByIdCardImage",
+      "x-url" : "{endpoint}/v2.0/ivs-standard"
+    },
+    "/DetectExtentionByNameAndId" : {
+      "post" : {
+        "tags" : [ "人证核身证件版(二要素)" ],
+        "summary" : "人证核身证件版(二要素)",
+        "description" : "使用姓名、身份证号码二要素进行身份审核。身份验证时,传入的数据为身份证信息。提取身份证信息时,可以使用身份证正反面图片,也可以直接输入姓名、身份证号文本。",
+        "operationId" : "DetectExtentionByNameAndId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsExtentionByNameAndIdResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsExtentionByNameAndIdRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectExtentionByNameAndId",
+      "x-url" : "{endpoint}/v2.0/ivs-idcard-extention"
+    },
+    "/DetectStandardByVideoAndIdCardImage" : {
+      "post" : {
+        "tags" : [ "人证核身标准版(三要素)" ],
+        "summary" : "人证核身标准版(三要素)",
+        "description" : "从身份证正反面图片中提取姓名和身份证号码,并对视频做活体检测后提取人脸图片,以此进行三要素身份审核。",
+        "operationId" : "DetectStandardByVideoAndIdCardImage",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsStandardByVideoAndIdCardImageResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsStandardByVideoAndIdCardImageRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectStandardByVideoAndIdCardImage",
+      "x-url" : "{endpoint}/v2.0/ivs-standard"
+    },
+    "/DetectExtentionByIdCardImage" : {
+      "post" : {
+        "tags" : [ "人证核身证件版(二要素)" ],
+        "summary" : "人证核身证件版(二要素)",
+        "description" : "使用姓名、身份证号码二要素进行身份审核。身份验证时,传入的数据为身份证信息。提取身份证信息时,可以使用身份证正反面图片,也可以直接输入姓名、身份证号文本。",
+        "operationId" : "DetectExtentionByIdCardImage",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsExtentionByIdCardImageResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsExtentionByIdCardImageRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectExtentionByIdCardImage",
+      "x-url" : "{endpoint}/v2.0/ivs-idcard-extention"
+    },
+    "/DetectStandardByVideoAndNameAndId" : {
+      "post" : {
+        "tags" : [ "人证核身标准版(三要素)" ],
+        "summary" : "人证核身标准版(三要素)",
+        "description" : "使用姓名、身份证号文本,并对视频做活体检测后提取人脸图片,以此进行三要素身份审核。",
+        "operationId" : "DetectStandardByVideoAndNameAndId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsStandardByVideoAndNameAndIdResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-Request-Id" : {
+                "type" : "string",
+                "description" : "This field is the request ID number for task tracking. Format is request_uuid-timestamp-hostname."
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应样例",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IvsErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "X-Auth-Token值获取方法请参见[认证鉴权](https://support.huaweicloud.com/api-ivs/ivs_02_0011.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。IVS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IvsStandardByVideoAndNameAndIdRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetectStandardByVideoAndNameAndId",
+      "x-url" : "{endpoint}/v2.0/ivs-standard"
+    }
+  }
+}

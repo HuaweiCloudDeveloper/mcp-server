@@ -1,0 +1,2857 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "MSGSMS-短信签名API",
+    "title" : "MSGSMS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : {
+      "Content-Type" : {
+        "name" : "Content-Type",
+        "in" : "header",
+        "description" : "请求体参数类型,该字段必须设置为:application/json;charset=utf8",
+        "required" : true,
+        "schema" : {
+          "example" : "application/json;charset=utf8",
+          "description" : "请求体参数类型,该字段必须设置为:application/json;charset=utf8",
+          "type" : "string",
+          "default" : "application/json;charset=utf8",
+          "maxLength" : 255,
+          "minLength" : 1
+        },
+        "type" : "object"
+      },
+      "X-Auth-Token" : {
+        "name" : "X-Auth-Token",
+        "in" : "header",
+        "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+        "required" : true,
+        "schema" : {
+          "example" : "******JKoZIhvcNAQcCoIIDgzCCXXXXX",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "type" : "string",
+          "maxLength" : 32768,
+          "minLength" : 1
+        },
+        "type" : "object"
+      },
+      "project_id" : {
+        "name" : "project_id",
+        "in" : "path",
+        "description" : "项目ID。获取方法请参见 [获取帐号、用户、项目的名称和ID](https://support.huaweicloud.com/api-msgsms/sms_05_0020.html)。",
+        "required" : true,
+        "schema" : {
+          "example" : "******c55c3c4526b2ed7a0213bc9871",
+          "description" : "项目ID。获取方法请参见 [获取帐号、用户、项目的名称和ID](https://support.huaweicloud.com/api-msgsms/sms_05_0020.html)。",
+          "type" : "string",
+          "pattern" : "^[a-fA-F0-9]{1,32}$"
+        },
+        "type" : "object"
+      }
+    },
+    "schemas" : {
+      "SmsSignatureResp" : {
+        "title" : "SmsSignatureResp",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "签名主键id,用于获取、修改、删除、申请激活签名的唯一标识",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******bb-d48c-4c4d-b3da-baa8e4664852"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "创建时间[yyyy-MM-dd HH:mm:ss]",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "update_time" : {
+            "type" : "string",
+            "description" : "更新时间[yyyy-MM-dd HH:mm:ss]",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "customer_id" : {
+            "type" : "string",
+            "description" : "租户customer id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******c55c3c4526b2ed7a0213bc9871"
+          },
+          "tenant" : {
+            "$ref" : "#/components/schemas/TenantBasic"
+          },
+          "signature_name" : {
+            "type" : "string",
+            "description" : "签名名称",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "auto_test789"
+          },
+          "signature_id" : {
+            "type" : "string",
+            "description" : "签名id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******d1-196f-495f-abbe-42240469b8fc"
+          },
+          "signature_type" : {
+            "type" : "string",
+            "description" : "签名类型",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "NOTIFY_TYPE"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test7890"
+          },
+          "apply_desc" : {
+            "type" : "string",
+            "description" : "申请描述",
+            "minLength" : 0,
+            "maxLength" : 300,
+            "example" : "test"
+          },
+          "channel_num" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "description" : "国内短信通道号,仅当签名审核成功,运营人员配置完成后返回。",
+            "example" : "******1733968"
+          },
+          "review_desc" : {
+            "type" : "string",
+            "description" : "审核意见",
+            "minLength" : 0,
+            "maxLength" : 300,
+            "example" : "test"
+          },
+          "file_id" : {
+            "type" : "string",
+            "description" : "文件id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******ab-1390-4268-9463-73db98cdc2e1"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "签名状态",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "PENDING_REVIEW"
+          },
+          "site" : {
+            "type" : "string",
+            "description" : "站点",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "signature_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "签名来源",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 0
+          },
+          "is_involved_third" : {
+            "type" : "string",
+            "description" : "是否涉及第三方权益",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "No"
+          },
+          "power_attorney_file_id" : {
+            "type" : "string",
+            "description" : "授权委托书文件ID",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "******ab-1390-4268-9463-73db98cdc2e2"
+          },
+          "urge_status" : {
+            "type" : "string",
+            "description" : "催审状态",
+            "minLength" : 1,
+            "maxLength" : 8,
+            "example" : "No"
+          },
+          "urge_time" : {
+            "type" : "string",
+            "description" : "催审时间",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "urge_desc" : {
+            "type" : "string",
+            "description" : "催审描述",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "app_key" : {
+            "type" : "string",
+            "description" : "应用key",
+            "minLength" : 0,
+            "maxLength" : 128,
+            "example" : "******3baZf4c856O4Qrbqvui3K2"
+          },
+          "source_title_content" : {
+            "type" : "string",
+            "description" : "标题内容",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "example" : "test"
+          },
+          "signature_usage" : {
+            "type" : "string",
+            "description" : "签名用途",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "COMMERCIAL"
+          },
+          "qualification_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "资质ID",
+            "example" : "******d1-4dd9-98a1-47607a5655ce"
+          },
+          "qualification_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "资质名",
+            "example" : "******name"
+          }
+        },
+        "type" : "object"
+      },
+      "TenantBasic" : {
+        "title" : "TenantBasic",
+        "type" : "object",
+        "properties" : {
+          "customer_id" : {
+            "type" : "string",
+            "description" : "租户custom id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******c55c3c4526b2ed7a0213bc9871"
+          },
+          "customer_name" : {
+            "type" : "string",
+            "description" : "租户custom name",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "****05"
+          },
+          "enterprise_name" : {
+            "type" : "string",
+            "description" : "租户企业名称",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "华为技术有限公司"
+          }
+        }
+      },
+      "SmsAppQueryResp" : {
+        "title" : "SmsAppQueryResp",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "应用主键ID,用于获取、修改应用的唯一标识",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3"
+          },
+          "create_time" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "description" : "创建时间[yyyy-MM-dd HH:mm:ss]",
+            "example" : "2022-08-12 06:51:17"
+          },
+          "update_time" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "description" : "更新时间[yyyy-MM-dd HH:mm:ss]",
+            "example" : "2022-08-12 06:51:17"
+          },
+          "customer_id" : {
+            "type" : "string",
+            "description" : "租户customer id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******c55c3c4526b2ed7a0213bc9871"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "租户resource id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******8a-a690-4e14-a1c7-2430937336d0"
+          },
+          "developer_account" : {
+            "type" : "string",
+            "description" : "租户开发者账号",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "****66_sms"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test789"
+          },
+          "omp_app_name" : {
+            "type" : "string",
+            "description" : "omp应用名称",
+            "minLength" : 1,
+            "maxLength" : 48,
+            "example" : "******4877bf46b5906a3240636bc7aa"
+          },
+          "app_key" : {
+            "type" : "string",
+            "description" : "应用key",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "******3baZf4c856O4Qrbqvui3K2"
+          },
+          "up_link_addr" : {
+            "type" : "string",
+            "description" : "上行短信地址",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "https://localhost/uplinkaddr"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "应用状态",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "LAUNCHED"
+          },
+          "industry" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "行业类型",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 14
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "地域",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "intl_channel_num" : {
+            "type" : "string",
+            "description" : "国际/港澳台短信通道号",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "******886739"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "0"
+          },
+          "enterprise_project_name" : {
+            "type" : "string",
+            "description" : "企业项目名称",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "example" : "default"
+          },
+          "ip_white_list" : {
+            "type" : "string",
+            "description" : "IP白名单",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "example" : "auto_test789"
+          },
+          "app_access_addr" : {
+            "type" : "string",
+            "description" : "接入地址",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "https://100.**.***.**:8443"
+          },
+          "protocol" : {
+            "type" : "string",
+            "description" : "协议",
+            "minLength" : 1,
+            "maxLength" : 10,
+            "example" : "https"
+          },
+          "platform" : {
+            "type" : "string",
+            "description" : "平台",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "NFV"
+          },
+          "is_support_multiomp" : {
+            "type" : "boolean",
+            "description" : "是否支持多OMP",
+            "example" : false
+          },
+          "tenant" : {
+            "$ref" : "#/components/schemas/TenantBasic"
+          }
+        },
+        "type" : "object"
+      },
+      "AppPageQueryResponse" : {
+        "title" : "AppPageQueryResponse",
+        "type" : "object",
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "查询结果",
+            "minItems" : 0,
+            "maxItems" : 10000,
+            "items" : {
+              "$ref" : "#/components/schemas/SmsAppQueryResp"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "总数",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 1
+          }
+        }
+      },
+      "SmsTemplateVariableAttrReq" : {
+        "title" : "SmsTemplateVariableAttrReq",
+        "type" : "object",
+        "required" : [ "variable_index", "variable_type" ],
+        "properties" : {
+          "variable_desc" : {
+            "type" : "string",
+            "description" : "变量说明,当变量类型为TEXT时,必填",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "test"
+          },
+          "variable_index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "变量索引,对应模板内容变量索引",
+            "minimum" : 1,
+            "maximum" : 20,
+            "example" : 1
+          },
+          "variable_type" : {
+            "type" : "string",
+            "pattern" : "PHONE|CHARDIGIT|DATETIME|MONEY|TEXT|NEWTEXT|LONGTEXT",
+            "description" : "变量类型,目前支持:PHONE|CHARDIGIT|DATETIME|MONEY|TEXT|NEWTEXT|LONGTEXT",
+            "example" : "TEXT"
+          }
+        }
+      },
+      "ApiTemplateResponse" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "模板主键ID",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "template_name" : {
+            "type" : "string",
+            "description" : "模板名称",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "auto_test789"
+          }
+        },
+        "title" : "ApiTemplateResponse",
+        "type" : "object"
+      },
+      "SmsTemplateReq" : {
+        "title" : "SmsTemplateReq",
+        "required" : [ "app_id", "template_content", "template_name", "template_type", "region" ],
+        "properties" : {
+          "app_id" : {
+            "type" : "string",
+            "description" : "应用主键ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3"
+          },
+          "brackets" : {
+            "type" : "string",
+            "description" : "中括号类型。支持枚举值:",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "GB"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "地域",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "send_country" : {
+            "type" : "array",
+            "description" : "发送国家id列表,只有地域为国际时,该字段有效",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0,
+              "maximum" : 2147483647
+            },
+            "minItems" : 0,
+            "maxItems" : 3,
+            "example" : ""
+          },
+          "sign_id" : {
+            "type" : "string",
+            "description" : "签名主键ID,只有地域为国内时,该字段有效",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******10-c3fb-427e-965c-a98ae844c5bd"
+          },
+          "template_content" : {
+            "type" : "string",
+            "description" : "模板内容",
+            "minLength" : 1,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "template_desc" : {
+            "type" : "string",
+            "description" : "模板描述",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "template_name" : {
+            "type" : "string",
+            "description" : "模板名称",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "auto_test789"
+          },
+          "template_type" : {
+            "type" : "string",
+            "description" : "模板类型。只有地域为国内时,该字段有效。支持枚举值:",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "NOTIFY_TYPE"
+          },
+          "universal_template" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "是否为通用模板",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 0
+          },
+          "variable_attributes" : {
+            "type" : "array",
+            "description" : "模板参数",
+            "minItems" : 0,
+            "maxItems" : 20,
+            "items" : {
+              "$ref" : "#/components/schemas/SmsTemplateVariableAttrReq"
+            }
+          },
+          "flow_status" : {
+            "type" : "string",
+            "description" : "流程状态",
+            "pattern" : "(Pending|Reviewing|Disable)",
+            "example" : "Pending"
+          }
+        },
+        "type" : "object"
+      },
+      "SmsFileQueryResp" : {
+        "title" : "SmsFileQueryResp",
+        "properties" : {
+          "file_id" : {
+            "type" : "string",
+            "description" : "文件ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******ab-1390-4268-9463-73db98cdc2e1"
+          },
+          "file_name" : {
+            "type" : "string",
+            "description" : "文件名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "/C:/Users/******/Desktop/test.PNG"
+          },
+          "file_ref" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "文件引用",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 1
+          },
+          "file_size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "文件大小",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 327
+          },
+          "file_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "文件类型",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 1
+          },
+          "module_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "模块类型",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 2
+          },
+          "operator" : {
+            "type" : "string",
+            "description" : "操作人",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******c55c3c4526b2ed7a0213bc9871"
+          },
+          "file_desc" : {
+            "type" : "string",
+            "description" : "描述",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "test"
+          },
+          "update_time" : {
+            "type" : "string",
+            "description" : "更新时间",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          }
+        },
+        "type" : "object"
+      },
+      "SmsCountryResp" : {
+        "title" : "SmsCountryResp",
+        "type" : "object",
+        "properties" : {
+          "country_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "国家id",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : 93
+          },
+          "country_name_en" : {
+            "type" : "string",
+            "description" : "国家(英文)",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "example" : "Afghanistan"
+          },
+          "country_name_zh" : {
+            "type" : "string",
+            "description" : "国家(中文)",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "example" : "阿富汗"
+          }
+        }
+      },
+      "MsgSendCountryList" : {
+        "title" : "MsgSendCountryList",
+        "type" : "object",
+        "minItems" : 0,
+        "maxItems" : 500,
+        "items" : {
+          "$ref" : "#/components/schemas/SmsCountryResp"
+        }
+      },
+      "SmsTemplateResp" : {
+        "title" : "SmsTemplateResp",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "模板主键ID,用于获取、修改、删除模板以及查询模板变量的唯一标识",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******bb-d48c-4c4d-b3da-baa8e4664852"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "创建时间[yyyy-MM-dd HH:mm:ss]",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "update_time" : {
+            "type" : "string",
+            "description" : "更新时间[yyyy-MM-dd HH:mm:ss]",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "customer_id" : {
+            "type" : "string",
+            "description" : "租户customer id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******c55c3c4526b2ed7a0213bc9871"
+          },
+          "tenant" : {
+            "$ref" : "#/components/schemas/TenantBasic"
+          },
+          "template_name" : {
+            "type" : "string",
+            "description" : "模板名称",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "auto_test789"
+          },
+          "template_id" : {
+            "type" : "string",
+            "description" : "模板ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******d1-196f-495f-abbe-42240469b8fc"
+          },
+          "template_type" : {
+            "type" : "string",
+            "description" : "模板类型",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "NOTIFY_TYPE"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test7890"
+          },
+          "app_key" : {
+            "type" : "string",
+            "description" : "应用key",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "******3baZf4c856O4Qrbqvui3K2"
+          },
+          "sign_id" : {
+            "type" : "string",
+            "description" : "签名主键id",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******b9-4141-4e2d-9838-14889c32a4bf"
+          },
+          "template_content" : {
+            "type" : "string",
+            "description" : "模板内容",
+            "minLength" : 1,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "has_variable" : {
+            "type" : "string",
+            "description" : "是否有变量",
+            "minLength" : 0,
+            "maxLength" : 4,
+            "example" : "No"
+          },
+          "template_desc" : {
+            "type" : "string",
+            "description" : "申请描述",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "review_desc" : {
+            "type" : "string",
+            "description" : "审核意见",
+            "minLength" : 0,
+            "maxLength" : 300,
+            "example" : "test"
+          },
+          "review_order" : {
+            "type" : "string",
+            "description" : "审核人账号",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "example" : "test"
+          },
+          "flow_status" : {
+            "type" : "string",
+            "description" : "流程状态",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "Reviewing"
+          },
+          "universal_template" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "是否是通用模板",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "模板状态",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "Normal"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "地域",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "brackets" : {
+            "type" : "string",
+            "description" : "中括号类型",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "GB"
+          },
+          "site" : {
+            "type" : "string",
+            "description" : "站点",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "urge_status" : {
+            "type" : "string",
+            "description" : "催审状态",
+            "minLength" : 1,
+            "maxLength" : 8,
+            "example" : "NO"
+          },
+          "urge_time" : {
+            "type" : "string",
+            "description" : "催审时间",
+            "minLength" : 1,
+            "maxLength" : 20,
+            "example" : "2022-08-12 07:14:18"
+          },
+          "urge_desc" : {
+            "type" : "string",
+            "description" : "催审描述",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "test"
+          },
+          "send_country1" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "发送国家1",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : "country1"
+          },
+          "send_country2" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "发送国家2",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : "country2"
+          },
+          "send_country3" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "发送国家3",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : "country3"
+          },
+          "is_support_multiomp" : {
+            "type" : "boolean",
+            "description" : "是否支持多OMP",
+            "example" : false
+          },
+          "country_name" : {
+            "type" : "string",
+            "description" : "国家名称列表,返回发送国家前三名的国家名称,国家名称间以\"~\"分隔",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "example" : "country"
+          }
+        },
+        "type" : "object"
+      },
+      "TemplatePageQueryResponse" : {
+        "title" : "TemplatePageQueryResponse",
+        "type" : "object",
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "查询结果",
+            "minItems" : 0,
+            "maxItems" : 10000,
+            "items" : {
+              "$ref" : "#/components/schemas/SmsTemplateResp"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "总数",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 1
+          }
+        }
+      },
+      "SmsAppResp" : {
+        "title" : "SmsAppResp",
+        "properties" : {
+          "app_key" : {
+            "type" : "string",
+            "description" : "应用KEY",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "******3baZf4c856O4Qrbqvui3K2"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test789"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "应用主键ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3"
+          },
+          "app_secret" : {
+            "type" : "string",
+            "description" : "Application Secret,应用密钥",
+            "minLength" : 1,
+            "maxLength" : 256,
+            "example" : "******3baZf4c856O4Qrc856O4Q"
+          }
+        },
+        "type" : "object"
+      },
+      "SmsAppAddReq" : {
+        "properties" : {
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test789"
+          },
+          "create_sign_and_template" : {
+            "type" : "boolean",
+            "description" : "是否创建测试签名和模板。只有地域为国内时,该字段有效 true:是 false:否",
+            "example" : false
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID,默认为0",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "0"
+          },
+          "enterprise_project_name" : {
+            "type" : "string",
+            "description" : "企业项目名称,默认为default",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "example" : "default"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "地域",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "up_link_addr" : {
+            "type" : "string",
+            "description" : "上行回调地址。只有地域为国内时,",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "https://localhost/rest/callback"
+          },
+          "show_secret" : {
+            "type" : "boolean",
+            "description" : "是否在返回体中显示app_secret字段",
+            "example" : true
+          }
+        },
+        "title" : "SmsAppAddReq",
+        "required" : [ "app_name", "region" ],
+        "type" : "object"
+      },
+      "SmsSignatureReq" : {
+        "title" : "SmsSignatureReq",
+        "required" : [ "app_id", "is_involved_third", "signature_name", "signature_source", "signature_type" ],
+        "properties" : {
+          "app_id" : {
+            "type" : "string",
+            "description" : "应用主键ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3"
+          },
+          "apply_desc" : {
+            "type" : "string",
+            "description" : "申请说明",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "test"
+          },
+          "file_id" : {
+            "type" : "string",
+            "description" : "营业执照文件ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "057a76ab-1390-4268-9463-73db98cdc2e1"
+          },
+          "is_involved_third" : {
+            "type" : "string",
+            "description" : "是否涉及第三方权益",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "No"
+          },
+          "power_attorney_fileid" : {
+            "type" : "string",
+            "description" : "授权委托书文件ID",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "057a76ab-1390-4268-9463-73db98cdc2e2"
+          },
+          "signature_name" : {
+            "type" : "string",
+            "description" : "签名名称",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "auto_test789"
+          },
+          "signature_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "签名来源。支持枚举值:",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 0
+          },
+          "signature_type" : {
+            "type" : "string",
+            "description" : "签名类型。支持枚举值:",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "NOTIFY_TYPE"
+          },
+          "source_title_content" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "签名来源标题内容"
+          },
+          "qualification_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "pattern" : "^$|^[A-Za-z0-9_-]+$",
+            "description" : "资质ID ,当前考虑存量应用的接口兼容性,代码未做强制校验,但创建签名时请务必携带资质ID,否则会导致资质审核失败"
+          }
+        },
+        "type" : "object"
+      },
+      "ApiSignatureResponse" : {
+        "title" : "ApiSignatureResponse",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "签名主键ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "07cfacbb-d48c-4c4d-b3da-baa8e4664852"
+          },
+          "signature_id" : {
+            "type" : "string",
+            "description" : "签名ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******d1-196f-495f-abbe-42240469b8fc"
+          },
+          "signature_name" : {
+            "type" : "string",
+            "description" : "签名名称",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "auto_test789"
+          }
+        },
+        "type" : "object"
+      },
+      "SmsFileUploadResp" : {
+        "title" : "SmsFileUploadResp",
+        "properties" : {
+          "file_id" : {
+            "type" : "string",
+            "description" : "文件ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "******ab-1390-4268-9463-73db98cdc2e1"
+          }
+        },
+        "type" : "object"
+      },
+      "AppCountResponse" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 395
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "description" : "已使用数",
+            "example" : 108
+          }
+        },
+        "title" : "AppCountResponse",
+        "type" : "object"
+      },
+      "ApiTemplateVariable" : {
+        "title" : "ApiTemplateVariable",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "变量id",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 15003394
+          },
+          "user_name" : {
+            "type" : "string",
+            "description" : "用户名",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "autotest789"
+          },
+          "temp_name" : {
+            "type" : "string",
+            "description" : "模板名称",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "test"
+          },
+          "variable_index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "变量索引",
+            "minimum" : 1,
+            "maximum" : 20,
+            "example" : 1
+          },
+          "variable_type" : {
+            "type" : "string",
+            "description" : "变量类型",
+            "pattern" : "PHONE|CHARDIGIT|DATETIME|MONEY|TEXT|NEWTEXT|LONGTEXT",
+            "example" : "URL"
+          },
+          "variable_length" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "变量长度",
+            "minimum" : 1,
+            "maximum" : 2147483647,
+            "example" : "******bb-d48c-4c4d-b3da-baa8e4664852"
+          },
+          "variable_desc" : {
+            "type" : "string",
+            "description" : "变量描述",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "******bb-d48c-4c4d-b3da-baa8e4664852"
+          }
+        },
+        "type" : "object"
+      },
+      "VariablePageQueryResponse" : {
+        "title" : "VariablePageQueryResponse",
+        "type" : "object",
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "查询结果",
+            "minItems" : 0,
+            "maxItems" : 10000,
+            "items" : {
+              "$ref" : "#/components/schemas/ApiTemplateVariable"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "总数",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 1
+          }
+        }
+      },
+      "SmsAppUpdateReq" : {
+        "title" : "SmsAppUpdateReq",
+        "required" : [ "app_name", "region" ],
+        "properties" : {
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test7890"
+          },
+          "create_sign_and_template" : {
+            "type" : "boolean",
+            "description" : "是否创建测试签名和模板。只有地域为国内时,该字段有效",
+            "example" : false
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID,默认为0",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "0"
+          },
+          "enterprise_project_name" : {
+            "type" : "string",
+            "description" : "企业项目名称,默认为default",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "example" : "default"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "地域",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "example" : "cn"
+          },
+          "up_link_addr" : {
+            "type" : "string",
+            "description" : "上行回调地址。只有地域为国内时,该字段有效",
+            "minLength" : 0,
+            "maxLength" : 128,
+            "example" : "https://localhost/callback"
+          }
+        },
+        "type" : "object"
+      },
+      "SmsUpdateAppResp" : {
+        "title" : "SmsUpdateAppResp",
+        "properties" : {
+          "app_key" : {
+            "type" : "string",
+            "description" : "应用KEY",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "******3baZf4c856O4Qrbqvui3K2"
+          },
+          "app_name" : {
+            "type" : "string",
+            "description" : "应用名称",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "auto_test789"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "应用主键ID",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3"
+          }
+        },
+        "type" : "object"
+      },
+      "SignaturePageQueryResponse" : {
+        "title" : "SignaturePageQueryResponse",
+        "type" : "object",
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "查询结果",
+            "minItems" : 0,
+            "maxItems" : 10000,
+            "items" : {
+              "$ref" : "#/components/schemas/SmsSignatureResp"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "总数",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 1
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowSignature" : {
+      "get" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "获取签名详情",
+        "description" : "该接口用于用户查询签名详情信息。",
+        "operationId" : "ShowSignature",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsSignatureResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "签名ID",
+          "required" : true,
+          "schema" : {
+            "example" : "07cfacbb-d48c-4c4d-b3da-baa8e4664852",
+            "description" : "签名ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSignature",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures/{id}"
+    },
+    "/ListAppDetails" : {
+      "get" : {
+        "tags" : [ "AppManagement" ],
+        "summary" : "查询短信应用",
+        "description" : "该接口用于用户查询已创建的应用信息。",
+        "operationId" : "ListAppDetails",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AppPageQueryResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "app_name",
+          "in" : "query",
+          "description" : "应用名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "应用名称",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "开始时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-14 08:21:48",
+            "description" : "开始时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-15 08:21:48",
+            "description" : "结束时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "region",
+          "in" : "query",
+          "description" : "地域",
+          "required" : false,
+          "schema" : {
+            "example" : "cn",
+            "description" : "地域",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方式",
+          "required" : false,
+          "schema" : {
+            "example" : "desc",
+            "description" : "排序方式",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序字段",
+          "required" : false,
+          "schema" : {
+            "example" : "create_time",
+            "description" : "排序字段",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "应用状态",
+          "required" : false,
+          "schema" : {
+            "example" : "LAUNCHED",
+            "description" : "应用状态",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAppDetails",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/apps"
+    },
+    "/UpdateTemplate" : {
+      "put" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "修改短信模板",
+        "description" : "该接口用于用户修改模板信息,目前仅支持审核不通过的短信模板重新修改",
+        "operationId" : "UpdateTemplate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiTemplateResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "description" : "模板ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsTemplateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTemplate",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates/{id}"
+    },
+    "/DeleteTemplate" : {
+      "delete" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "删除短信模板",
+        "description" : "该接口用于用户删除已创建的模板信息。",
+        "operationId" : "DeleteTemplate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "description" : "模板ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTemplate",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates/{id}"
+    },
+    "/ShowSignatureFile" : {
+      "get" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "查询申请文件",
+        "description" : "该接口用于用户查询上传的文件信息。",
+        "operationId" : "ShowSignatureFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsFileQueryResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "file_id",
+          "in" : "query",
+          "description" : "营业执照ID",
+          "required" : true,
+          "schema" : {
+            "example" : "******ab-1390-4268-9463-73db98cdc2e1",
+            "description" : "营业执照ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSignatureFile",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/upload-files"
+    },
+    "/ListSendCountryDetails" : {
+      "get" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "查询发送国家",
+        "description" : "该接口用于用户查询短信发送的国家信息",
+        "operationId" : "ListSendCountryDetails",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MsgSendCountryList"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "country_name_en",
+          "in" : "query",
+          "description" : "国家(英文)",
+          "required" : false,
+          "schema" : {
+            "example" : "Afghanistan",
+            "description" : "国家(英文)",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "country_name_zh",
+          "in" : "query",
+          "description" : "国家(中文)",
+          "required" : false,
+          "schema" : {
+            "example" : "阿富汗",
+            "description" : "国家(中文)",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSendCountryDetails",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/country"
+    },
+    "/ShowTemplate" : {
+      "get" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "获取模板详情",
+        "description" : "该接口用于用户查询已创建的模板详情。",
+        "operationId" : "ShowTemplate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsTemplateResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "example" : "460a2427-37eb-4229-bee9-0eba4d8a897f",
+            "description" : "模板ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTemplate",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates/{id}"
+    },
+    "/ListTemplateDetails" : {
+      "get" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "查询短信模板",
+        "description" : "该接口用于用户查询已创建的模板信息。",
+        "operationId" : "ListTemplateDetails",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TemplatePageQueryResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "app_key",
+          "in" : "query",
+          "description" : "应用key",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "应用key",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "app_name",
+          "in" : "query",
+          "description" : "应用名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "应用名称",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "开始时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-14 08:21:48",
+            "description" : "开始时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-15 08:21:48",
+            "description" : "结束时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "flow_status",
+          "in" : "query",
+          "description" : "流程状态",
+          "required" : false,
+          "schema" : {
+            "example" : "Reviewing",
+            "description" : "流程状态",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "has_variable",
+          "in" : "query",
+          "description" : "是否存在变量",
+          "required" : false,
+          "schema" : {
+            "example" : "(No)",
+            "description" : "是否存在变量",
+            "type" : "string",
+            "pattern" : "(Yes)|(No)"
+          }
+        }, {
+          "name" : "region",
+          "in" : "query",
+          "description" : "地域",
+          "required" : false,
+          "schema" : {
+            "example" : "cn",
+            "description" : "地域",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sign_name",
+          "in" : "query",
+          "description" : "签名名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "签名名称",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方式",
+          "required" : false,
+          "schema" : {
+            "example" : "desc",
+            "description" : "排序方式",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序字段",
+          "required" : false,
+          "schema" : {
+            "example" : "create_time",
+            "description" : "排序字段",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "template_id",
+          "in" : "query",
+          "description" : "模板ID",
+          "required" : false,
+          "schema" : {
+            "example" : "460a2427-37eb-4229-bee9-0eba4d8a897f",
+            "description" : "模板ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "template_name",
+          "in" : "query",
+          "description" : "模板名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "模板名称",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "template_type",
+          "in" : "query",
+          "description" : "模板类型",
+          "required" : false,
+          "schema" : {
+            "example" : "NOTIFY_TYPE",
+            "description" : "模板类型",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTemplateDetails",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates"
+    },
+    "/CreateApp" : {
+      "post" : {
+        "tags" : [ "AppManagement" ],
+        "summary" : "创建短信应用",
+        "description" : "该接口用于用户创建应用信息。",
+        "operationId" : "CreateApp",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsAppResp"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsAppAddReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateApp",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/apps"
+    },
+    "/ShowApp" : {
+      "get" : {
+        "tags" : [ "AppManagement" ],
+        "summary" : "获取应用详情",
+        "description" : "该接口用于用户查询应用详情信息。",
+        "operationId" : "ShowApp",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsAppQueryResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "应用ID",
+          "required" : true,
+          "schema" : {
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3",
+            "description" : "应用ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApp",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/apps/{id}"
+    },
+    "/UpdateSignature" : {
+      "put" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "修改短信签名",
+        "description" : "该接口用于用户更新签名信息,目前仅支持审核不通过的短信签名重新修改。",
+        "operationId" : "UpdateSignature",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiSignatureResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "签名ID",
+          "required" : true,
+          "schema" : {
+            "description" : "签名ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsSignatureReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateSignature",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures/{id}"
+    },
+    "/UploadSignatureFile" : {
+      "post" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "上传申请文件",
+        "description" : "该接口用于用户上传文件信息。",
+        "operationId" : "UploadSignatureFile",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsFileUploadResp"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "营业执照文件",
+          "required" : true,
+          "schema" : {
+            "description" : "营业执照文件",
+            "type" : "file"
+          }
+        }, {
+          "name" : "file_desc",
+          "in" : "query",
+          "description" : "描述",
+          "required" : false,
+          "schema" : {
+            "description" : "描述",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UploadSignatureFile",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/upload-files"
+    },
+    "/DeleteSignature" : {
+      "delete" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "删除短信签名",
+        "description" : "该接口用于用户删除已创建的签名信息息。",
+        "operationId" : "DeleteSignature",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "签名ID",
+          "required" : true,
+          "schema" : {
+            "example" : "07cfacbb-d48c-4c4d-b3da-baa8e4664852",
+            "description" : "签名ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSignature",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures/{id}"
+    },
+    "/EnableSignature" : {
+      "put" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "申请激活签名",
+        "description" : "该接口用于用户申请激活签名信息。",
+        "operationId" : "EnableSignature",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "签名ID",
+          "required" : true,
+          "schema" : {
+            "example" : "07cfacbb-d48c-4c4d-b3da-baa8e4664852",
+            "description" : "签名ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableSignature",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures/{id}/active"
+    },
+    "/ShowAppCount" : {
+      "get" : {
+        "tags" : [ "AppManagement" ],
+        "summary" : "查询应用数量",
+        "description" : "该接口用于用户查询应用使用的数量信息。",
+        "operationId" : "ShowAppCount",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AppCountResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "region",
+          "in" : "query",
+          "description" : "地域",
+          "required" : true,
+          "schema" : {
+            "example" : "cn",
+            "description" : "地域",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAppCount",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/apps-count"
+    },
+    "/ListTemplateVarilableDetails" : {
+      "get" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "查询模板变量",
+        "description" : "该接口用于用户查询模板参数。",
+        "operationId" : "ListTemplateVarilableDetails",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VariablePageQueryResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "description" : "模板ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTemplateVarilableDetails",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates/{id}/varilable"
+    },
+    "/UpdateApp" : {
+      "put" : {
+        "tags" : [ "AppManagement" ],
+        "summary" : "修改短信应用",
+        "description" : "该接口用于用户修改应用信息。",
+        "operationId" : "UpdateApp",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SmsUpdateAppResp"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "应用主键ID",
+          "required" : true,
+          "schema" : {
+            "example" : "9e61f59c-1a6b-4ee5-9651-5bca450694b3",
+            "description" : "应用主键ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsAppUpdateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateApp",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/apps/{id}"
+    },
+    "/CreateSignature" : {
+      "post" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "创建短信签名",
+        "description" : "该接口用于用户创建签名。",
+        "operationId" : "CreateSignature",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiSignatureResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsSignatureReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSignature",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures"
+    },
+    "/ListSignatureDetails" : {
+      "get" : {
+        "tags" : [ "SignatureManagement" ],
+        "summary" : "查询签名信息",
+        "description" : "该接口用于用户查询已创建的短信签名信息。",
+        "operationId" : "ListSignatureDetails",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignaturePageQueryResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "name" : "app_name",
+          "in" : "query",
+          "description" : "应用名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test789",
+            "description" : "应用名称",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "开始时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-14 08:21:48",
+            "description" : "开始时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间",
+          "required" : false,
+          "schema" : {
+            "example" : "2023-03-15 08:21:48",
+            "description" : "结束时间",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "数量",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "signature_id",
+          "in" : "query",
+          "description" : "签名ID",
+          "required" : false,
+          "schema" : {
+            "example" : "07cfacbb-d48c-4c4d-b3da-baa8e4664852",
+            "description" : "签名ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "signature_name",
+          "in" : "query",
+          "description" : "签名名称",
+          "required" : false,
+          "schema" : {
+            "example" : "auto_test7890",
+            "description" : "签名名称",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "signature_type",
+          "in" : "query",
+          "description" : "签名类型。支持枚举值:",
+          "required" : false,
+          "schema" : {
+            "example" : "NOTIFY_TYPE",
+            "description" : "签名类型。支持枚举值:",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "site",
+          "in" : "query",
+          "description" : "地域",
+          "required" : false,
+          "schema" : {
+            "example" : "cn",
+            "description" : "地域",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方式",
+          "required" : false,
+          "schema" : {
+            "example" : "desc",
+            "description" : "排序方式",
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序字段",
+          "required" : false,
+          "schema" : {
+            "example" : "create_time",
+            "description" : "排序字段",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "状态",
+          "required" : false,
+          "schema" : {
+            "example" : "PENDING_REVIEW",
+            "description" : "状态",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSignatureDetails",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/signatures"
+    },
+    "/CreateTemplate" : {
+      "post" : {
+        "tags" : [ "TemplateManagement" ],
+        "summary" : "创建短信模板",
+        "description" : "该接口用于用户创建模板。",
+        "operationId" : "CreateTemplate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiTemplateResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Content-Type"
+        }, {
+          "$ref" : "#/components/parameters/project_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SmsTemplateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTemplate",
+      "x-url" : "{endpoint}/v2/{project_id}/msgsms/templates"
+    }
+  }
+}

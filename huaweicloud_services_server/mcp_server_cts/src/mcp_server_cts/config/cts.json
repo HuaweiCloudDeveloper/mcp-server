@@ -1,0 +1,3223 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CTS-其它接口",
+    "title" : "CTS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "UserResource" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "用户名。",
+            "minLength" : 1,
+            "maxLength" : 100
+          }
+        }
+      },
+      "UserResourceResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "users" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UserResource"
+            },
+            "description" : "最近30天操作事件的用户列表。",
+            "minItems" : 0,
+            "maxItems" : 100
+          }
+        }
+      },
+      "FailedRsp" : {
+        "description" : "失败时的返回对象。",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码标识,CTS.XXX。",
+            "type" : "string",
+            "minLength" : 15,
+            "maxLength" : 15,
+            "example" : "CTS.0214"
+          },
+          "error_msg" : {
+            "description" : "错误描述。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 2048,
+            "example" : "The tracker does not exist."
+          }
+        },
+        "type" : "object"
+      },
+      "ListOperation" : {
+        "type" : "object",
+        "properties" : {
+          "service_type" : {
+            "type" : "string",
+            "description" : "事件对应的云服务类型。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "事件对应的资源类型。",
+            "minLength" : 1,
+            "maxLength" : 100
+          },
+          "operation_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            },
+            "description" : "操作事件名称数组。",
+            "minItems" : 1,
+            "maxItems" : 64
+          }
+        },
+        "description" : "本次查询全量云服务的操作事件列表。"
+      },
+      "OperationResponseBody" : {
+        "type" : "object",
+        "description" : "全量云服务的操作事件列表。",
+        "properties" : {
+          "operations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ListOperation"
+            },
+            "description" : "全量云服务的操作事件列表。",
+            "minItems" : 1,
+            "maxItems" : 200
+          }
+        }
+      },
+      "CtsQuota" : {
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "quota资源类型。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "cts_tracker"
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已使用的资源个数。",
+            "maximum" : 10000,
+            "minimum" : 0,
+            "example" : 15
+          },
+          "quota" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "总资源个数。",
+            "maximum" : 10000,
+            "minimum" : 0,
+            "example" : 100
+          }
+        },
+        "type" : "object"
+      },
+      "ListQuotasResponseBody" : {
+        "properties" : {
+          "resources" : {
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "本次查询追踪器列表返回的追踪器数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/CtsQuota"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CheckBucketResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "buckets" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Bucket"
+            },
+            "type" : "array",
+            "description" : "检查OBS桶状态响应体。",
+            "minItems" : 1,
+            "maxItems" : 100
+          }
+        }
+      },
+      "Bucket" : {
+        "type" : "object",
+        "properties" : {
+          "bucket_name" : {
+            "type" : "string",
+            "example" : "obs-f1da",
+            "description" : "标识OBS桶名称。由数字或字母开头,支持小写字母、数字、“-”、“.”,长度为3~63个字符。",
+            "minLength" : 3,
+            "maxLength" : 63
+          },
+          "bucket_location" : {
+            "type" : "string",
+            "description" : "标识桶位置。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id。 如果is_support_trace_files_encryption\"参数值为“是”时,此参数为必选项。",
+            "minLength" : 0,
+            "maxLength" : 200
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。"
+          },
+          "check_bucket_response" : {
+            "$ref" : "#/components/schemas/CheckBucketResponse",
+            "description" : "转储OBS桶的检查结果。"
+          }
+        },
+        "required" : [ "bucket_name", "is_support_trace_files_encryption" ]
+      },
+      "CheckBucketRequest" : {
+        "type" : "object",
+        "properties" : {
+          "bucket_name" : {
+            "type" : "string",
+            "description" : "标识OBS桶名称。由数字或字母开头,支持小写字母、数字、“-”、“.”,长度为3~63个字符。",
+            "minLength" : 3,
+            "maxLength" : 63
+          },
+          "bucket_location" : {
+            "type" : "string",
+            "description" : "标识OBS桶位置。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id,is_support_trace_files_encryption\"参数值为“是”时,此参数为必选项。",
+            "minLength" : 0,
+            "maxLength" : 200
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。"
+          }
+        },
+        "required" : [ "bucket_name", "bucket_location" ]
+      },
+      "CheckBucketResponse" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码。",
+            "minLength" : 15,
+            "maxLength" : 15
+          },
+          "error_message" : {
+            "type" : "string",
+            "description" : "错误信息。",
+            "minLength" : 0,
+            "maxLength" : 2048
+          },
+          "response_code" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回的http状态码。",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "exclusiveMaximum" : true,
+            "exclusiveMinimum" : true
+          },
+          "success" : {
+            "type" : "boolean",
+            "description" : "是否成功转储。"
+          }
+        }
+      },
+      "CheckObsBucketsRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "buckets" : {
+            "items" : {
+              "$ref" : "#/components/schemas/CheckBucketRequest"
+            },
+            "type" : "array",
+            "description" : "请求检查的OBS桶列表。",
+            "minItems" : 0,
+            "maxItems" : 100
+          }
+        }
+      },
+      "BatchCreateResourceTagsRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            },
+            "description" : "标签列表。",
+            "minItems" : 1,
+            "maxItems" : 20
+          }
+        }
+      },
+      "Tags" : {
+        "type" : "object",
+        "description" : "标签列表。",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。最大长度128个unicode字符。key不能为空。不能包含非打印字符ASCII(0-31),“=”,“*”,“<”,“>”,“\\”,“,”,“|”,“/”",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。每个值最大长度255个unicode字符,删除时如果value有值按照key/value删除,如果value没值,则按照key删除,可以为空字符串。,不能包含非打印字符ASCII(0-31), “=”,“*”,“<”,“>”,“\\”,“,”,“|”,“/”",
+            "minLength" : 0,
+            "maxLength" : 255
+          }
+        }
+      },
+      "NotificationsResponseBodyList" : {
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/NotificationsResponseBody"
+        },
+        "description" : "关键操作通知列表。"
+      },
+      "ListNotificationResponseBody" : {
+        "properties" : {
+          "notifications" : {
+            "$ref" : "#/components/schemas/NotificationsResponseBodyList"
+          }
+        },
+        "description" : "关键操作通知列表。",
+        "type" : "object"
+      },
+      "Filter" : {
+        "description" : "关键操作通知高级筛选条件。",
+        "properties" : {
+          "condition" : {
+            "type" : "string",
+            "description" : "多条件关系。",
+            "enum" : [ "AND", "OR" ]
+          },
+          "is_support_filter" : {
+            "type" : "boolean",
+            "description" : "是否打开高级筛选开关。"
+          },
+          "rule" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : "[“trace_rating != normal\", \"resource_id = xxx\"]",
+            "description" : "高级过滤条件规则,示例如下:\"key != value\",格式为:字段 规则 值。"
+          }
+        },
+        "required" : [ "condition", "is_support_filter", "rule" ],
+        "type" : "object"
+      },
+      "NotificationsResponseBody" : {
+        "properties" : {
+          "notification_name" : {
+            "type" : "string",
+            "description" : "标识关键操作名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "标识操作类型。",
+            "enum" : [ "customized", "complete" ]
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "operations" : {
+            "$ref" : "#/components/schemas/OperationsList"
+          },
+          "notify_user_list" : {
+            "$ref" : "#/components/schemas/NotificationUserList"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识关键操作通知状态,包括正常(enabled),停止(disabled)两种状态。",
+            "enum" : [ "enabled", "disabled" ]
+          },
+          "topic_id" : {
+            "type" : "string",
+            "description" : "消息通知服务的topic_urn或者函数工作流的func_urn。",
+            "minLength" : 0,
+            "maxLength" : 400
+          },
+          "notification_id" : {
+            "type" : "string",
+            "description" : "关键操作通知的唯一标识。",
+            "minLength" : 1,
+            "maxLength" : 40
+          },
+          "notification_type" : {
+            "type" : "string",
+            "description" : "关键操作通知类型,根据topic_id区分为消息通知服务(smn)和函数工作流(fun)。",
+            "enum" : [ "smn", "fun" ]
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。",
+            "minLength" : 32,
+            "maxLength" : 32
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "关键操作通知创建时间戳。",
+            "example" : 1587958482923,
+            "minimum" : 946656000000,
+            "maximum" : 4102416000000
+          },
+          "filter" : {
+            "description" : "关键操作通知高级筛选条件。",
+            "$ref" : "#/components/schemas/Filter"
+          }
+        },
+        "type" : "object"
+      },
+      "OperationsList" : {
+        "description" : "操作事件列表。",
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/Operations"
+        }
+      },
+      "Operations" : {
+        "properties" : {
+          "service_type" : {
+            "type" : "string",
+            "description" : "标识云服务类型。必须为已对接CTS的云服务的英文缩写,且服务类型一般为大写字母。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "标识资源类型。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "trace_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "标识事件名称。",
+            "minItems" : 1,
+            "maxItems" : 64
+          }
+        },
+        "description" : "操作事件列表,目前最多支持对100服务的1000个关键操作进行配置。",
+        "required" : [ "service_type", "resource_type", "trace_names" ],
+        "type" : "object"
+      },
+      "NotificationUsers" : {
+        "description" : "通知用户列表。",
+        "properties" : {
+          "user_group" : {
+            "type" : "string",
+            "description" : "IAM用户组。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "user_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "IAM用户。",
+            "minItems" : 1,
+            "maxItems" : 32
+          }
+        },
+        "required" : [ "user_group", "user_list" ],
+        "type" : "object"
+      },
+      "NotificationUserList" : {
+        "description" : "通知用户列表,目前最多支持对10个用户组和50个用户发起的操作进行配置。",
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/NotificationUsers"
+        }
+      },
+      "UpdateNotificationResponseBody" : {
+        "properties" : {
+          "notification_name" : {
+            "type" : "string",
+            "description" : "标识关键操作名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "标识操作类型。",
+            "enum" : [ "customized", "complete" ]
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "operations" : {
+            "$ref" : "#/components/schemas/OperationsList"
+          },
+          "notify_user_list" : {
+            "$ref" : "#/components/schemas/NotificationUserList"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识关键操作通知状态,包括正常(enabled),停止(disabled)两种状态。",
+            "enum" : [ "enabled", "disabled" ]
+          },
+          "topic_id" : {
+            "type" : "string",
+            "description" : "消息通知服务的topic_urn或者函数工作流的func_urn。",
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "notification_id" : {
+            "type" : "string",
+            "description" : "关键操作通知的唯一标识。",
+            "minLength" : 1,
+            "maxLength" : 40
+          },
+          "notification_type" : {
+            "type" : "string",
+            "description" : "关键操作通知类型,根据topic_id区分为消息通知服务(smn)和函数工作流(fun)。",
+            "enum" : [ "smn", "fun" ]
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。",
+            "minLength" : 32,
+            "maxLength" : 32
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "关键操作通知创建时间戳。",
+            "minimum" : 946656000000,
+            "exclusiveMinimum" : true,
+            "exclusiveMaximum" : true,
+            "maximum" : 4102416000000
+          },
+          "filter" : {
+            "description" : "关键操作通知高级筛选条件。",
+            "$ref" : "#/components/schemas/Filter"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateNotificationRequestBody" : {
+        "properties" : {
+          "notification_name" : {
+            "type" : "string",
+            "description" : "标识关键操作名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "标识操作类型。",
+            "enum" : [ "customized", "complete" ]
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "operations" : {
+            "$ref" : "#/components/schemas/OperationsList"
+          },
+          "notify_user_list" : {
+            "$ref" : "#/components/schemas/NotificationUserList"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识关键操作通知状态,包括正常(enabled),停止(disabled)两种状态。",
+            "enum" : [ "enabled", "disabled" ]
+          },
+          "topic_id" : {
+            "type" : "string",
+            "description" : "消息通知服务的topic_urn或者函数工作流的func_urn,当“status”字段为enabled时,该字段必填。",
+            "minLength" : 0,
+            "maxLength" : 400
+          },
+          "notification_id" : {
+            "type" : "string",
+            "description" : "关键操作通知id。",
+            "minLength" : 1,
+            "maxLength" : 40
+          },
+          "filter" : {
+            "description" : "关键操作通知高级筛选条件。",
+            "$ref" : "#/components/schemas/Filter"
+          }
+        },
+        "description" : "修改关键操作通知规则的请求体。",
+        "required" : [ "notification_name", "operation_type", "status", "notification_id" ],
+        "type" : "object"
+      },
+      "DataBucket" : {
+        "properties" : {
+          "data_bucket_name" : {
+            "type" : "string",
+            "maxLength" : 63,
+            "minLength" : 3,
+            "description" : "数据类追踪器追踪对象的桶名。"
+          },
+          "data_event" : {
+            "type" : "array",
+            "maxItems" : 2,
+            "minItems" : 1,
+            "items" : {
+              "type" : "string",
+              "enum" : [ "WRITE", "READ" ],
+              "example" : "WRITE"
+            },
+            "description" : "数据类追踪器追踪的操作类型。"
+          }
+        },
+        "type" : "object"
+      },
+      "ManagementEventSelector" : {
+        "type" : "object",
+        "description" : "管理类事件选择器。",
+        "properties" : {
+          "exclude_service" : {
+            "type" : "array",
+            "description" : "标识不转储的云服务名称。",
+            "example" : "",
+            "items" : {
+              "example" : "KMS",
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 20
+            },
+            "minItems" : 0,
+            "maxItems" : 10
+          }
+        }
+      },
+      "ObsInfo" : {
+        "description" : "转储桶信息。",
+        "properties" : {
+          "bucket_name" : {
+            "type" : "string",
+            "description" : "标识OBS桶名称。由数字或字母开头,支持小写字母、数字、“-”、“.”,长度为3~63个字符。",
+            "maxLength" : 63,
+            "minLength" : 3,
+            "example" : "obs-f1da"
+          },
+          "file_prefix_name" : {
+            "type" : "string",
+            "description" : "标识需要存储于OBS的日志文件前缀,0-9,a-z,A-Z,'-','.','_'长度为0~64字符。",
+            "maxLength" : 64,
+            "minLength" : 0,
+            "example" : "yO8Q"
+          },
+          "is_obs_created" : {
+            "type" : "boolean",
+            "description" : "标识配置桶是否由追踪器自动创建。",
+            "example" : "true"
+          },
+          "is_authorized_bucket" : {
+            "type" : "boolean",
+            "description" : "标识配置桶是否已经授权给CTS服务账号。",
+            "example" : "true"
+          },
+          "bucket_lifecycle" : {
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0,
+            "maximum" : 100000,
+            "description" : "标识配置桶内对象存储周期。",
+            "example" : 30
+          },
+          "compress_type" : {
+            "type" : "string",
+            "description" : "压缩类型。包括不压缩(json),压缩(gzip)两种状态。默认为gzip格式。",
+            "default" : "gzip",
+            "enum" : [ "gzip", "json" ]
+          },
+          "is_sort_by_service" : {
+            "type" : "boolean",
+            "description" : "路径按云服务划分,打开后转储文件路径中将增加云服务名。默认为true。",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTrackerRequestBody" : {
+        "required" : [ "tracker_type", "tracker_name" ],
+        "properties" : {
+          "tracker_type" : {
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "enum" : [ "system", "data" ]
+          },
+          "tracker_name" : {
+            "type" : "string",
+            "description" : "标识追踪器名称。",
+            "maxLength" : 64,
+            "minLength" : 1,
+            "example" : "data-tracker-name"
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "is_organization_tracker" : {
+            "type" : "boolean",
+            "description" : "是否应用到我的组织。",
+            "default" : false
+          },
+          "management_event_selector" : {
+            "$ref" : "#/components/schemas/ManagementEventSelector"
+          },
+          "is_lts_enabled" : {
+            "type" : "boolean",
+            "description" : "是否打开事件分析。",
+            "example" : true
+          },
+          "obs_info" : {
+            "$ref" : "#/components/schemas/TrackerObsInfo",
+            "description" : "转储桶配置"
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。",
+            "example" : true
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id(从KMS获取)。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "13a4207c-7abe-4b68-8510-16b84c3b5504"
+          },
+          "is_support_validate" : {
+            "type" : "boolean",
+            "description" : "事件文件转储时是否打开事件文件校验。",
+            "example" : true
+          },
+          "data_bucket" : {
+            "$ref" : "#/components/schemas/DataBucket",
+            "description" : "追踪桶配置信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "TrackerObsInfo" : {
+        "description" : "转储桶信息。",
+        "properties" : {
+          "bucket_name" : {
+            "type" : "string",
+            "description" : "标识OBS桶名称。由数字或字母开头,支持小写字母、数字、“-”、“.”,长度为3~63个字符。",
+            "maxLength" : 63,
+            "minLength" : 3,
+            "example" : "obs-f1da"
+          },
+          "file_prefix_name" : {
+            "type" : "string",
+            "description" : "标识需要存储于OBS的日志文件前缀,0-9,a-z,A-Z,'-','.','_'长度为0~64字符。",
+            "maxLength" : 64,
+            "minLength" : 0,
+            "example" : "yO8Q"
+          },
+          "is_obs_created" : {
+            "type" : "boolean",
+            "description" : "是否支持新建OBS桶。",
+            "example" : "true"
+          },
+          "bucket_lifecycle" : {
+            "type" : "integer",
+            "description" : "标识配置桶内对象存储周期。",
+            "minimum" : 0,
+            "maximum" : 5000,
+            "example" : "30"
+          },
+          "compress_type" : {
+            "type" : "string",
+            "description" : "压缩类型。包括不压缩(json),压缩(gzip)两种状态。默认为gzip格式。",
+            "default" : "gzip",
+            "enum" : [ "gzip", "json" ]
+          },
+          "is_sort_by_service" : {
+            "type" : "boolean",
+            "description" : "路径按云服务划分,打开后转储文件路径中将增加云服务名。默认为true。",
+            "default" : true
+          }
+        },
+        "type" : "object"
+      },
+      "Lts" : {
+        "description" : "云日志服务配置",
+        "properties" : {
+          "is_lts_enabled" : {
+            "type" : "boolean",
+            "description" : "是否启用日志服务检索功能。",
+            "example" : true
+          },
+          "log_group_name" : {
+            "type" : "string",
+            "description" : "云审计服务在日志服务中创建的日志组名称。",
+            "maxLength" : 100,
+            "minLength" : 0,
+            "example" : "CTS"
+          },
+          "log_topic_name" : {
+            "type" : "string",
+            "description" : "云审计服务在日志服务中创建的日志主题名称。",
+            "maxLength" : 100,
+            "minLength" : 0,
+            "example" : "system-trace"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTrackerResponseBody" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "追踪器唯一标识。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "2e6fa9b8-8c6e-456d-b5d3-77be972d220b"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "追踪器创建时间戳。",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000,
+            "example" : 1587958482923
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id(从KMS获取)。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "13a4207c-7abe-4b68-8510-16b84c3b5504"
+          },
+          "is_support_validate" : {
+            "type" : "boolean",
+            "description" : "是否打开事件文件校验。当前环境仅\"tracker_type\"参数值为\"system\"时支持该功能。",
+            "example" : true
+          },
+          "is_organization_tracker" : {
+            "type" : "boolean",
+            "description" : "是否应用到我的组织。",
+            "default" : false
+          },
+          "management_event_selector" : {
+            "$ref" : "#/components/schemas/ManagementEventSelector"
+          },
+          "lts" : {
+            "$ref" : "#/components/schemas/Lts",
+            "description" : "事件分析"
+          },
+          "tracker_type" : {
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "enum" : [ "system", "data" ]
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "账号ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "maxLength" : 40,
+            "minLength" : 15,
+            "example" : "aexxxxxxxx4d4fb4bexxxxxxx791fbf"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。",
+            "maxLength" : 40,
+            "minLength" : 15,
+            "example" : "bb1xxxxxxxxe4f498cbxxxxxxxx35634"
+          },
+          "tracker_name" : {
+            "type" : "string",
+            "description" : "标识追踪器名称,当前版本默认为“system”。",
+            "maxLength" : 64,
+            "minLength" : 1,
+            "example" : "system"
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识追踪器状态,包括正常(enabled),停止(disabled)和异常(error)三种状态,状态为异常时需通过明细(detail)字段说明错误来源。",
+            "enum" : [ "enabled", "disabled" ],
+            "example" : "disabled"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "该参数仅在追踪器状态异常时返回,用于标识追踪器异常的原因,包括桶策略异常(bucketPolicyError),桶不存在(noBucket)和欠费或冻结(arrears)三种原因。",
+            "maxLength" : 360,
+            "minLength" : 0,
+            "example" : "noBucket"
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。",
+            "example" : false
+          },
+          "obs_info" : {
+            "$ref" : "#/components/schemas/ObsInfo",
+            "description" : "事件转储桶信息。"
+          },
+          "data_bucket" : {
+            "$ref" : "#/components/schemas/DataBucketQuery",
+            "description" : "数据类事件追踪桶信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "DataBucketQuery" : {
+        "description" : "追踪桶信息。",
+        "properties" : {
+          "data_bucket_name" : {
+            "type" : "string",
+            "description" : "标识OBS桶名称。由数字或字母开头,支持小写字母、数字、“-”、“.”,长度为3~63个字符。",
+            "maxLength" : 63,
+            "minLength" : 3,
+            "example" : "obs-f1da"
+          },
+          "search_enabled" : {
+            "type" : "boolean",
+            "description" : "追踪桶日志是否支持搜索。",
+            "example" : "true"
+          },
+          "data_event" : {
+            "type" : "array",
+            "maxItems" : 2,
+            "minItems" : 1,
+            "items" : {
+              "type" : "string",
+              "enum" : [ "WRITE", "READ" ]
+            },
+            "example" : "WRITE",
+            "description" : "数据类追踪器追踪对象的桶名。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateNotificationResponseBody" : {
+        "properties" : {
+          "notification_name" : {
+            "type" : "string",
+            "description" : "通知名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "操作类型,完整和自定义。",
+            "enum" : [ "customized", "complete" ]
+          },
+          "operations" : {
+            "$ref" : "#/components/schemas/OperationsList"
+          },
+          "notify_user_list" : {
+            "$ref" : "#/components/schemas/NotificationUserList"
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "通知状态,启用和停用。",
+            "enum" : [ "enabled", "disabled" ]
+          },
+          "topic_id" : {
+            "type" : "string",
+            "description" : "消息通知服务(SMN)主题的唯一的资源标识,可通过查询主题列表获取该标识。",
+            "minLength" : 1,
+            "maxLength" : 400
+          },
+          "notification_id" : {
+            "type" : "string",
+            "description" : "通知的唯一标识ID。",
+            "minLength" : 1,
+            "maxLength" : 40
+          },
+          "notification_type" : {
+            "type" : "string",
+            "description" : "通知类型,消息通知,函数触发器。",
+            "enum" : [ "smn", "fun" ]
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。",
+            "minLength" : 32,
+            "maxLength" : 32
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "通知规则创建时间。",
+            "example" : 1587958482923,
+            "minimum" : 946656000000,
+            "maximum" : 4102416000000
+          },
+          "filter" : {
+            "description" : "关键操作通知高级筛选条件。",
+            "$ref" : "#/components/schemas/Filter"
+          }
+        },
+        "required" : [ "notification_name", "operation_type", "notification_type", "project_id" ],
+        "type" : "object"
+      },
+      "CreateNotificationRequestBody" : {
+        "properties" : {
+          "notification_name" : {
+            "type" : "string",
+            "description" : "标识关键操作名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "operation_type" : {
+            "type" : "string",
+            "description" : "标识操作类型。",
+            "enum" : [ "complete", "customized" ]
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "operations" : {
+            "$ref" : "#/components/schemas/OperationsList"
+          },
+          "notify_user_list" : {
+            "$ref" : "#/components/schemas/NotificationUserList"
+          },
+          "topic_id" : {
+            "type" : "string",
+            "description" : "消息通知服务的topic_urn或者函数工作流的func_urn。",
+            "minLength" : 0,
+            "maxLength" : 400
+          },
+          "filter" : {
+            "description" : "关键操作通知高级过滤条件。",
+            "$ref" : "#/components/schemas/Filter"
+          }
+        },
+        "description" : "创建通知规则的请求体",
+        "required" : [ "notification_name", "operation_type" ],
+        "type" : "object"
+      },
+      "UpdateTrackerRequestBody" : {
+        "required" : [ "tracker_type", "tracker_name" ],
+        "properties" : {
+          "tracker_type" : {
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "enum" : [ "system", "data" ]
+          },
+          "tracker_name" : {
+            "type" : "string",
+            "description" : "标识追踪器名称。",
+            "maxLength" : 64,
+            "minLength" : 1,
+            "example" : "data-tracker-name"
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识追踪器状态,该接口中可修改的状态包括正常(enabled)和停止(disabled)。如果选择修改状态为停止,则修改成功后追踪器停止记录事件。",
+            "enum" : [ "enabled", "disabled" ],
+            "example" : "disabled"
+          },
+          "is_organization_tracker" : {
+            "type" : "boolean",
+            "description" : "是否应用到我的组织。",
+            "default" : false
+          },
+          "management_event_selector" : {
+            "$ref" : "#/components/schemas/ManagementEventSelector"
+          },
+          "is_lts_enabled" : {
+            "type" : "boolean",
+            "description" : "是否打开事件分析。",
+            "example" : true
+          },
+          "obs_info" : {
+            "$ref" : "#/components/schemas/TrackerObsInfo",
+            "description" : "转储桶配置"
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。",
+            "example" : true
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id(从KMS获取)。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "13a4207c-7abe-4b68-8510-16b84c3b5504"
+          },
+          "is_support_validate" : {
+            "type" : "boolean",
+            "description" : "事件文件转储时是否打开事件文件校验。",
+            "example" : true
+          },
+          "data_bucket" : {
+            "$ref" : "#/components/schemas/DataBucket",
+            "description" : "追踪桶配置信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchDeleteResourceTagsRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Tags"
+            },
+            "description" : "标签列表。",
+            "minItems" : 0,
+            "maxItems" : 20
+          }
+        }
+      },
+      "ListTraceResourcesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TraceResource"
+            },
+            "description" : "返回的资源类型列表。",
+            "minItems" : 0,
+            "maxItems" : 300
+          }
+        }
+      },
+      "TraceResource" : {
+        "type" : "object",
+        "properties" : {
+          "service_type" : {
+            "type" : "string",
+            "description" : "云服务类型。必须为已对接CTS的云服务的英文缩写,且服务类型一般为大写字母。",
+            "minLength" : 0,
+            "maxLength" : 36
+          },
+          "resource" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 100
+            },
+            "description" : "云服务对应的资源类型列表。",
+            "minItems" : 0,
+            "maxItems" : 10
+          }
+        }
+      },
+      "ListTrackerResponseBody" : {
+        "properties" : {
+          "trackers" : {
+            "maxItems" : 101,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "本次查询追踪器列表返回的追踪器数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/TrackerResponseBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TrackerResponseBody" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "追踪器唯一标识。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "2e6fa9b8-8c6e-456d-b5d3-77be972d220b"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "追踪器创建时间戳。",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000,
+            "example" : 1587958482923
+          },
+          "kms_id" : {
+            "type" : "string",
+            "description" : "事件文件转储加密所采用的秘钥id(从KMS获取)。",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "example" : "13a4207c-7abe-4b68-8510-16b84c3b5504"
+          },
+          "is_support_validate" : {
+            "type" : "boolean",
+            "description" : "是否打开事件文件校验。",
+            "example" : true
+          },
+          "is_organization_tracker" : {
+            "type" : "boolean",
+            "description" : "是否应用到我的组织。",
+            "default" : false
+          },
+          "agency_name" : {
+            "type" : "string",
+            "description" : "云服务委托名称。",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "example" : "cts_admin_trust",
+            "enum" : [ "cts_admin_trust" ]
+          },
+          "management_event_selector" : {
+            "$ref" : "#/components/schemas/ManagementEventSelector"
+          },
+          "lts" : {
+            "$ref" : "#/components/schemas/Lts",
+            "description" : "事件分析"
+          },
+          "tracker_type" : {
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "enum" : [ "system", "data" ]
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "账号ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "maxLength" : 40,
+            "minLength" : 15,
+            "example" : "aexxxxxxxx4d4fb4bexxxxxxx791fbf"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID。",
+            "maxLength" : 40,
+            "minLength" : 15,
+            "example" : "bb1xxxxxxxxe4f498cbxxxxxxxx35634"
+          },
+          "tracker_name" : {
+            "type" : "string",
+            "description" : "标识追踪器名称,当前版本默认为“system”。",
+            "maxLength" : 64,
+            "minLength" : 1,
+            "example" : "system"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "标识追踪器状态,包括正常(enabled),停止(disabled)和异常(error)三种状态,状态为异常时需通过明细(detail)字段说明错误来源。",
+            "enum" : [ "enabled", "disabled" ],
+            "example" : "disabled"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "该参数仅在追踪器状态异常时返回,用于标识追踪器异常的原因,包括桶策略异常(bucketPolicyError),桶不存在(noBucket)和欠费或冻结(arrears)三种原因。",
+            "maxLength" : 360,
+            "minLength" : 0,
+            "example" : "noBucket"
+          },
+          "is_support_trace_files_encryption" : {
+            "type" : "boolean",
+            "description" : "事件文件转储加密功能开关。",
+            "example" : false
+          },
+          "group_id" : {
+            "type" : "string",
+            "description" : "LTS服务日志组的ID。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "stream_id" : {
+            "type" : "string",
+            "description" : "LTS服务日志流的ID。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "obs_info" : {
+            "$ref" : "#/components/schemas/ObsInfo",
+            "description" : "事件转储桶信息。"
+          },
+          "data_bucket" : {
+            "$ref" : "#/components/schemas/DataBucketQuery",
+            "description" : "数据类事件追踪桶信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "SessionContext" : {
+        "type" : "object",
+        "description" : "临时安全凭据的属性。",
+        "properties" : {
+          "attributes" : {
+            "description" : "临时安全凭据的属性。",
+            "$ref" : "#/components/schemas/Attributes"
+          }
+        }
+      },
+      "Traces" : {
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "标识事件对应的云服务资源ID。",
+            "maxLength" : 350,
+            "minLength" : 0,
+            "example" : "f3f18b9215014f0d9ded3045af020811"
+          },
+          "trace_name" : {
+            "type" : "string",
+            "description" : "标识查询事件列表对应的事件名称。由0-9,a-z,A-Z,'-','.','_',组成,长度为1~64个字符,且以首字符必须为字母。",
+            "maxLength" : 100,
+            "minLength" : 1,
+            "example" : "login"
+          },
+          "trace_rating" : {
+            "type" : "string",
+            "description" : "标识事件等级,目前有三种:正常(normal),警告(warning),事故(incident)。",
+            "enum" : [ "normal", "warning", "incident" ],
+            "example" : "normal"
+          },
+          "trace_type" : {
+            "type" : "string",
+            "description" : "标识事件发生源头类型,管理类事件主要包括API调用(ApiCall),Console页面调用(ConsoleAction)和系统间调用(SystemAction)。",
+            "maxLength" : 20,
+            "minLength" : 5,
+            "example" : "ConsoleAction"
+          },
+          "request" : {
+            "type" : "string",
+            "description" : "标识事件对应接口请求内容,即资源操作请求体。",
+            "maxLength" : 5000,
+            "minLength" : 0,
+            "example" : "{xxx}"
+          },
+          "response" : {
+            "type" : "string",
+            "description" : "记录用户请求的响应,标识事件对应接口响应内容,即资源操作结果返回体。",
+            "maxLength" : 5000,
+            "minLength" : 0,
+            "example" : "{xxx}"
+          },
+          "code" : {
+            "type" : "string",
+            "description" : "记录用户请求的响应,标识事件对应接口返回的HTTP状态码。",
+            "maxLength" : 20,
+            "minLength" : 0,
+            "example" : "302"
+          },
+          "api_version" : {
+            "type" : "string",
+            "description" : "标识事件对应的云服务接口版本。",
+            "maxLength" : 10,
+            "minLength" : 0,
+            "example" : "2.0"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "标识其他云服务为此条事件添加的备注信息。",
+            "maxLength" : 5000,
+            "minLength" : 0,
+            "example" : "xxx"
+          },
+          "record_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "标识云审计服务记录本次事件的时间戳。",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000,
+            "example" : "1567477476596"
+          },
+          "trace_id" : {
+            "type" : "string",
+            "description" : "标识事件的ID,由系统生成的UUID。",
+            "maxLength" : 200,
+            "minLength" : 1,
+            "example" : "e001ccb9-bc09-11e6-b00b-4b2a61338db6"
+          },
+          "time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "标识事件产生的时间戳。",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000,
+            "example" : "1567477476596"
+          },
+          "user" : {
+            "description" : "标识触发事件的用户信息。",
+            "$ref" : "#/components/schemas/UserInfo"
+          },
+          "service_type" : {
+            "type" : "string",
+            "description" : "标识查询事件列表对应的云服务类型。必须为已对接CTS的云服务的英文缩写,且服务类型一般为大写字母。",
+            "maxLength" : 36,
+            "minLength" : 0,
+            "example" : "ECS"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "查询事件列表对应的资源类型。",
+            "maxLength" : 100,
+            "minLength" : 0,
+            "example" : "user"
+          },
+          "source_ip" : {
+            "type" : "string",
+            "description" : "标识触发事件的租户IP。",
+            "maxLength" : 256,
+            "minLength" : 0,
+            "example" : "xx.xx.xx.xx"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "标识事件对应的资源名称。",
+            "maxLength" : 300,
+            "minLength" : 0,
+            "example" : "paas_cts"
+          },
+          "request_id" : {
+            "type" : "string",
+            "description" : "记录本次请求的request id",
+            "maxLength" : 300,
+            "minLength" : 0,
+            "example" : "16xxf66e7xxxxx7acb99a463e610764"
+          },
+          "location_info" : {
+            "type" : "string",
+            "description" : "记录本次请求出错后,问题定位所需要的辅助信息。",
+            "maxLength" : 300,
+            "minLength" : 1,
+            "example" : "resource has been deleted"
+          },
+          "endpoint" : {
+            "type" : "string",
+            "description" : "云资源的详情页面",
+            "maxLength" : 500,
+            "minLength" : 0,
+            "example" : "https://*****/vpc?agencyId=***&region=***&locale=zh-cn#"
+          },
+          "resource_url" : {
+            "type" : "string",
+            "description" : "云资源的详情页面的访问链接(不含endpoint)",
+            "maxLength" : 300,
+            "minLength" : 0,
+            "example" : "/vpc/vpcmanager/vpcs?vpcid=*****"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "标识资源所在的企业项目ID。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "resource_account_id" : {
+            "type" : "string",
+            "description" : "标识资源所在的账号ID。仅在跨租户操作资源时有值。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "read_only" : {
+            "type" : "boolean",
+            "description" : "标识用户请求是不是只读。"
+          },
+          "operation_id" : {
+            "type" : "string",
+            "description" : "记录事件对应的操作ID。",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "type" : "object"
+      },
+      "Attributes" : {
+        "type" : "object",
+        "description" : "临时安全凭据的属性。",
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "description" : "颁发临时安全凭证时的时间(timestamp,为标准UTC时间,毫秒级,13位数字)。",
+            "minLength" : 1,
+            "maxLength" : 13
+          },
+          "mfa_authenticated" : {
+            "type" : "string",
+            "description" : "是否已经通过MFA身份认证。",
+            "minLength" : 1,
+            "maxLength" : 10
+          }
+        }
+      },
+      "UserInfo" : {
+        "description" : "用户信息。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "用户ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "maxLength" : 40,
+            "minLength" : 15
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "用户名称。",
+            "maxLength" : 300,
+            "minLength" : 0
+          },
+          "user_name" : {
+            "type" : "string",
+            "description" : "用户名称。",
+            "minLength" : 0,
+            "maxLength" : 300
+          },
+          "domain" : {
+            "description" : "标识触发事件的用户domain信息。",
+            "$ref" : "#/components/schemas/BaseUser"
+          },
+          "account_id" : {
+            "type" : "string",
+            "description" : "账号ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "minLength" : 15,
+            "maxLength" : 40
+          },
+          "access_key_id" : {
+            "type" : "string",
+            "description" : "访问密钥ID。",
+            "minLength" : 15,
+            "maxLength" : 40
+          },
+          "principal_urn" : {
+            "type" : "string",
+            "description" : "操作用户身份的 URN。",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "principal_id" : {
+            "type" : "string",
+            "description" : "操作用户身份Id。",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "principal_is_root_user" : {
+            "type" : "string",
+            "description" : "是否是根用户。",
+            "enum" : [ "true", "false" ],
+            "minLength" : 1,
+            "maxLength" : 10
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "操作者身份类型。",
+            "minLength" : 1,
+            "maxLength" : 30
+          },
+          "invoked_by" : {
+            "type" : "array",
+            "description" : "发出请求的服务的名称。控制台操作时为[\"service.console\" ]",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 20
+            },
+            "minItems" : 1,
+            "maxItems" : 1
+          },
+          "session_context" : {
+            "description" : "临时安全凭据属性。",
+            "$ref" : "#/components/schemas/SessionContext"
+          }
+        },
+        "type" : "object"
+      },
+      "MetaData" : {
+        "description" : "标识为扩展字段,包括count(当前响应中事件记录的个数)和marker(本次查询返回事件列表最后一个事件ID)。",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "标识本次查询事件列表返回的事件记录的总条数。",
+            "minimum" : 0,
+            "maximum" : 5000,
+            "example" : 2
+          },
+          "marker" : {
+            "type" : "string",
+            "maxLength" : 500,
+            "minLength" : 0,
+            "description" : "标识本次查询事件列表返回的最后一个事件ID。可以使用这个参数返回值作为分页请求参数next的值,如果marker返回为null,则表示当前请求条件下查询事件列表已经全部返回没有下一页。",
+            "example" : "e001ccb8-bc09-11e6-b2cc-2640a43cc6e8"
+          }
+        },
+        "type" : "object"
+      },
+      "BaseUser" : {
+        "description" : "用户信息。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "账号ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "maxLength" : 40,
+            "minLength" : 15
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "账号名称。",
+            "maxLength" : 300,
+            "minLength" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "ListTracesRsponse" : {
+        "properties" : {
+          "traces" : {
+            "maxItems" : 5000,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "本次查询事件列表返回事件数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/Traces"
+            }
+          },
+          "meta_data" : {
+            "description" : "本次查询事件条数和标记位。",
+            "$ref" : "#/components/schemas/MetaData"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListUserResources" : {
+      "get" : {
+        "tags" : [ "其它接口" ],
+        "summary" : "查询30天事件的操作用户列表",
+        "description" : "查询30天事件的操作用户列表。",
+        "operationId" : "ListUserResources",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResourceResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListUserResources",
+      "x-url" : "{endpoint}/v3/{project_id}/user-resources"
+    },
+    "/DeleteNotification" : {
+      "delete" : {
+        "tags" : [ "关键操作通知管理" ],
+        "summary" : "删除关键操作通知",
+        "description" : "云审计服务支持删除已创建的关键操作通知。",
+        "operationId" : "DeleteNotification",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源或部分关键操作通知删除失败。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成;或部分追踪器删除失败。"
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "notification_id",
+          "in" : "query",
+          "description" : "标识关键操作通知id。 批量删除请使用逗号隔开,notification_id=\"xxx1,cccc2\"",
+          "required" : true,
+          "schema" : {
+            "description" : "标识关键操作通知id。 批量删除请使用逗号隔开,notification_id=\"xxx1,cccc2\"",
+            "type" : "string",
+            "maxLength" : 400,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteNotification",
+      "x-url" : "{endpoint}/v3/{project_id}/notifications"
+    },
+    "/ListOperations" : {
+      "get" : {
+        "tags" : [ "其它接口" ],
+        "summary" : "查询云服务的全量操作列表",
+        "description" : "查询云服务的全量操作列表。",
+        "operationId" : "ListOperations",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "service_type",
+          "in" : "query",
+          "description" : "事件对应的云服务类型。",
+          "required" : false,
+          "schema" : {
+            "description" : "事件对应的云服务类型。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "query",
+          "description" : "事件对应的资源类型。传入该参数时,service_type必选。",
+          "required" : false,
+          "schema" : {
+            "description" : "事件对应的资源类型。传入该参数时,service_type必选。",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListOperations",
+      "x-url" : "{endpoint}/v3/{project_id}/operations"
+    },
+    "/ListQuotas" : {
+      "get" : {
+        "tags" : [ "其它接口" ],
+        "summary" : "查询租户追踪器配额信息",
+        "description" : "查询租户追踪器配额信息。",
+        "operationId" : "ListQuotas",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListQuotasResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "请求资源不存在,请求未完成。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQuotas",
+      "x-url" : "{endpoint}/v3/{project_id}/quotas"
+    },
+    "/CheckObsBuckets" : {
+      "post" : {
+        "tags" : [ "其它接口" ],
+        "summary" : "检查已经配置OBS桶是否可以成功转储",
+        "description" : "检查已经配置OBS桶是否可以成功转储。",
+        "operationId" : "CheckObsBuckets",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckBucketResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "账户id,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "账户id,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckObsBucketsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckObsBuckets",
+      "x-url" : "{endpoint}/v3/{domain_id}/checkbucket"
+    },
+    "/BatchCreateResourceTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量添加CTS资源标签",
+        "description" : "批量添加CTS资源标签。",
+        "operationId" : "BatchCreateResourceTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "创建成功。"
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求中的资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID。",
+            "type" : "string",
+            "maxLength" : 350,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "CTS服务的资源类型,目前仅支持cts-tracker。",
+          "required" : true,
+          "schema" : {
+            "description" : "CTS服务的资源类型,目前仅支持cts-tracker。",
+            "type" : "string",
+            "enum" : [ "cts-tracker" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateResourceTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateResourceTags",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags/create"
+    },
+    "/ListNotifications" : {
+      "get" : {
+        "tags" : [ "关键操作通知管理" ],
+        "summary" : "查询关键操作通知",
+        "description" : "查询创建的关键操作通知规则。",
+        "operationId" : "ListNotifications",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListNotificationResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源或部分关键操作通知删除失败。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成;或部分追踪器删除失败。"
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "notification_type",
+          "in" : "path",
+          "description" : "通知类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "通知类型。",
+            "type" : "string",
+            "enum" : [ "smn", "fun" ]
+          }
+        }, {
+          "name" : "notification_name",
+          "in" : "query",
+          "description" : "标识关键操作通知名称。 在不传入该字段的情况下,将查询当前租户所有的关键操作通知。",
+          "required" : false,
+          "schema" : {
+            "description" : "标识关键操作通知名称。 在不传入该字段的情况下,将查询当前租户所有的关键操作通知。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNotifications",
+      "x-url" : "{endpoint}/v3/{project_id}/notifications/{notification_type}"
+    },
+    "/UpdateNotification" : {
+      "put" : {
+        "tags" : [ "关键操作通知管理" ],
+        "summary" : "修改关键操作通知",
+        "description" : "云审计服务支持修改已创建关键操作通知配置项,通过notification_id的字段匹配修改对象,notification_id必须已经存在。",
+        "operationId" : "UpdateNotification",
+        "responses" : {
+          "200" : {
+            "description" : "修改关键操作通知成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateNotificationResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源或部分关键操作通知删除失败。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成;或部分追踪器删除失败。"
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateNotificationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNotification",
+      "x-url" : "{endpoint}/v3/{project_id}/notifications"
+    },
+    "/CreateTracker" : {
+      "post" : {
+        "tags" : [ "追踪器管理" ],
+        "summary" : "创建追踪器",
+        "description" : "云审计服务开通后系统会自动创建一个追踪器,用来关联系统记录的所有操作。目前,一个云账户在一个Region下支持创建一个管理类追踪器和多个数据类追踪器。",
+        "operationId" : "CreateTracker",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTrackerResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "请求中的资源不存在,请求未完成。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTrackerRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTracker",
+      "x-url" : "{endpoint}/v3/{project_id}/tracker"
+    },
+    "/CreateNotification" : {
+      "post" : {
+        "tags" : [ "关键操作通知管理" ],
+        "summary" : "创建关键操作通知",
+        "description" : "配置关键操作通知,可在发生特定操作时,使用预先创建好的SMN主题,向用户手机、邮箱发送消息,也可直接发送http/https消息。常用于实时感知高危操作、触发特定操作或对接用户自有审计分析系统。",
+        "operationId" : "CreateNotification",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateNotificationResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源或部分关键操作通知删除失败。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成;或部分追踪器删除失败。"
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateNotificationRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNotification",
+      "x-url" : "{endpoint}/v3/{project_id}/notifications"
+    },
+    "/DeleteTracker" : {
+      "delete" : {
+        "tags" : [ "追踪器管理" ],
+        "summary" : "删除追踪器",
+        "description" : "云审计服务目前仅支持删除已创建的数据类追踪器。删除追踪器对已有的操作记录没有影响,当您重新开通云审计服务后,依旧可以查看已有的操作记录。",
+        "operationId" : "DeleteTracker",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源或部分追踪器删除失败。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成;或部分追踪器删除失败。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "tracker_name",
+          "in" : "query",
+          "description" : "标识追踪器名称。",
+          "required" : false,
+          "schema" : {
+            "example" : "system",
+            "description" : "标识追踪器名称。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "tracker_type",
+          "in" : "query",
+          "description" : "标识追踪器类型。",
+          "required" : false,
+          "schema" : {
+            "example" : "data",
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "enum" : [ "data", "system" ]
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTracker",
+      "x-url" : "{endpoint}/v3/{project_id}/trackers"
+    },
+    "/UpdateTracker" : {
+      "put" : {
+        "tags" : [ "追踪器管理" ],
+        "summary" : "修改追踪器",
+        "description" : "云审计服务支持修改已创建追踪器的配置项,包括OBS桶转储、关键事件通知、事件转储加密、通过LTS对管理类事件进行检索、事件文件完整性校验以及追踪器启停状态等相关参数,修改追踪器对已有的操作记录没有影响。修改追踪器完成后,系统立即以新的规则开始记录操作。",
+        "operationId" : "UpdateTracker",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求正常。"
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "服务器无法找到被请求的资源。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTrackerRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTracker",
+      "x-url" : "{endpoint}/v3/{project_id}/tracker"
+    },
+    "/BatchDeleteResourceTags" : {
+      "delete" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量删除CTS资源标签",
+        "description" : "批量删除CTS资源标签。",
+        "operationId" : "BatchDeleteResourceTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "删除成功。"
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求中的资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID。",
+            "type" : "string",
+            "maxLength" : 350,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "CTS服务的资源类型,目前仅支持cts-tracker。",
+          "required" : true,
+          "schema" : {
+            "description" : "CTS服务的资源类型,目前仅支持cts-tracker。",
+            "type" : "string",
+            "enum" : [ "cts-tracker" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchDeleteResourceTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteResourceTags",
+      "x-url" : "{endpoint}/v3/{project_id}/{resource_type}/{resource_id}/tags/delete"
+    },
+    "/ListTraceResources" : {
+      "get" : {
+        "tags" : [ "其它接口" ],
+        "summary" : "查询事件的资源类型列表",
+        "description" : "查询事件的资源类型列表。",
+        "operationId" : "ListTraceResources",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTraceResourcesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求资源不存在,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "被请求的服务无效。建议直接修改该请求,不要重试该请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "账户id,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "description" : "账户id,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTraceResources",
+      "x-url" : "{endpoint}/v3/{domain_id}/resources"
+    },
+    "/ListTrackers" : {
+      "get" : {
+        "tags" : [ "追踪器管理" ],
+        "summary" : "查询追踪器",
+        "description" : "开通云审计服务成功后,您可以在追踪器信息页面查看追踪器的详细信息。详细信息主要包括追踪器名称,用于存储操作事件的OBS桶名称和OBS桶中的事件文件前缀。",
+        "operationId" : "ListTrackers",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTrackerResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "服务器未能处理请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "tracker_name",
+          "in" : "query",
+          "description" : "标示追踪器名称。",
+          "required" : false,
+          "schema" : {
+            "example" : "system",
+            "description" : "标示追踪器名称。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "tracker_type",
+          "in" : "query",
+          "description" : "标识追踪器类型。",
+          "required" : false,
+          "schema" : {
+            "example" : "system",
+            "description" : "标识追踪器类型。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "enum" : [ "system", "data" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTrackers",
+      "x-url" : "{endpoint}/v3/{project_id}/trackers"
+    },
+    "/ListTraces" : {
+      "get" : {
+        "tags" : [ "事件管理" ],
+        "summary" : "查询事件列表",
+        "description" : "通过事件列表查询接口,可以查出系统记录的7天内资源操作记录。",
+        "operationId" : "ListTraces",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求正常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTracesRsponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "查询参数异常,请求未完成。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailedRsp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "请求鉴权校验失败,访问被拒绝。"
+          },
+          "403" : {
+            "description" : "请求权限校验失败,访问被禁止。"
+          },
+          "404" : {
+            "description" : "查询事件不存在,请求未完成。"
+          },
+          "500" : {
+            "description" : "服务内部异常,请求未完成。"
+          },
+          "503" : {
+            "description" : " 被请求的服务无效。建议直接修改该请求,不要重试该请求。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID,参见《云审计服务API参考》“获取账号ID和项目ID”章节。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        }, {
+          "name" : "trace_type",
+          "in" : "query",
+          "description" : "标识审计事件类型。",
+          "required" : true,
+          "schema" : {
+            "example" : "system",
+            "description" : "标识审计事件类型。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1,
+            "enum" : [ "system", "data" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "标示查询事件列表中限定返回的事件条数。不传时默认10条,最大值200条。",
+          "required" : false,
+          "schema" : {
+            "example" : 11,
+            "description" : "标示查询事件列表中限定返回的事件条数。不传时默认10条,最大值200条。",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 200,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "from",
+          "in" : "query",
+          "description" : "标识查询事件列表的起始时间戳(timestamp,为标准UTC时间,毫秒级,13位数字,不包括传入时间)默认为上一小时的时间戳。查询条件from与to配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : 1478490478000,
+            "description" : "标识查询事件列表的起始时间戳(timestamp,为标准UTC时间,毫秒级,13位数字,不包括传入时间)默认为上一小时的时间戳。查询条件from与to配套使用。",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000
+          }
+        }, {
+          "name" : "next",
+          "in" : "query",
+          "description" : "取值为响应中中marker的值,用于标识查询事件的起始时间(自此条事件的记录时间起,向更早时间查询)。",
+          "required" : false,
+          "schema" : {
+            "example" : "1478490478000",
+            "description" : "取值为响应中中marker的值,用于标识查询事件的起始时间(自此条事件的记录时间起,向更早时间查询)。",
+            "type" : "string",
+            "maxLength" : 50,
+            "minLength" : 10
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "标识查询事件列表的结束时间戳(timestamp,为标准UTC时间,毫秒级,13位数字,不包括传入时间)默认为当前时间戳。查询条件to与from配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : 1479095278000,
+            "description" : "标识查询事件列表的结束时间戳(timestamp,为标准UTC时间,毫秒级,13位数字,不包括传入时间)默认为当前时间戳。查询条件to与from配套使用。",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 4102416000000,
+            "minimum" : 946656000000
+          }
+        }, {
+          "name" : "tracker_name",
+          "in" : "query",
+          "description" : "当\"trace_type\"字段值为\"system\"时,该字段值默认为\"system\"。",
+          "required" : false,
+          "schema" : {
+            "example" : "data-tracker-name",
+            "description" : "当\"trace_type\"字段值为\"system\"时,该字段值默认为\"system\"。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "service_type",
+          "in" : "query",
+          "description" : "标识查询事件列表对应的云服务类型。必须为已对接CTS的云服务的英文缩写,且服务类型一般为大写字母。",
+          "required" : false,
+          "schema" : {
+            "example" : "CTS",
+            "description" : "标识查询事件列表对应的云服务类型。必须为已对接CTS的云服务的英文缩写,且服务类型一般为大写字母。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "user",
+          "in" : "query",
+          "description" : "标识特定用户名称,用以查询该用户下的所有事件。",
+          "required" : false,
+          "schema" : {
+            "example" : {
+              "name" : "xxx",
+              "id" : "a2e899190fcd444084a68fc0ac2sc1e9",
+              "domain" : {
+                "name" : "xxx",
+                "id" : "05b2598d69bc4a209f9ac5eeeb1f91ad"
+              }
+            },
+            "description" : "标识特定用户名称,用以查询该用户下的所有事件。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的云服务资源ID。",
+          "required" : false,
+          "schema" : {
+            "example" : "d502809d-0d1d-41ce-9690-784282142ccc",
+            "description" : "标示查询事件列表对应的云服务资源ID。",
+            "type" : "string",
+            "maxLength" : 350,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "resource_name",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的的资源名称。",
+          "required" : false,
+          "schema" : {
+            "example" : "192.144.163.1",
+            "description" : "标示查询事件列表对应的的资源名称。",
+            "type" : "string",
+            "maxLength" : 300,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的资源类型。",
+          "required" : false,
+          "schema" : {
+            "example" : "eip",
+            "description" : "标示查询事件列表对应的资源类型。",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "trace_id",
+          "in" : "query",
+          "description" : "标示某一条事件的事件ID。当传入这个查询条件时,其他查询条件自动不生效。",
+          "required" : false,
+          "schema" : {
+            "example" : "e001ccb9-bc09-11e6-b00b-4b2a61338db6",
+            "description" : "标示某一条事件的事件ID。当传入这个查询条件时,其他查询条件自动不生效。",
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "trace_name",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的事件名称。",
+          "required" : false,
+          "schema" : {
+            "example" : "createTracker",
+            "description" : "标示查询事件列表对应的事件名称。",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "trace_rating",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的事件等级目前有三种:正常(normal), 警告(warning),事故(incident)。",
+          "required" : false,
+          "schema" : {
+            "example" : "normal",
+            "description" : "标示查询事件列表对应的事件等级目前有三种:正常(normal), 警告(warning),事故(incident)。",
+            "type" : "string",
+            "maxLength" : 10,
+            "minLength" : 5,
+            "enum" : [ "normal", "warning", "incident" ]
+          }
+        }, {
+          "name" : "access_key_id",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的访问密钥ID。包含临时访问凭证和永久访问密钥。",
+          "required" : false,
+          "schema" : {
+            "description" : "标示查询事件列表对应的访问密钥ID。包含临时访问凭证和永久访问密钥。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "标示查询事件列表对应的企业项目ID。",
+          "required" : false,
+          "schema" : {
+            "description" : "标示查询事件列表对应的企业项目ID。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 15
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTraces",
+      "x-url" : "{endpoint}/v3/{project_id}/traces"
+    }
+  }
+}

@@ -1,0 +1,4791 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VPCEP-终端节点服务功能",
+    "title" : "VPCEP",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "PolicyStatement" : {
+        "description" : "policy",
+        "properties" : {
+          "Effect" : {
+            "type" : "string",
+            "description" : "- Allow,允许控制访问权限",
+            "enum" : [ "Allow", "Deny" ]
+          },
+          "Action" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "obs访问权限"
+          },
+          "Resource" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "obs对象"
+          }
+        },
+        "required" : [ "Effect", "Action", "Resource" ],
+        "type" : "object"
+      },
+      "TagList" : {
+        "description" : "标签列表,没有标签默认为空数组。",
+        "properties" : {
+          "key" : {
+            "description" : "键。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "value" : {
+            "description" : "值。",
+            "type" : "string",
+            "maxLength" : 255
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointPolicyRequestBody" : {
+        "description" : "更新终端节点policy请求结构体",
+        "properties" : {
+          "policy_statement" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          }
+        },
+        "type" : "object"
+      },
+      "EndpointPolicyResponseBody" : {
+        "description" : "终端节点policy响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_type" : {
+            "description" : "终端节点连接的终端节点服务类型。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string"
+          },
+          "active_status" : {
+            "description" : "账号状态。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "endpoint_service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "ip" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "访问所连接的终端节点服务的IP。"
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "error" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/QueryError"
+            },
+            "description" : "错误信息。"
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "ipv4或cidr。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "routetables" : {
+            "type" : "array",
+            "description" : "路由表ID列表。",
+            "items" : {
+              "description" : "路由表ID。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          },
+          "policy_statement" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          },
+          "endpoint_pool_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "待废弃,实例相关联的集群ID"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点关联的Public Border Group信息,只有当终端节点和边缘Pool相关联时才会返回该字段"
+          }
+        },
+        "type" : "object"
+      },
+      "QueryError" : {
+        "properties" : {
+          "error_code" : {
+            "description" : "错误编码。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 10
+          },
+          "error_message" : {
+            "description" : "错误信息。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "description" : "查询资源返回的异常信息",
+        "type" : "object"
+      },
+      "ResourceTag" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "键。最大长度128个unicode字符。"
+          },
+          "value" : {
+            "type" : "string",
+            "maxLength" : 255,
+            "description" : "值。action为create时必选,每个值最大长度255个unicode字符, 删除时如果value有值按照key/value删除, 如果value没值,则按照key删除。 value需要满足标签字符集规范。"
+          }
+        },
+        "required" : [ "key" ],
+        "type" : "object"
+      },
+      "BatchAddOrRemoveResourceInstanceRequestBody" : {
+        "description" : "批量添加或删除资源标签接口请求结构体",
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识:仅限于",
+            "enum" : [ "create", "delete" ]
+          }
+        },
+        "required" : [ "action" ],
+        "type" : "object"
+      },
+      "ServiceConnectionsResponseBody" : {
+        "properties" : {
+          "connections" : {
+            "type" : "array",
+            "description" : "连接列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectionEndpoints"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的终端节点总条数,不受分页(即limit、offset参数)影响。"
+          }
+        },
+        "description" : "查询连接终端节点服务的连接列表接口响应结构体",
+        "type" : "object"
+      },
+      "ConnectionEndpoints" : {
+        "description" : "终端节点列表",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "domain_id" : {
+            "description" : "用户的Domain ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "error" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/QueryError"
+            },
+            "description" : "错误信息。"
+          },
+          "status" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "终端节点连接描述。",
+            "minLength" : 0,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "VersionObject" : {
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "版本状态。   - CURRENT:表示该版本为主推版本。   - SUPPORT:表示为老版本,但是现在还在继续支持。   -DEPRECATED:表示为废弃版本,存在后续删除的可能。"
+          },
+          "id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 16,
+            "description" : "版本ID。"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "版本发布时间。采用UTC时间格式,格式为:YYYY-MMDDTHH:MM:SSZ",
+            "format" : "date-time"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "支持的版本号。"
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "支持的微版本号。若该版本API不支持微版本,则为空。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "API的URL地址",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          }
+        },
+        "description" : "描述VPCEP服务API版本信息列表",
+        "type" : "object"
+      },
+      "VersionsResponseBody" : {
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "VPC终端节点版本信息列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/VersionObject"
+            }
+          }
+        },
+        "description" : "查询API版本信息列表接口响应结构体",
+        "type" : "object"
+      },
+      "Link" : {
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "description" : "当前API版本的引用地址。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "发送的实体的MIME类型,取值为application/json。"
+          },
+          "rel" : {
+            "type" : "string",
+            "description" : "当前API版本和被引用地址的关系。"
+          }
+        },
+        "description" : "API的url地址",
+        "type" : "object"
+      },
+      "ProjectResourceTags" : {
+        "description" : "租户资源标签响应体",
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "包含标签,最多包含10个key,每个key下面的value最多10个,",
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10
+          }
+        },
+        "required" : [ "tags" ],
+        "type" : "object"
+      },
+      "TagValuesList" : {
+        "properties" : {
+          "key" : {
+            "description" : "键。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "values" : {
+            "description" : "值列表。",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255
+            },
+            "minItems" : 1,
+            "maxItems" : 1000
+          }
+        },
+        "required" : [ "key", "values" ],
+        "type" : "object"
+      },
+      "OperatePermissionsResponseBody" : {
+        "properties" : {
+          "permissions" : {
+            "type" : "array",
+            "description" : "permission列表。",
+            "items" : {
+              "description" : "IPV4或CIDR。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "permission_type" : {
+            "type" : "string",
+            "description" : "终端节点服务白名单类型。"
+          }
+        },
+        "description" : "批量添加或删除终端节点服务的白名单列表接口响应结构体",
+        "type" : "object"
+      },
+      "AddOrRemoveServicePermissionsRequestBody" : {
+        "description" : "操作权限请求结构体",
+        "properties" : {
+          "permissions" : {
+            "type" : "array",
+            "description" : "permission列表。",
+            "items" : {
+              "description" : "可连接的用户domian_id或者org_path。",
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 1024
+            },
+            "minItems" : 1,
+            "maxItems" : 50
+          },
+          "permission_type" : {
+            "type" : "string",
+            "enum" : [ "domainId", "orgPath" ],
+            "description" : "终端节点服务白名单类型。"
+          },
+          "action" : {
+            "description" : "要执行的操作。",
+            "type" : "string",
+            "enum" : [ "add", "remove" ],
+            "minLength" : 1,
+            "maxLength" : 32
+          }
+        },
+        "required" : [ "permissions", "action" ],
+        "type" : "object"
+      },
+      "EndpointService" : {
+        "description" : "终端节点服务列表",
+        "properties" : {
+          "id" : {
+            "description" : "公共终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "owner" : {
+            "description" : "终端节点服务的所有者。",
+            "type" : "string"
+          },
+          "service_name" : {
+            "description" : "公共终端节点服务的名称。",
+            "type" : "string"
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。",
+            "type" : "string"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的创建时间。"
+          },
+          "is_charge" : {
+            "type" : "boolean",
+            "description" : "连接该终端节点服务的终端节点是否计费。"
+          },
+          "enable_policy" : {
+            "type" : "boolean",
+            "description" : "是否允许自定义终端节点策略。"
+          }
+        },
+        "type" : "object"
+      },
+      "QueryPublicServiceResponseBody" : {
+        "properties" : {
+          "endpoint_services" : {
+            "type" : "array",
+            "description" : "终端节点服务列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/EndpointService"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的公共终端节点服务总条数,不受分页(即limit、offset参数)影响。"
+          }
+        },
+        "description" : "查询公共终端节点服务列表接口响应结构体",
+        "type" : "object"
+      },
+      "EpsRemovePermissionRequest" : {
+        "description" : "删除终端节点服务白名单请求体。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "终端节点服务白名单表主键ID",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "required" : [ "id" ],
+        "type" : "object"
+      },
+      "EpsPermissionResponseBody" : {
+        "description" : "终端节点服务白名单响应体",
+        "properties" : {
+          "permissions" : {
+            "type" : "array",
+            "description" : "终端节点服务白名单",
+            "items" : {
+              "$ref" : "#/components/schemas/EpsPermission"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "BatchRemoveEndpointServicePermissionsRequestBody" : {
+        "description" : "批量删除终端节点服务白名单列表。",
+        "properties" : {
+          "permissions" : {
+            "description" : "终端节点服务白名单",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EpsRemovePermissionRequest"
+            }
+          }
+        },
+        "required" : [ "permissions" ],
+        "type" : "object"
+      },
+      "EpsPermission" : {
+        "description" : "终端节点服务白名单响应体。",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "白名单表主键ID"
+          },
+          "permission" : {
+            "type" : "string",
+            "description" : "权限格式为:iam:domain::domain_id或者organizations:orgPath::org_path其中,",
+            "minLength" : 1,
+            "maxLength" : 1024
+          },
+          "permission_type" : {
+            "type" : "string",
+            "enum" : [ "domainId", "orgPath" ],
+            "description" : "终端节点服务白名单类型。"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "description" : "终端节点服务白名单描述"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "白名单创建时间"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointWhitelistResponseBody" : {
+        "description" : "终端节接口响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_type" : {
+            "description" : "终端节点连接的终端节点服务类型。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string"
+          },
+          "ip" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "访问所连接的终端节点服务的IP。"
+          },
+          "active_status" : {
+            "description" : "账号状态。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "endpoint_service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "enable_dns" : {
+            "description" : "是否创建域名。",
+            "type" : "boolean"
+          },
+          "dns_names" : {
+            "type" : "array",
+            "description" : "访问所连接的终端节点服务的域名。",
+            "items" : {
+              "description" : "域名。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "subnet_id" : {
+            "description" : "vpc_id对应VPC下已创建的网络(network)的ID,UUID格式。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "ipv4或cidr。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "policy_statement" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointWhiteRequestBody" : {
+        "description" : "更新终端节点白名单接口请求结构体",
+        "properties" : {
+          "whitelist" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            },
+            "description" : "更新或删除用于控制访问终端节点的白名单。此参数可以添加IPv4或CIDR:"
+          },
+          "enable_whitelist" : {
+            "type" : "boolean",
+            "description" : "是否开启网络ACL隔离。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointServiceRequestBody" : {
+        "description" : "修改终端节点服务接口请求结构体",
+        "properties" : {
+          "approval_enabled" : {
+            "description" : "是否需要审批。",
+            "type" : "boolean",
+            "default" : true
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称,长度不大于16,允许传入大小写字母、数字、下划线、中划线。",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9_-]{1,16}$",
+            "minLength" : 1,
+            "maxLength" : 16
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "服务开放的端口映射列表,同一个终端节点服务下,不允许重复的端口映射。 若多个终端节点服务共用一个port_id, 则终端节点之间服务的所有端口映射的server_port和protocol的组合不能重复, 单次最多添加200个。 该参数值将被全量更新。",
+            "items" : {
+              "$ref" : "#/components/schemas/PortList"
+            }
+          },
+          "port_id" : {
+            "description" : "弹性云服务器IP地址对应的网卡ID",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tcp_proxy" : {
+            "description" : "用于控制将哪些信息(如客户端的源IP、源端口、marker_id等)携带到服务端。",
+            "type" : "string",
+            "enum" : [ "close", "toa_open", "proxy_open", "open", "proxy_vni" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。",
+            "minLength" : 0,
+            "maxLength" : 512
+          },
+          "ip" : {
+            "description" : "接口型VLAN场景服务端IPv4地址或域名",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ServiceResponseBody" : {
+        "description" : "终端节点服务响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "port_id" : {
+            "description" : "标识终端节点服务后端资源的ID,",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "server_type" : {
+            "description" : "资源类型。",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "终端节点服务对应后端资源所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "pool_id" : {
+            "description" : "终端节点服务对应的集群id",
+            "type" : "string"
+          },
+          "approval_enabled" : {
+            "description" : "是否需要审批。",
+            "type" : "boolean"
+          },
+          "status" : {
+            "description" : "终端节点服务的状态。",
+            "type" : "string"
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 16
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "ip" : {
+            "description" : "接口型VLAN场景服务端IPv4地址或域名",
+            "type" : "string"
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "服务开放的端口映射列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PortList"
+            }
+          },
+          "tcp_proxy" : {
+            "description" : "用于控制将哪些信息(如客户端的源IP、源端口、marker_id等)携带到服务端。",
+            "type" : "string"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "资源标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。",
+            "minLength" : 0,
+            "maxLength" : 512
+          },
+          "enable_policy" : {
+            "type" : "boolean",
+            "description" : "是否允许自定义终端节点策略。"
+          },
+          "ip_version" : {
+            "type" : "string",
+            "description" : "指定终端节点服务的IP版本,仅专业型终端节点服务支持此参数",
+            "enum" : [ "ipv4", "ipv6" ]
+          }
+        },
+        "type" : "object"
+      },
+      "PortList" : {
+        "description" : "服务开放的端口映射列表",
+        "properties" : {
+          "client_port" : {
+            "description" : "终端节点访问的端口。",
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 65535
+          },
+          "server_port" : {
+            "description" : "终端节点服务的端口。",
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 65535
+          },
+          "protocol" : {
+            "description" : "端口映射协议,支持TCP。",
+            "type" : "string",
+            "default" : "TCP",
+            "enum" : [ "TCP" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ResourceInstance" : {
+        "description" : "资源实例详情",
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "资源ID,Endpoint Service ID或Endpoint ID。"
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表。",
+            "type" : "array"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 128,
+            "description" : "资源名称,资源没有名称时,返回ID。"
+          }
+        },
+        "type" : "object"
+      },
+      "TagResourceInstanceResponseBody" : {
+        "description" : "查询资源实例接口响应体",
+        "properties" : {
+          "resources" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceInstance"
+            },
+            "description" : "资源实例详情",
+            "type" : "array"
+          },
+          "total_count" : {
+            "description" : "总记录数。",
+            "minimum" : 1,
+            "exclusiveMaximum" : true,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "type" : "object"
+      },
+      "Match" : {
+        "properties" : {
+          "key" : {
+            "description" : "键。第一期限定为resource_name,后续扩展。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "value" : {
+            "description" : "值。每个值最大长度255个unicode字符。不校验字符集范。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255
+          }
+        },
+        "required" : [ "key", "value" ],
+        "type" : "object"
+      },
+      "QueryResourceInstanceTagsBody" : {
+        "description" : "查询资源实例接口请求结构体",
+        "properties" : {
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "包含标签,最多包含10个key,每个key下面的value最多10个,",
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "tags_any" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "包含任意标签,最多包含10个key,每个key下面的value最多10个,",
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "not_tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "不包含标签,最多包含10个key,每个key下面的value最多10个,",
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "not_tags_any" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "不包含任意标签,最多包含10个key,每个key下面的value最多10个,",
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "sys_tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TagValuesList"
+            },
+            "description" : "系统标签,"
+          },
+          "limit" : {
+            "type" : "string",
+            "description" : "查询记录数(action为count时无此参数)如果action为filter默认为1000,"
+          },
+          "offset" : {
+            "type" : "string",
+            "description" : "索引位置,偏移量(action为count时无此参数)从第一条数据偏移offset条数据后开始查询,"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "操作标识(仅限于filter,count):filter(过滤),",
+            "enum" : [ "filter", "count" ]
+          },
+          "matches" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Match"
+            },
+            "description" : "搜索字段,key为要匹配的字段,如resource_name等。value为匹配的值。",
+            "type" : "array"
+          },
+          "without_any_tag" : {
+            "type" : "boolean",
+            "description" : "默认为false,取值【true/false】,当withoutAnyTag=true, 忽略tags、tagsAny、notTags、notTagsAny参数校验。"
+          }
+        },
+        "required" : [ "action" ],
+        "type" : "object"
+      },
+      "VersionResponseBody" : {
+        "properties" : {
+          "version" : {
+            "$ref" : "#/components/schemas/VersionObject"
+          }
+        },
+        "required" : [ "version" ],
+        "type" : "object"
+      },
+      "RoutetableInfoResponseBody" : {
+        "description" : "更新终端节点白名单接口请求结构体",
+        "properties" : {
+          "routetables" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            },
+            "description" : "路由表ID列表。"
+          },
+          "error" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RoutetableInfoError"
+            },
+            "description" : "当修改终端节点子网路由表失败时,返回错误提示信息",
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointRoutetableRequestBody" : {
+        "description" : "更新终端节点路由表请求结构体",
+        "properties" : {
+          "routetables" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            },
+            "description" : "路由表ID列表。",
+            "minItems" : 1,
+            "maxItems" : 10
+          }
+        },
+        "required" : [ "routetables" ],
+        "type" : "object"
+      },
+      "RoutetableInfoErrorDetial" : {
+        "properties" : {
+          "id" : {
+            "description" : "路由表ID。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64
+          },
+          "error_message" : {
+            "description" : "详细错误信息。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "type" : "object"
+      },
+      "RoutetableInfoError" : {
+        "properties" : {
+          "bind_failed" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RoutetableInfoErrorDetial"
+            },
+            "type" : "array",
+            "description" : "绑定终端节点子网路由表失败信息。"
+          },
+          "unbind_failed" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RoutetableInfoErrorDetial"
+            },
+            "type" : "array",
+            "description" : "解绑终端节点子网路由表失败信息。"
+          }
+        },
+        "description" : "当修改终端节点子网路由表失败时,返回错误提示信息",
+        "type" : "object"
+      },
+      "CreateEndpointServiceRequestBody" : {
+        "description" : "创建终端节点服务接口请求结构体",
+        "properties" : {
+          "port_id" : {
+            "description" : "标识终端节点服务后端资源的ID,",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称,长度不大于16,允许传入大小写字母、数字、下划线、中划线。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 16
+          },
+          "vpc_id" : {
+            "description" : "终端节点服务对应后端资源所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "approval_enabled" : {
+            "description" : "是否需要审批。",
+            "enum" : [ false, true ],
+            "type" : "boolean",
+            "default" : true
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。",
+            "enum" : [ "gateway", "interface" ],
+            "type" : "string",
+            "default" : "interface"
+          },
+          "server_type" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "VM", "VIP", "LB" ]
+          },
+          "ip" : {
+            "description" : "接口型VLAN场景服务端IPv4地址或域名",
+            "type" : "string"
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "服务开放的端口映射列表,详细内容请参见表4-10。",
+            "items" : {
+              "$ref" : "#/components/schemas/PortList"
+            }
+          },
+          "tcp_proxy" : {
+            "description" : "用于控制将哪些信息(如客户端的源IP、源端口、marker_id等)携带到服务端。",
+            "type" : "string",
+            "default" : "close",
+            "enum" : [ "close", "toa_open", "proxy_open", "open", "proxy_vni" ]
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "资源标签列表。同一个终端节点服务最多可添加20个标签。",
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。\t",
+            "minLength" : 0,
+            "maxLength" : 512
+          },
+          "ip_version" : {
+            "type" : "string",
+            "description" : "指定终端节点服务的IP版本,仅专业型终端节点服务支持此参数",
+            "enum" : [ "ipv4", "ipv6" ]
+          },
+          "snat_network_id" : {
+            "type" : "string",
+            "pattern" : "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            "description" : "接口型snat的地址段,ip_version为ipv6时必选。创建服务时使用的VPC内的任意一个网络ID。当服务类型为VIP、VM、ELBV2类型时使用"
+          }
+        },
+        "required" : [ "port_id", "vpc_id", "server_type", "ports" ],
+        "type" : "object"
+      },
+      "QueryPermissionsResponseBody" : {
+        "properties" : {
+          "permissions" : {
+            "type" : "array",
+            "description" : "permission列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/PermissionObject"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的终端节点服务的白名单总条数,不受分页(即limit、offset参数)影响。"
+          }
+        },
+        "description" : "查询终端节点服务的白名单列表接口响应结构体",
+        "type" : "object"
+      },
+      "PermissionObject" : {
+        "description" : "permission列表。",
+        "properties" : {
+          "id" : {
+            "description" : "permission的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "permission" : {
+            "description" : "permission列表。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 1024
+          },
+          "permission_type" : {
+            "type" : "string",
+            "description" : "终端节点服务白名单类型。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "白名单的添加时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchAddEndpointServicePermissionsRequestBody" : {
+        "description" : "批量添加终端节点服务白名单列表。",
+        "properties" : {
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EpsAddPermissionRequest"
+            },
+            "description" : "终端节点服务白名单列表"
+          },
+          "permission_type" : {
+            "type" : "string",
+            "enum" : [ "domainId", "orgPath" ],
+            "description" : "终端节点服务白名单类型。"
+          }
+        },
+        "required" : [ "permissions" ],
+        "type" : "object"
+      },
+      "EpsAddPermissionRequest" : {
+        "description" : "添加终端节点服务白名单请求体。",
+        "properties" : {
+          "permission" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "description" : "权限格式为:iam:domain::domain_id或者organizations:orgPath::org_path其中,"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "description" : "终端节点服务白名单描述"
+          }
+        },
+        "required" : [ "permission", "description" ],
+        "type" : "object"
+      },
+      "Error" : {
+        "properties" : {
+          "message" : {
+            "description" : "任务异常错误信息描述",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "code" : {
+            "description" : "任务异常错误信息编码",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 10
+          }
+        },
+        "description" : "提交任务异常时返回的异常信息",
+        "type" : "object"
+      },
+      "ServiceList" : {
+        "properties" : {
+          "id" : {
+            "description" : "终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "port_id" : {
+            "description" : "标识终端节点服务后端资源的ID,",
+            "type" : "string"
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string",
+            "pattern" : "^[a-zA-Z0-9_-]{1,16}$"
+          },
+          "server_type" : {
+            "description" : "资源类型。",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "终端节点服务对应后端资源所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "approval_enabled" : {
+            "description" : "是否需要审批。",
+            "type" : "boolean"
+          },
+          "status" : {
+            "description" : "终端节点服务的状态。",
+            "type" : "string"
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。",
+            "type" : "string"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "domain_id" : {
+            "description" : "Domain ID",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "服务开放的端口映射列表",
+            "items" : {
+              "$ref" : "#/components/schemas/PortList"
+            }
+          },
+          "ip" : {
+            "description" : "接口型VLAN场景服务端IPv4地址或域名",
+            "type" : "string"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "资源标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            }
+          },
+          "connection_count" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "format" : "int32",
+            "description" : "终端节点服务下连接的状态为“创建中”或“已接受”的终端节点的个数。"
+          },
+          "tcp_proxy" : {
+            "description" : "用于控制将哪些信息(如客户端的源IP、源端口、marker_id等)携带到服务端。",
+            "type" : "string"
+          },
+          "error" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "description" : "提交任务异常时返回的异常信息",
+            "type" : "array"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          },
+          "supported_editions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "终端节点服务支持的类型,取值范围为profession-专业型,basic-基础型"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点服务对应Pool的Public Border Group信息"
+          },
+          "enable_policy" : {
+            "type" : "boolean",
+            "description" : "是否允许自定义终端节点策略。"
+          }
+        },
+        "type" : "object"
+      },
+      "ServiceListResponseBody" : {
+        "properties" : {
+          "endpoint_services" : {
+            "type" : "array",
+            "description" : "终端节点服务列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ServiceList"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的终端节点服务总条数,不受分页(即limit、offset参数)影响。"
+          }
+        },
+        "description" : "查询终端节点服务列表接口响应结构体",
+        "type" : "object"
+      },
+      "EpsUpdatePermissionDesc" : {
+        "description" : "更新终端节点服务白名单描述请求体。",
+        "properties" : {
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "description" : "终端节点服务白名单描述"
+          }
+        },
+        "required" : [ "description" ],
+        "type" : "object"
+      },
+      "UpdateEndpointServicePermissionDescRequestBody" : {
+        "description" : "更新终端节点服务白名单描述",
+        "properties" : {
+          "permission" : {
+            "description" : "更新终端节点服务白名单描述的请求体",
+            "$ref" : "#/components/schemas/EpsUpdatePermissionDesc"
+          }
+        },
+        "required" : [ "permission" ],
+        "type" : "object"
+      },
+      "EndpointInfoResponseBody" : {
+        "description" : "终端节接口响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_type" : {
+            "description" : "终端节点连接的终端节点服务类型。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string"
+          },
+          "active_status" : {
+            "description" : "账号状态。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "enable_status" : {
+            "description" : "终端节点是否可用。",
+            "type" : "string"
+          },
+          "specification_name" : {
+            "description" : "终端节点服务规格的名称。",
+            "type" : "string"
+          },
+          "endpoint_service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "enable_dns" : {
+            "description" : "是否创建域名。",
+            "type" : "boolean"
+          },
+          "dns_names" : {
+            "type" : "array",
+            "description" : "访问所连接的终端节点服务的域名。",
+            "items" : {
+              "description" : "域名。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "ip" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "访问所连接的终端节点服务的IP。"
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "subnet_id" : {
+            "description" : "vpc_id对应VPC下已创建的网络(network)的ID,UUID格式。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "error" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/QueryError"
+            }
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "ipv4或cidr。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "routetables" : {
+            "type" : "array",
+            "description" : "路由表ID列表。",
+            "items" : {
+              "description" : "路由表ID。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          },
+          "policy_statement" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          },
+          "endpoint_pool_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "待废弃,实例相关联的集群ID"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点对应Pool的Public Border Group信息"
+          },
+          "ipv6_address" : {
+            "type" : "string",
+            "description" : "访问所连接的终端节点服务的IPv6的地址。",
+            "format" : "ipv6"
+          }
+        },
+        "type" : "object"
+      },
+      "QueryServiceDescribeResponseBody" : {
+        "description" : "查询终端节点服务列表信息",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。仅支持将用户私有服务创建为interface类型的终端节点服务。",
+            "type" : "string"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的创建时间。"
+          },
+          "is_charge" : {
+            "type" : "boolean",
+            "description" : "连接该终端节点服务的终端节点是否计费。"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点对应Pool的Public Border Group信息"
+          },
+          "enable_policy" : {
+            "type" : "boolean",
+            "description" : "是否允许自定义终端节点策略。"
+          }
+        },
+        "type" : "object"
+      },
+      "EndpointListResponseBody" : {
+        "properties" : {
+          "endpoints" : {
+            "type" : "array",
+            "description" : "终端节点列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/EndpointResponseBody"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的终端节点总条数,不受分页(即limit、offset参数)影响。"
+          }
+        },
+        "description" : "查询终端节点列表接口响应结构体",
+        "type" : "object"
+      },
+      "EndpointResponseBody" : {
+        "description" : "终端节接口响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_type" : {
+            "description" : "终端节点连接的终端节点服务类型。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string"
+          },
+          "active_status" : {
+            "description" : "账号状态。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "endpoint_service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "enable_dns" : {
+            "description" : "是否创建域名。",
+            "type" : "boolean"
+          },
+          "dns_names" : {
+            "type" : "array",
+            "description" : "访问所连接的终端节点服务的域名。",
+            "items" : {
+              "description" : "域名。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "ip" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "访问所连接的终端节点服务的IP。"
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "subnet_id" : {
+            "description" : "vpc_id对应VPC下已创建的网络(network)的ID,UUID格式。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "error" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/QueryError"
+            },
+            "description" : "错误信息。"
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "ipv4或cidr。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "routetables" : {
+            "type" : "array",
+            "description" : "路由表ID列表。",
+            "items" : {
+              "description" : "路由表ID。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          },
+          "policy_statement" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          },
+          "endpoint_pool_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "待废弃,实例相关联的集群ID"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点关联的Public Border Group信息,只有当终端节点和边缘Pool相关联时才会返回该字段"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointConnectionsDescRequestBody" : {
+        "properties" : {
+          "connections" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectionsDesc"
+            },
+            "description" : "连接管理描述字段列表"
+          }
+        },
+        "required" : [ "connections" ],
+        "type" : "object"
+      },
+      "ConnectionEndpointResponseBody" : {
+        "description" : "连接终端节点响应结构体",
+        "properties" : {
+          "connections" : {
+            "type" : "array",
+            "description" : "连接列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectionEndpoints"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ConnectionsDesc" : {
+        "required" : [ "id", "description" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "终端节点ID,UUID格式字符"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          }
+        },
+        "type" : "object"
+      },
+      "Quotas" : {
+        "description" : "创建配额接口请求结构体",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "资源类型。支持根据资源类型过滤查询指定类型的配额。"
+          },
+          "used" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "description" : "已创建的资源个数。"
+          },
+          "quota" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "description" : "资源的最大配额数。"
+          }
+        },
+        "type" : "object"
+      },
+      "QuotasResponseBody" : {
+        "description" : "查询配额接口响应结构体",
+        "properties" : {
+          "quotas" : {
+            "$ref" : "#/components/schemas/ResourcesResponseBody"
+          }
+        },
+        "type" : "object"
+      },
+      "ResourcesResponseBody" : {
+        "description" : "查询配额接口响应结构体",
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "description" : "资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Quotas"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "AcceptOrRejectEndpointRequestBody" : {
+        "description" : "连接终端节点列表请求结构体",
+        "properties" : {
+          "action" : {
+            "description" : "允许或拒绝连接。",
+            "type" : "string",
+            "enum" : [ "receive", "reject" ]
+          },
+          "endpoints" : {
+            "type" : "array",
+            "description" : "终端节点ID列表。",
+            "items" : {
+              "description" : "string类型。",
+              "type" : "string"
+            },
+            "minItems" : 1,
+            "maxItems" : 1
+          }
+        },
+        "required" : [ "action", "endpoints" ],
+        "type" : "object"
+      },
+      "ServiceDetailsResponseBody" : {
+        "properties" : {
+          "id" : {
+            "description" : "终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "port_id" : {
+            "description" : "标识终端节点服务后端资源的ID,",
+            "type" : "string"
+          },
+          "service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "server_type" : {
+            "description" : "资源类型。",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "终端节点服务对应后端资源所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "approval_enabled" : {
+            "description" : "是否需要审批。",
+            "type" : "boolean"
+          },
+          "status" : {
+            "description" : "终端节点服务的状态。",
+            "type" : "string"
+          },
+          "service_type" : {
+            "description" : "终端节点服务类型。",
+            "type" : "string"
+          },
+          "supported_editions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "终端节点服务支持的类型,取值范围为profession-专业型,basic-基础型"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点服务的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "cidr_type" : {
+            "type" : "string",
+            "description" : "网段类型。"
+          },
+          "ip" : {
+            "description" : "接口型VLAN场景服务端IPv4地址或域名",
+            "type" : "string"
+          },
+          "ports" : {
+            "type" : "array",
+            "description" : "服务开放的端口映射列表,详细内容请参见表4-17",
+            "items" : {
+              "$ref" : "#/components/schemas/PortList"
+            }
+          },
+          "tcp_proxy" : {
+            "description" : "用于控制将哪些信息(如客户端的源IP、源端口、marker_id等)携带到服务端。",
+            "type" : "string"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "资源标签列表",
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            }
+          },
+          "error" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "description" : "提交任务异常时返回的异常信息",
+            "type" : "array"
+          },
+          "enable_policy" : {
+            "type" : "boolean",
+            "description" : "是否允许自定义终端节点策略。"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 512,
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateEndpointServiceNameRequestBody" : {
+        "description" : "修改终端节点服务名称",
+        "properties" : {
+          "endpoint_service_name" : {
+            "type" : "string",
+            "description" : "终端节点服务名称"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateEndpointRequestBody" : {
+        "description" : "创建终端节接口请求结构体",
+        "properties" : {
+          "subnet_id" : {
+            "description" : "创建连接Interface类型终端节点服务的终端节点时,此参数必选。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "enable_dns" : {
+            "description" : "是否创建域名。",
+            "type" : "boolean",
+            "default" : false
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "routetables" : {
+            "type" : "array",
+            "description" : "路由表ID列表。",
+            "items" : {
+              "description" : "路由表ID。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            },
+            "minItems" : 1,
+            "maxItems" : 10
+          },
+          "port_ip" : {
+            "type" : "string",
+            "description" : "访问所连接的终端节点服务的IP。",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "添加用于控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "IPv4或CIDR。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述字段,支持中英文字母、数字等字符,不支持“<”或“>”字符。",
+            "minLength" : 0,
+            "maxLength" : 512
+          },
+          "policy_statement" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          },
+          "ip_version" : {
+            "type" : "string",
+            "description" : "指定终端节点的IP版本,仅专业型终端节点支持此参数。",
+            "enum" : [ "ipv4", "dualstack" ]
+          },
+          "ipv6_address" : {
+            "type" : "string",
+            "description" : "访问所连接的终端节点服务的IPv6的地址。",
+            "format" : "ipv6"
+          }
+        },
+        "required" : [ "endpoint_service_id", "vpc_id" ],
+        "type" : "object"
+      },
+      "CreateEndpointResponseBody" : {
+        "description" : "终端节接口响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "service_type" : {
+            "description" : "终端节点连接的终端节点服务类型。 ",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "终端节点的状态。",
+            "type" : "string"
+          },
+          "ip" : {
+            "description" : "终端节点ip",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "active_status" : {
+            "description" : "账号状态。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "endpoint_service_name" : {
+            "description" : "终端节点服务的名称。",
+            "type" : "string"
+          },
+          "marker_id" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "integer"
+          },
+          "endpoint_service_id" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "enable_dns" : {
+            "description" : "是否创建域名。",
+            "type" : "boolean"
+          },
+          "subnet_id" : {
+            "description" : "vpc_id对应VPC下已创建的网络(network)的ID,UUID格式。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "vpc_id" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "终端节点的更新时间。"
+          },
+          "project_id" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "tags" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TagList"
+            },
+            "description" : "标签列表,没有标签默认为空数组。",
+            "type" : "array"
+          },
+          "whitelist" : {
+            "type" : "array",
+            "description" : "控制访问终端节点的白名单。",
+            "items" : {
+              "description" : "ipv4或cidr。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 32
+            }
+          },
+          "enable_whitelist" : {
+            "description" : "是否开启网络ACL隔离。",
+            "type" : "boolean"
+          },
+          "routetables" : {
+            "type" : "array",
+            "description" : "路由表ID列表。",
+            "items" : {
+              "description" : "路由表ID。",
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 64
+            }
+          },
+          "specification_name" : {
+            "type" : "string",
+            "description" : "规格名称"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 128,
+            "description" : "描述"
+          },
+          "policy_statement" : {
+            "minItems" : 0,
+            "maxItems" : 10,
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PolicyStatement"
+            },
+            "description" : "Gateway类型终端节点策略信息,仅限OBS、SFS的终端节点服务的enable_policy值为true时支持该参数。"
+          },
+          "policy_document" : {
+            "type" : "object",
+            "description" : "终端节点策略信息,仅当终端节点服务的enable_policy值为true时支持该参数,默认值为完全访问权限。(OBS、SFS的终端节点服务暂不支持该参数)",
+            "minItems" : 0,
+            "maxItems" : 20480
+          },
+          "enable_status" : {
+            "type" : "string",
+            "description" : "终端节点是否可用。"
+          },
+          "endpoint_pool_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "待废弃,实例相关联的集群ID"
+          },
+          "public_border_group" : {
+            "type" : "string",
+            "description" : "终端节点对应Pool的Public Border Group信息"
+          },
+          "ipv6_address" : {
+            "type" : "string",
+            "description" : "终端节点的IPv6地址,仅专业型终端节点支持此参数",
+            "format" : "ipv6"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DeleteEndpointService" : {
+      "delete" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "删除终端节点服务",
+        "description" : "删除终端节点服务。",
+        "operationId" : "DeleteEndpointService",
+        "responses" : {
+          "204" : {
+            "description" : "服务器已成功处理了请求"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEndpointService",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}"
+    },
+    "/UpdateEndpointPolicy" : {
+      "put" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "修改终端节点策略",
+        "description" : "修改终端节点策略。",
+        "operationId" : "UpdateEndpointPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EndpointPolicyResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointPolicyRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointPolicy",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}/policy"
+    },
+    "/BatchAddOrRemoveResourceInstance" : {
+      "post" : {
+        "tags" : [ "TAG功能" ],
+        "summary" : "批量添加或删除资源标签接口",
+        "description" : "为指定Endpoint Service或Endpoint批量添加或删除标签。",
+        "operationId" : "BatchAddOrRemoveResourceInstance",
+        "responses" : {
+          "204" : {
+            "description" : "服务器已成功处理了请求"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "endpoint_service", "endpoint" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID,Endpoint Service ID或Endpoint ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源ID,Endpoint Service ID或Endpoint ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchAddOrRemoveResourceInstanceRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddOrRemoveResourceInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/{resource_id}/tags/action"
+    },
+    "/ListServiceConnections" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询连接终端节点服务的连接列表",
+        "description" : "查询连接当前用户下的某一个终端节点服务的连接列表。marker_id是连接的唯一标识。",
+        "operationId" : "ListServiceConnections",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceConnectionsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "终端节点的ID,唯一标识。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "marker_id",
+          "in" : "query",
+          "description" : "终端节点的报文标识。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点的报文标识。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "终端节点的连接状态。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点的连接状态。",
+            "type" : "string",
+            "enum" : [ "pendingAcceptance", "accepted", "rejected", "failed" ]
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "查询结果中终端节点列表的排序字段,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点列表的排序字段,取值为:",
+            "type" : "string",
+            "default" : "create_at",
+            "enum" : [ "create_at", "update_at" ]
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "查询结果中终端节点列表的排序方式,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点列表的排序方式,取值为:",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回终端节点服务的连接列表限制每页个数,即每页返回的个数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回终端节点服务的连接列表限制每页个数,即每页返回的个数。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListServiceConnections",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/connections"
+    },
+    "/DeleteEndpoint" : {
+      "delete" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "删除终端节点",
+        "description" : "删除终端节点。",
+        "operationId" : "DeleteEndpoint",
+        "responses" : {
+          "204" : {
+            "description" : "服务器已成功处理了请求"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEndpoint",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}"
+    },
+    "/ListVersionDetails" : {
+      "get" : {
+        "tags" : [ "版本管理" ],
+        "summary" : "查询VPC终端节点接口版本列表",
+        "description" : "查询VPC终端节点接口版本列表。",
+        "operationId" : "ListVersionDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VersionsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVersionDetails",
+      "x-url" : "{endpoint}/"
+    },
+    "/DeleteEndpointPolicy" : {
+      "delete" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "删除网关型终端节点策略(待下线)",
+        "description" : "删除网关型终端节点策略,该接口待下线,不建议使用。",
+        "operationId" : "DeleteEndpointPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EndpointPolicyResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEndpointPolicy",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}/policy"
+    },
+    "/UpgradeEndpointService" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "升级终端节点服务",
+        "description" : "升级终端节点服务,使终端节点服务支持创建专业型终端节点实例",
+        "operationId" : "UpgradeEndpointService",
+        "responses" : {
+          "204" : {
+            "description" : "服务器已成功处理了请求"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "minLength" : 1
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json",
+            "maxLength" : 65,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpgradeEndpointService",
+      "x-url" : "{endpoint}/v2/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/upgrade"
+    },
+    "/ListQueryProjectResourceTags" : {
+      "get" : {
+        "tags" : [ "TAG功能" ],
+        "summary" : "查询租户资源标签接口",
+        "description" : "根据租户ID和资源类型,获取租户下资源的标签。",
+        "operationId" : "ListQueryProjectResourceTags",
+        "responses" : {
+          "200" : {
+            "description" : "标签列表。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectResourceTags"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "endpoint_service", "endpoint" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQueryProjectResourceTags",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/tags"
+    },
+    "/AddOrRemoveServicePermissions" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "批量添加或移除终端节点服务的白名单",
+        "description" : "批量添加或移除当前用户下终端节点服务的白名单。",
+        "operationId" : "AddOrRemoveServicePermissions",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperatePermissionsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddOrRemoveServicePermissionsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddOrRemoveServicePermissions",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/permissions/action"
+    },
+    "/ListServicePublicDetails" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询公共终端节点服务列表",
+        "description" : "查询公共终端节点服务的列表,公共终端节点服务是所有用户可见且可连接的终端节点服务,",
+        "operationId" : "ListServicePublicDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryPublicServiceResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回公共的终端节点服务数量限制,即每页返回的个数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回公共的终端节点服务数量限制,即每页返回的个数。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "endpoint_service_name",
+          "in" : "query",
+          "description" : "公共终端节点服务的名称,支持大小写以及模糊匹配。",
+          "required" : false,
+          "schema" : {
+            "description" : "公共终端节点服务的名称,支持大小写以及模糊匹配。",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "公共终端节点服务的ID,唯一标识。",
+          "required" : false,
+          "schema" : {
+            "description" : "公共终端节点服务的ID,唯一标识。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+            "type" : "string",
+            "default" : "create_at",
+            "enum" : [ "create_at", "update_at" ]
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "查询结果中终端节点服务列表的排序方式,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点服务列表的排序方式,取值为:",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListServicePublicDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/public"
+    },
+    "/BatchRemoveEndpointServicePermissions" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "批量删除终端节点服务的白名单",
+        "description" : "批量删除当前用户下终端节点服务的白名单",
+        "operationId" : "BatchRemoveEndpointServicePermissions",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EpsPermissionResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchRemoveEndpointServicePermissionsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchRemoveEndpointServicePermissions",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/permissions/batch-delete"
+    },
+    "/UpdateEndpointWhite" : {
+      "put" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "更新终端节点",
+        "description" : "更新或删除允许访问终端节点的白名单。",
+        "operationId" : "UpdateEndpointWhite",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateEndpointWhitelistResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见获取项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointWhiteRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointWhite",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}"
+    },
+    "/UpdateEndpointService" : {
+      "put" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "修改终端节点服务",
+        "description" : "修改终端节点服务。",
+        "operationId" : "UpdateEndpointService",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointServiceRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointService",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}"
+    },
+    "/ListResourceInstances" : {
+      "post" : {
+        "tags" : [ "TAG功能" ],
+        "summary" : "查询资源实例接口",
+        "description" : "使用标签过滤查询租户下资源的实例。",
+        "operationId" : "ListResourceInstances",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TagResourceInstanceResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型,值为:endpoint_service或endpoint。",
+          "required" : true,
+          "schema" : {
+            "description" : "资源类型,值为:endpoint_service或endpoint。",
+            "type" : "string",
+            "enum" : [ "endpoint_service", "endpoint" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryResourceInstanceTagsBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/{resource_type}/resource_instances/action"
+    },
+    "/ListSpecifiedVersionDetails" : {
+      "get" : {
+        "tags" : [ "版本管理" ],
+        "summary" : "查询指定VPC终端节点接口版本信息",
+        "description" : "查询指定VPC终端节点接口版本信息。",
+        "operationId" : "ListSpecifiedVersionDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VersionResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "description" : "待查询版本号。",
+          "required" : true,
+          "schema" : {
+            "description" : "待查询版本号。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSpecifiedVersionDetails",
+      "x-url" : "{endpoint}/{version}"
+    },
+    "/UpdateEndpointRoutetable" : {
+      "put" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "修改终端节点的路由表",
+        "description" : "修改终端节点的路由表。",
+        "operationId" : "UpdateEndpointRoutetable",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoutetableInfoResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointRoutetableRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointRoutetable",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}/routetables"
+    },
+    "/CreateEndpointService" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "创建终端节点服务",
+        "description" : "创建终端节点服务,允许其他用户创建终端节点连接您创建的终端节点服务,",
+        "operationId" : "CreateEndpointService",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。用户Token也就是调用获取用户Token接口的响应值, 该接口是唯一不需要认证的接口。 请求响应成功后在响应消息头(Headers)中包含的“X-Subject-Token”的值即为Token值。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。用户Token也就是调用获取用户Token接口的响应值, 该接口是唯一不需要认证的接口。 请求响应成功后在响应消息头(Headers)中包含的“X-Subject-Token”的值即为Token值。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,获取方法请参见获取项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,获取方法请参见获取项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateEndpointServiceRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEndpointService",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services"
+    },
+    "/ListServicePermissionsDetails" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询终端节点服务的白名单列表",
+        "description" : "查询当前用户下终端节点服务的白名单列表。",
+        "operationId" : "ListServicePermissionsDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryPermissionsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "permission",
+          "in" : "query",
+          "description" : "权限账号ID,格式为“iam:domain::domain_id”。",
+          "required" : false,
+          "schema" : {
+            "description" : "权限账号ID,格式为“iam:domain::domain_id”。",
+            "type" : "string",
+            "maxLength" : 1000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回终端节点服务的白名单数量限制,即每页返回的个数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回终端节点服务的白名单数量限制,即每页返回的个数。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 500,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+            "type" : "string",
+            "default" : "create_at",
+            "enum" : [ "create_at", "update_at" ]
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "查询结果中白名单列表的排序方式,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中白名单列表的排序方式,取值为:",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListServicePermissionsDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/permissions"
+    },
+    "/BatchAddEndpointServicePermissions" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "批量添加终端节点服务的白名单",
+        "description" : "批量添加当前用户下终端节点服务的白名单,支持添加描述信息。",
+        "operationId" : "BatchAddEndpointServicePermissions",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EpsPermissionResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchAddEndpointServicePermissionsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddEndpointServicePermissions",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/permissions/batch-create"
+    },
+    "/ListEndpointService" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询终端节点服务列表",
+        "description" : "查询当前用户下的终端节点服务的列表。",
+        "operationId" : "ListEndpointService",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceListResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "endpoint_service_name",
+          "in" : "query",
+          "description" : "终端节点服务的名称,支持大小写,前后模糊匹配。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的名称,支持大小写,前后模糊匹配。",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "终端节点服务的ID,唯一标识。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的ID,唯一标识。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "终端节点服务的状态。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的状态。",
+            "type" : "string",
+            "enum" : [ "creating", "available", "failed", "deleting" ]
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点服务列表的排序字段,取值为:",
+            "type" : "string",
+            "default" : "create_at",
+            "enum" : [ "create_at", "update_at" ]
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "查询结果中终端节点服务列表的排序方式,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点服务列表的排序方式,取值为:",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回的终端节点服务数量限制,即每页返回的终端节点服务的个数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回的终端节点服务数量限制,即每页返回的终端节点服务的个数。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "public_border_group",
+          "in" : "query",
+          "description" : "筛选结果中匹配边缘属性的EPS",
+          "required" : false,
+          "schema" : {
+            "description" : "筛选结果中匹配边缘属性的EPS",
+            "type" : "string"
+          }
+        }, {
+          "name" : "net_type",
+          "in" : "query",
+          "description" : "后端类型",
+          "required" : false,
+          "schema" : {
+            "description" : "后端类型",
+            "type" : "string",
+            "maxLength" : 5,
+            "minLength" : 1,
+            "enum" : [ "vlan", "vxlan", "all" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEndpointService",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services"
+    },
+    "/UpdateEndpointServicePermissionDesc" : {
+      "put" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "更新终端节点服务白名单描述",
+        "description" : "更新当前用户下终端节点服务白名单的描述信息",
+        "operationId" : "UpdateEndpointServicePermissionDesc",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EpsPermissionResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "permission_id",
+          "in" : "path",
+          "description" : "白名单的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "白名单的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointServicePermissionDescRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointServicePermissionDesc",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/permissions/{permission_id}"
+    },
+    "/ListEndpointInfoDetails" : {
+      "get" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "查询终端节点详情",
+        "description" : "查询终端节点的详细信息。",
+        "operationId" : "ListEndpointInfoDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EndpointInfoResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_id",
+          "in" : "path",
+          "description" : "终端节点的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEndpointInfoDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints/{vpc_endpoint_id}"
+    },
+    "/ListServiceDescribeDetails" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询终端节点服务概要",
+        "description" : "查询终端节点服务的概要信息, 此接口是供创建终端节点的用户来查询需要连接的终端节点服务信息。 此接口既可以方便其他用户查询到您的终端节点服务概要信息, 又可以避免您的终端节点服务的细节信息暴露给其他用户。",
+        "operationId" : "ListServiceDescribeDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryServiceDescribeResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "endpoint_service_name",
+          "in" : "query",
+          "description" : "终端节点服务的名称。说明:该字段和id字段必须二选一,否则会出现错误。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的名称。说明:该字段和id字段必须二选一,否则会出现错误。",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "终端节点服务的ID,唯一标识。 说明:该字段必须和endpoint_service_name字段二选一,否则会出现错误。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的ID,唯一标识。 说明:该字段必须和endpoint_service_name字段二选一,否则会出现错误。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListServiceDescribeDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/describe"
+    },
+    "/ListEndpoints" : {
+      "get" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "查询终端节点列表",
+        "description" : "查询当前用户下的终端节点的列表。",
+        "operationId" : "ListEndpoints",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EndpointListResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "endpoint_service_name",
+          "in" : "query",
+          "description" : "终端节点服务的名称,支持大小写,前后模糊匹配。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点服务的名称,支持大小写,前后模糊匹配。",
+            "type" : "string",
+            "maxLength" : 128,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_id",
+          "in" : "query",
+          "description" : "终端节点所在的VPC的ID。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点所在的VPC的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "终端节点的ID,唯一标识。",
+          "required" : false,
+          "schema" : {
+            "description" : "终端节点的ID,唯一标识。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回终端节点的数量限制,即每页返回的资源个数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回终端节点的数量限制,即每页返回的资源个数。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "查询结果中终端节点列表的排序字段,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点列表的排序字段,取值为:",
+            "type" : "string",
+            "default" : "create_at",
+            "enum" : [ "create_at", "update_at" ]
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "查询结果中终端节点列表的排序方式,取值为:",
+          "required" : false,
+          "schema" : {
+            "description" : "查询结果中终端节点列表的排序方式,取值为:",
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "desc", "asc" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEndpoints",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints"
+    },
+    "/UpdateEndpointConnectionsDesc" : {
+      "put" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "更新终端节点连接描述",
+        "description" : "更新终端节点服务连接的终端节点的描述。",
+        "operationId" : "UpdateEndpointConnectionsDesc",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectionEndpointResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointConnectionsDescRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointConnectionsDesc",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/connections/description"
+    },
+    "/ListQuotaDetails" : {
+      "get" : {
+        "tags" : [ "资源配额功能" ],
+        "summary" : "查询配额",
+        "description" : "查询用户的资源配额,包括终端节点服务和终端节点。",
+        "operationId" : "ListQuotaDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuotasResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "资源类型。",
+          "required" : false,
+          "schema" : {
+            "description" : "资源类型。",
+            "type" : "string",
+            "enum" : [ "endpoint_service", "endpoint" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQuotaDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/quotas"
+    },
+    "/AcceptOrRejectEndpoint" : {
+      "post" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "接受或拒绝终端节点的连接",
+        "description" : "接受或者拒绝终端节点连接到当前的终端节点服务。",
+        "operationId" : "AcceptOrRejectEndpoint",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectionEndpointResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AcceptOrRejectEndpointRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AcceptOrRejectEndpoint",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/connections/action"
+    },
+    "/ListServiceDetails" : {
+      "get" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "查询终端节点服务详情",
+        "description" : "查询终端节点服务的详细信息。",
+        "operationId" : "ListServiceDetails",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceDetailsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务的ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListServiceDetails",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}"
+    },
+    "/UpdateEndpointServiceName" : {
+      "put" : {
+        "tags" : [ "终端节点服务功能" ],
+        "summary" : "修改终端节点服务名称",
+        "description" : "修改终端节点服务名称",
+        "operationId" : "UpdateEndpointServiceName",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateEndpointServiceNameRequestBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户ID",
+          "required" : true,
+          "schema" : {
+            "description" : "租户ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "vpc_endpoint_service_id",
+          "in" : "path",
+          "description" : "终端节点服务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "终端节点服务ID",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEndpointServiceNameRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateEndpointServiceName",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoint-services/{vpc_endpoint_service_id}/name"
+    },
+    "/CreateEndpoint" : {
+      "post" : {
+        "tags" : [ "终端节点功能" ],
+        "summary" : "创建终端节点",
+        "description" : "创建终端节点,以便访问终端节点服务。",
+        "operationId" : "CreateEndpoint",
+        "responses" : {
+          "200" : {
+            "description" : "服务器已成功处理了请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateEndpointResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+          "required" : false,
+          "schema" : {
+            "description" : "发送的实体的MIME类型。推荐用户默认使用application/json, 如果API是对象、镜像上传等接口,媒体类型可按照流类型的不同进行确定。",
+            "type" : "string",
+            "default" : "application/json"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateEndpointRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEndpoint",
+      "x-url" : "{endpoint}/v1/{project_id}/vpc-endpoints"
+    }
+  }
+}

@@ -1,0 +1,5504 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CCM-私有CA管理",
+    "title" : "CCM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "DistinguishedName" : {
+        "type" : "object",
+        "required" : [ "common_name", "country", "state", "locality", "organization", "organizational_unit" ],
+        "properties" : {
+          "common_name" : {
+            "type" : "string",
+            "description" : "证书通用名称(CN),名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、\"*\"、字母、数字、汉字组成,长度不能超过64位字符。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "国家编码,只能由英文组成,长度为2位字符。",
+            "minLength" : 2,
+            "maxLength" : 2
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "省市名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过128位字符。",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "locality" : {
+            "type" : "string",
+            "description" : "地区名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过128位字符。",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "organization" : {
+            "type" : "string",
+            "description" : "组织名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过64位字符。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "organizational_unit" : {
+            "type" : "string",
+            "description" : "组织单元名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过64位字符。",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "title" : "DistinguishedName"
+      },
+      "Error" : {
+        "type" : "object",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 36,
+            "description" : "错误请求返回的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "description" : "错误请求返回的错误信息。"
+          }
+        },
+        "title" : "Error"
+      },
+      "CrlConfiguration" : {
+        "type" : "object",
+        "required" : [ "enabled" ],
+        "properties" : {
+          "enabled" : {
+            "type" : "boolean",
+            "description" : "是否启用CRL发布功能。"
+          },
+          "crl_name" : {
+            "type" : "string",
+            "description" : "吊销列表文件名称。"
+          },
+          "obs_bucket_name" : {
+            "type" : "string",
+            "description" : "OBS桶名称。"
+          },
+          "valid_days" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 7,
+            "maximum" : 30,
+            "description" : "CRL更新周期,单位为\"天\"。当启用CRL发布功能,为必填项。"
+          }
+        },
+        "title" : "CrlConfiguration"
+      },
+      "CreateCertificateAuthorityResponseBody" : {
+        "required" : [ "ca_id" ],
+        "properties" : {
+          "ca_id" : {
+            "type" : "string",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "description" : "当前签发的CA证书ID。"
+          }
+        },
+        "title" : "CreateCertificateAuthorityResponseBody",
+        "type" : "object"
+      },
+      "Validity" : {
+        "type" : "object",
+        "required" : [ "type", "value" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "有效期类型,为必填值:"
+          },
+          "value" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "证书有效期值,与type对应的类型值,换算成年需满足以下规则:"
+          },
+          "start_from" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "起始时间,为可选值:"
+          }
+        },
+        "title" : "Validity"
+      },
+      "CreateCertificateAuthorityRequestBody" : {
+        "type" : "object",
+        "required" : [ "type", "key_algorithm", "distinguished_name" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "创建的CA类型。"
+          },
+          "distinguished_name" : {
+            "description" : "证书名称配置,详情请参见**DistinguishedName**字段数据结构说明。",
+            "$ref" : "#/components/schemas/DistinguishedName"
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法,可选值如下:"
+          },
+          "validity" : {
+            "description" : "证书有效期,分以下三种情况:",
+            "$ref" : "#/components/schemas/Validity"
+          },
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID,分以下三种情况:",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "path_length" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 6,
+            "description" : "CA证书路径长度,分以下三种情况:"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名哈希算法。"
+          },
+          "key_usages" : {
+            "type" : "array",
+            "description" : "密钥用法,具体标准参见RFC 5280中:[4.2.1.3节](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3)。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "crl_configuration" : {
+            "$ref" : "#/components/schemas/CrlConfiguration",
+            "description" : "证书CRL配置,详情请参见**CrlConfiguration**字段数据结构说明。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件."
+          },
+          "ca_id" : {
+            "type" : "string",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "description" : "CA证书ID。如果为空,则创建按需CA;如果不为空,则保存包周期CA信息。"
+          }
+        },
+        "title" : "CreateCertificateAuthorityRequestBody"
+      },
+      "CreateCertificateAuthorityObsAgencyResponseBody" : {
+        "required" : [ "agency_id" ],
+        "properties" : {
+          "agency_id" : {
+            "type" : "string",
+            "description" : "创建OBS委托,由IAM返回的授权ID。"
+          }
+        },
+        "title" : "CreateCertificateAuthorityObsAgencyResponseBody",
+        "type" : "object"
+      },
+      "GetDomainTagsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/DomainTags"
+            }
+          }
+        },
+        "title" : "GetDomainTagsResponseBody"
+      },
+      "DomainTags" : {
+        "type" : "object",
+        "required" : [ "key", "values" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "标签键。"
+          },
+          "values" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签值列表。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 255
+            }
+          }
+        },
+        "title" : "DomainTags"
+      },
+      "IssueCertificateAuthorityCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "issuer_id", "validity", "path_length", "signature_algorithm" ],
+        "properties" : {
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "path_length" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 6,
+            "description" : "路径长度。"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名哈希算法,可选值如下:"
+          },
+          "validity" : {
+            "description" : "证书有效期,详情请参见**Validity**字段数据结构说明。",
+            "$ref" : "#/components/schemas/Validity"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "创建的CA类型。(如果激活包周期CA,为必填值)"
+          },
+          "distinguished_name" : {
+            "description" : "证书名称配置,详情请参见**DistinguishedName**字段数据结构说明。(如果激活包周期CA,为必填值)",
+            "$ref" : "#/components/schemas/DistinguishedName"
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法(如果激活包周期CA,为必填值),可选值如下:"
+          },
+          "key_usages" : {
+            "type" : "array",
+            "description" : "密钥用法,具体标准参见RFC 5280中:[4.2.1.3节](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3)。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "crl_configuration" : {
+            "$ref" : "#/components/schemas/CrlConfiguration",
+            "description" : "证书CRL配置,详情请参见**CrlConfiguration**字段数据结构说明。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件."
+          }
+        },
+        "title" : "IssueCertificateAuthorityCertificateRequestBody"
+      },
+      "ListCertificateAuthorityResponseBody" : {
+        "type" : "object",
+        "required" : [ "total", "certificate_authorities" ],
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "CA证书总数。",
+            "format" : "int32"
+          },
+          "certificate_authorities" : {
+            "type" : "array",
+            "minItems" : 0,
+            "description" : "CA列表,详情请参见**CertificateAuthorities**字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/CertificateAuthorities"
+            }
+          }
+        },
+        "title" : "ListCertificateAuthorityResponseBody"
+      },
+      "ListCrlConfiguration" : {
+        "type" : "object",
+        "required" : [ "enabled", "crl_name", "obs_bucket_name", "valid_days", "crl_dis_point" ],
+        "properties" : {
+          "enabled" : {
+            "type" : "boolean",
+            "description" : "是否启用CRL发布功能。"
+          },
+          "crl_name" : {
+            "type" : "string",
+            "description" : "吊销列表文件名称。"
+          },
+          "obs_bucket_name" : {
+            "type" : "string",
+            "description" : "OBS桶名称。"
+          },
+          "valid_days" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 7,
+            "maximum" : 30,
+            "description" : "CRL更新周期,单位为\"天\"。当启用CRL发布功能,为必填项。"
+          },
+          "crl_dis_point" : {
+            "type" : "string",
+            "description" : "吊销列表分发地址,即对应的OBS桶中的CRL文件地址。"
+          }
+        },
+        "title" : "ListCrlConfiguration"
+      },
+      "CertificateAuthorities" : {
+        "type" : "object",
+        "required" : [ "ca_id", "type", "status", "path_length", "issuer_id", "issuer_name", "key_algorithm", "signature_algorithm", "freeze_flag", "gen_mode", "serial_number", "create_time", "delete_time", "not_before", "not_after", "distinguished_name", "crl_configuration" ],
+        "properties" : {
+          "ca_id" : {
+            "type" : "string",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "description" : "CA证书ID。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "CA类型:"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "CA证书状态:"
+          },
+          "path_length" : {
+            "type" : "integer",
+            "description" : "CA路径长度。",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 6
+          },
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID,即签发此证书的CA证书ID。根CA中,此参数为**null**。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "issuer_name" : {
+            "type" : "string",
+            "description" : "父CA证书名称。根CA中,此参数为**null**。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法。"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名哈希算法。"
+          },
+          "freeze_flag" : {
+            "type" : "integer",
+            "description" : "冻结标识:",
+            "format" : "int32"
+          },
+          "gen_mode" : {
+            "type" : "string",
+            "description" : "证书生成方式:"
+          },
+          "serial_number" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "证书序列号。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书创建时间,格式为时间戳(毫秒级)。"
+          },
+          "delete_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书删除时间,格式为时间戳(毫秒级)。"
+          },
+          "not_before" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书创建时间,格式为时间戳(毫秒级)。"
+          },
+          "not_after" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书到期时间,格式为时间戳(毫秒级)。"
+          },
+          "distinguished_name" : {
+            "description" : "证书名称配置,详情请参见**DistinguishedName**字段数据结构说明。",
+            "$ref" : "#/components/schemas/DistinguishedName"
+          },
+          "crl_configuration" : {
+            "description" : "证书CRL配置,详情请参见**ListCrlConfiguration**字段数据结构说明。",
+            "$ref" : "#/components/schemas/ListCrlConfiguration"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID,默认为“0”。 对于开通企业项目的用户,表示资源处于默认企业项目下。 对于未开通企业项目的用户,表示资源未处于企业项目下。"
+          },
+          "free_quota" : {
+            "type" : "integer",
+            "description" : "免费证书配额。",
+            "format" : "int32"
+          },
+          "charging_mode" : {
+            "type" : "integer",
+            "description" : "计费模式:",
+            "format" : "int32"
+          }
+        },
+        "title" : "CertificateAuthorities"
+      },
+      "ResourceTag" : {
+        "type" : "object",
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "标签键。"
+          },
+          "value" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "标签值。"
+          }
+        },
+        "title" : "ResourceTag"
+      },
+      "BatchOperateTagRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表,key和value键值对的集合。",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          }
+        },
+        "title" : "BatchOperateCaTagRequestBody"
+      },
+      "Certificates" : {
+        "type" : "object",
+        "required" : [ "certificate_id", "status", "issuer_id", "issuer_name", "key_algorithm", "signature_algorithm", "freeze_flag", "gen_mode", "serial_number", "create_time", "delete_time", "not_before", "not_after", "distinguished_name" ],
+        "properties" : {
+          "certificate_id" : {
+            "type" : "string",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "description" : "私有证书ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "证书状态:"
+          },
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "issuer_name" : {
+            "type" : "string",
+            "description" : "父CA证书名称。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法。"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名算法。"
+          },
+          "freeze_flag" : {
+            "type" : "integer",
+            "description" : "冻结标识:",
+            "format" : "int32"
+          },
+          "gen_mode" : {
+            "type" : "string",
+            "description" : "证书生成方式:"
+          },
+          "serial_number" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "序列号。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书创建时间,格式为时间戳(毫秒级)。"
+          },
+          "delete_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书删除时间,格式为时间戳(毫秒级)。"
+          },
+          "not_before" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书创建时间,格式为时间戳(毫秒级)。"
+          },
+          "not_after" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "证书到期时间,格式为时间戳(毫秒级)。"
+          },
+          "distinguished_name" : {
+            "$ref" : "#/components/schemas/DistinguishedName",
+            "description" : "证书名称配置,详情请参见**DistinguishedName**字段数据结构说明。"
+          },
+          "enc_cert_info" : {
+            "$ref" : "#/components/schemas/EncCertInfo",
+            "description" : "加密证书信息,详情请参见**EncCertInfo**字段数据结构说明。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID,默认为“0”。 对于开通企业项目的用户,表示资源处于默认企业项目下。 对于未开通企业项目的用户,表示资源未处于企业项目下。"
+          }
+        },
+        "title" : "Certificates"
+      },
+      "ListCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "total", "certificates" ],
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "私有证书总数。",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 1000000
+          },
+          "certificates" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "证书列表,详情请参见**Certificates**字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/Certificates"
+            }
+          }
+        },
+        "title" : "ListCertificateResponseBody"
+      },
+      "EncCertInfo" : {
+        "type" : "object",
+        "required" : [ "enc_serial_number" ],
+        "properties" : {
+          "enc_serial_number" : {
+            "type" : "string",
+            "description" : "加密证书序列号。",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "title" : "EncCertInfo"
+      },
+      "ProductInfo" : {
+        "required" : [ "cloud_service_type", "resource_type", "resource_spec_code", "resource_size" ],
+        "properties" : {
+          "cloud_service_type" : {
+            "type" : "string",
+            "description" : "云服务类型,固定为'hws.service.type.ccm'",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源类型,CA为\"hws.resource.type.pca.duration\"",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "resource_spec_code" : {
+            "type" : "string",
+            "description" : "资源规格编码,CA为\"ca.duration\"",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "title" : "ProductInfo",
+        "type" : "object"
+      },
+      "CreateCertificateAuthorityOrderResponseBody" : {
+        "type" : "object",
+        "required" : [ "order_id" ],
+        "properties" : {
+          "order_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "订单号。"
+          },
+          "ca_ids" : {
+            "type" : "array",
+            "description" : "当前购买的CA证书ID列表。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 64
+            }
+          }
+        },
+        "title" : "CreateCertificateAuthorityOrderResponseBody"
+      },
+      "CreateCertificateAuthorityOrderRequestBody" : {
+        "type" : "object",
+        "required" : [ "cloud_service_type", "charging_mode", "period_type", "period_num", "is_auto_renew", "subscription_num", "product_infos" ],
+        "properties" : {
+          "cloud_service_type" : {
+            "type" : "string",
+            "description" : "云服务类型,固定为'hws.service.type.ccm'",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "charging_mode" : {
+            "type" : "integer",
+            "description" : "计费模式 0包周期"
+          },
+          "period_type" : {
+            "type" : "integer",
+            "description" : "订购周期 2月 3年"
+          },
+          "period_num" : {
+            "type" : "integer",
+            "description" : "订购周期数"
+          },
+          "is_auto_renew" : {
+            "type" : "integer",
+            "description" : "是否自动续费 1是 0否"
+          },
+          "promotion_info" : {
+            "type" : "string",
+            "description" : "折扣信息",
+            "minLength" : 0,
+            "maxLength" : 2048
+          },
+          "subscription_num" : {
+            "type" : "integer",
+            "description" : "订购数量"
+          },
+          "is_auto_pay" : {
+            "type" : "integer",
+            "description" : "是否自动支付 1是 0否 不填默认为0"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "product_infos" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "description" : "产品列表,详情请参见**ProductInfo**字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductInfo"
+            }
+          }
+        },
+        "title" : "CreateCertificateAuthorityOrderRequestBody"
+      },
+      "RevokeCertificateRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "description" : "吊销理由,支持以下选项:"
+          }
+        },
+        "title" : "RevokeCertificateRequestBody"
+      },
+      "ExportCertificateAuthorityCsrResponseBody" : {
+        "required" : [ "csr" ],
+        "properties" : {
+          "csr" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "证书签名请求内容,有以下两种情况:"
+          }
+        },
+        "title" : "ExportCertificateAuthorityCsrResponseBody",
+        "type" : "object"
+      },
+      "SubjectAlternativeName" : {
+        "type" : "object",
+        "required" : [ "type", "value" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "备用名称类型,当前仅支持DNS、IP、EMAIL、URI。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "对应备用名称类型的值。"
+          }
+        },
+        "title" : "SubjectAlternativeName"
+      },
+      "CreateCertificateResponseBody" : {
+        "required" : [ "certificate_id" ],
+        "properties" : {
+          "certificate_id" : {
+            "type" : "string",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "description" : "当前签发的证书ID。"
+          }
+        },
+        "title" : "CreateCertificateResponseBody",
+        "type" : "object"
+      },
+      "CreateCertificateByCsrRequestBody" : {
+        "type" : "object",
+        "required" : [ "csr", "issuer_id", "validity" ],
+        "properties" : {
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "csr" : {
+            "type" : "string",
+            "description" : "证书签名请求。请使用“\\r\\n”或“\\n”替代证书签名请求中的换行符,若通过console端请求此接口,则无需做符号转换。",
+            "maxLength" : 5120
+          },
+          "validity" : {
+            "description" : "证书有效期,详情请参见**Validity**字段数据结构说明。",
+            "$ref" : "#/components/schemas/Validity"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "证书类型,用于区分从属CA与私有证书。"
+          },
+          "path_length" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 6,
+            "description" : "路径长度,仅当签发从属CA时有效。"
+          },
+          "subject_alternative_names" : {
+            "type" : "array",
+            "description" : "主体备用名称(本接口预留参数,当前在后端被忽略),详情请参见**SubjectAlternativeName**字段数据结构说明。",
+            "minItems" : 0,
+            "maxItems" : 20,
+            "items" : {
+              "$ref" : "#/components/schemas/SubjectAlternativeName"
+            }
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件."
+          }
+        },
+        "title" : "CreateCertificateByCsrRequestBody"
+      },
+      "ResourceTagRequestBody" : {
+        "type" : "object",
+        "required" : [ "tag" ],
+        "properties" : {
+          "tag" : {
+            "description" : "标签。",
+            "$ref" : "#/components/schemas/ResourceTag"
+          }
+        },
+        "title" : "ResourceTagRequestBody"
+      },
+      "ParseCsrResponseBody" : {
+        "type" : "object",
+        "required" : [ "key_algorithm", "key_algorithm_length", "signature_algorithm", "public_key", "distinguished_name" ],
+        "properties" : {
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法。"
+          },
+          "key_algorithm_length" : {
+            "type" : "integer",
+            "description" : "密钥算法长度,单位为bit。",
+            "format" : "int32"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名算法,带具体的签名与哈希算法,如\"SHA256withRSA\"。"
+          },
+          "public_key" : {
+            "type" : "string",
+            "description" : "公钥内容。",
+            "minLength" : 0,
+            "maxLength" : 4096
+          },
+          "distinguished_name" : {
+            "description" : "证书名称配置,详情请参见**DistinguishedName**字段数据结构说明。",
+            "$ref" : "#/components/schemas/DistinguishedName"
+          }
+        },
+        "title" : "ParseCsrResponseBody"
+      },
+      "ParseCertificateSigningRequestRequestBody" : {
+        "type" : "object",
+        "required" : [ "csr" ],
+        "properties" : {
+          "csr" : {
+            "type" : "string",
+            "description" : "证书签名请求。请使用“\\r\\n”或“\\n”替代证书签名请求中的换行符,若通过console端请求此接口,则无需做符号转换。",
+            "maxLength" : 5120
+          }
+        },
+        "title" : "ParseCertificateSigningRequestRequestBody"
+      },
+      "ShowCertificateAuthorityObsAgencyResponseBody" : {
+        "required" : [ "agency_granted" ],
+        "properties" : {
+          "agency_granted" : {
+            "type" : "string",
+            "description" : "OBS当前的授权结果。"
+          }
+        },
+        "title" : "ShowCertificateAuthorityObsAgencyResponseBody",
+        "type" : "object"
+      },
+      "ListResourceInstancesRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/DomainTags"
+            }
+          },
+          "limit" : {
+            "type" : "integer",
+            "default" : 10,
+            "format" : "int32",
+            "minimum" : 10,
+            "maximum" : 50,
+            "description" : "每页条目数量,取值如下:"
+          },
+          "offset" : {
+            "type" : "integer",
+            "default" : 0,
+            "format" : "int32",
+            "minimum" : 0,
+            "description" : "索引位置,偏移量,从offset指定的下一条数据开始查询。"
+          },
+          "matches" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 20,
+            "description" : "搜索字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          }
+        },
+        "title" : "ListResourceInstancesRequestBody"
+      },
+      "CountResourceInstancesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 100,
+            "description" : "总记录数。"
+          }
+        },
+        "title" : "CountResourceInstancesResponseBody"
+      },
+      "Resources" : {
+        "required" : [ "type", "used", "quota" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "证书类型:"
+          },
+          "used" : {
+            "type" : "integer",
+            "description" : "已使用配额数。",
+            "format" : "int32"
+          },
+          "quota" : {
+            "type" : "integer",
+            "description" : "配额总数:",
+            "format" : "int32"
+          }
+        },
+        "title" : "Resources",
+        "type" : "object"
+      },
+      "Quotas" : {
+        "type" : "object",
+        "required" : [ "resources" ],
+        "properties" : {
+          "resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "description" : "资源配额列表,详情请参见**Resources**字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/Resources"
+            }
+          }
+        },
+        "title" : "Quotas"
+      },
+      "ShowQuotaResponseBody" : {
+        "required" : [ "quotas" ],
+        "properties" : {
+          "quotas" : {
+            "description" : "证书配额,详情请参见**Quotas**字段数据结构说明。",
+            "$ref" : "#/components/schemas/Quotas"
+          }
+        },
+        "title" : "ShowQuotaResponseBody",
+        "type" : "object"
+      },
+      "ListCertificateAuthorityObsBucketResponseBody" : {
+        "required" : [ "total", "obs_buckets" ],
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "OBS桶总数。",
+            "format" : "int32"
+          },
+          "obs_buckets" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 256,
+            "description" : "OBS桶列表,详情请参见**ObsBuckets**字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/ObsBuckets"
+            }
+          }
+        },
+        "title" : "CreateCertificateAuthorityObsAgencyResponseBody",
+        "type" : "object"
+      },
+      "ObsBuckets" : {
+        "required" : [ "bucket_name", "create_time" ],
+        "properties" : {
+          "bucket_name" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "description" : "桶名称。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "创建时间,格式为时间戳(毫秒级)。"
+          }
+        },
+        "title" : "ObsBuckets",
+        "type" : "object"
+      },
+      "TagResource" : {
+        "type" : "object",
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源ID。"
+          },
+          "resource_detail" : {
+            "type" : "object",
+            "description" : "资源详情。"
+          },
+          "tags" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "标签列表,没有标签默认为空数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          },
+          "resource_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源名称,默认为空字符串。"
+          }
+        }
+      },
+      "ListResourceByTagsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 100,
+            "description" : "总记录数。"
+          },
+          "resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "资源实例列表,详情请参见TagResource字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/TagResource"
+            }
+          }
+        },
+        "title" : "ListResourceByTagsResponseBody"
+      },
+      "ImportCertificateAuthorityCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "certificate" ],
+        "properties" : {
+          "certificate" : {
+            "type" : "string",
+            "description" : "证书内容。",
+            "minLength" : 1,
+            "maxLength" : 32768
+          },
+          "certificate_chain" : {
+            "type" : "string",
+            "description" : "证书链内容。",
+            "minLength" : 0,
+            "maxLength" : 2097152
+          }
+        },
+        "title" : "ImportCertificateAuthorityCertificateRequestBody"
+      },
+      "EnableCertificateAuthorityCrlRequestBody" : {
+        "type" : "object",
+        "required" : [ "obs_bucket_name", "valid_days" ],
+        "properties" : {
+          "crl_name" : {
+            "type" : "string",
+            "description" : "吊销列表文件名称。"
+          },
+          "obs_bucket_name" : {
+            "type" : "string",
+            "description" : "OBS桶名称。",
+            "example" : "pca-crl-1"
+          },
+          "valid_days" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 7,
+            "maximum" : 30,
+            "description" : "CRL更新周期,单位为\"天\"。",
+            "example" : 7
+          }
+        },
+        "title" : "EnableCertificateAuthorityCrlRequestBody"
+      },
+      "GetTagsResponseBody" : {
+        "type" : "object",
+        "required" : [ "tags" ],
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表,key和value键值对的集合。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          }
+        },
+        "title" : "GetCaTagsResponseBody"
+      },
+      "ExportCertificateResponseBody" : {
+        "properties" : {
+          "private_key" : {
+            "type" : "string",
+            "description" : "私钥内容。"
+          },
+          "certificate" : {
+            "type" : "string",
+            "description" : "证书内容。"
+          },
+          "certificate_chain" : {
+            "type" : "string",
+            "description" : "证书链内容。"
+          },
+          "enc_certificate" : {
+            "type" : "string",
+            "description" : "加密证书内容。"
+          },
+          "enc_private_key" : {
+            "type" : "string",
+            "description" : "加密私钥内容。"
+          },
+          "enc_sm2_enveloped_key" : {
+            "type" : "string",
+            "description" : "加密私钥的国密GMT0009标准规范SM2数字信封。"
+          },
+          "signed_and_enveloped_data" : {
+            "type" : "string",
+            "description" : "加密私钥的国密GMT0010标准规范签名数字信封。"
+          }
+        },
+        "title" : "ExportCertificateResponseBody",
+        "type" : "object"
+      },
+      "ExportCertificateRequestBody" : {
+        "required" : [ "type", "is_compressed" ],
+        "type" : "object",
+        "properties" : {
+          "is_compressed" : {
+            "type" : "string",
+            "description" : "是否压缩。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "根据服务器类型选择下载证书的形式,支持以下五种类型:"
+          },
+          "is_sm_standard" : {
+            "type" : "string",
+            "description" : "是否国密GMT0009标准规范和国密GMT0010标准规范。当证书算法为SM2时传入才有效,若不传入,则默认为false。"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "设置用于加密私钥的密码。支持使用英文大小写字母、数字、特殊字符(例如,.+-_#)等。最大长度为32字节,若不传入,则默认不使用加密导出。"
+          }
+        },
+        "title" : "ExportCertificateRequestBody"
+      },
+      "ExportCertificateAuthorityCertificateResponseBody" : {
+        "required" : [ "certificate", "certificate_chain" ],
+        "properties" : {
+          "certificate" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "证书内容。"
+          },
+          "certificate_chain" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 2097152,
+            "description" : "证书链内容,证书链中排列顺序(从上至下):中间证书>...>根证书。"
+          }
+        },
+        "title" : "ExportCertificateAuthorityCertificateResponseBody",
+        "type" : "object"
+      },
+      "CustomizedExtension" : {
+        "type" : "object",
+        "properties" : {
+          "object_identifier" : {
+            "type" : "string",
+            "description" : "对象标识符。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "自定义属性内容。",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "title" : "CustomizedExtension"
+      },
+      "CreateCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "key_algorithm", "issuer_id", "validity", "signature_algorithm", "distinguished_name" ],
+        "properties" : {
+          "issuer_id" : {
+            "type" : "string",
+            "description" : "父CA证书ID。",
+            "minLength" : 36,
+            "maxLength" : 36
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "description" : "密钥算法,可选值如下:"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "description" : "签名哈希算法,可选值如下:"
+          },
+          "distinguished_name" : {
+            "description" : "证书名称配置,详情请参见**CertDistinguishedName**字段数据结构说明。",
+            "$ref" : "#/components/schemas/CertDistinguishedName"
+          },
+          "validity" : {
+            "description" : "证书有效期,详情请参见**Validity**字段数据结构说明。",
+            "$ref" : "#/components/schemas/Validity"
+          },
+          "key_usages" : {
+            "type" : "array",
+            "description" : "密钥用法,具体标准参见RFC 5280中:[4.2.1.3节](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.3)。",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "subject_alternative_names" : {
+            "type" : "array",
+            "description" : "主体备用名称,详情请参见**SubjectAlternativeName**字段数据结构说明。",
+            "minItems" : 0,
+            "maxItems" : 20,
+            "items" : {
+              "$ref" : "#/components/schemas/SubjectAlternativeName"
+            }
+          },
+          "extended_key_usage" : {
+            "description" : "增强型密钥用法,详情请参见**ExtendedKeyUsage**字段数据结构说明。",
+            "$ref" : "#/components/schemas/ExtendedKeyUsage"
+          },
+          "customized_extension" : {
+            "description" : "自定义扩展信息,详情请参见**CustomizedExtension**字段数据结构说明。",
+            "$ref" : "#/components/schemas/CustomizedExtension"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件."
+          }
+        },
+        "title" : "CreateCertificateRequestBody"
+      },
+      "CertDistinguishedName" : {
+        "type" : "object",
+        "required" : [ "common_name" ],
+        "properties" : {
+          "common_name" : {
+            "type" : "string",
+            "description" : "证书通用名称(CN),名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、\"*\"、字母、数字、汉字组成,长度不能超过64位字符。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "国家编码,只能由英文组成,长度为2位字符。若不传入,则默认继承父CA对应的值。",
+            "minLength" : 2,
+            "maxLength" : 2
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "省市名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过128位字符。若不传入,则默认继承父CA对应的值。",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "locality" : {
+            "type" : "string",
+            "description" : "地区名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过128位字符。若不传入,则默认继承父CA对应的值。",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "organization" : {
+            "type" : "string",
+            "description" : "组织名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过64位字符。若不传入,则默认继承父CA对应的值。",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "organizational_unit" : {
+            "type" : "string",
+            "description" : "组织单元名称,名称只能由\"-\"、\"_\"、\" \"、\".\"、\",\"、字母、数字、汉字组成,长度不能超过64位字符。若不传入,则默认继承父CA对应的值。",
+            "minLength" : 1,
+            "maxLength" : 64
+          }
+        },
+        "title" : "CertDistinguishedName"
+      },
+      "ExtendedKeyUsage" : {
+        "type" : "object",
+        "properties" : {
+          "server_auth" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "服务器身份验证,OID为:1.3.6.1.5.5.7.3.1。"
+          },
+          "client_auth" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "客户端身份验证,OID为:1.3.6.1.5.5.7.3.2。"
+          },
+          "code_signing" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "代码签名,OID为:1.3.6.1.5.5.7.3.3。"
+          },
+          "email_protection" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "安全电子邮件,OID为:1.3.6.1.5.5.7.3.4。"
+          },
+          "time_stamping" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "时间戳,OID为:1.3.6.1.5.5.7.3.8。"
+          }
+        },
+        "title" : "ExtendedKeyUsage"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateCertificateAuthority" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "创建CA",
+        "description" : "创建CA,分以下三种情况:",
+        "operationId" : "CreateCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCertificateAuthorityResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCertificateAuthorityRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities"
+    },
+    "/CreateCertificateAuthorityObsAgency" : {
+      "post" : {
+        "tags" : [ "证书吊销处理" ],
+        "summary" : "创建委托",
+        "description" : "用户给PCA创建OBS委托授权,用于访问OBS桶,更新吊销列表。",
+        "operationId" : "CreateCertificateAuthorityObsAgency",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCertificateAuthorityObsAgencyResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificateAuthorityObsAgency",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/obs/agencies"
+    },
+    "/ListDomainCertTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "查询所有证书标签列表",
+        "description" : "查询所有证书标签列表。",
+        "operationId" : "ListDomainCertTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDomainTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDomainCertTags",
+      "x-url" : "{endpoint}/v1/private-certificates/tags"
+    },
+    "/IssueCertificateAuthorityCertificate" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "激活CA",
+        "description" : "激活CA。",
+        "operationId" : "IssueCertificateAuthorityCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要激活的从属CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要激活的从属CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IssueCertificateAuthorityCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "IssueCertificateAuthorityCertificate",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/activate"
+    },
+    "/ListCertificateAuthority" : {
+      "get" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "查询CA列表",
+        "description" : "查询CA列表。",
+        "operationId" : "ListCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCertificateAuthorityResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "指定查询返回记录条数,默认值10。",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "指定查询返回记录条数,默认值10。",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "CA证书名称(CN)过滤值,用于获取名称中带有特定值的CA证书集合。",
+          "required" : false,
+          "schema" : {
+            "example" : "test",
+            "description" : "CA证书名称(CN)过滤值,用于获取名称中带有特定值的CA证书集合。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,从offset指定的下一条数据开始查询。默认值为0。",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "索引位置,从offset指定的下一条数据开始查询。默认值为0。",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "CA证书状态,通过状态过滤证书集合:",
+          "required" : false,
+          "schema" : {
+            "example" : "PENDING",
+            "description" : "CA证书状态,通过状态过滤证书集合:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "CA证书类型:",
+          "required" : false,
+          "schema" : {
+            "example" : "ROOT",
+            "description" : "CA证书类型:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序属性,目前支持以下属性:",
+          "required" : false,
+          "schema" : {
+            "example" : "common_name",
+            "description" : "排序属性,目前支持以下属性:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方向,支持以下值:",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "排序方向,支持以下值:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities"
+    },
+    "/BatchCreateCaTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量创建CA标签",
+        "description" : "批量创建CA标签。",
+        "operationId" : "BatchCreateCaTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所需要批量创建标签的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要批量创建标签的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchOperateTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateCaTags",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/tags/create"
+    },
+    "/BatchDeleteCaTags" : {
+      "delete" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量删除CA标签",
+        "description" : "批量删除CA标签。",
+        "operationId" : "BatchDeleteCaTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所需要批量删除标签的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要批量删除标签的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchOperateTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteCaTags",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/tags/delete"
+    },
+    "/BatchCreateCertTags" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量创建证书标签",
+        "description" : "批量创建证书标签。",
+        "operationId" : "BatchCreateCertTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所需要批量创建标签的证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要批量创建标签的证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchOperateTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateCertTags",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/tags/create"
+    },
+    "/ListCertificate" : {
+      "get" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "查询私有证书列表",
+        "description" : "查询私有证书列表。",
+        "operationId" : "ListCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "指定查询返回记录条数,默认值10。",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "指定查询返回记录条数,默认值10。",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "私有证书名称,返回名称带有name字段的证书集合。",
+          "required" : false,
+          "schema" : {
+            "example" : "test.com",
+            "description" : "私有证书名称,返回名称带有name字段的证书集合。",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "索引位置,从offset指定的下一条数据开始查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "0",
+            "description" : "索引位置,从offset指定的下一条数据开始查询。",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "私有证书状态,通过状态过滤证书集合。",
+          "required" : false,
+          "schema" : {
+            "example" : "ISSUED",
+            "description" : "私有证书状态,通过状态过滤证书集合。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序属性,目前支持以下属性:",
+          "required" : false,
+          "schema" : {
+            "example" : "common_name",
+            "description" : "排序属性,目前支持以下属性:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方向,支持以下值:",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "排序方向,支持以下值:",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates"
+    },
+    "/CreateCertificateAuthorityOrder" : {
+      "post" : {
+        "tags" : [ "订单管理" ],
+        "summary" : "购买CA",
+        "description" : "购买CA。",
+        "operationId" : "CreateCertificateAuthorityOrder",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCertificateAuthorityOrderResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCertificateAuthorityOrderRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificateAuthorityOrder",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/order"
+    },
+    "/DeleteCertificate" : {
+      "delete" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "删除证书",
+        "description" : "删除证书。",
+        "operationId" : "DeleteCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所要删除的私有证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要删除的私有证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}"
+    },
+    "/RevokeCertificateAuthority" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "吊销CA",
+        "description" : "吊销子CA。",
+        "operationId" : "RevokeCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要吊销的子CA ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要吊销的子CA ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RevokeCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RevokeCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/revoke"
+    },
+    "/ExportCertificateAuthorityCsr" : {
+      "get" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "导出CA的证书签名请求(CSR)",
+        "description" : "导出CA的证书签名请求。",
+        "operationId" : "ExportCertificateAuthorityCsr",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportCertificateAuthorityCsrResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "未激活的从属CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "未激活的从属CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportCertificateAuthorityCsr",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/csr"
+    },
+    "/ShowCertificate" : {
+      "get" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "查询证书详情",
+        "description" : "查询证书详情。",
+        "operationId" : "ShowCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Certificates"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "需要查询的私有证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "需要查询的私有证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}"
+    },
+    "/EnableCertificateAuthority" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "启用CA",
+        "description" : "启用CA。",
+        "operationId" : "EnableCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要启用的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要启用的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/enable"
+    },
+    "/CreateCertificateByCsr" : {
+      "post" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "通过CSR签发证书",
+        "description" : "通过CSR签发证书。功能约束如下:",
+        "operationId" : "CreateCertificateByCsr",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCertificateByCsrRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificateByCsr",
+      "x-url" : "{endpoint}/v1/private-certificates/csr"
+    },
+    "/CreateCertTag" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "创建证书标签",
+        "description" : "创建证书标签。",
+        "operationId" : "CreateCertTag",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所需要创建标签的证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要创建标签的证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertTag",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/tags"
+    },
+    "/DisableCertificateAuthority" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "禁用CA",
+        "description" : "禁用CA。",
+        "operationId" : "DisableCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要禁用CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要禁用CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/disable"
+    },
+    "/ParseCertificateSigningRequest" : {
+      "post" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "解析CSR",
+        "description" : "解析CSR。",
+        "operationId" : "ParseCertificateSigningRequest",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParseCsrResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParseCertificateSigningRequestRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ParseCertificateSigningRequest",
+      "x-url" : "{endpoint}/v1/private-certificates/csr/parse"
+    },
+    "/RestoreCertificateAuthority" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "恢复CA",
+        "description" : "恢复CA,将处于“计划删除”状态的CA证书,重新恢复为“已禁用”状态。",
+        "operationId" : "RestoreCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所需要恢复的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要恢复的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RestoreCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/restore"
+    },
+    "/ShowCertificateAuthorityObsAgency" : {
+      "get" : {
+        "tags" : [ "证书吊销处理" ],
+        "summary" : "查看是否具有委托权限",
+        "description" : "查看是否具有委托权限。",
+        "operationId" : "ShowCertificateAuthorityObsAgency",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowCertificateAuthorityObsAgencyResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificateAuthorityObsAgency",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/obs/agencies"
+    },
+    "/CountCertResourceInstances" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据标签查询证书数量",
+        "description" : "根据标签查询证书数量。",
+        "operationId" : "CountCertResourceInstances",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CountResourceInstancesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListResourceInstancesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountCertResourceInstances",
+      "x-url" : "{endpoint}/v1/private-certificates/resource-instances/count"
+    },
+    "/ShowCertificateQuota" : {
+      "get" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "查询私有证书配额",
+        "description" : "查询私有证书配额。",
+        "operationId" : "ShowCertificateQuota",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowQuotaResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificateQuota",
+      "x-url" : "{endpoint}/v1/private-certificates/quotas"
+    },
+    "/DisableCertificateAuthorityCrl" : {
+      "post" : {
+        "tags" : [ "证书吊销处理" ],
+        "summary" : "禁用CRL",
+        "description" : "禁用当前CA的CRL。",
+        "operationId" : "DisableCertificateAuthorityCrl",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要禁用CRL的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要禁用CRL的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableCertificateAuthorityCrl",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/crl/disable"
+    },
+    "/ShowCertificateAuthority" : {
+      "get" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "查询CA详情",
+        "description" : "查询CA详情。",
+        "operationId" : "ShowCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CertificateAuthorities"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}"
+    },
+    "/ListCertificateAuthorityObsBucket" : {
+      "get" : {
+        "tags" : [ "证书吊销处理" ],
+        "summary" : "查询OBS桶列表",
+        "description" : "查询OBS桶列表。",
+        "operationId" : "ListCertificateAuthorityObsBucket",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCertificateAuthorityObsBucketResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificateAuthorityObsBucket",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/obs/buckets"
+    },
+    "/ListCaResourceInstances" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据标签查询CA列表",
+        "description" : "根据标签查询CA列表。",
+        "operationId" : "ListCaResourceInstances",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListResourceByTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListResourceInstancesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCaResourceInstances",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/resource-instances/filter"
+    },
+    "/RevokeCertificate" : {
+      "post" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "吊销证书",
+        "description" : "吊销证书。",
+        "operationId" : "RevokeCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所要吊销的私有证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要吊销的私有证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RevokeCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RevokeCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/revoke"
+    },
+    "/ImportCertificateAuthorityCertificate" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "导入CA证书",
+        "description" : "导入CA证书,使用本接口需要满足以下条件:",
+        "operationId" : "ImportCertificateAuthorityCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要导入的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要导入的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImportCertificateAuthorityCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportCertificateAuthorityCertificate",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/import"
+    },
+    "/EnableCertificateAuthorityCrl" : {
+      "post" : {
+        "tags" : [ "证书吊销处理" ],
+        "summary" : "启用CRL",
+        "description" : "启用当前CA的CRL。",
+        "operationId" : "EnableCertificateAuthorityCrl",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要启用CRL的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要启用CRL的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EnableCertificateAuthorityCrlRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableCertificateAuthorityCrl",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/crl/enable"
+    },
+    "/ListCaTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据CA查询标签列表",
+        "description" : "根据CA证书ID查询此CA的标签列表。",
+        "operationId" : "ListCaTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所需要查询标签列表的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要查询标签列表的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCaTags",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/tags"
+    },
+    "/CreateCaTag" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "创建CA标签",
+        "description" : "创建CA标签。",
+        "operationId" : "CreateCaTag",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所需要创建标签的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要创建标签的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCaTag",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/tags"
+    },
+    "/ListCertTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据证书查询标签列表",
+        "description" : "根据证书ID查询此证书的标签列表。",
+        "operationId" : "ListCertTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所需要查询标签列表的证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要查询标签列表的证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertTags",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/tags"
+    },
+    "/ShowCertificateAuthorityQuota" : {
+      "get" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "查询CA配额",
+        "description" : "查询CA证书配额。",
+        "operationId" : "ShowCertificateAuthorityQuota",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowQuotaResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificateAuthorityQuota",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/quotas"
+    },
+    "/CountCaResourceInstances" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据标签查询CA数量",
+        "description" : "根据标签查询CA数量。",
+        "operationId" : "CountCaResourceInstances",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CountResourceInstancesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListResourceInstancesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountCaResourceInstances",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/resource-instances/count"
+    },
+    "/ListCertResourceInstances" : {
+      "post" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "根据标签查询证书列表",
+        "description" : "根据标签查询证书列表。",
+        "operationId" : "ListCertResourceInstances",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListResourceByTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListResourceInstancesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertResourceInstances",
+      "x-url" : "{endpoint}/v1/private-certificates/resource-instances/filter"
+    },
+    "/ExportCertificate" : {
+      "post" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "导出证书",
+        "description" : "导出证书。",
+        "operationId" : "ExportCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所要导出的私有证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要导出的私有证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExportCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/export"
+    },
+    "/ExportCertificateAuthorityCertificate" : {
+      "post" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "导出CA证书",
+        "description" : "导出CA证书。",
+        "operationId" : "ExportCertificateAuthorityCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportCertificateAuthorityCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要导出的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要导出的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportCertificateAuthorityCertificate",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}/export"
+    },
+    "/ListDomainCaTags" : {
+      "get" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "查询所有CA标签列表",
+        "description" : "查询所有CA标签列表。",
+        "operationId" : "ListDomainCaTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDomainTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDomainCaTags",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/tags"
+    },
+    "/DeleteCertificateAuthority" : {
+      "delete" : {
+        "tags" : [ "私有CA管理" ],
+        "summary" : "删除CA",
+        "description" : "计划删除CA。计划多少天后删除CA证书,可设置7天~30天内删除。",
+        "operationId" : "DeleteCertificateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "ca_id",
+          "in" : "path",
+          "description" : "所要计划删除的CA证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所要计划删除的CA证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "pending_days",
+          "in" : "query",
+          "description" : "延迟删除时间,单位为”天“。",
+          "required" : true,
+          "schema" : {
+            "example" : 10,
+            "description" : "延迟删除时间,单位为”天“。",
+            "type" : "string",
+            "maxLength" : 2,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCertificateAuthority",
+      "x-url" : "{endpoint}/v1/private-certificate-authorities/{ca_id}"
+    },
+    "/BatchDeleteCertTags" : {
+      "delete" : {
+        "tags" : [ "标签管理" ],
+        "summary" : "批量删除证书标签",
+        "description" : "批量删除证书标签。",
+        "operationId" : "BatchDeleteCertTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "请求已成功,无响应body"
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "所需要批量删除标签的证书ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "50608bba-87c2-45f8-9fc7-5723766ced75",
+            "description" : "所需要批量删除标签的证书ID。",
+            "type" : "string",
+            "maxLength" : 36,
+            "minLength" : 36
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchOperateTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteCertTags",
+      "x-url" : "{endpoint}/v1/private-certificates/{certificate_id}/tags/delete"
+    },
+    "/CreateCertificate" : {
+      "post" : {
+        "tags" : [ "私有证书管理" ],
+        "summary" : "申请证书",
+        "description" : "申请证书。",
+        "operationId" : "CreateCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求已成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求参数有误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "被请求的页面需要鉴权。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在或资源未找到。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIePgYJKoZIhvcNAQcCoIIeLzCCHisCAQExDTALBglghkgBZQMEAgEwghxOBgkqhkiG9w0BBwGgghw...",
+            "description" : "用户token,参见:[IAM token获取方法](https://support.huaweicloud.com/api-iam/iam_30_0001.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificate",
+      "x-url" : "{endpoint}/v1/private-certificates"
+    }
+  }
+}

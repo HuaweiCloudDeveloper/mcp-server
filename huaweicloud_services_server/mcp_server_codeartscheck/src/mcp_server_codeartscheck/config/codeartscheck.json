@@ -1,0 +1,4572 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CodeArtsCheck-规则管理",
+    "title" : "CodeArtsCheck",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ErrorResponse" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "example" : "CC.00000000",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "example" : "网络繁忙,请稍后再试",
+            "description" : "错误描述"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskMetricInfo" : {
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "example" : "b9db371361724xxxx6937f3280df1d4fc4",
+            "description" : "任务id"
+          },
+          "task_name" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "任务名字"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "example" : "a2b9a42ee649xxxx94f5655f8535920e",
+            "description" : "创建者id"
+          },
+          "git_url" : {
+            "type" : "string",
+            "example" : "https://codehub.alpha.devcloud.inhuawei.com/******",
+            "description" : "代码仓地址"
+          },
+          "git_branch" : {
+            "type" : "string",
+            "example" : "portal-ts",
+            "description" : "代码仓分支"
+          },
+          "last_check_time" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:37:46",
+            "description" : "上一次检查时间"
+          },
+          "last_exec_time" : {
+            "type" : "string",
+            "example" : "2 分 28 秒",
+            "description" : "上次执行时间"
+          },
+          "check_type" : {
+            "type" : "string",
+            "example" : "source",
+            "description" : "检查类型"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:21:11",
+            "description" : "创建时间"
+          },
+          "metric_info" : {
+            "$ref" : "#/components/schemas/MetricInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "MetricInfo" : {
+        "description" : "度量项",
+        "properties" : {
+          "code_size" : {
+            "type" : "string",
+            "example" : "133426.00",
+            "description" : "代码规模"
+          },
+          "raw_lines" : {
+            "type" : "string",
+            "example" : "182082.00",
+            "description" : "原始代码行数"
+          },
+          "methods_total" : {
+            "type" : "string",
+            "example" : "6840.00",
+            "description" : "函数总数"
+          },
+          "cyclomatic_complexity_total" : {
+            "type" : "string",
+            "example" : "27435.00",
+            "description" : "圈复杂度总数"
+          },
+          "cyclomatic_complexity_per_method" : {
+            "type" : "string",
+            "example" : "7.43",
+            "description" : "平均圈复杂度"
+          },
+          "maximum_cyclomatic_complexity" : {
+            "type" : "string",
+            "example" : "346.00",
+            "description" : "最大圈复杂度"
+          },
+          "huge_cyclomatic_complexity_total" : {
+            "type" : "string",
+            "example" : "167.00",
+            "description" : "超大圈复杂度数"
+          },
+          "huge_cyclomatic_complexity_ratio" : {
+            "type" : "string",
+            "example" : "4.13",
+            "description" : "超大圈复杂度比例"
+          },
+          "cca_cyclomatic_complexity_total" : {
+            "type" : "string",
+            "example" : "26693.00",
+            "description" : "cca圈复杂度总数"
+          },
+          "cca_cyclomatic_complexity_per_method" : {
+            "type" : "string",
+            "example" : "7.25",
+            "description" : "cca平均圈复杂度"
+          },
+          "maximum_cca_cyclomatic_complexity" : {
+            "type" : "string",
+            "example" : "342.00",
+            "description" : "cca最大圈复杂度"
+          },
+          "huge_cca_cyclomatic_complexity_total" : {
+            "type" : "string",
+            "example" : "148.00",
+            "description" : "超大圈复杂度函数总数"
+          },
+          "cyclomatic_complexity_adequacy" : {
+            "type" : "string",
+            "example" : "21.00",
+            "description" : "圈复杂度满足度"
+          },
+          "maximum_depth" : {
+            "type" : "string",
+            "example" : "333.00",
+            "description" : "最大深度"
+          },
+          "huge_depth_total" : {
+            "type" : "string",
+            "example" : "8.85",
+            "description" : "超大深度数"
+          },
+          "huge_depth_ratio" : {
+            "type" : "string",
+            "example" : "91546.00",
+            "description" : "超大深度占比"
+          },
+          "method_lines" : {
+            "type" : "string",
+            "example" : "91546.00",
+            "description" : "函数总行数"
+          },
+          "lines_per_method" : {
+            "type" : "string",
+            "example" : "8.04",
+            "description" : "函数平均代码行"
+          },
+          "huge_method_total" : {
+            "type" : "string",
+            "example" : "321",
+            "description" : "超大函数数"
+          },
+          "huge_method_ratio" : {
+            "type" : "string",
+            "example" : "8.04",
+            "description" : "超大函数占比"
+          },
+          "files_total" : {
+            "type" : "string",
+            "example" : "629.00",
+            "description" : "文件总数"
+          },
+          "folders_total" : {
+            "type" : "string",
+            "example" : "426.00",
+            "description" : "目录总数"
+          },
+          "lines_per_file" : {
+            "type" : "string",
+            "example" : "1700.93",
+            "description" : "文件平均代码行"
+          },
+          "huge_headerfile_total" : {
+            "type" : "string",
+            "example" : "0.00",
+            "description" : "超大头文件数"
+          },
+          "huge_headerfile_ratio" : {
+            "type" : "string",
+            "example" : "0.00",
+            "description" : "超大头文件占比"
+          },
+          "huge_non_headerfile_total" : {
+            "type" : "string",
+            "example" : "7.00",
+            "description" : "超大源文件数"
+          },
+          "huge_non_headerfile_ratio" : {
+            "type" : "string",
+            "example" : "11.40",
+            "description" : "超大源文件占比"
+          },
+          "huge_folder_total" : {
+            "type" : "string",
+            "example" : "0.0",
+            "description" : "超大目录数"
+          },
+          "huge_folder_ratio" : {
+            "type" : "string",
+            "example" : "0.0",
+            "description" : "超大目录占比"
+          },
+          "file_duplication_total" : {
+            "type" : "string",
+            "example" : "2.0",
+            "description" : "重复文件数"
+          },
+          "file_duplication_ratio" : {
+            "type" : "string",
+            "example" : "2.0",
+            "description" : "文件重复率"
+          },
+          "non_hfile_duplication_total" : {
+            "type" : "string",
+            "example" : "2.0",
+            "description" : "重复源文件数"
+          },
+          "non_hfile_duplication_ratio" : {
+            "type" : "string",
+            "example" : "2.0",
+            "description" : "源文件重复率"
+          },
+          "code_duplication_total" : {
+            "type" : "string",
+            "example" : "11782.00",
+            "description" : "代码重复数"
+          },
+          "code_duplication_ratio" : {
+            "type" : "string",
+            "example" : "8.00",
+            "description" : "代码重复率"
+          },
+          "non_hfile_code_duplication_total" : {
+            "type" : "string",
+            "example" : "11782",
+            "description" : "源文件代码重复数"
+          },
+          "non_hfile_code_duplication_ratio" : {
+            "type" : "string",
+            "example" : "17.17",
+            "description" : "源文件代码重复率"
+          },
+          "unsafe_functions_total" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "危险函数总数"
+          },
+          "unsafe_functions_kloc" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "危险函数密度"
+          },
+          "redundant_code_total" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "冗余代码数"
+          },
+          "redundant_code_kloc" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "冗余代码块密度"
+          },
+          "warning_suppression_total" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "抑制告警数"
+          },
+          "warning_suppression_kloc" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "抑制告警密度"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskRulesetResponse" : {
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "规则集信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskRulesetInfo"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "总数",
+            "example" : 10
+          }
+        },
+        "type" : "object"
+      },
+      "TaskRulesetInfo" : {
+        "properties" : {
+          "template_id" : {
+            "type" : "string",
+            "example" : "99f573075fe24e769ad96c676511c823",
+            "description" : "规则集id"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "Java",
+            "description" : "规则集语言"
+          },
+          "template_name" : {
+            "type" : "string",
+            "example" : "自定义规则集",
+            "description" : "规则集名称"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "selected",
+            "description" : "规则集状态optional:可选,selected:已选"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "规则集属性0 是默认用户规则集,1 是系统默认规则集"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowTasksResponseV2" : {
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "description" : "任务信息",
+            "items" : {
+              "$ref" : "#/components/schemas/SimpleTaskInfoV2"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "SimpleTaskInfoV2" : {
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "example" : "b9db371361724xxxx6937f3280df1d4fc4",
+            "description" : "任务id"
+          },
+          "task_name" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "任务名字"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "example" : "a2b9a42ee649xxxx94f5655f8535920e",
+            "description" : "创建者id"
+          },
+          "git_url" : {
+            "type" : "string",
+            "example" : "https://codehub.alpha.devcloud.inhuawei.com/******",
+            "description" : "代码仓地址"
+          },
+          "git_branch" : {
+            "type" : "string",
+            "example" : "portal-ts",
+            "description" : "代码仓分支,如果是MR模式,为源分支"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:21:11",
+            "description" : "创建时间"
+          },
+          "last_check_time" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:37:46",
+            "description" : "上一次检查时间"
+          }
+        },
+        "type" : "object"
+      },
+      "CheckRecordIssueCountsInfo" : {
+        "properties" : {
+          "critical" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "致命问题"
+          },
+          "serious" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "严重问题"
+          },
+          "normal" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "常规问题"
+          },
+          "prompt" : {
+            "type" : "integer",
+            "example" : 3,
+            "description" : "提示问题"
+          }
+        },
+        "type" : "object"
+      },
+      "CheckRecordResult" : {
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "description" : "历史记录数据",
+            "items" : {
+              "$ref" : "#/components/schemas/CheckRecordDataInfo"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "CheckRecordDataInfo" : {
+        "properties" : {
+          "check_time" : {
+            "type" : "string",
+            "description" : "检查任务执行开始时间",
+            "example" : "2020-02-10T11:31:46Z"
+          },
+          "check_end_time" : {
+            "type" : "string",
+            "description" : "检查任务执行结束时间",
+            "example" : "2020-02-10T11:38:46Z"
+          },
+          "issue_counts" : {
+            "description" : "严重程度",
+            "$ref" : "#/components/schemas/CheckRecordIssueCountsInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "RuleListResponse" : {
+        "required" : [ "info", "total" ],
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "规则信息",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleListItem"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "RuleListItem" : {
+        "properties" : {
+          "rule_set" : {
+            "type" : "string",
+            "example" : "HuaWeiC",
+            "description" : "规则集规范分类"
+          },
+          "rule_id" : {
+            "type" : "string",
+            "example" : 8048,
+            "description" : "规则id"
+          },
+          "rule_language" : {
+            "type" : "string",
+            "example" : "Java",
+            "description" : "规则所属语言"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "example" : "\\\"Arrays.stream\\\" should be used for primitive arrays",
+            "description" : "规则名称"
+          },
+          "rule_severity" : {
+            "type" : "string",
+            "example" : 1,
+            "description" : "规则问题级别"
+          },
+          "rule_tages" : {
+            "type" : "string",
+            "example" : "bug",
+            "description" : "规则标签"
+          },
+          "right_example" : {
+            "type" : "string",
+            "example" : "\\u003cpre\\u003e\\nvar a \\u003d 8;\\nvar b \\u003d \\\"8\\\";\\n\\nif (a \\u003d\\u003d b) {\\n  // ...\\n}\\n\\u003c/pre\\u003e\\n\\u003cp\\u003eor\\u003c/p\\u003e\\n\\u003cpre\\u003e\\nvar a \\u003d 8;\\nvar b \\u003d \\\"8\\\";\\n\\nif (a \\u003d\\u003d\\u003d Number(b)) {\\n  // ...\\n}\\n\\u003c/pre\\u003e",
+            "description" : "正确示例"
+          },
+          "error_example" : {
+            "type" : "string",
+            "example" : "\\u003cpre\\u003e\\nvar a \\u003d 8;\\nvar b \\u003d \\\"8\\\";\\n\\nif (a \\u003d\\u003d\\u003d b) {  //不规范;比较结果总是false\\n  // ...\\n}\\n\\u003c/pre\\u003e",
+            "description" : "错误示例"
+          },
+          "revise_opinion" : {
+            "type" : "string",
+            "example" : "无",
+            "description" : "修改建议"
+          },
+          "rule_desc" : {
+            "type" : "string",
+            "example" : "\\u003cp\\u003e使用恒等运算符(\\u003ccode\\u003e\\u003d\\u003d\\u003d\\u003c/code\\u003e)比较不同的类型,其结果总是 \\u003ccode\\u003efalse\\u003c/code\\u003e 。\\u003c/p\\u003e",
+            "description" : "规则描述"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskSettingsResponse" : {
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "高级选项的相关信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskAdvancedSettings"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskAdvancedSettings" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "example" : "customImage",
+            "description" : "高级选项对应的名称"
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "registry-xxx.com/xxxxx202210-001",
+            "description" : "高级选项对应的取值"
+          },
+          "option_value" : {
+            "type" : "string",
+            "example" : "registry-xxx.com/xxxxx202210-001",
+            "description" : "高级选项对应的可选项"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "自定义镜像",
+            "description" : "高级选项对应的中文描述"
+          }
+        },
+        "type" : "object"
+      },
+      "ListTemplateRulesRes" : {
+        "required" : [ "info", "total" ],
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "规则集的规则列表信息",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleItem"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "RuleConfig" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "example" : 251,
+            "description" : "规则配置ID"
+          },
+          "rule_id" : {
+            "type" : "integer",
+            "example" : 11707,
+            "description" : "规则ID"
+          },
+          "default_value" : {
+            "type" : "string",
+            "example" : 20,
+            "description" : "默认值"
+          },
+          "option_value" : {
+            "type" : "string",
+            "example" : 10,
+            "description" : "当前"
+          },
+          "option_key" : {
+            "type" : "string",
+            "example" : "threshold",
+            "description" : "当前规则配置项key"
+          },
+          "option_name" : {
+            "type" : "string",
+            "example" : "threshold",
+            "description" : "当前规则配置项名称"
+          },
+          "template_id" : {
+            "type" : "string",
+            "example" : "99f573075fe24e769ad96c676511c823",
+            "description" : "规则集id"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "代码复杂度超过阈值,则会被识别为超大圈复杂度,与圈复杂度统计区别在于统计SWITCH的时候,只统计SWITCH的个数,不统计case,default,必填",
+            "description" : "描述"
+          }
+        },
+        "type" : "object"
+      },
+      "RuleItem" : {
+        "properties" : {
+          "rule_id" : {
+            "type" : "string",
+            "example" : 8048,
+            "description" : "规则id"
+          },
+          "rule_language" : {
+            "type" : "string",
+            "example" : "Java",
+            "description" : "规则所属语言"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "example" : "\\\"Arrays.stream\\\" should be used for primitive arrays",
+            "description" : "规则名称"
+          },
+          "rule_severity" : {
+            "type" : "string",
+            "example" : 1,
+            "description" : "规则问题级别"
+          },
+          "rule_tages" : {
+            "type" : "string",
+            "example" : "bug",
+            "description" : "规则标签"
+          },
+          "checked" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "规则状态0:未启用,1:已启用"
+          },
+          "rule_config_list" : {
+            "type" : "array",
+            "description" : "规则配置参数阈值相关信息",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleConfig"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowDefectsDetailResponseV2" : {
+        "properties" : {
+          "defects" : {
+            "type" : "array",
+            "description" : "缺陷详情信息",
+            "items" : {
+              "$ref" : "#/components/schemas/DefectInfoV2"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "DefectInfoV2" : {
+        "description" : "缺陷信息",
+        "properties" : {
+          "defect_id" : {
+            "type" : "string",
+            "example" : "b04be5fa29c94f6580375124a857dc25",
+            "description" : "缺陷的id"
+          },
+          "defect_checker_name" : {
+            "type" : "string",
+            "example" : "Expected a break statement before default",
+            "description" : "缺陷对应检查项的名称"
+          },
+          "defect_status" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "缺陷的状态0为解决 1已解决 2已忽略"
+          },
+          "rule_system_tags" : {
+            "type" : "string",
+            "example" : "fossscan,findbugs",
+            "description" : "规则标签,多个标签用逗号隔开"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "example" : "FossScan.1 OpenSource Software",
+            "description" : "规则名"
+          },
+          "line_number" : {
+            "type" : "string",
+            "example" : "81",
+            "description" : "缺陷所在文件行号"
+          },
+          "defect_content" : {
+            "type" : "string",
+            "example" : "Update or refactor this function so that its implementation doesn't duplicate the one on line 60.",
+            "description" : "缺陷描述"
+          },
+          "defect_level" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "缺陷等级,0致命,1严重,2一般,3提示"
+          },
+          "file_path" : {
+            "type" : "string",
+            "example" : "code/types/functions.ts",
+            "description" : "缺陷文件路径"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2020-10-26T06:24:15Z",
+            "description" : "创建时间"
+          },
+          "issue_key" : {
+            "type" : "string",
+            "example" : "AA76E96XXXXXXXXXXXXXXXXXCAAE5",
+            "description" : "问题唯一标识"
+          },
+          "fragment" : {
+            "type" : "array",
+            "description" : "缺陷代码片段详情",
+            "items" : {
+              "$ref" : "#/components/schemas/DefectFragmentV2"
+            }
+          },
+          "events" : {
+            "type" : "array",
+            "description" : "调用链信息",
+            "items" : {
+              "$ref" : "#/components/schemas/DefectEvents"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "DefectFragmentV2" : {
+        "description" : "start_offset和end_offset均为-1,表示该行不是缺陷片段或者整行都是,需要结合DefectInfoV2中的line_number属性一起判断哪一行是具体的缺陷片段。",
+        "properties" : {
+          "line_num" : {
+            "type" : "string",
+            "example" : "78",
+            "description" : "行号"
+          },
+          "line_content" : {
+            "type" : "string",
+            "example" : "    export function padding(all: number);",
+            "description" : "该行代码内容"
+          },
+          "start_offset" : {
+            "type" : "integer",
+            "example" : -1,
+            "description" : "缺陷开始列号"
+          },
+          "end_offset" : {
+            "type" : "integer",
+            "example" : -1,
+            "description" : "缺陷结束列号"
+          }
+        },
+        "type" : "object"
+      },
+      "DefectEvents" : {
+        "properties" : {
+          "events" : {
+            "type" : "array",
+            "description" : "调用链信息",
+            "items" : {
+              "$ref" : "#/components/schemas/DefectEvents"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "描述"
+          },
+          "fix_suggestions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "fix suggestions"
+          },
+          "line" : {
+            "type" : "integer",
+            "example" : 11,
+            "description" : "缺陷所在行"
+          },
+          "end_line" : {
+            "type" : "integer",
+            "example" : 22,
+            "description" : "缺陷结束行"
+          },
+          "code_context_start_line" : {
+            "type" : "integer",
+            "example" : 11,
+            "description" : "缺陷开始行"
+          },
+          "main" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "代码片段"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "file path"
+          },
+          "tag" : {
+            "type" : "string",
+            "example" : "path",
+            "description" : "标签"
+          },
+          "main_buggy_code" : {
+            "type" : "string",
+            "example" : "path",
+            "description" : "main buggy code"
+          },
+          "code_context" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "code context"
+          }
+        },
+        "type" : "object"
+      },
+      "TreeNode" : {
+        "description" : "节点信息",
+        "properties" : {
+          "file_name" : {
+            "type" : "string",
+            "description" : "目录或文件名",
+            "example" : "main"
+          },
+          "file_path" : {
+            "type" : "string",
+            "description" : "目录或文件路径",
+            "example" : "src/main"
+          },
+          "is_leaf" : {
+            "type" : "boolean",
+            "description" : "是否为叶子节点,true是,false不是",
+            "example" : false
+          },
+          "checkbox_status" : {
+            "type" : "string",
+            "description" : "屏蔽状态,包括unchecked(不屏蔽)、all(全屏蔽)、half(半屏蔽)",
+            "example" : "unchecked"
+          }
+        },
+        "type" : "object"
+      },
+      "PathTreeResponse" : {
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "任务的目录树信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TreeNode"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "description" : "数目",
+            "example" : 20
+          }
+        },
+        "type" : "object"
+      },
+      "TaskLogRes" : {
+        "properties" : {
+          "param_info" : {
+            "$ref" : "#/components/schemas/ParamInfo"
+          },
+          "log_info" : {
+            "type" : "array",
+            "description" : "日志信息",
+            "items" : {
+              "$ref" : "#/components/schemas/LogInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ParamInfo" : {
+        "description" : "任务详情",
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "example" : "git@codehub.devcloud.cn-north-7.ulanqab.huawei.com:xxxxxxx/xxxxxx.git",
+            "description" : "仓库地址"
+          },
+          "branch" : {
+            "type" : "string",
+            "example" : "master",
+            "description" : "仓库分支"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "CSS",
+            "description" : "仓库语言"
+          },
+          "exclude_dir" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "排除的目录"
+          },
+          "encode" : {
+            "type" : "string",
+            "example" : "GBK",
+            "description" : "编码格式"
+          },
+          "compile_config" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "编译配置信息"
+          },
+          "rule_template" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "g规则集名称"
+          }
+        },
+        "type" : "object"
+      },
+      "LogInfo" : {
+        "properties" : {
+          "display_name" : {
+            "type" : "string",
+            "example" : "执行sonar检查",
+            "description" : "日志标题"
+          },
+          "log" : {
+            "type" : "string",
+            "example" : "[2022/01/07 16:57:16.321] + export SONAR_SCANNER_OPTS=-Xmx4096m\\n[2022/01/07 16:57:16.321] + SONAR_SCANNER_OPTS=-Xmx4096m\\n[2022/01/07 16:57:16.321] + cd ./code",
+            "description" : "日志内容"
+          },
+          "level" : {
+            "type" : "string",
+            "example" : "error",
+            "description" : "日志级别"
+          },
+          "analysis" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "日志分析"
+          },
+          "faq" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "常见问题解答"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateTaskSettingsRequestBody" : {
+        "description" : "任务配置高级选项的请求信息",
+        "required" : [ "task_advanced_settings" ],
+        "properties" : {
+          "task_advanced_settings" : {
+            "type" : "array",
+            "description" : "高级选项参数的相关信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskAdvancedSettingsItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TaskAdvancedSettingsItem" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "高级选项对应的名称",
+            "example" : "customImage",
+            "minLength" : 1,
+            "maxLength" : 50
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "高级选项对应的取值",
+            "example" : "msbuild",
+            "minLength" : 1,
+            "maxLength" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "ProgressInfoV2" : {
+        "properties" : {
+          "task_status" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "任务状态,0表示检查中,1表示检查失败,2表示检查成功,3表示任务中止"
+          },
+          "progress" : {
+            "description" : "检查进度",
+            "$ref" : "#/components/schemas/ProgressDetailV2"
+          }
+        },
+        "type" : "object"
+      },
+      "ProgressDetailV2" : {
+        "properties" : {
+          "ratio" : {
+            "type" : "string",
+            "description" : "进度百分比"
+          },
+          "info" : {
+            "type" : "string",
+            "description" : "中文信息"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskCheckParamters" : {
+        "properties" : {
+          "check_id" : {
+            "type" : "integer",
+            "example" : 11,
+            "description" : "检查工具ID"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Java",
+            "description" : "编译参数名称"
+          },
+          "checker_configs" : {
+            "type" : "array",
+            "description" : "检查参数配置信息",
+            "items" : {
+              "$ref" : "#/components/schemas/CheckConfigInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CheckConfigInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "java编译工具",
+            "description" : "检查参数名称"
+          },
+          "cfg_key" : {
+            "type" : "string",
+            "example" : "javaCompileTool",
+            "description" : "检查参数对应的key值"
+          },
+          "default_value" : {
+            "type" : "string",
+            "example" : "maven",
+            "description" : "检查参数默认值"
+          },
+          "option_value" : {
+            "type" : "string",
+            "example" : "maven,gradle",
+            "description" : "检查参数可选项"
+          },
+          "is_required" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "0:非必填,1:必填"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "java编译工具",
+            "description" : "检查参数说明"
+          },
+          "type" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "参数类型,0:文本,2:有可选项"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : false,
+            "description" : "参数状态,on:启用,off:未启用"
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "maven",
+            "description" : "检查参数值"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskCheckResponse" : {
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "description" : "历史记录数据",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskCheckParamters"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "ConfigTaskParameterBody" : {
+        "description" : "任务配置检查参数请求信息",
+        "required" : [ "check_id", "ruleset_id", "language", "status", "task_check_settings" ],
+        "properties" : {
+          "check_id" : {
+            "type" : "integer",
+            "description" : "检查工具ID",
+            "example" : 11,
+            "minLength" : 1,
+            "maxLength" : 11
+          },
+          "ruleset_id" : {
+            "type" : "string",
+            "description" : "规则集ID",
+            "example" : "b113b9bee57545738bee86ec69f337a6",
+            "minLength" : 1,
+            "maxLength" : 64
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "规则集语言",
+            "example" : "csharp",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "off:关闭,on:开启",
+            "example" : "on",
+            "minLength" : 1,
+            "maxLength" : 3
+          },
+          "task_check_settings" : {
+            "type" : "array",
+            "description" : "检查参数信息",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskCheckSettingsItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TaskCheckSettingsItem" : {
+        "required" : [ "cfg_key", "status", "value" ],
+        "properties" : {
+          "cfg_key" : {
+            "type" : "string",
+            "description" : "检查参数对应的key值",
+            "example" : "csharpCompileTool",
+            "minLength" : 1,
+            "maxLength" : 50
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "参数状态",
+            "example" : "on",
+            "minLength" : 1,
+            "maxLength" : 3
+          },
+          "cfg_value" : {
+            "type" : "string",
+            "description" : "检查参数值",
+            "example" : "msbuild",
+            "minLength" : 1,
+            "maxLength" : 1000
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateTaskRulesetItem" : {
+        "required" : [ "rule_set_id", "language", "if_use", "status" ],
+        "properties" : {
+          "language" : {
+            "type" : "string",
+            "description" : "规则集语言",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "example" : "cpp"
+          },
+          "rule_set_id" : {
+            "type" : "string",
+            "description" : "规则集ID,通过调用ListTaskRuleset接口,根据响应参数中的template_id获得",
+            "minLength" : 1,
+            "maxLength" : 50,
+            "example" : "7be4cf0bec9d4bfd8d07077c77329884"
+          },
+          "if_use" : {
+            "type" : "string",
+            "description" : "任务语言和规则集的关系是否启用,1是启用,0是未启用",
+            "minLength" : 1,
+            "maxLength" : 1,
+            "example" : "1"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "新/老数据表示,默认1",
+            "minLength" : 1,
+            "maxLength" : 1,
+            "example" : "1"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateTaskRuleset" : {
+        "description" : "修改任务规则集",
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/UpdateTaskRulesetItem"
+        }
+      },
+      "Ruleset" : {
+        "description" : "创建规则集信息",
+        "required" : [ "project_id", "template_name", "language", "rule_ids", "is_default" ],
+        "properties" : {
+          "project_id" : {
+            "type" : "string",
+            "description" : "项目ID",
+            "example" : "24b97ef1e7a042fb912625b14c8e99f0",
+            "minLength" : 1,
+            "maxLength" : 50
+          },
+          "template_name" : {
+            "type" : "string",
+            "description" : "新规则集名称",
+            "example" : "自定义test",
+            "minLength" : 1,
+            "maxLength" : 500
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "规则集语言",
+            "example" : "cpp",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "is_default" : {
+            "type" : "string",
+            "description" : "如果有基于的规则集则是1,没有基于的规则集则是0",
+            "example" : "0",
+            "minLength" : 1,
+            "maxLength" : 1
+          },
+          "rule_ids" : {
+            "type" : "string",
+            "description" : "新启用规则ids",
+            "example" : "8139,8138",
+            "minLength" : 1,
+            "maxLength" : 4000
+          },
+          "uncheck_ids" : {
+            "type" : "string",
+            "description" : "新关闭规则id",
+            "example" : "1101,1102",
+            "minLength" : 1,
+            "maxLength" : 4000
+          },
+          "template_id" : {
+            "type" : "string",
+            "description" : "规则集ID",
+            "example" : "da303d80d2594faca60dbcc2e29c18aa",
+            "minLength" : 1,
+            "maxLength" : 50
+          },
+          "custom_attributes" : {
+            "type" : "array",
+            "description" : "自定义规则参数项,支持修改规则阈值",
+            "items" : {
+              "$ref" : "#/components/schemas/CustomAttributes"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RulesetRes" : {
+        "required" : [ "template_id" ],
+        "properties" : {
+          "template_id" : {
+            "type" : "string",
+            "example" : "9e16b*********9471ce5d",
+            "description" : "规则集ID"
+          }
+        },
+        "type" : "object"
+      },
+      "CustomAttributesRule" : {
+        "properties" : {
+          "rule_id" : {
+            "type" : "string",
+            "description" : "规则ID",
+            "example" : 11712
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "attribute的问题级别,0致命,1严重,2一般,3提示",
+            "example" : 2
+          },
+          "rule_config_list" : {
+            "type" : "array",
+            "description" : "规则阈值详细",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleConfig"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CustomAttributes" : {
+        "properties" : {
+          "attribute" : {
+            "type" : "string",
+            "description" : "配置项属性,severity:为问题级别",
+            "example" : "severity"
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "规则详细",
+            "items" : {
+              "$ref" : "#/components/schemas/CustomAttributesRule"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RunRequestV2" : {
+        "description" : "代码仓相关的信息非必填,主要是用于CodeFever临时仓库使用,不填时直接使用创建任务时已经提供的信息",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "description" : "该任务对应临时仓库有权限的用户名",
+            "example" : "test"
+          },
+          "access_token" : {
+            "type" : "string",
+            "description" : "该任务对应临时仓库有权限的用户token",
+            "example" : "xLD56Vhd8xxxxxJF3Sd43fT"
+          },
+          "git_url" : {
+            "type" : "string",
+            "description" : "该任务对应的临时仓库地址",
+            "example" : "http://github.*******.git"
+          },
+          "git_branch" : {
+            "type" : "string",
+            "description" : "该任务对应的临时仓库分支",
+            "example" : "master"
+          }
+        },
+        "type" : "object"
+      },
+      "RunTaskInfoV2" : {
+        "required" : [ "exec_id" ],
+        "properties" : {
+          "exec_id" : {
+            "type" : "string",
+            "example" : "9e16b*********9471ce5d",
+            "description" : "执行id"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDefectRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "defect_id" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "问题id,多个时英文逗号分隔"
+          },
+          "defect_status" : {
+            "type" : "string",
+            "example" : 1,
+            "description" : "状态2:已忽略 1:已解决 0:未解决"
+          }
+        }
+      },
+      "RulesetItem" : {
+        "properties" : {
+          "template_id" : {
+            "type" : "string",
+            "example" : "99f573075fe24e769ad96c676511c823",
+            "description" : "规则集id"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "Java",
+            "description" : "规则集语言"
+          },
+          "template_name" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "规则集名称"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "example" : "ae161856f2604229ae12056478a7919f",
+            "description" : "创建人ID"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "example" : "杨老板",
+            "description" : "创建人名称"
+          },
+          "template_create_time" : {
+            "type" : "string",
+            "example" : "2021-10-21T02:14:55Z",
+            "description" : "创建人时间"
+          },
+          "is_used" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "使用状态1使用中,0空闲中"
+          },
+          "rule_ids" : {
+            "type" : "string",
+            "example" : "11152,11153,11154,11155",
+            "description" : "规则集包含的规则id"
+          },
+          "is_default" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "是否该语言默认规则集,0不是,1是"
+          },
+          "is_devcloud_project_default" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "是否是项目下语言默认规则集,0不是,1是"
+          },
+          "is_default_template" : {
+            "type" : "string",
+            "example" : "1",
+            "description" : "是否是系统规则集,0不是,1是"
+          }
+        },
+        "type" : "object"
+      },
+      "ListRulesetsRes" : {
+        "required" : [ "info", "total" ],
+        "properties" : {
+          "info" : {
+            "type" : "array",
+            "description" : "规则集列表信息",
+            "items" : {
+              "$ref" : "#/components/schemas/RulesetItem"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "总数"
+          }
+        },
+        "type" : "object"
+      },
+      "StatisticSeverityV2" : {
+        "properties" : {
+          "critical" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "致命问题数"
+          },
+          "major" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "严重问题数"
+          },
+          "minor" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "一般问题数"
+          },
+          "suggestion" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "提示问题数"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowDefectsStatisticResponseV2" : {
+        "properties" : {
+          "severity" : {
+            "$ref" : "#/components/schemas/StatisticSeverityV2",
+            "description" : "问题级别统计"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/StatisticStatusV2",
+            "description" : "问题状态统计"
+          }
+        },
+        "type" : "object"
+      },
+      "StatisticStatusV2" : {
+        "properties" : {
+          "unresolved" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "未解决"
+          },
+          "resolved" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "已解决"
+          },
+          "dismissed" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "已忽略"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTaskRequestV2" : {
+        "required" : [ "git_url", "git_branch", "language" ],
+        "properties" : {
+          "check_type" : {
+            "type" : "array",
+            "description" : "检查类型,数组格式,默认为source",
+            "items" : {
+              "type" : "string",
+              "example" : "source"
+            }
+          },
+          "git_url" : {
+            "type" : "string",
+            "description" : "仓库地址",
+            "example" : "http://github.*******.git"
+          },
+          "git_branch" : {
+            "type" : "string",
+            "description" : "仓库分支",
+            "example" : "master"
+          },
+          "language" : {
+            "type" : "array",
+            "description" : "检查语言,数组格式,支持cpp,java,js,python,php,css,html,go,typescript,csharp",
+            "items" : {
+              "type" : "string",
+              "example" : "cpp"
+            }
+          },
+          "rule_sets" : {
+            "description" : "指定规则集",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RuleSetV2"
+            }
+          },
+          "task_type" : {
+            "type" : "string",
+            "description" : "检查类型,支持full/inc两种类型,full表示全量检查,inc表示mr检查",
+            "example" : "full"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "仓库有权限的用户名",
+            "example" : "test"
+          },
+          "access_token" : {
+            "type" : "string",
+            "description" : "仓库有权限的用户token",
+            "example" : "testxxxxtest"
+          },
+          "endpoint_id" : {
+            "type" : "string",
+            "description" : "仓库有权限的用户endpointId",
+            "example" : "cd9f6b87ffae43f08cc70a24c7fd7482"
+          },
+          "inc_config" : {
+            "$ref" : "#/components/schemas/IncConfigV2"
+          },
+          "enable_fossbot" : {
+            "type" : "boolean",
+            "description" : "是否打开fossbot检查,默认不开",
+            "example" : true
+          },
+          "resource_pool_id" : {
+            "type" : "string",
+            "description" : "资源池id,可以从资源池管理页面获取",
+            "example" : "cd9f6b87ffae43f08cc70a24c7fd7482"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskIdV2" : {
+        "required" : [ "task_id" ],
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "检查任务id",
+            "example" : "9e16b*********9471ce5d"
+          }
+        },
+        "type" : "object"
+      },
+      "RuleSetV2" : {
+        "required" : [ "language" ],
+        "properties" : {
+          "ruleset_id" : {
+            "type" : "string",
+            "description" : "规则集id,需要从web界面获取",
+            "example" : "4d8b52e071ce4f73bb552d27076f5e1a"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "检查语言,支持cpp,java,js,python,php,css,html,go,typescript",
+            "example" : "cpp"
+          }
+        },
+        "type" : "object"
+      },
+      "IncConfigV2" : {
+        "description" : "增量检查相关的参数",
+        "properties" : {
+          "parent_task_id" : {
+            "type" : "string",
+            "description" : "需要关联的父任务ID,流水线创建或MR创建任务需要该参数",
+            "example" : "4d8b52e071ce4f73bb552d27076f5e1a"
+          },
+          "git_source_branch" : {
+            "type" : "string",
+            "description" : "增量检查代码源分支",
+            "example" : "develop"
+          },
+          "git_target_branch" : {
+            "type" : "string",
+            "description" : "增量检查代码目标分支",
+            "example" : "master"
+          },
+          "merge_id" : {
+            "type" : "string",
+            "description" : "MR唯一标示ID",
+            "example" : "12321"
+          },
+          "event_type" : {
+            "type" : "string",
+            "description" : "webhook触发事件类型,merge_request/push_request",
+            "example" : "merge_request"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "webhook事件状态,open/close/update",
+            "example" : "open"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "MR标题",
+            "example" : "新增测试用例"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateIgnorePathRequestBody" : {
+        "required" : [ "ignore_path_settings" ],
+        "properties" : {
+          "ignore_path_settings" : {
+            "type" : "array",
+            "description" : "屏蔽目录的节点信息列表",
+            "items" : {
+              "$ref" : "#/components/schemas/IgnorePathSettingItem"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "IgnorePathSettingItem" : {
+        "required" : [ "file_path", "checkbox_status" ],
+        "properties" : {
+          "file_path" : {
+            "type" : "string",
+            "description" : "目录或文件路径",
+            "example" : "src/main"
+          },
+          "checkbox_status" : {
+            "type" : "string",
+            "description" : "屏蔽状态,包括unchecked(不屏蔽)、all(全屏蔽)、half(半屏蔽)",
+            "example" : "unchecked"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskInfoV2" : {
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "example" : "b9db371361724xxxx6937f3280df1d4fc4",
+            "description" : "任务id"
+          },
+          "task_name" : {
+            "type" : "string",
+            "example" : "test",
+            "description" : "任务名字"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "example" : "a2b9a42ee649xxxx94f5655f8535920e",
+            "description" : "创建者id"
+          },
+          "git_url" : {
+            "type" : "string",
+            "example" : "https://codehub.alpha.devcloud.inhuawei.com/******",
+            "description" : "代码仓地址"
+          },
+          "git_branch" : {
+            "type" : "string",
+            "example" : "portal-ts",
+            "description" : "代码仓分支,如果是MR模式,为源分支"
+          },
+          "last_check_time" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:37:46",
+            "description" : "上一次检查时间"
+          },
+          "code_line_total" : {
+            "type" : "integer",
+            "example" : 63371,
+            "description" : "代码总行数"
+          },
+          "code_line" : {
+            "type" : "integer",
+            "example" : 5685,
+            "description" : "代码有效行数"
+          },
+          "code_quality" : {
+            "type" : "number",
+            "example" : 147.3,
+            "description" : "代码质量"
+          },
+          "issue_count" : {
+            "type" : "integer",
+            "example" : 3,
+            "description" : "问题数"
+          },
+          "risk_coefficient" : {
+            "type" : "number",
+            "example" : 23,
+            "description" : "危险系数"
+          },
+          "duplication_ratio" : {
+            "type" : "string",
+            "example" : "0.0%",
+            "description" : "重复比例"
+          },
+          "complexity_count" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "复杂度"
+          },
+          "duplicated_lines" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "重复行数"
+          },
+          "comment_lines" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "注释行数"
+          },
+          "comment_ratio" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "注释比例"
+          },
+          "duplicated_blocks" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "重复块"
+          },
+          "last_exec_time" : {
+            "type" : "string",
+            "example" : "2 分 28 秒",
+            "description" : "上次执行时间"
+          },
+          "check_type" : {
+            "type" : "string",
+            "example" : "source",
+            "description" : "检查类型"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2020-02-20 11:21:11",
+            "description" : "创建时间"
+          },
+          "cyclomatic_complexity_per_method" : {
+            "type" : "string",
+            "example" : "84.0",
+            "description" : "代码平均复杂度"
+          },
+          "cyclomatic_complexity_per_file" : {
+            "type" : "string",
+            "example" : "112.0",
+            "description" : "代码平均复杂度(文件)"
+          },
+          "critical_count" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "致命问题数"
+          },
+          "major_count" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "严重问题数"
+          },
+          "minor_count" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "一般问题数"
+          },
+          "suggestion_count" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "提示问题数"
+          },
+          "is_access" : {
+            "type" : "string",
+            "example" : 1,
+            "description" : "门禁质量是否通过"
+          },
+          "trigger_type" : {
+            "type" : "string",
+            "example" : 0,
+            "description" : "任务触发方式"
+          },
+          "file_duplication_ratio" : {
+            "type" : "string",
+            "example" : "33.3%",
+            "description" : "文件重复率"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/SetDefaulTemplate" : {
+      "post" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "设置每个项目对应语言的默认规则集配置",
+        "description" : "设置每个项目对应语言的默认规则集配置。",
+        "operationId" : "SetDefaulTemplate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ruleset_id",
+          "in" : "path",
+          "description" : "规则集ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "规则集ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "language",
+          "in" : "path",
+          "description" : "规则集语言",
+          "required" : true,
+          "schema" : {
+            "example" : "cpp",
+            "description" : "规则集语言",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetDefaulTemplate",
+      "x-url" : "{endpoint}/v2/{project_id}/ruleset/{ruleset_id}/{language}/default"
+    },
+    "/ShowTaskCmetrics" : {
+      "get" : {
+        "tags" : [ "缺陷管理" ],
+        "summary" : "查询cmertrics缺陷概要",
+        "description" : "根据检查任务ID查询cmertrics缺陷概要。",
+        "operationId" : "ShowTaskCmetrics",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskMetricInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskCmetrics",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/metrics-summary"
+    },
+    "/ShowTasksRulesets" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务的已选规则集列表",
+        "description" : "查询任务的已选规则集列表。",
+        "operationId" : "ShowTasksRulesets",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskRulesetResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,每页最多显示1000条",
+          "schema" : {
+            "example" : 1,
+            "description" : "每页显示的数量,每页最多显示1000条",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTasksRulesets",
+      "x-url" : "{endpoint}/v3/{project_id}/tasks/{task_id}/rulesets"
+    },
+    "/ShowTaskListByProjectId" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务列表",
+        "description" : "根据DEVCLOUD_PROJECT_UUID查询该项目下的任务列表。",
+        "operationId" : "ShowTaskListByProjectId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowTasksResponseV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,每页最多显示100条",
+          "schema" : {
+            "example" : 1,
+            "description" : "每页显示的数量,每页最多显示100条",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskListByProjectId",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks"
+    },
+    "/CheckRecord" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "历史扫描结果查询",
+        "description" : "提供每次扫描的问题数量统计",
+        "operationId" : "CheckRecord",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckRecordResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,每页最多显示1000条",
+          "schema" : {
+            "example" : 1,
+            "description" : "每页显示的数量,每页最多显示1000条",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "过滤开始时间,根据任务检查开始时间过滤",
+          "required" : false,
+          "schema" : {
+            "example" : "2020-02-10T11:37:46Z",
+            "description" : "过滤开始时间,根据任务检查开始时间过滤",
+            "type" : "string"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "过滤结束时间,根据任务检查开始时间过滤",
+          "required" : false,
+          "schema" : {
+            "example" : "2020-02-10T11:37:46Z",
+            "description" : "过滤结束时间,根据任务检查开始时间过滤",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckRecord",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/checkrecord"
+    },
+    "/ListTaskRuleset" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务的已选规则集列表",
+        "description" : "查询任务的已选规则集列表。",
+        "operationId" : "ListTaskRuleset",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TaskRulesetInfo"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTaskRuleset",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/rulesets"
+    },
+    "/ListRules" : {
+      "get" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "获取规则列表接口",
+        "description" : "根据语言、问题级别等条件查询规则列表。",
+        "operationId" : "ListRules",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RuleListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "rule_languages",
+          "in" : "query",
+          "description" : "规则对应的语言",
+          "schema" : {
+            "example" : "Java",
+            "description" : "规则对应的语言",
+            "type" : "string"
+          }
+        }, {
+          "name" : "rule_severity",
+          "in" : "query",
+          "description" : "缺陷等级,0致命,1严重,2一般,3提示",
+          "schema" : {
+            "example" : "2",
+            "description" : "缺陷等级,0致命,1严重,2一般,3提示",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量",
+          "schema" : {
+            "example" : 1000,
+            "description" : "每页显示的数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRules",
+      "x-url" : "{endpoint}/v2/rules"
+    },
+    "/ShowTaskSettings" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务的高级选项",
+        "description" : "查询任务的高级选项",
+        "operationId" : "ShowTaskSettings",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskSettingsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量,非必填",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量,非必填",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,非必填",
+          "schema" : {
+            "example" : 100,
+            "description" : "每页显示的数量,非必填",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskSettings",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/settings"
+    },
+    "/ListTemplateRules" : {
+      "get" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "查看规则集的规则列表",
+        "description" : "根据项目ID、规则集ID等条件查询规则列表。",
+        "operationId" : "ListTemplateRules",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTemplateRulesRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ruleset_id",
+          "in" : "path",
+          "description" : "规则集ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "规则集ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "types",
+          "in" : "query",
+          "description" : "规则状态",
+          "required" : true,
+          "schema" : {
+            "example" : "1",
+            "description" : "规则状态",
+            "type" : "string",
+            "default" : "1"
+          }
+        }, {
+          "name" : "languages",
+          "in" : "query",
+          "description" : "规则语言",
+          "schema" : {
+            "example" : "java",
+            "description" : "规则语言",
+            "type" : "string"
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "description" : "规则所属标签",
+          "schema" : {
+            "example" : "bug",
+            "description" : "规则所属标签",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量",
+          "schema" : {
+            "example" : 100,
+            "description" : "每页显示的数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTemplateRules",
+      "x-url" : "{endpoint}/v2/{project_id}/ruleset/{ruleset_id}/rules"
+    },
+    "/ShowTaskDefects" : {
+      "get" : {
+        "tags" : [ "缺陷管理" ],
+        "summary" : "查询缺陷详情",
+        "description" : "根据检查任务ID分页查询缺陷结果详情。",
+        "operationId" : "ShowTaskDefects",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowDefectsDetailResponseV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,每页最多显示100条",
+          "schema" : {
+            "example" : 1,
+            "description" : "每页显示的数量,每页最多显示100条",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "status_ids",
+          "in" : "query",
+          "description" : "问题状态筛选",
+          "schema" : {
+            "example" : -1,
+            "description" : "问题状态筛选",
+            "type" : "string"
+          }
+        }, {
+          "name" : "severity",
+          "in" : "query",
+          "description" : "严重级别,0致命,1严重,2一般,3提示",
+          "schema" : {
+            "example" : -1,
+            "description" : "严重级别,0致命,1严重,2一般,3提示",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskDefects",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/defects-detail"
+    },
+    "/ShowTaskPathTree" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "获取任务的目录树",
+        "description" : "获取任务的目录树",
+        "operationId" : "ShowTaskPathTree",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PathTreeResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "current_path",
+          "in" : "query",
+          "description" : "目录或文件的路径",
+          "required" : false,
+          "schema" : {
+            "description" : "目录或文件的路径",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,每页最多显示1000条",
+          "required" : false,
+          "schema" : {
+            "example" : 10,
+            "description" : "每页显示的数量,每页最多显示1000条",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskPathTree",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/listpathtree"
+    },
+    "/DeleteRuleset" : {
+      "delete" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "删除自定义规则集",
+        "description" : "删除自定义规则集,正在使用中的或默认规则集不能删除",
+        "operationId" : "DeleteRuleset",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ruleset_id",
+          "in" : "path",
+          "description" : "规则集ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "规则集ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRuleset",
+      "x-url" : "{endpoint}/v2/{project_id}/ruleset/{ruleset_id}"
+    },
+    "/ShowTasklog" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务检查失败日志",
+        "description" : "查询任务检查失败日志,不传execute_id则查询最近一次的检查日志",
+        "operationId" : "ShowTasklog",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskLogRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "execute_id",
+          "in" : "query",
+          "description" : "任务单次的执行ID",
+          "schema" : {
+            "example" : "java",
+            "description" : "任务单次的执行ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTasklog",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/log-detail"
+    },
+    "/UpdateTaskSettings" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "任务配置高级选项",
+        "description" : "任务配置高级选项,如自定义镜像",
+        "operationId" : "UpdateTaskSettings",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTaskSettingsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTaskSettings",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/settings"
+    },
+    "/ShowProgressDetail" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务执行状态",
+        "description" : "根据任务ID查询任务执行状态。任务状态:0表示检查中,1表示检查失败,2表示检查成功,3表示任务中止。只有正在检查中才有进度的详细信息。",
+        "operationId" : "ShowProgressDetail",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProgressInfoV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowProgressDetail",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/progress"
+    },
+    "/CheckRulesetParameters" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务规则集的检查参数",
+        "description" : "查询任务规则集的检查参数",
+        "operationId" : "CheckRulesetParameters",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskCheckResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ruleset_id",
+          "in" : "path",
+          "description" : "规则集ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "规则集ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "language",
+          "in" : "query",
+          "description" : "规则集语言",
+          "required" : true,
+          "schema" : {
+            "example" : "java",
+            "description" : "规则集语言",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量,非必填",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量,非必填",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量,非必填",
+          "schema" : {
+            "example" : 100,
+            "description" : "每页显示的数量,非必填",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckRulesetParameters",
+      "x-url" : "{endpoint}/v3/{project_id}/tasks/{task_id}/ruleset/{ruleset_id}/check-parameters"
+    },
+    "/StopTaskById" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "终止检查任务",
+        "description" : "根据任务ID终止检查任务。",
+        "operationId" : "StopTaskById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopTaskById",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/stop"
+    },
+    "/ListTaskParameter" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "任务配置检查参数",
+        "description" : "任务配置检查参数",
+        "operationId" : "ListTaskParameter",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConfigTaskParameterBody"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTaskParameter",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/config-parameters"
+    },
+    "/UpdateTaskRuleset" : {
+      "put" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "修改任务规则集",
+        "description" : "修改任务规则集。",
+        "operationId" : "UpdateTaskRuleset",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTaskRuleset"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTaskRuleset",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/ruleset"
+    },
+    "/CreateRuleset" : {
+      "post" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "创建自定义规则集",
+        "description" : "可根据需求灵活的组合规则。",
+        "operationId" : "CreateRuleset",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RulesetRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Ruleset"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRuleset",
+      "x-url" : "{endpoint}/v2/ruleset"
+    },
+    "/RunTask" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "执行检查任务",
+        "description" : "执行检查任务。",
+        "operationId" : "RunTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RunTaskInfoV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RunRequestV2"
+              }
+            }
+          },
+          "required" : false
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTask",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/run"
+    },
+    "/CheckParameters" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询任务规则集的检查参数",
+        "description" : "查询任务规则集的检查参数",
+        "operationId" : "CheckParameters",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TaskCheckParamters"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "设置媒体类型和编码格式",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "设置媒体类型和编码格式",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ruleset_id",
+          "in" : "path",
+          "description" : "规则集ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "规则集ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "language",
+          "in" : "query",
+          "description" : "规则集语言",
+          "required" : true,
+          "schema" : {
+            "example" : "java",
+            "description" : "规则集语言",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckParameters",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/ruleset/{ruleset_id}/check-parameters"
+    },
+    "/UpdateDefectStatus" : {
+      "put" : {
+        "tags" : [ "缺陷管理" ],
+        "summary" : "修改缺陷状态",
+        "description" : "修改检查出的缺陷的状态为已解决、已忽略",
+        "operationId" : "UpdateDefectStatus",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDefectRequestBody"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDefectStatus",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/defect-status"
+    },
+    "/ListRulesets" : {
+      "get" : {
+        "tags" : [ "规则管理" ],
+        "summary" : "查询规则集列表",
+        "description" : "根据项目ID、语言等条件查询规则集列表。",
+        "operationId" : "ListRulesets",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRulesetsRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "规则集类别",
+          "schema" : {
+            "example" : "1",
+            "description" : "规则集类别",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页索引,偏移量",
+          "schema" : {
+            "example" : 1,
+            "description" : "分页索引,偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的数量",
+          "schema" : {
+            "example" : 100,
+            "description" : "每页显示的数量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRulesets",
+      "x-url" : "{endpoint}/v2/{project_id}/rulesets"
+    },
+    "/ShowTaskDefectsStatistic" : {
+      "get" : {
+        "tags" : [ "缺陷管理" ],
+        "summary" : "查询缺陷详情的统计",
+        "description" : "根据检查任务ID查询缺陷详情的统计",
+        "operationId" : "ShowTaskDefectsStatistic",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowDefectsStatisticResponseV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskDefectsStatistic",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/defects-statistic"
+    },
+    "/CreateTask" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "新建检查任务",
+        "description" : "新建检查任务但是不执行。",
+        "operationId" : "CreateTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskIdV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskRequestV2"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTask",
+      "x-url" : "{endpoint}/v2/{project_id}/task"
+    },
+    "/UpdateIgnorePath" : {
+      "post" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "任务配置屏蔽目录",
+        "description" : "任务配置屏蔽目录",
+        "operationId" : "UpdateIgnorePath",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateIgnorePathRequestBody"
+              }
+            }
+          },
+          "required" : true
+        },
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateIgnorePath",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/config-ignorepath"
+    },
+    "/ShowTaskDetail" : {
+      "get" : {
+        "tags" : [ "缺陷管理" ],
+        "summary" : "查询缺陷概要",
+        "description" : "根据检查任务ID查询缺陷结果的概要。包括问题概述、问题状态、圈复杂度、代码重复率等。",
+        "operationId" : "ShowTaskDetail",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskInfoV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskDetail",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}/defects-summary"
+    },
+    "/DeleteTask" : {
+      "delete" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "删除检查任务",
+        "description" : "删除检查任务,执行中的任务删除无法再查看",
+        "operationId" : "DeleteTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Request succeeded!"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "检查任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "检查任务ID",
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "apig-auth-iam" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTask",
+      "x-url" : "{endpoint}/v2/tasks/{task_id}"
+    }
+  }
+}

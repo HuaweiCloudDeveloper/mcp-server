@@ -1,0 +1,4471 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CDM-作业管理",
+    "title" : "CDM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "counters" : {
+        "properties" : {
+          "org.apache.sqoop.submission.counter.SqoopCounters" : {
+            "description" : "作业运行结果统计,请参见统计结果参数说明",
+            "type" : "object",
+            "$ref" : "#/components/schemas/counter"
+          }
+        },
+        "required" : [ "org.apache.sqoop.submission.counter.SqoopCounters" ],
+        "type" : "object"
+      },
+      "Submission" : {
+        "properties" : {
+          "isIncrementing" : {
+            "description" : "作业是否为增量迁移",
+            "type" : "boolean",
+            "example" : false
+          },
+          "job-name" : {
+            "description" : "作业名称",
+            "type" : "string",
+            "example" : "jdbc2hive"
+          },
+          "counters" : {
+            "description" : "作业运行结果统计,当“status”为“SUCCEEDED”时才有此字段,请参见counters数据结构参数说明",
+            "type" : "object",
+            "$ref" : "#/components/schemas/counters"
+          },
+          "isStopingIncrement" : {
+            "description" : "是否停止增量迁移",
+            "type" : "string",
+            "example" : "false"
+          },
+          "is-execute-auto" : {
+            "description" : "是否定时执行作业",
+            "type" : "boolean",
+            "example" : false
+          },
+          "last-update-date" : {
+            "description" : "作业最后更新时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1536916580005
+          },
+          "last-udpate-user" : {
+            "description" : "最后更新作业状态的用户",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "isDeleteJob" : {
+            "description" : "作业执行完成后是否删除",
+            "type" : "boolean",
+            "example" : false
+          },
+          "creation-user" : {
+            "description" : "创建用户",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "creation-date" : {
+            "description" : "创建时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1536905778725
+          },
+          "external-id" : {
+            "description" : "作业ID",
+            "type" : "string",
+            "example" : "job_local1127970451_0009"
+          },
+          "progress" : {
+            "description" : "作业进度,失败时为“-1”,其它情况为0~100",
+            "type" : "number",
+            "format" : "float",
+            "example" : 1.0
+          },
+          "submission-id" : {
+            "description" : "作业提交id",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10
+          },
+          "delete_rows" : {
+            "description" : "删除数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "update_rows" : {
+            "description" : "更新数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "write_rows" : {
+            "description" : "写入数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "execute-date" : {
+            "description" : "执行时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1621062874725
+          },
+          "status" : {
+            "description" : "作业状态:",
+            "type" : "string",
+            "example" : "BOOTING"
+          },
+          "error-details" : {
+            "description" : "错误详情,当“status”为“FAILED”时才有此字段。",
+            "type" : "string",
+            "example" : "Submission has been stopped manually by user."
+          },
+          "error-summary" : {
+            "description" : "错误总结,当“status”为“FAILED”时才有此字段。",
+            "type" : "string",
+            "example" : "Submission has been stopped manually by user."
+          }
+        },
+        "required" : [ "progress", "job-name", "status", "creation-date", "creation-user", "isStopingIncrement", "last-update-date", "is-execute-auto", "last-udpate-user", "isDeleteJob", "isIncrementing", "external-id" ],
+        "type" : "object"
+      },
+      "CdmQueryStatusResponseBody" : {
+        "properties" : {
+          "submissions" : {
+            "description" : "作业运行信息,详见submissions参数说明。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Submission"
+            }
+          }
+        },
+        "required" : [ "submissions" ],
+        "type" : "object"
+      },
+      "counter" : {
+        "properties" : {
+          "BYTES_WRITTEN" : {
+            "description" : "写入的字节数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : -1
+          },
+          "TOTAL_FILES" : {
+            "description" : "总文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : -1
+          },
+          "ROWS_READ" : {
+            "description" : "读取的行数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 80
+          },
+          "BYTES_READ" : {
+            "description" : "读取的字节数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : -1
+          },
+          "ROWS_WRITTEN" : {
+            "description" : "写入的行数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 80
+          },
+          "FILES_WRITTEN" : {
+            "description" : "写入的文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : -1
+          },
+          "FILES_READ" : {
+            "description" : "读取的文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : -1
+          },
+          "TOTAL_SIZE" : {
+            "description" : "总字节数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : -1
+          },
+          "FILES_SKIPPED" : {
+            "description" : "跳过的文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : -1
+          },
+          "ROWS_WRITTEN_SKIPPED" : {
+            "description" : "跳过的行数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "CdmDeleteClusterReq" : {
+        "properties" : {
+          "keep_last_manual_backup" : {
+            "description" : "日志备份数,填写为默认填0即可。",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "default" : 0
+          }
+        },
+        "required" : [ "keep_last_manual_backup" ],
+        "type" : "object"
+      },
+      "jobId" : {
+        "properties" : {
+          "jobId" : {
+            "description" : "作业ID",
+            "type" : "string",
+            "example" : "ff8080815e55125a015e552eddba001a"
+          }
+        },
+        "type" : "object"
+      },
+      "Datastore" : {
+        "description" : "cdm信息",
+        "properties" : {
+          "type" : {
+            "description" : "类型,一般为cdm。",
+            "type" : "string"
+          },
+          "version" : {
+            "description" : "集群版本。",
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "version" : "2.9.1.200",
+          "type" : "cdm"
+        },
+        "type" : "object"
+      },
+      "ExtendedProperties" : {
+        "description" : "集群扩展信息",
+        "properties" : {
+          "workSpaceId" : {
+            "description" : "工作空间ID。",
+            "type" : "string"
+          },
+          "resourceId" : {
+            "description" : "资源ID。",
+            "type" : "string"
+          },
+          "trial" : {
+            "description" : "是否是试用集群。",
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "workSpaceId" : "7567534786684995b70734cf7aef9a5e",
+          "resourceId" : "41324ff8ae741679d47c9a3f6delf3f",
+          "trial" : "false"
+        },
+        "type" : "object"
+      },
+      "sys_tags" : {
+        "properties" : {
+          "value" : {
+            "description" : "企业项目ID",
+            "type" : "string",
+            "example" : "1ce45885-4033-40d2-bdde-d4dbaceb387d"
+          },
+          "key" : {
+            "description" : "该值目前固定为“_sys_enterprise_project_id”",
+            "type" : "string",
+            "example" : "_sys_enterprise_project_id"
+          }
+        },
+        "required" : [ "value", "key" ],
+        "type" : "object"
+      },
+      "instance" : {
+        "properties" : {
+          "availability_zone" : {
+            "description" : "集群的可用分区",
+            "type" : "string",
+            "example" : "cn-north-1b"
+          },
+          "nics" : {
+            "description" : "网卡列表,最多两个网卡。请参见•nics参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/nics"
+            }
+          },
+          "flavorRef" : {
+            "description" : "实例规格:",
+            "type" : "string",
+            "example" : "a79fd5ae-1833-448a-88e8-3ea2b913e1f6"
+          },
+          "type" : {
+            "description" : "节点类型,当前只有“cdm”一种类型",
+            "type" : "string",
+            "example" : "cdm"
+          }
+        },
+        "required" : [ "flavorRef", "nics", "availability_zone", "type" ],
+        "type" : "object"
+      },
+      "CdmCreateClusterReq" : {
+        "properties" : {
+          "cluster" : {
+            "description" : "集群对象,请参见cluster参数说明",
+            "type" : "object",
+            "properties" : {
+              "scheduleBootTime" : {
+                "description" : "定时开机的时间,CDM集群会在每天这个时间开机",
+                "type" : "string",
+                "example" : ""
+              },
+              "isScheduleBootOff" : {
+                "description" : "选择是否启用定时开关机功能。定时开关机功能和自动关机功能不可同时开启",
+                "type" : "boolean",
+                "example" : false
+              },
+              "instances" : {
+                "description" : "节点列表,请参见instances参数说明",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/instance"
+                }
+              },
+              "datastore" : {
+                "description" : "集群信息,请参见•datastore参数说明",
+                "type" : "object",
+                "$ref" : "#/components/schemas/Datastore"
+              },
+              "extended_properties" : {
+                "description" : "扩展属性,请参见•extended_properties参数说明",
+                "type" : "object",
+                "$ref" : "#/components/schemas/ExtendedProperties"
+              },
+              "scheduleOffTime" : {
+                "description" : "定时关机的时间,定时关机时系统不会等待未完成的作业执行完成",
+                "type" : "string",
+                "example" : ""
+              },
+              "vpcId" : {
+                "description" : "指定虚拟私有云ID,用于集群网络配置",
+                "type" : "string",
+                "example" : "67c06084-2212-4242-bcd4-d2144c2385a9"
+              },
+              "name" : {
+                "description" : "集群名称",
+                "type" : "string",
+                "example" : "cdm-ab82"
+              },
+              "sys_tags" : {
+                "description" : "企业项目信息,请参见•sys_tags参数说明",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/sys_tags"
+                }
+              },
+              "isAutoOff" : {
+                "description" : "选择是否启用自动关机功能,自动关机功能和定时开关机功能不可同时开启。如果选择自动关机,则当集群中无作业运行且无定时作业时,等待15分钟后集群将自动关机来帮您节约成本",
+                "type" : "boolean",
+                "example" : false
+              }
+            }
+          },
+          "auto_remind" : {
+            "description" : "选择是否开启消息通知。开启后,支持配置5个手机号码或邮箱,作业(目前仅支持表/文件迁移的作业)失败时、EIP异常时会发送短信或邮件通知用户",
+            "type" : "boolean",
+            "example" : false
+          },
+          "phone_num" : {
+            "description" : "接收消息通知的手机号码",
+            "type" : "string",
+            "example" : "138xxxx8888"
+          },
+          "email" : {
+            "description" : "接收消息通知的邮箱",
+            "type" : "string",
+            "example" : "123@huawei.com"
+          }
+        },
+        "required" : [ "cluster" ],
+        "type" : "object"
+      },
+      "CdmCreateClusterRepsonse" : {
+        "properties" : {
+          "name" : {
+            "description" : "集群名称",
+            "type" : "string",
+            "example" : "cdm-ab82"
+          },
+          "id" : {
+            "description" : "集群ID",
+            "type" : "string",
+            "example" : "7d85f602-a948-4a30-afd4-e84f47471c15"
+          },
+          "task" : {
+            "description" : "任务信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/Task"
+          },
+          "datastore" : {
+            "description" : "集群信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/Datastore"
+          },
+          "instances" : {
+            "description" : "集群的节点信息",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterInstance"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ClusterInstance" : {
+        "description" : "集群的节点信息",
+        "properties" : {
+          "id" : {
+            "description" : "节点的虚拟机ID。",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "节点的虚拟机名称。",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "节点类型,只支持一种类型“cdm”。",
+            "type" : "string"
+          },
+          "shard_id" : {
+            "description" : "分片ID",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "nics" : {
+        "properties" : {
+          "securityGroupId" : {
+            "description" : "安全组ID",
+            "type" : "string",
+            "example" : "c37852d2-2d12-41cb-af47-65c80e995c80"
+          },
+          "net-id" : {
+            "description" : "子网ID",
+            "type" : "string",
+            "example" : "2d120298-6130-44d4-a438-454912fff901"
+          }
+        },
+        "required" : [ "net-id", "securityGroupId" ],
+        "type" : "object"
+      },
+      "Task" : {
+        "description" : "任务信息",
+        "properties" : {
+          "id" : {
+            "description" : "任务id",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "任务名称",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Input" : {
+        "properties" : {
+          "name" : {
+            "description" : "参数名",
+            "type" : "string",
+            "example" : "fromJobConfig.schemaName"
+          },
+          "value" : {
+            "description" : "参数值",
+            "type" : "object",
+            "example" : "rf_database"
+          },
+          "type" : {
+            "description" : "值类型",
+            "type" : "string",
+            "example" : "STRING"
+          }
+        },
+        "required" : [ "name", "value" ],
+        "type" : "object"
+      },
+      "links" : {
+        "properties" : {
+          "link-config-values" : {
+            "description" : "连接参数配置,请参见link-config-values参数说明",
+            "type" : "object",
+            "properties" : {
+              "configs" : {
+                "description" : "连接配置参数数据结构,请参见configs参数说明。",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/configs"
+                }
+              },
+              "extended-configs" : {
+                "description" : "扩展配置,请参见extended-configs参数说明。",
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "description" : "名称",
+                    "type" : "string"
+                  },
+                  "value" : {
+                    "description" : "值",
+                    "type" : "string"
+                  }
+                }
+              },
+              "validators" : {
+                "description" : "校验器",
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ ]
+              }
+            },
+            "required" : [ "configs" ]
+          },
+          "creation-user" : {
+            "description" : "创建连接的用户",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "name" : {
+            "description" : "连接名称",
+            "type" : "string",
+            "example" : "mysql_link"
+          },
+          "id" : {
+            "description" : "连接ID",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "creation-date" : {
+            "description" : "创建连接的时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1496654788622
+          },
+          "connector-name" : {
+            "description" : "连接器名称,对应的连接参数如下:generic-jdbc-connector:关系数据库连接。obs-connector:OBS连接、阿里云OSS连接。hdfs-connector:HDFS连接。hbase-connector:HBase连接、CloudTable连接。hive-connector:Hive连接。ftp-connector/sftp-connector:FTP/SFTP连接。mongodb-connector:MongoDB连接。redis-connector:Redis/DCS连接。nas-connector:NAS/SFS连接。kafka-connector:Kafka连接。dis-connector:DIS连接。elasticsearch-connector:Elasticsearch/云搜索服务连接。dli-connector:DLI连接。opentsdb-connector:CloudTable OpenTSDB连接。http-connector:HTTP/HTTPS连接,该连接暂无连接参数。thirdparty-obs-connector:七牛云KODO/腾讯云COS连接、亚马逊对象存储连接。dms-kafka-connector:DMS Kafka连接",
+            "type" : "string",
+            "example" : "generic-jdbc-connector"
+          },
+          "update-date" : {
+            "description" : "更新连接的时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1496654788622
+          },
+          "enabled" : {
+            "description" : "是否激活连接,默认为“true”",
+            "type" : "boolean",
+            "example" : true
+          },
+          "update-user" : {
+            "description" : "更新连接的用户",
+            "type" : "string",
+            "example" : "cdm"
+          }
+        },
+        "required" : [ "name", "link-config-values", "connector-name" ],
+        "type" : "object"
+      },
+      "CdmCreateAndUpdateLinkReq" : {
+        "properties" : {
+          "links" : {
+            "description" : "连接列表,请参见links数据结构说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/links"
+            }
+          }
+        },
+        "required" : [ "links" ],
+        "type" : "object"
+      },
+      "validationLinkConfig" : {
+        "properties" : {
+          "message" : {
+            "description" : "错误描述",
+            "type" : "string",
+            "example" : "Can't connect to the database with given credentials: The authentication type 12 is not supported. Check that you have configured the pg_hba.conf file to include the client's IP address or subnet, and that it is using an authentication scheme supported by the driver."
+          },
+          "status" : {
+            "description" : "ERROR,WARNING",
+            "type" : "string",
+            "enum" : [ "ERROR", "WARNING" ],
+            "example" : "ERROR"
+          }
+        },
+        "type" : "object"
+      },
+      "validationResult" : {
+        "properties" : {
+          "linkConfig" : {
+            "description" : "创建或更新连接校验结果,请参见linkConfig参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/validationLinkConfig"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmUpdateLinkResponse" : {
+        "properties" : {
+          "validation-result" : {
+            "description" : "校验结构:如果创建连接失败,返回失败原因,请参见validation-result参数说明。如果创建成功,返回空列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/validationResult"
+            }
+          }
+        },
+        "required" : [ "validation-result" ],
+        "type" : "object"
+      },
+      "configs" : {
+        "properties" : {
+          "inputs" : {
+            "description" : "输入参数列表,列表中的每个参数为“name,value”结构,请参考inputs数据结构参数说明。在“from-config-values”数据结构中,不同的源连接类型有不同的“inputs”参数列表,请参见源端作业参数说明下的章节。在“to-cofig-values”数据结构中,不同的目的连接类型有不同的“inputs”参数列表,请参见目的端作业参数说明下面的子章节。在“driver-config-values”数据结构中,“inputs”具体参数请参见作业任务参数说明。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Input"
+            }
+          },
+          "name" : {
+            "description" : "配置名称:源端作业的配置名称为“fromJobConfig”。目的端作业的配置名称为“toJobConfig”,连接的配置名称固定为“linkConfig”。",
+            "type" : "string",
+            "example" : "fromJobConfig"
+          },
+          "id" : {
+            "description" : "配置ID",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 79
+          },
+          "type" : {
+            "description" : "配置类型",
+            "type" : "string",
+            "example" : "link"
+          }
+        },
+        "required" : [ "inputs", "name" ],
+        "type" : "object"
+      },
+      "CdmCodeResponse" : {
+        "properties" : {
+          "errCode" : {
+            "description" : "错误码",
+            "type" : "string",
+            "example" : "Cdm.0021"
+          },
+          "externalMessage" : {
+            "description" : "错误描述。",
+            "type" : "string",
+            "example" : "Given link name is in use"
+          }
+        },
+        "required" : [ "errCode", "externalMessage" ],
+        "type" : "object"
+      },
+      "CdmQuerySubmissionsResponseBody" : {
+        "properties" : {
+          "submissions" : {
+            "description" : "作业运行信息,详见submissions参数说明。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Submission"
+            }
+          },
+          "total" : {
+            "description" : "查询该作业总的历史记录数。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "page_no" : {
+            "description" : "查询作业记录时,分页数。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "page_size" : {
+            "description" : "分页查询,每页返回的记录数。默认值:10。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "submissions" ],
+        "type" : "object"
+      },
+      "CdmStartAndStopClusterResponseBody" : {
+        "properties" : {
+          "jobId" : {
+            "description" : "作业ID",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmStartClusterReq" : {
+        "properties" : {
+          "start" : {
+            "description" : "集群启动操作,定义集群启动标识,为空对象",
+            "type" : "object"
+          }
+        },
+        "required" : [ "start" ],
+        "type" : "object"
+      },
+      "CdmClusterDatastore" : {
+        "properties" : {
+          "id" : {
+            "description" : "服务ID,用于区分不同服务。",
+            "type" : "string",
+            "example" : "736270b9-27c7-4f03-823b-447d8245e1c2"
+          },
+          "name" : {
+            "description" : "服务名称。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "bigclusterEnable" : {
+            "description" : "是否支持大规格集群。",
+            "type" : "boolean",
+            "example" : false
+          },
+          "defaultVersion" : {
+            "description" : "默认版本。",
+            "type" : "string",
+            "example" : "2.9.3.300"
+          },
+          "versions" : {
+            "description" : "版本。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterVersion"
+            }
+          }
+        },
+        "required" : [ "id", "name", "bigclusterEnable", "defaultVersion", "versions" ],
+        "type" : "object"
+      },
+      "ClusterLinks" : {
+        "description" : "集群连接信息",
+        "properties" : {
+          "rel" : {
+            "description" : "关系",
+            "type" : "string"
+          },
+          "href" : {
+            "description" : "链接地址",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryDatastoresResponse" : {
+        "properties" : {
+          "datastores" : {
+            "description" : "数据库列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterDatastore"
+            }
+          }
+        },
+        "required" : [ "datastores" ],
+        "type" : "object"
+      },
+      "CdmClusterVersion" : {
+        "description" : "版本信息。",
+        "properties" : {
+          "active" : {
+            "description" : "版本状态。",
+            "type" : "string",
+            "example" : 1
+          },
+          "id" : {
+            "description" : "版本ID。",
+            "type" : "string",
+            "example" : "e8a8b8cc-63f8-4fb5-8d4a-24c502317b11"
+          },
+          "image" : {
+            "description" : "版本镜像。",
+            "type" : "string",
+            "example" : null
+          },
+          "name" : {
+            "description" : "版本名称。",
+            "type" : "string",
+            "example" : "2.9.3.300"
+          },
+          "packages" : {
+            "description" : "版本的包。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "datastore" : {
+            "description" : "服务ID,用于区分不同服务。",
+            "type" : "string",
+            "example" : "736270b9-27c7-4f03-823b-447d8245e1c2"
+          },
+          "links" : {
+            "description" : "链接信息。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterLinks"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CommonErrResponse" : {
+        "properties" : {
+          "code" : {
+            "description" : "返回编码",
+            "type" : "string"
+          },
+          "errCode" : {
+            "description" : "错误码",
+            "type" : "string"
+          },
+          "message" : {
+            "description" : "报错信息",
+            "type" : "string"
+          },
+          "externalMessage" : {
+            "description" : "附加信息",
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "errCode", "message" ],
+        "type" : "object"
+      },
+      "CdmUpdateJobJsonReq" : {
+        "properties" : {
+          "jobs" : {
+            "description" : "作业列表,请参见jobs数据结构说明。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Job"
+            }
+          }
+        },
+        "required" : [ "jobs" ],
+        "type" : "object"
+      },
+      "extended-configs" : {
+        "properties" : {
+          "name" : {
+            "description" : "扩展参数属性名称",
+            "type" : "string",
+            "example" : "toJobConfig.extendedFields"
+          },
+          "value" : {
+            "description" : "cdm-base64编码后的值",
+            "type" : "string",
+            "example" : "e30="
+          }
+        },
+        "type" : "object"
+      },
+      "JobValidationResult" : {
+        "type" : "object",
+        "description" : "失败原因",
+        "properties" : {
+          "message" : {
+            "description" : "错误描述",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "ERROR,WARNING",
+            "type" : "string",
+            "enum" : [ "ERROR", "WARNING" ],
+            "example" : "ERROR"
+          }
+        }
+      },
+      "Job" : {
+        "properties" : {
+          "job_type" : {
+            "description" : "作业类型:",
+            "type" : "string",
+            "enum" : [ "NORMAL_JOB", "BATCH_JOB", "SCENARIO_JOB" ],
+            "example" : "NORMAL_JOB"
+          },
+          "from-connector-name" : {
+            "description" : "源端连接类型",
+            "type" : "string",
+            "example" : "generic-jdbc-connector"
+          },
+          "to-config-values" : {
+            "description" : "目的连接参数配置。",
+            "$ref" : "#/components/schemas/ConfigValues"
+          },
+          "to-link-name" : {
+            "description" : "目的端连接名称",
+            "type" : "string",
+            "example" : "hive_link"
+          },
+          "driver-config-values" : {
+            "description" : "作业任务参数配置。",
+            "$ref" : "#/components/schemas/ConfigValues"
+          },
+          "from-config-values" : {
+            "description" : "源连接参数配置。",
+            "$ref" : "#/components/schemas/ConfigValues"
+          },
+          "to-connector-name" : {
+            "description" : "目的端连接类型",
+            "type" : "string",
+            "example" : "generic-jdbc-connector"
+          },
+          "name" : {
+            "description" : "作业名称,长度在1到240个字符之间",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 240,
+            "example" : "mysql2hive"
+          },
+          "from-link-name" : {
+            "description" : "源连接名称",
+            "type" : "string",
+            "example" : "mysql_link"
+          },
+          "creation-user" : {
+            "description" : "创建的用户。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "creation-date" : {
+            "description" : "作业创建的时间,单位:毫秒。",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1628327321403
+          },
+          "update-date" : {
+            "description" : "作业最后更新的时间,单位:毫秒。",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1628327531681
+          },
+          "is_incre_job" : {
+            "description" : "是否增量",
+            "type" : "boolean",
+            "example" : false
+          },
+          "flag" : {
+            "description" : "标记",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "files_read" : {
+            "description" : "已读文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "update-user" : {
+            "description" : "作业最后更新的用户。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "external_id" : {
+            "description" : "外部ID。",
+            "type" : "string",
+            "example" : "job_local1202051771_0002"
+          },
+          "type" : {
+            "description" : "作业类型",
+            "type" : "string",
+            "example" : "NORMAL_JOB"
+          },
+          "execute_start_date" : {
+            "description" : "执行_开始_日期。",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1496654788622
+          },
+          "delete_rows" : {
+            "description" : "删除行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "enabled" : {
+            "description" : "是否激活连接",
+            "type" : "boolean",
+            "example" : true
+          },
+          "bytes_written" : {
+            "description" : "写入字节",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1521288
+          },
+          "id" : {
+            "description" : "作业ID",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "is_use_sql" : {
+            "description" : "用户是否使用sql",
+            "type" : "boolean",
+            "example" : false
+          },
+          "update_rows" : {
+            "description" : "更新行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "group_name" : {
+            "description" : "组_名称",
+            "type" : "string",
+            "example" : "DEFAULT"
+          },
+          "bytes_read" : {
+            "description" : "读取字节",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1521288
+          },
+          "execute_update_date" : {
+            "description" : "执行_更新_日期。",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1496654788622
+          },
+          "write_rows" : {
+            "description" : "写入数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "rows_written" : {
+            "description" : "写入行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "rows_read" : {
+            "description" : "读取的行数",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 60
+          },
+          "files_written" : {
+            "description" : "写入文件数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "is_incrementing" : {
+            "description" : "是否增量",
+            "type" : "boolean",
+            "example" : false
+          },
+          "execute_create_date" : {
+            "description" : "执行_创建_日期",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1496654788622
+          },
+          "status" : {
+            "description" : "作业最后的执行状态:",
+            "type" : "string",
+            "example" : "BOOTING"
+          }
+        },
+        "required" : [ "job_type", "name", "from-connector-name", "to-connector-name", "to-config-values", "from-link-name", "to-link-name", "driver-config-values", "from-config-values" ],
+        "type" : "object"
+      },
+      "ConfigValues" : {
+        "type" : "object",
+        "properties" : {
+          "configs" : {
+            "description" : "源连接参数、目的连接参数和作业任务参数,它们的配置数据结构相同,其中“inputs”里的参数不一样,详细请参见configs数据结构说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/configs"
+            }
+          },
+          "extended-configs" : {
+            "description" : "作业任务扩展参数,详细请参见extended-configs数据结构说明",
+            "type" : "object",
+            "$ref" : "#/components/schemas/extended-configs"
+          }
+        },
+        "required" : [ "configs" ]
+      },
+      "CdmUpdateJobResponseBody" : {
+        "properties" : {
+          "validation-result" : {
+            "description" : "校验结果:如果修改失败,返回失败原因。如果修改成功,返回空列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobValidationResult"
+            }
+          }
+        },
+        "required" : [ "validation-result" ],
+        "type" : "object"
+      },
+      "CdmCreateJobResponse" : {
+        "properties" : {
+          "name" : {
+            "description" : "作业名称。",
+            "type" : "string",
+            "example" : "mysql2hive"
+          },
+          "validation-result" : {
+            "description" : "校验结果:",
+            "items" : {
+              "$ref" : "#/components/schemas/JobValidationResult"
+            },
+            "type" : "array",
+            "example" : [ { }, { }, { } ]
+          }
+        },
+        "required" : [ "name" ],
+        "type" : "object"
+      },
+      "CdmCreateJobJsonReq" : {
+        "properties" : {
+          "jobs" : {
+            "type" : "array",
+            "description" : "作业列表,请参见jobs数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/Job"
+            }
+          }
+        },
+        "required" : [ "jobs" ],
+        "type" : "object"
+      },
+      "CdmQueryJobsResponse" : {
+        "properties" : {
+          "total" : {
+            "description" : "作业数,查询单个作业时为0",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : "1"
+          },
+          "jobs" : {
+            "description" : "作业列表,请参见jobs参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Job"
+            }
+          },
+          "page_no" : {
+            "description" : "返回指定页号的作业",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : "1"
+          },
+          "page_size" : {
+            "description" : "每页作业数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : "10"
+          }
+        },
+        "required" : [ "jobs" ],
+        "type" : "object"
+      },
+      "flavorAttribute" : {
+        "description" : "规格属性信息",
+        "properties" : {
+          "name" : {
+            "description" : "规格属性名称,如mem、cpu。",
+            "type" : "string",
+            "example" : "mem"
+          },
+          "value" : {
+            "description" : "规格属性值",
+            "type" : "string",
+            "example" : 16
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryFlavorDetailResponse" : {
+        "description" : "规格详情",
+        "properties" : {
+          "name" : {
+            "description" : "规格名称",
+            "type" : "string",
+            "example" : "cdm.large"
+          },
+          "str_id" : {
+            "description" : "规格ID",
+            "type" : "string",
+            "example" : "a79fd5ae-1833-448a-88e8-3ea2b913e1f6"
+          },
+          "flavor_detail" : {
+            "description" : "规格详细列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/flavorAttribute"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmModifyClusterReq" : {
+        "properties" : {
+          "autoOff" : {
+            "type" : "boolean",
+            "description" : "自动关机。",
+            "example" : false
+          },
+          "scheduleBootOff" : {
+            "type" : "boolean",
+            "description" : "定时关机。",
+            "example" : false
+          },
+          "scheduleBootTime" : {
+            "type" : "string",
+            "description" : "定时开机。",
+            "example" : "00:00:00"
+          },
+          "scheduleOffTime" : {
+            "type" : "string",
+            "description" : "定时关机时间。",
+            "example" : "10:00:00"
+          },
+          "autoRemind" : {
+            "type" : "boolean",
+            "description" : "消息通知。",
+            "example" : false
+          },
+          "phoneNum" : {
+            "type" : "string",
+            "description" : "手机号码,最多填写20个,以英文逗号分隔。",
+            "example" : "xxx"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "邮箱地址,最多填写20个,以英文逗号分隔。",
+            "example" : "xxx@xxx.com"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryClusterEnterpriseProjectsResponse" : {
+        "properties" : {
+          "sys_tags" : {
+            "description" : "企业项目列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/sys_tags"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ActionProgress" : {
+        "description" : "集群操作进度,任务信息,由key、value组成。key值为正在进行的任务,value值为正在进行任务的进度。示例如 \"action_progress\":{\"SNAPSHOTTING\":\"16%\"}",
+        "properties" : {
+          "CREATING" : {
+            "description" : "创建集群进度,例如:29%",
+            "type" : "string",
+            "example" : "29%"
+          },
+          "GROWING" : {
+            "description" : "扩容集群进度,例如:29%",
+            "type" : "string",
+            "example" : "29%"
+          },
+          "RESTORING" : {
+            "description" : "恢复集群进度,例如:29%",
+            "type" : "string",
+            "example" : "29%"
+          },
+          "SNAPSHOTTING" : {
+            "description" : "集群快照进度,例如:29%",
+            "type" : "string",
+            "example" : "29%"
+          },
+          "REPAIRING" : {
+            "description" : "修复集群进度,例如:29%",
+            "type" : "string",
+            "example" : "29%"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryClusterDetailsRepsonse" : {
+        "properties" : {
+          "publicEndpoint" : {
+            "description" : "集群绑定的EIP",
+            "type" : "string",
+            "example" : "10.xx.xx.100"
+          },
+          "instances" : {
+            "description" : "集群的节点信息,请参见instances参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterDetailInstance"
+            }
+          },
+          "security_group_id" : {
+            "description" : "安全组id",
+            "type" : "string"
+          },
+          "subnet_id" : {
+            "description" : "子网id",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "虚拟私有云ID",
+            "type" : "string"
+          },
+          "customerConfig" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/CustomerConfig"
+          },
+          "datastore" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/Datastore"
+          },
+          "isAutoOff" : {
+            "description" : "自动关机",
+            "type" : "boolean"
+          },
+          "publicEndpointDomainName" : {
+            "description" : "集群绑定的EIP域名",
+            "type" : "string"
+          },
+          "bakExpectedStartTime" : {
+            "description" : "开始时间",
+            "type" : "string"
+          },
+          "bakKeepDay" : {
+            "description" : "保留时间",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "maintainWindow" : {
+            "description" : "维护窗口",
+            "type" : "object",
+            "properties" : {
+              "day" : {
+                "description" : "周几",
+                "type" : "string"
+              },
+              "startTime" : {
+                "description" : "开始时间。",
+                "type" : "string"
+              },
+              "endTime" : {
+                "description" : "结束时间。",
+                "type" : "string"
+              }
+            }
+          },
+          "recentEvent" : {
+            "description" : "事件数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "flavorName" : {
+            "description" : "规格名称",
+            "type" : "string"
+          },
+          "azName" : {
+            "description" : "az名称",
+            "type" : "string"
+          },
+          "endpointDomainName" : {
+            "description" : "对端域名",
+            "type" : "string"
+          },
+          "publicEndpointStatus" : {
+            "description" : "EIP状态信息",
+            "type" : "object",
+            "properties" : {
+              "status" : {
+                "description" : "状态",
+                "type" : "string"
+              },
+              "errorMessage" : {
+                "description" : "错误信息",
+                "type" : "string"
+              }
+            }
+          },
+          "isScheduleBootOff" : {
+            "description" : "选择是否启用定时开关机功能。定时开关机功能和自动关机功能不可同时开启",
+            "type" : "boolean"
+          },
+          "namespace" : {
+            "description" : "命名空间",
+            "type" : "string"
+          },
+          "eipId" : {
+            "description" : "弹性ip id",
+            "type" : "string"
+          },
+          "failedReasons" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/FailedReasons"
+          },
+          "dbuser" : {
+            "description" : "数据库用户",
+            "type" : "string"
+          },
+          "links" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterLinks"
+            }
+          },
+          "clusterMode" : {
+            "description" : "集群模式:sharding(分片集群)",
+            "type" : "string"
+          },
+          "task" : {
+            "description" : "任务信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/ClusterTask"
+          },
+          "created" : {
+            "description" : "集群创建时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "statusDetail" : {
+            "description" : "集群状态描述:Normal(正常)",
+            "type" : "string",
+            "example" : ""
+          },
+          "config_status" : {
+            "description" : "集群配置状态:",
+            "type" : "string",
+            "example" : "In-Sync"
+          },
+          "actionProgress" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ActionProgress"
+          },
+          "name" : {
+            "description" : "集群名称",
+            "type" : "string",
+            "example" : "cdm-c018"
+          },
+          "id" : {
+            "description" : "集群ID",
+            "type" : "string",
+            "example" : "bae65496-643e-47ca-84af-948672de7eeb"
+          },
+          "isFrozen" : {
+            "description" : "集群是否冻结:0:否1:是",
+            "type" : "string",
+            "example" : "0"
+          },
+          "actions" : {
+            "description" : "集群配置状态:In-Sync:配置已同步。Applying:配置中。Sync-Failure:配置失败",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : "In-Sync"
+          },
+          "updated" : {
+            "description" : "集群更新时间,格式为 ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "status" : {
+            "description" : "集群状态:",
+            "type" : "string",
+            "example" : "200"
+          }
+        },
+        "required" : [ "version", "instances", "updated", "name", "created", "id", "status", "isFrozen" ],
+        "type" : "object"
+      },
+      "CustomerConfig" : {
+        "description" : "用户配置信息",
+        "properties" : {
+          "failureRemind" : {
+            "description" : "失败提醒。",
+            "type" : "string"
+          },
+          "clusterName" : {
+            "description" : "集群类型。",
+            "type" : "string"
+          },
+          "serviceProvider" : {
+            "description" : "服务提供",
+            "type" : "string"
+          },
+          "localDisk" : {
+            "description" : "是否本地磁盘。",
+            "type" : "string"
+          },
+          "ssl" : {
+            "description" : "是否使用ssl。",
+            "type" : "string"
+          },
+          "createFrom" : {
+            "description" : "创建来源",
+            "type" : "string"
+          },
+          "resourceId" : {
+            "description" : "资源ID",
+            "type" : "string"
+          },
+          "flavorType" : {
+            "description" : "规格类型",
+            "type" : "string"
+          },
+          "workSpaceId" : {
+            "description" : "工作空间ID",
+            "type" : "string"
+          },
+          "trial" : {
+            "description" : "适用",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "FailedReasons" : {
+        "description" : "失败原因。集群处于正常状态时不返回。",
+        "type" : "object",
+        "properties" : {
+          "CREATE_FAILED" : {
+            "description" : "集群创建失败原因。",
+            "type" : "object",
+            "properties" : {
+              "errorCode" : {
+                "description" : "错误码",
+                "type" : "string"
+              },
+              "errorMsg" : {
+                "description" : "失败原因",
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "Resource" : {
+        "properties" : {
+          "resource_id" : {
+            "description" : "资源id",
+            "type" : "string"
+          },
+          "resource_type" : {
+            "description" : "资源类型:server(服务器)",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ClusterTask" : {
+        "description" : "任务信息",
+        "properties" : {
+          "description" : {
+            "description" : "任务描述",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "任务id",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "任务名称",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ClusterDetailInstance" : {
+        "properties" : {
+          "flavor" : {
+            "description" : "节点的虚拟机规格,请参见flavor参数说明(查询集群列表时返回值为null)。",
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "description" : "节点虚拟机的规格ID。",
+                "type" : "string"
+              },
+              "links" : {
+                "description" : "链接信息",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ClusterLinks"
+                }
+              }
+            }
+          },
+          "volume" : {
+            "description" : "节点的磁盘信息,请参见volume参数说明(查询集群列表时返回值为null)。",
+            "type" : "object",
+            "properties" : {
+              "type" : {
+                "description" : "节点的磁盘类型,只支持本地磁盘",
+                "type" : "string"
+              },
+              "size" : {
+                "description" : "节点磁盘大小,单位G。",
+                "type" : "integer",
+                "format" : "int64"
+              }
+            }
+          },
+          "status" : {
+            "description" : "节点状态:",
+            "type" : "string"
+          },
+          "actions" : {
+            "description" : "节点操作状态列表:",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "type" : {
+            "description" : "节点类型,只支持一种类型“cdm”。",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "节点的虚拟机ID。",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "节点的虚拟机名称。",
+            "type" : "string"
+          },
+          "isFrozen" : {
+            "description" : "节点是否冻结:0:否。1:是。",
+            "type" : "string"
+          },
+          "components" : {
+            "description" : "组件",
+            "type" : "string"
+          },
+          "config_status" : {
+            "description" : "节点配置状态(查询集群列表时为null):",
+            "type" : "string"
+          },
+          "role" : {
+            "description" : "实例角色",
+            "type" : "string"
+          },
+          "group" : {
+            "description" : "分组",
+            "type" : "string"
+          },
+          "links" : {
+            "description" : "链接信息(查询集群列表时返回值为null)",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterLinks"
+            }
+          },
+          "paramsGroupId" : {
+            "description" : "组件分组id",
+            "type" : "string"
+          },
+          "publicIp" : {
+            "description" : "公网ip",
+            "type" : "string"
+          },
+          "manageIp" : {
+            "description" : "管理ip",
+            "type" : "string"
+          },
+          "trafficIp" : {
+            "description" : "流量ip",
+            "type" : "string"
+          },
+          "shard_id" : {
+            "description" : "分片id",
+            "type" : "string"
+          },
+          "manage_fix_ip" : {
+            "description" : "管理修复ip",
+            "type" : "string"
+          },
+          "private_ip" : {
+            "description" : "私有ip",
+            "type" : "string"
+          },
+          "internal_ip" : {
+            "description" : "内部ip",
+            "type" : "string"
+          },
+          "resource" : {
+            "description" : "资源信息(查询集群列表时返回值为null)",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          }
+        },
+        "required" : [ "flavor", "volume", "status", "type", "id", "name", "isFrozen" ],
+        "type" : "object"
+      },
+      "CdmCreateLinkResponse" : {
+        "properties" : {
+          "name" : {
+            "description" : "连接名称",
+            "type" : "string",
+            "example" : "rdb_link"
+          },
+          "validation-result" : {
+            "description" : "校验结构:如果创建连接失败,返回失败原因,请参见validation-result参数说明。如果创建成功,返回空列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/validationResult"
+            }
+          }
+        },
+        "required" : [ "name", "validation-result" ],
+        "type" : "object"
+      },
+      "CdmStartJobReq" : {
+        "properties" : {
+          "variables" : {
+            "description" : "启动作业,配置变量参数,作业配置无变量时,为空对象",
+            "type" : "object"
+          }
+        },
+        "type" : "object"
+      },
+      "StartJobSubmission" : {
+        "properties" : {
+          "isIncrementing" : {
+            "description" : "作业是否为增量迁移",
+            "type" : "boolean",
+            "example" : false
+          },
+          "delete_rows" : {
+            "description" : "删除数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "update_rows" : {
+            "description" : "更新数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "write_rows" : {
+            "description" : "写入数据行数",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "submission-id" : {
+            "description" : "作业提交id",
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10
+          },
+          "job-name" : {
+            "description" : "作业名称",
+            "type" : "string",
+            "example" : "jdbc2hive"
+          },
+          "creation-user" : {
+            "description" : "创建用户",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "creation-date" : {
+            "description" : "创建时间,单位:毫秒。",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1536905778725
+          },
+          "execute-date" : {
+            "description" : "执行时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1621062874725
+          },
+          "progress" : {
+            "description" : "作业进度,失败时为“-1”,其它情况为0~100",
+            "type" : "number",
+            "format" : "float",
+            "example" : 1.0
+          },
+          "status" : {
+            "description" : "作业状态:",
+            "type" : "string",
+            "example" : "BOOTING"
+          },
+          "isStopingIncrement" : {
+            "description" : "是否停止增量迁移",
+            "type" : "string",
+            "example" : "false"
+          },
+          "is-execute-auto" : {
+            "description" : "是否定时执行作业",
+            "type" : "boolean",
+            "example" : false
+          },
+          "last-update-date" : {
+            "description" : "作业最后更新时间",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1536916580005
+          },
+          "last-udpate-user" : {
+            "description" : "最后更新作业状态的用户",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "isDeleteJob" : {
+            "description" : "作业执行完成后是否删除",
+            "type" : "boolean",
+            "example" : false
+          }
+        },
+        "required" : [ "progress", "job-name", "status", "creation-date", "creation-user" ],
+        "type" : "object"
+      },
+      "CdmStartJobResponse" : {
+        "properties" : {
+          "submissions" : {
+            "description" : "作业运行信息,请参见submission参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StartJobSubmission"
+            }
+          }
+        },
+        "required" : [ "submissions" ],
+        "type" : "object"
+      },
+      "CdmQueryEnterpriseProjectsResponse" : {
+        "properties" : {
+          "resources" : {
+            "description" : "集群企业项目列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterEnterpriseProject"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmClusterEnterpriseProject" : {
+        "properties" : {
+          "cluster_id" : {
+            "description" : "集群ID",
+            "type" : "string",
+            "example" : "2b2a676f-0b91-4ad5-8c24-ec61be586fd1"
+          },
+          "sys_tags" : {
+            "description" : "企业项目列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/sys_tags"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmStopJobResponse" : {
+        "properties" : {
+          "validation-result" : {
+            "description" : "校验结构:如果停止作业接失败,返回失败原因,请参见validation-result参数说明。如果停止成功,返回空列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobValidationResult"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmRandomCreateAndStartJobJsonReq" : {
+        "properties" : {
+          "jobs" : {
+            "type" : "array",
+            "description" : "作业列表,请参见jobs数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/Job"
+            }
+          },
+          "clusters" : {
+            "description" : "CDM集群ID列表,系统会从里面随机选择一个开机状态的集群,在该集群中创建作业并执行作业。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ ]
+          }
+        },
+        "required" : [ "jobs", "clusters" ],
+        "type" : "object"
+      },
+      "CdmQueryClustersRepsonse" : {
+        "properties" : {
+          "clusters" : {
+            "description" : "集群列表,请参见clusters参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/clusters"
+            }
+          }
+        },
+        "required" : [ "clusters" ],
+        "type" : "object"
+      },
+      "clusters" : {
+        "properties" : {
+          "customerConfig" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/CustomerConfig"
+          },
+          "datastore" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/Datastore"
+          },
+          "instances" : {
+            "description" : "集群的节点信息,请参见instances参数说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterDetailInstance"
+            }
+          },
+          "azName" : {
+            "description" : "az名称",
+            "type" : "string"
+          },
+          "dbuser" : {
+            "description" : "数据库用户",
+            "type" : "string"
+          },
+          "flavorName" : {
+            "description" : "规格名称",
+            "type" : "string"
+          },
+          "recentEvent" : {
+            "description" : "事件数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "isAutoOff" : {
+            "description" : "自动关机",
+            "type" : "boolean"
+          },
+          "isScheduleBootOff" : {
+            "description" : "选择是否启用定时开关机功能。定时开关机功能和自动关机功能不可同时开启",
+            "type" : "boolean",
+            "example" : false
+          },
+          "clusterMode" : {
+            "description" : "集群模式:sharding(分片集群)",
+            "type" : "string"
+          },
+          "namespace" : {
+            "description" : "命名空间",
+            "type" : "string"
+          },
+          "task" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ClusterTask"
+          },
+          "publicEndpoint" : {
+            "description" : "集群绑定的EIP",
+            "type" : "string",
+            "example" : "49.xx.xx.10"
+          },
+          "actionProgress" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ActionProgress"
+          },
+          "created" : {
+            "description" : "集群创建时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "bakExpectedStartTime" : {
+            "description" : "开始时间",
+            "type" : "string"
+          },
+          "bakKeepDay" : {
+            "description" : "保留时间",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "name" : {
+            "description" : "集群名称",
+            "type" : "string",
+            "example" : "cdm-c018"
+          },
+          "statusDetail" : {
+            "description" : "集群状态描述:Normal(正常)",
+            "type" : "string",
+            "example" : ""
+          },
+          "id" : {
+            "description" : "集群ID",
+            "type" : "string",
+            "example" : "bae65496-643e-47ca-84af-948672de7eeb"
+          },
+          "isFrozen" : {
+            "description" : "集群是否冻结:0:否 1:是",
+            "type" : "string",
+            "example" : "0"
+          },
+          "updated" : {
+            "description" : "集群更新时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "status" : {
+            "description" : "集群状态:",
+            "type" : "string",
+            "example" : "200"
+          },
+          "failedReasons" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/FailedReasons"
+          }
+        },
+        "required" : [ "version", "updated", "name", "created", "id", "status", "isFrozen" ],
+        "type" : "object"
+      },
+      "CdmRestartClusterReq" : {
+        "properties" : {
+          "restart" : {
+            "description" : "集群重启操作,定义哪些集群节点需要重启,请参见restart参数说明",
+            "type" : "object",
+            "properties" : {
+              "restartDelayTime" : {
+                "description" : "重启时延,单位:秒",
+                "type" : "integer",
+                "format" : "int32",
+                "example" : 0
+              },
+              "restartMode" : {
+                "description" : "重启类型:",
+                "type" : "string",
+                "example" : "IMMEDIATELY"
+              },
+              "restartLevel" : {
+                "description" : "重启级别:",
+                "type" : "string",
+                "example" : "SERVICE"
+              },
+              "type" : {
+                "description" : "集群节点类型,只支持“cdm”",
+                "type" : "string",
+                "example" : "cdm"
+              },
+              "instance" : {
+                "description" : "预留字段,“restartLevel” 为“SERVICE”时,“instance”必填,填空字串。",
+                "type" : "string",
+                "default" : "",
+                "example" : "\"\""
+              },
+              "group" : {
+                "description" : "预留字段,“restartLevel” 为“SERVICE”时,“group”必填,填空字串。",
+                "type" : "string",
+                "default" : "",
+                "example" : "\"\""
+              }
+            },
+            "required" : [ "type" ]
+          }
+        },
+        "required" : [ "restart" ],
+        "type" : "object"
+      },
+      "CdmShowLinkResponseBody" : {
+        "properties" : {
+          "links" : {
+            "description" : "连接列表,请参见links数据结构说明",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/links"
+            }
+          },
+          "fromTo-unMapping" : {
+            "description" : "表/文件迁移不支持哪些数据源迁移到哪些数据源",
+            "type" : "string"
+          },
+          "batchFromTo-mapping" : {
+            "description" : "整库迁移支持哪些数据源迁移到哪些数据源",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryAvailabilityZonesResponse" : {
+        "properties" : {
+          "regionId" : {
+            "description" : "区域ID。",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "defaultAZ" : {
+            "description" : "默认可用区。",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "availableZones" : {
+            "description" : "可用区。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterAvailabilityZone"
+            }
+          }
+        },
+        "required" : [ "regionId", "defaultAZ", "availableZones" ],
+        "type" : "object"
+      },
+      "CdmClusterAvailabilityZone" : {
+        "description" : "集群的可用区。",
+        "properties" : {
+          "availableZoneId" : {
+            "description" : "可用区ID。",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "availableZoneName" : {
+            "description" : "可用区名称。",
+            "type" : "string",
+            "example" : "可用区a"
+          },
+          "availableZoneCode" : {
+            "description" : "可用区码。",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "azStatus" : {
+            "description" : "可用区状态。",
+            "type" : "string",
+            "example" : "Available"
+          },
+          "type" : {
+            "description" : "可用区类型。",
+            "type" : "string",
+            "example" : null
+          },
+          "tags" : {
+            "description" : "可用区tag。",
+            "type" : "object",
+            "example" : null
+          }
+        },
+        "type" : "object"
+      },
+      "CdmClusterFlavor" : {
+        "description" : "集群规格。",
+        "properties" : {
+          "cpu" : {
+            "description" : "CPU。",
+            "type" : "integer",
+            "example" : 4
+          },
+          "ram" : {
+            "description" : "内存。",
+            "type" : "integer",
+            "example" : 8
+          },
+          "name" : {
+            "description" : "规格名称。",
+            "type" : "string",
+            "example" : "cdm.small"
+          },
+          "region" : {
+            "description" : "region。",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "typename" : {
+            "description" : "类型名称。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "clusterMode" : {
+            "description" : "集群模式。",
+            "type" : "string",
+            "example" : "sharding"
+          },
+          "status" : {
+            "description" : "规格状态。",
+            "type" : "string",
+            "example" : "abandon"
+          },
+          "str_id" : {
+            "description" : "规格ID。",
+            "type" : "string",
+            "example" : "a79fd5ae-1833-448a-88e8-3ea2b913e1f6"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmClusterDatastoreVersion" : {
+        "description" : "版本。",
+        "properties" : {
+          "id" : {
+            "description" : "版本ID。",
+            "type" : "string",
+            "example" : "e8a8b8cc-63f8-4fb5-8d4a-24c502317b11"
+          },
+          "name" : {
+            "description" : "版本名称。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "flavors" : {
+            "description" : "规格信息。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterFlavor"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryFlavorsResponse" : {
+        "properties" : {
+          "id" : {
+            "description" : "服务ID,用于区分不同服务。",
+            "type" : "string",
+            "example" : "736270b9-27c7-4f03-823b-447d8245e1c2"
+          },
+          "dbname" : {
+            "description" : "db名称,一般为cdm。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "versions" : {
+            "description" : "版本信息列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CdmClusterDatastoreVersion"
+            }
+          }
+        },
+        "required" : [ "id", "dbname", "versions" ],
+        "type" : "object"
+      },
+      "CdmQueryClusterInstanceDetailResponse" : {
+        "properties" : {
+          "instance" : {
+            "description" : "实例信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/CdmQueryClusterInstanceDetail"
+          }
+        },
+        "type" : "object"
+      },
+      "CdmQueryClusterInstanceDetail" : {
+        "properties" : {
+          "configurationStatus" : {
+            "description" : "节点配置状态:",
+            "type" : "string",
+            "example" : "In-Sync"
+          },
+          "paramsGroupId" : {
+            "description" : "配置ID",
+            "type" : "string",
+            "example" : "26084bb9-e74b-47d5-8be6-c0fbee9449d5"
+          },
+          "type" : {
+            "description" : "配置服务类型,这里为cdm",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "role" : {
+            "description" : "实例模式,这里为Standalone",
+            "type" : "string",
+            "example" : "Standalone"
+          },
+          "subnetid" : {
+            "description" : "实例的子网ID",
+            "type" : "string",
+            "example" : "9e4049b5-19a6-48fe-b5a2-2857c842fe56"
+          },
+          "securegroup" : {
+            "description" : "安全组ID",
+            "type" : "string",
+            "example" : "560a3642-ddb1-4e93-a4bb-e484ae975127"
+          },
+          "vpc" : {
+            "description" : "实例的VPC ID",
+            "type" : "string",
+            "example" : "f35aee01-c4a3-47c1-8d92-9df430537de4"
+          },
+          "azcode" : {
+            "description" : "可用区名称",
+            "type" : "string",
+            "example" : "可用区a"
+          },
+          "region" : {
+            "description" : "局点名称",
+            "type" : "string",
+            "example" : "xxx-xxx-xxx"
+          },
+          "created" : {
+            "description" : "实例创建时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "updated" : {
+            "description" : "实例更新时间,格式为ISO8601:YYYY-MM-DDThh:mm:ssZ",
+            "type" : "string",
+            "example" : "2018-09-05T08:38:25"
+          },
+          "name" : {
+            "description" : "实例名称",
+            "type" : "string",
+            "example" : "test-cdm-dn-1-1"
+          },
+          "id" : {
+            "description" : "实例ID",
+            "type" : "string",
+            "example" : "2c529048-ed06-4bcb-a48e-bf1800e1f496"
+          },
+          "flavor" : {
+            "description" : "节点的虚拟机规格,请参见flavor参数说明。",
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "description" : "节点虚拟机的规格ID。",
+                "type" : "string"
+              },
+              "links" : {
+                "description" : "链接信息",
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ClusterLinks"
+                }
+              }
+            }
+          },
+          "datastore" : {
+            "description" : "集群信息,请参见•datastore参数说明。",
+            "type" : "object",
+            "$ref" : "#/components/schemas/Datastore"
+          },
+          "dbuser" : {
+            "description" : "数据库用户,这里为cdm。",
+            "type" : "string",
+            "example" : "cdm"
+          },
+          "payModel" : {
+            "description" : "付费模式:",
+            "type" : "integer",
+            "example" : 0
+          },
+          "publicIp" : {
+            "description" : "集群绑定的公网地址",
+            "type" : "string",
+            "example" : "49.xx.xx.10"
+          },
+          "trafficIp" : {
+            "description" : "集群的内网地址",
+            "type" : "string",
+            "example" : "192.168.0.128"
+          },
+          "trafficIpv6" : {
+            "description" : "集群的内网IPv6地址",
+            "type" : "string",
+            "example" : "fe80::2"
+          },
+          "cluster_id" : {
+            "description" : "集群ID",
+            "type" : "string",
+            "example" : "2d9ac57e-3ebf-4557-86d5-89ae750ff61c"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowJobStatus" : {
+      "get" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "查询作业状态",
+        "description" : "查询作业状态接口。",
+        "operationId" : "ShowJobStatus",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryStatusResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobStatus",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}/status"
+    },
+    "/DeleteCluster" : {
+      "delete" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "删除集群",
+        "description" : "删除集群接口。",
+        "operationId" : "DeleteCluster",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/jobId"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmDeleteClusterReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCluster",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}"
+    },
+    "/CreateCluster" : {
+      "post" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "创建集群",
+        "description" : "创建集群接口。",
+        "operationId" : "CreateCluster",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmCreateClusterRepsonse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部接口异常"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Language",
+          "in" : "header",
+          "description" : "请求语言。",
+          "required" : true,
+          "schema" : {
+            "example" : "zh_cn",
+            "description" : "请求语言。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmCreateClusterReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCluster",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters"
+    },
+    "/UpdateLink" : {
+      "put" : {
+        "tags" : [ "连接管理" ],
+        "summary" : "修改连接",
+        "description" : "修改连接接口。",
+        "operationId" : "UpdateLink",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmUpdateLinkResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/validationLinkConfig"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "link_name",
+          "in" : "path",
+          "description" : "连接名称",
+          "required" : true,
+          "schema" : {
+            "description" : "连接名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmCreateAndUpdateLinkReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateLink",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/link/{link_name}"
+    },
+    "/DeleteLink" : {
+      "delete" : {
+        "tags" : [ "连接管理" ],
+        "summary" : "删除连接",
+        "description" : "删除连接接口。",
+        "operationId" : "DeleteLink",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmCodeResponse"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "link_name",
+          "in" : "path",
+          "description" : "需要删除的连接名",
+          "required" : true,
+          "schema" : {
+            "description" : "需要删除的连接名",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteLink",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/link/{link_name}"
+    },
+    "/ShowSubmissions" : {
+      "get" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "查询作业执行历史",
+        "description" : "查询作业执行历史接口。",
+        "operationId" : "ShowSubmissions",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQuerySubmissionsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "jname",
+          "in" : "query",
+          "description" : "作业名称",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSubmissions",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/submissions"
+    },
+    "/StartCluster" : {
+      "post" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "启动集群",
+        "description" : "启动集群接口。",
+        "operationId" : "StartCluster",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmStartAndStopClusterResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmStartClusterReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartCluster",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/action"
+    },
+    "/ShowDatastores" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询支持的版本",
+        "description" : "查询CDM集群支持的版本。",
+        "operationId" : "ShowDatastores",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryDatastoresResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDatastores",
+      "x-url" : "{endpoint}/v1.1/{project_id}/datastores"
+    },
+    "/UpdateJob" : {
+      "put" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "修改作业",
+        "description" : "修改作业接口。",
+        "operationId" : "UpdateJob",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmUpdateJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "报错错误码",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称。",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmUpdateJobJsonReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}"
+    },
+    "/CreateJob" : {
+      "post" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "指定集群创建作业",
+        "description" : "指定集群创建作业接口。",
+        "operationId" : "CreateJob",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmCreateJobResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求报错",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmCreateJobJsonReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job"
+    },
+    "/ShowJobs" : {
+      "get" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "查询作业",
+        "description" : "查询作业接口。",
+        "operationId" : "ShowJobs",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryJobsResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "查询多个作业用all,查询单个作业输入作业名",
+          "required" : true,
+          "schema" : {
+            "description" : "查询多个作业用all,查询单个作业输入作业名",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "当“job_name”为“all”时,此参数用于模糊过滤作业",
+          "schema" : {
+            "description" : "当“job_name”为“all”时,此参数用于模糊过滤作业",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_no",
+          "in" : "query",
+          "description" : "指定作业页号",
+          "schema" : {
+            "description" : "指定作业页号",
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1
+          }
+        }, {
+          "name" : "page_size",
+          "in" : "query",
+          "description" : "每页作业数,值在10-100之间",
+          "schema" : {
+            "description" : "每页作业数,值在10-100之间",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "jobType",
+          "in" : "query",
+          "description" : "作业类型:",
+          "schema" : {
+            "description" : "作业类型:",
+            "type" : "string",
+            "enum" : [ "NORMAL_JOB", "BATCH_JOB", "SCENARIO_JOB" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobs",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}"
+    },
+    "/ShowFlavorDetail" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询规格详情",
+        "description" : "查询指定规格ID的规格详请。",
+        "operationId" : "ShowFlavorDetail",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryFlavorDetailResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "flavor_id",
+          "in" : "path",
+          "description" : "规格ID,获取方法请参见[查询版本规格](ShowFlavors.xml)。",
+          "required" : true,
+          "schema" : {
+            "description" : "规格ID,获取方法请参见[查询版本规格](ShowFlavors.xml)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFlavorDetail",
+      "x-url" : "{endpoint}/v1.1/{project_id}/flavors/{flavor_id}"
+    },
+    "/ModifyCluster" : {
+      "post" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "修改集群",
+        "description" : "修改CDM集群配置。",
+        "operationId" : "ModifyCluster",
+        "responses" : {
+          "202" : {
+            "description" : "请求成功。"
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部接口异常。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),有Body体的情况下必选,没有Body体无需填写。如果请求消息体中含有中文字符,则需要通过charset=utf8指定中文字符集,例如取值为:application/json;charset=utf8。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=utf8",
+            "description" : "消息体的类型(格式),有Body体的情况下必选,没有Body体无需填写。如果请求消息体中含有中文字符,则需要通过charset=utf8指定中文字符集,例如取值为:application/json;charset=utf8。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Language",
+          "in" : "header",
+          "description" : "请求语言。",
+          "required" : true,
+          "schema" : {
+            "example" : "zh_cn",
+            "description" : "请求语言。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmModifyClusterReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ModifyCluster",
+      "x-url" : "{endpoint}/v1.1/{project_id}/cluster/modify/{cluster_id}"
+    },
+    "/ShowClusterEnterpriseProjects" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询集群的企业项目ID",
+        "description" : "查询指定集群的企业项目ID。",
+        "operationId" : "ShowClusterEnterpriseProjects",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryClusterEnterpriseProjectsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowClusterEnterpriseProjects",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/enterprise-projects"
+    },
+    "/ShowClusterDetail" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询集群详情",
+        "description" : "查询集群详情接口。",
+        "operationId" : "ShowClusterDetail",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryClusterDetailsRepsonse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowClusterDetail",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}"
+    },
+    "/DeleteJob" : {
+      "delete" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "删除作业",
+        "description" : "删除作业接口。",
+        "operationId" : "DeleteJob",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmCodeResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}"
+    },
+    "/CreateLink" : {
+      "post" : {
+        "tags" : [ "连接管理" ],
+        "summary" : "创建连接",
+        "description" : "创建连接接口。",
+        "operationId" : "CreateLink",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmCreateLinkResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/validationLinkConfig"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "validate",
+          "in" : "query",
+          "description" : "为“true”时,此API仅校验参数是否正确,不创建连接",
+          "required" : false,
+          "schema" : {
+            "description" : "为“true”时,此API仅校验参数是否正确,不创建连接",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmCreateAndUpdateLinkReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateLink",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/link"
+    },
+    "/StartJob" : {
+      "put" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "启动作业",
+        "description" : "启动作业接口。",
+        "operationId" : "StartJob",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmStartJobResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmStartJobReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}/start"
+    },
+    "/ShowEnterpriseProjects" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询所有集群的企业项目ID",
+        "description" : "查询当前项目下的所有集群的企业项目ID。",
+        "operationId" : "ShowEnterpriseProjects",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryEnterpriseProjectsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEnterpriseProjects",
+      "x-url" : "{endpoint}/v1.1/{project_id}/enterprise-projects"
+    },
+    "/StopJob" : {
+      "put" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "停止作业",
+        "description" : "停止作业接口。",
+        "operationId" : "StopJob",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmStopJobResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/job/{job_name}/stop"
+    },
+    "/CreateAndStartRandomClusterJob" : {
+      "post" : {
+        "tags" : [ "作业管理" ],
+        "summary" : "随机集群创建作业并执行",
+        "description" : "随机集群创建作业并执行接口。",
+        "operationId" : "CreateAndStartRandomClusterJob",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmStartJobResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Language",
+          "in" : "header",
+          "description" : "请求语言。",
+          "required" : true,
+          "schema" : {
+            "example" : "zh_cn",
+            "description" : "请求语言。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmRandomCreateAndStartJobJsonReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAndStartRandomClusterJob",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/job"
+    },
+    "/ListClusters" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询集群列表",
+        "description" : "查询集群列表接口。",
+        "operationId" : "ListClusters",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryClustersRepsonse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListClusters",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters"
+    },
+    "/RestartCluster" : {
+      "post" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "重启集群",
+        "description" : "重启集群接口。",
+        "operationId" : "RestartCluster",
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/jobId"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CdmRestartClusterReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RestartCluster",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/action"
+    },
+    "/ShowLink" : {
+      "get" : {
+        "tags" : [ "连接管理" ],
+        "summary" : "查询连接",
+        "description" : "查询连接接口。",
+        "operationId" : "ShowLink",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmShowLinkResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "description" : "集群ID",
+          "required" : true,
+          "schema" : {
+            "description" : "集群ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "link_name",
+          "in" : "path",
+          "description" : "连接名称",
+          "required" : true,
+          "schema" : {
+            "description" : "连接名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowLink",
+      "x-url" : "{endpoint}/v1.1/{project_id}/clusters/{cluster_id}/cdm/link/{link_name}"
+    },
+    "/ShowAvailabilityZones" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询所有可用区",
+        "description" : "查询CDM集群的所有可用区。",
+        "operationId" : "ShowAvailabilityZones",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryAvailabilityZonesResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "region_id",
+          "in" : "path",
+          "description" : "区域ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "区域ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAvailabilityZones",
+      "x-url" : "{endpoint}/v1.1/{project_id}/regions/{region_id}/availability_zones"
+    },
+    "/ShowFlavors" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询版本规格",
+        "description" : "按版本ID查询所有兼容规格。",
+        "operationId" : "ShowFlavors",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryFlavorsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "datastore_id",
+          "in" : "path",
+          "description" : "版本ID,获取方法请参见[CDM支持的版本](ShowDatastores.xml)。",
+          "required" : true,
+          "schema" : {
+            "description" : "版本ID,获取方法请参见[CDM支持的版本](ShowDatastores.xml)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFlavors",
+      "x-url" : "{endpoint}/v1.1/{project_id}/datastores/{datastore_id}/flavors"
+    },
+    "/ShowInstanceDetail" : {
+      "get" : {
+        "tags" : [ "集群管理" ],
+        "summary" : "查询集群实例信息",
+        "description" : "查询集群实例信息。",
+        "operationId" : "ShowInstanceDetail",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CdmQueryClusterInstanceDetailResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。"
+          },
+          "401" : {
+            "description" : "鉴权失败。"
+          },
+          "403" : {
+            "description" : "没有操作权限。"
+          },
+          "404" : {
+            "description" : "找不到资源。"
+          },
+          "500" : {
+            "description" : "服务内部错误,具体返回错误码请参考错误码。"
+          },
+          "503" : {
+            "description" : "服务不可用。"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,获取方法请参见[获取集群列表](ListClusters.xml)。",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,获取方法请参见[获取集群列表](ListClusters.xml)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowInstanceDetail",
+      "x-url" : "{endpoint}/v1.1/{project_id}/instances/{instance_id}"
+    }
+  }
+}
