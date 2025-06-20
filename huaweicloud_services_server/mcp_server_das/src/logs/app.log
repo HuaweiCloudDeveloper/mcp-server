@@ -1,0 +1,378 @@
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 19:54:51 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 19:54:51 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 19:54:51 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:10:23 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:10:23 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:10:23 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:20:55 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:20:55 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:20:55 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:22:02 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:22:03 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:22:03 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:31:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:31:37 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:31:37 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:36:47 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:36:47 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:36:47 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:37:36 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:37:36 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:37:36 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:39:17 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:39:17 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:39:17 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-10 20:39:32 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='\x16\x16\x16\x16\x16\x1a\x1a\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-10 20:39:33 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-10 20:39:33 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-10 20:39:33 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-10 20:41:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-10 20:41:15 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-10 20:41:15 - asyncio - DEBUG - Using proactor: IocpProactor
+
+
+
+
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 12:10:27 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 12:10:27 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 12:10:27 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 12:29:06 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 12:29:06 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 12:29:06 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:05:03 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:05:03 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:05:03 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server'
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:06:44 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:06:44 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:06:44 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:07:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:07:45 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:07:45 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:30:12 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:30:12 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:30:12 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:30:35 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-11 14:30:35 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-11 14:30:35 - mcp.server.lowlevel.server - DEBUG - Received message: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:31:33 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:31:33 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:31:33 - __main__ - DEBUG - stdio
+2025-06-11 14:31:33 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:49:43 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:49:43 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:49:43 - __main__ - DEBUG - stdio
+2025-06-11 14:49:43 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 14:55:32 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 14:55:32 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 14:55:32 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src\..\mcp-server
+2025-06-11 14:55:32 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src\..\mcp-server
+2025-06-11 14:55:32 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:00:18 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:00:18 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:00:18 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src\..\mcp-server
+2025-06-11 15:00:18 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src\..\mcp-server
+2025-06-11 15:00:18 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:00:37 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:00:37 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:00:37 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src
+2025-06-11 15:00:37 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src
+2025-06-11 15:00:37 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:03:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:03:07 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:03:07 - __main__ - DEBUG - ../../
+2025-06-11 15:03:07 - __main__ - DEBUG - ../../
+2025-06-11 15:03:07 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:16:52 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:16:52 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:16:52 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src
+2025-06-11 15:16:52 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server\mcp_server_das\src
+2025-06-11 15:16:52 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:17:15 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:17:15 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:17:15 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server
+2025-06-11 15:17:15 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:18:45 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:18:45 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:18:45 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 15:18:45 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:19:30 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:19:30 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:19:30 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 15:19:30 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:57:01 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:57:01 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:57:01 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server
+2025-06-11 15:57:01 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:57:26 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:57:26 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:57:26 - __main__ - DEBUG - C:\kylecheng\mcp-server\huaweicloud_services_server
+2025-06-11 15:57:26 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:58:07 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:58:07 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:58:07 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 15:58:07 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 15:58:56 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 15:58:56 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 15:58:56 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 15:58:56 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 16:00:57 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 16:00:57 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 16:00:57 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 16:00:57 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 16:02:24 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 16:02:24 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 16:02:24 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 16:02:24 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 16:03:34 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 16:03:34 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 16:03:34 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 16:03:34 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 16:12:41 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 16:12:41 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 16:12:41 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 16:12:41 - asyncio - DEBUG - Using proactor: IocpProactor
