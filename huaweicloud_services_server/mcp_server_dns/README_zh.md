@@ -1,101 +1,486 @@
 # DNS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-DNS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务DNS交互的能力。可以基于自然语言对DNS资源进行全链路管理。
+DNS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service DNS. Full-chain management of DNS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| DNSSEC | EnableDnssecConfig | 开启公网域名的DNSSEC。 | To be tested |
-|  | ShowDnssecConfig | 查询公网域名的DNSSEC。 | To be tested |
-|  | DisableDnssecConfig | 关闭公网域名的DNSSEC。 | To be tested |
-| 公网域名管理 | ShowPublicZoneNameServer | 查询公网域名的名称服务器。 | To be tested |
-|  | UpdatePublicZoneStatus | 设置公网域名状态,支持暂停、启用域名。 | To be tested |
-|  | ListPublicZones | 查询公网域名列表。 | To be tested |
-|  | CreatePublicZone | 创建公网域名。 | To be tested |
-|  | UpdatePublicZone | 修改公网域名。 | To be tested |
-|  | ShowPublicZone | 查询公网域名。 | To be tested |
-|  | DeletePublicZone | 删除公网域名。 | To be tested |
-| 内网域名管理 | DeletePrivateZone | 删除内网域名。 | To be tested |
-|  | SetPrivateZoneProxyPattern | 设置内网域名的子域名递归解析代理。 | To be tested |
-|  | ShowPrivateZone | 查询内网域名。 | To be tested |
-|  | ListPrivateZones | 查询内网域名列表。 | To be tested |
-|  | ShowPrivateZoneNameServer | 查询内网域名的名称服务器。 | To be tested |
-|  | UpdatePrivateZoneStatus | 设置内网域名状态,支持暂停、启用域名。 | To be tested |
-|  | AssociateRouter | 在内网域名上关联VPC。 | To be tested |
-|  | CreatePrivateZone | 创建内网域名。 | To be tested |
-|  | DisassociateRouter | 在内网域名上解关联VPC。 | To be tested |
-|  | UpdatePrivateZone | 修改内网域名。 | To be tested |
-| 反向解析管理(待废弃) | UpdatePtrRecord | 修改弹性公网IP的反向解析记录。 | To be tested |
-|  | ListPtrRecords | 查询弹性公网IP的反向解析记录列表。 | To be tested |
-|  | RestorePtrRecord | 将弹性公网IP的反向解析记录恢复为默认值。 | To be tested |
-|  | ShowPtrRecordSet | 查询弹性公网IP的反向解析记录。 | To be tested |
-|  | CreateEipRecordSet | 设置弹性公网IP的反向解析记录。 | To be tested |
-| 反向解析管理(新版本) | ListPtrs | 查询弹性公网IP的反向解析记录列表。 | To be tested |
-|  | DeletePtr | 将弹性公网IP的反向解析记录恢复为默认值。 | To be tested |
-|  | UpdatePtr | 修改弹性公网IP的反向解析记录。 | To be tested |
-|  | CreatePtr | 创建弹性公网IP的反向解析记录。 | To be tested |
-|  | ShowPtr | 查询弹性公网IP的反向解析记录。 | To be tested |
-| 名称服务器管理 | ListNameServers | 查询名称服务器列表 | To be tested |
-| 批量接口管理 | BatchDeleteRecordSetWithLine | 批量删除域名下的记录集,当删除的资源不存在时,则默认删除成功。 | To be tested |
-|  | BatchSetRecordSetsStatus | 批量设置记录集状态。 | To be tested |
-|  | CreateRecordSetWithBatchLines | 批量线路创建记录集。属于原子性操作,如果存在一个参数校验不通过,则创建失败。仅公网域名支持。 | To be tested |
-|  | BatchDeleteZones | 批量删除域名。 | To be tested |
-|  | BatchDeletePtrRecords | 批量删除反向解析。本接口为原子操作,所有记录应全部删除成功或全部失败。 | To be tested |
-|  | BatchSetZonesStatus | 批量设置域名状态。 | To be tested |
-|  | BatchDeleteRecordSets | 批量删除记录集。 | To be tested |
-|  | BatchUpdateRecordSetWithLine | 批量修改记录集。属于原子性操作,请求记录集将全部完成修改,或不做任何修改。 | To be tested |
-| 标签管理 | ListTag | 使用标签查询资源实例 | To be tested |
-|  | ShowResourceTag | 查询指定实例的标签信息 | To be tested |
-|  | CreateTag | 为指定实例添加标签 | To be tested |
-|  | DeleteTag | 删除资源标签 | To be tested |
-|  | BatchCreateTag | 为指定实例批量添加或删除标签 | To be tested |
-|  | ListTags | 查询指定实例类型的所有标签集合 | To be tested |
-| 版本管理 | ShowApiInfo | 查询指定的云解析服务API版本号。 | To be tested |
-|  | ListApiVersions | 查询所有的云解析服务API版本号列表。 | To be tested |
-| 线路分组管理 | ShowLineGroup | 查询线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。 | To be tested |
-|  | UpdateLineGroups | 更新线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。 | To be tested |
-|  | DeleteLineGroup | 删除线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。 | To be tested |
-|  | CreateLineGroup | 创建线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。 | To be tested |
-|  | ListLineGroups | 查询线路分组列表。该接口部分区域未上线,如需使用请提交工单申请开通。 | To be tested |
-| 终端节点管理 | DisassociateEndpointIpaddress | 终端节点解绑IP地址。 | To be tested |
-|  | DeleteEndpoint | 删除终端节点。 | To be tested |
-|  | ShowEndpoint | 查询终端节点。 | To be tested |
-|  | ListEndpointVpcs | 查询终端节点VPC列表。 | To be tested |
-|  | AssociateEndpointIpaddress | 终端节点绑定IP地址。 | To be tested |
-|  | ListEndpointIpaddresses | 查询终端节点下的IP地址列表。 | To be tested |
-|  | UpdateEndpoint | 修改终端节点 | To be tested |
-|  | CreateEndpoint | 创建终端节点。 | To be tested |
-|  | ListEndpoints | 查询终端节点列表。 | To be tested |
-| 自定义线路管理 | ListCustomLine | 查询自定义线路。 | To be tested |
-|  | CreateCustomLine | 创建自定义线路。 | To be tested |
-|  | UpdateCustomLine | 更新自定义线路。 | To be tested |
-|  | DeleteCustomLine | 删除自定义线路。 | To be tested |
-| 记录集管理(待废弃) | ListRecordSets | 查询租户记录集列表。 | To be tested |
-|  | ShowRecordSet | 查询记录集。 | To be tested |
-|  | DeleteRecordSet | 删除记录集。删除有添加智能解析的记录集时,需要用记录集管理(新版本)模块中删除接口进行删除。 | To be tested |
-|  | UpdateRecordSet | 修改记录集。 | To be tested |
-|  | ListRecordSetsByZone | 查询域名下的记录集列表。 | To be tested |
-|  | CreateRecordSet | 创建记录集。 | To be tested |
-| 记录集管理(新版本) | SetRecordSetsStatus | 设置记录集状态。 | To be tested |
-|  | DeleteRecordSets | 删除记录集。 | To be tested |
-|  | ListRecordSetsWithLine | 查询租户记录集列表。 | To be tested |
-|  | ShowRecordSetByZone | 查询域名下的记录集列表。 | To be tested |
-|  | ShowRecordSetWithLine | 查询记录集。 | To be tested |
-|  | UpdateRecordSets | 修改记录集。 | To be tested |
-|  | ListPublicZoneLines | 查询公网域名的线路列表。 | To be tested |
-|  | CreateRecordSetWithLine | 创建记录集。 | To be tested |
-| 转发规则管理 | AssociateResolverRuleRouter | 解析器转发规则关联VPC。 | To be tested |
-|  | ListResolverRules | 查询解析器转发规则列表。 | To be tested |
-|  | DeleteResolverRule | 删除解析器转发规则。 | To be tested |
-|  | ShowResolverRule | 查询解析器转发规则。 | To be tested |
-|  | CreateResolverRule | 创建解析器转发规则。 | To be tested |
-|  | UpdateResolverRule | 修改解析器转发规则。 | To be tested |
-|  | DisassociateResolverRuleRouter | 解析器转发规则解关联VPC。 | To be tested |
-| 配额管理 | ShowDomainQuota | 查询租户在DNS服务下的资源配额,包括公网域名配额、内网域名配额、记录集配额、反向解析配额、自定义线路配额、线路分组配额、入站终端节点配额、出站终端节点配额、转发规则配额等。 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="3">DNSSEC</td>
+                    <td>EnableDnssecConfig</td>
+                    <td>开启公网域名的DNSSEC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDnssecConfig</td>
+                    <td>查询公网域名的DNSSEC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisableDnssecConfig</td>
+                    <td>关闭公网域名的DNSSEC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">公网域名管理</td>
+                    <td>ShowPublicZoneNameServer</td>
+                    <td>查询公网域名的名称服务器。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePublicZoneStatus</td>
+                    <td>设置公网域名状态,支持暂停、启用域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPublicZones</td>
+                    <td>查询公网域名列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePublicZone</td>
+                    <td>创建公网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePublicZone</td>
+                    <td>修改公网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPublicZone</td>
+                    <td>查询公网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePublicZone</td>
+                    <td>删除公网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="10">内网域名管理</td>
+                    <td>DeletePrivateZone</td>
+                    <td>删除内网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SetPrivateZoneProxyPattern</td>
+                    <td>设置内网域名的子域名递归解析代理。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPrivateZone</td>
+                    <td>查询内网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPrivateZones</td>
+                    <td>查询内网域名列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPrivateZoneNameServer</td>
+                    <td>查询内网域名的名称服务器。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePrivateZoneStatus</td>
+                    <td>设置内网域名状态,支持暂停、启用域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateRouter</td>
+                    <td>在内网域名上关联VPC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePrivateZone</td>
+                    <td>创建内网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisassociateRouter</td>
+                    <td>在内网域名上解关联VPC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePrivateZone</td>
+                    <td>修改内网域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">反向解析管理(待废弃)</td>
+                    <td>UpdatePtrRecord</td>
+                    <td>修改弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPtrRecords</td>
+                    <td>查询弹性公网IP的反向解析记录列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RestorePtrRecord</td>
+                    <td>将弹性公网IP的反向解析记录恢复为默认值。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPtrRecordSet</td>
+                    <td>查询弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEipRecordSet</td>
+                    <td>设置弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">反向解析管理(新版本)</td>
+                    <td>ListPtrs</td>
+                    <td>查询弹性公网IP的反向解析记录列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePtr</td>
+                    <td>将弹性公网IP的反向解析记录恢复为默认值。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePtr</td>
+                    <td>修改弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePtr</td>
+                    <td>创建弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPtr</td>
+                    <td>查询弹性公网IP的反向解析记录。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">名称服务器管理</td>
+                    <td>ListNameServers</td>
+                    <td>查询名称服务器列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">密钥标签管理</td>
+                    <td>DeleteTag</td>
+                    <td>- 功能介绍:删除密钥标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">批量接口管理</td>
+                    <td>BatchDeleteRecordSetWithLine</td>
+                    <td>批量删除域名下的记录集,当删除的资源不存在时,则默认删除成功。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchSetRecordSetsStatus</td>
+                    <td>批量设置记录集状态。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRecordSetWithBatchLines</td>
+                    <td>批量线路创建记录集。属于原子性操作,如果存在一个参数校验不通过,则创建失败。仅公网域名支持。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteZones</td>
+                    <td>批量删除域名。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeletePtrRecords</td>
+                    <td>批量删除反向解析。本接口为原子操作,所有记录应全部删除成功或全部失败。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchSetZonesStatus</td>
+                    <td>批量设置域名状态。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteRecordSets</td>
+                    <td>批量删除记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchUpdateRecordSetWithLine</td>
+                    <td>批量修改记录集。属于原子性操作,请求记录集将全部完成修改,或不做任何修改。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">查询API版本信息</td>
+                    <td>ShowApiInfo</td>
+                    <td>查询对象存储迁移服务指定API版本信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">查询版本操作</td>
+                    <td>ListApiVersions</td>
+                    <td>查询标签管理服务的API版本列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">标签</td>
+                    <td>ListTag</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">标签管理</td>
+                    <td>CreateTag</td>
+                    <td>为资源添加标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchCreateTag</td>
+                    <td>为指定实例批量添加或删除标签</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">线路分组管理</td>
+                    <td>ShowLineGroup</td>
+                    <td>查询线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateLineGroups</td>
+                    <td>更新线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteLineGroup</td>
+                    <td>删除线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateLineGroup</td>
+                    <td>创建线路分组。该接口部分区域未上线,如需使用请提交工单申请开通。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLineGroups</td>
+                    <td>查询线路分组列表。该接口部分区域未上线,如需使用请提交工单申请开通。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">终端节点功能</td>
+                    <td>DeleteEndpoint</td>
+                    <td>删除终端节点。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEndpoint</td>
+                    <td>创建终端节点,以便访问终端节点服务。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEndpoints</td>
+                    <td>查询当前用户下的终端节点的列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">终端节点管理</td>
+                    <td>DisassociateEndpointIpaddress</td>
+                    <td>终端节点解绑IP地址。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEndpoint</td>
+                    <td>查询终端节点。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEndpointVpcs</td>
+                    <td>查询终端节点VPC列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateEndpointIpaddress</td>
+                    <td>终端节点绑定IP地址。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEndpointIpaddresses</td>
+                    <td>查询终端节点下的IP地址列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">自定义线路管理</td>
+                    <td>ListCustomLine</td>
+                    <td>查询自定义线路。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCustomLine</td>
+                    <td>创建自定义线路。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCustomLine</td>
+                    <td>更新自定义线路。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteCustomLine</td>
+                    <td>删除自定义线路。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">记录集管理(待废弃)</td>
+                    <td>ListRecordSets</td>
+                    <td>查询租户记录集列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRecordSet</td>
+                    <td>查询记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRecordSet</td>
+                    <td>删除记录集。删除有添加智能解析的记录集时,需要用记录集管理(新版本)模块中删除接口进行删除。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateRecordSet</td>
+                    <td>修改记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRecordSetsByZone</td>
+                    <td>查询域名下的记录集列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRecordSet</td>
+                    <td>创建记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">记录集管理(新版本)</td>
+                    <td>SetRecordSetsStatus</td>
+                    <td>设置记录集状态。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRecordSets</td>
+                    <td>删除记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRecordSetsWithLine</td>
+                    <td>查询租户记录集列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRecordSetByZone</td>
+                    <td>查询域名下的记录集列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRecordSetWithLine</td>
+                    <td>查询记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateRecordSets</td>
+                    <td>修改记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPublicZoneLines</td>
+                    <td>查询公网域名的线路列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRecordSetWithLine</td>
+                    <td>创建记录集。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">访问端点管理</td>
+                    <td>UpdateEndpoint</td>
+                    <td>更新访问端点。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">账号管理</td>
+                    <td>ShowDomainQuota</td>
+                    <td>该接口可以用于查询账号配额。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">资源标签</td>
+                    <td>ShowResourceTag</td>
+                    <td>查询单个资源上的标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">转发规则管理</td>
+                    <td>AssociateResolverRuleRouter</td>
+                    <td>解析器转发规则关联VPC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResolverRules</td>
+                    <td>查询解析器转发规则列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteResolverRule</td>
+                    <td>删除解析器转发规则。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResolverRule</td>
+                    <td>查询解析器转发规则。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateResolverRule</td>
+                    <td>创建解析器转发规则。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateResolverRule</td>
+                    <td>修改解析器转发规则。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisassociateResolverRuleRouter</td>
+                    <td>解析器转发规则解关联VPC。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">镜像标签</td>
+                    <td>ListTags</td>
+                    <td>根据不同条件查询镜像标签列表信息。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

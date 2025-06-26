@@ -11,18 +11,81 @@ EPS MCP Server is a Model Context Protocol (Model Context Protocol) server, prov
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| Enterprise Project Management Operation | ShowEnterpriseProjectQuota | Query the quota information of an enterprise project. | To be tested |
-|  | EnableEnterpriseProject | Enable an enterprise project. | To be tested |
-|  | ShowEnterpriseProject | Query enterprise project details. | To be tested |
-|  | UpdateEnterpriseProject | Modify an enterprise project. Currently, only the name and description can be modified. | To be tested |
-|  | MigrateResource | Migrate resources to the target enterprise project. | To be tested |
-|  | CreateEnterpriseProject | Create an enterprise project. | To be tested |
-|  | DisableEnterpriseProject | Disable an enterprise project. | To be tested |
-|  | ShowResourceBindEnterpriseProject | Query details about resources bound to an enterprise project. | To be tested |
-|  | ListEnterpriseProject | Query the list of authorized enterprise projects of the current user. The user can bind resources to the enterprise projects. | To be tested |
-| Query services supported by tag management | ListProviders | Query the services supported by tag management. | To be tested |
-| Query version operation | ShowApiVersion | Query the details about a specified TMS API version. | To be tested |
-|  | ListApiVersions | Query the TMS API version list. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="9">Enterprise Project Management Operation</td>
+                    <td>ShowEnterpriseProjectQuota</td>
+                    <td>Query the quota information of an enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>EnableEnterpriseProject</td>
+                    <td>Enable an enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEnterpriseProject</td>
+                    <td>Query enterprise project details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateEnterpriseProject</td>
+                    <td>Modify an enterprise project. Currently, only the name and description can be modified.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>MigrateResource</td>
+                    <td>Migrate resources to the target enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEnterpriseProject</td>
+                    <td>Create an enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisableEnterpriseProject</td>
+                    <td>Disable an enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResourceBindEnterpriseProject</td>
+                    <td>Query details about resources bound to an enterprise project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnterpriseProject</td>
+                    <td>Query the list of authorized enterprise projects of the current user. The user can bind resources to the enterprise projects.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Query services supported by tag management</td>
+                    <td>ListProviders</td>
+                    <td>Query the services supported by tag management.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Query version operation</td>
+                    <td>ShowApiVersion</td>
+                    <td>Query the details about a specified TMS API version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiVersions</td>
+                    <td>Query the TMS API version list.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

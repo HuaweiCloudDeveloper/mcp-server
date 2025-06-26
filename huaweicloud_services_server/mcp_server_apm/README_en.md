@@ -11,51 +11,254 @@ APM MCP Server is a Model Context Protocol (Model Context Protocol) server, prov
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| AKSK | ShowAkSks | Query the AK/SK of a tenant. | To be tested |
-|  | CreateAkSk | Create an AK/SK. | To be tested |
-|  | DeleteAkSk | Delete the AK/SK. | To be tested |
-| ALARM | ListAlarmNotify | Query the triggering details and history of a single alarm. | To be tested |
-|  | ListAlarmData | Query alarms in the system. | To be tested |
-| APM | ChangeAgentStatus | Changes the collection status of a specified instance, that is, enabled or disabled. | To be tested |
-|  | ShowMasterAddress | Obtain the POLB address of the master service in the region based on the region name. | To be tested |
-|  | DeleteAgent | Delete an agent | To be tested |
-|  | SaveMonitorItemConfig | Save the monitoring item. | To be tested |
-|  | ListEnvMonitorItem | Query the monitoring item list. | To be tested |
-|  | ListAkSk | Obtain the AK/SK list created by the user. | To be tested |
-|  | ListBusiness | This interface is used to query applications of a user. | To be tested |
-|  | SearchAgent | This interface is used to search for all probes in an application. | To be tested |
-|  | SearchApplication | Search for components, environments, and probes in a specified region. | To be tested |
-| App Template Management | ListApps | Query the application template list | To be tested |
-|  | DeleteApp | Delete an application template | To be tested |
-| CMDB | ShowSubBusinessDetail | Query details about a single subapplication. | To be tested |
-|  | ListAppEnvs | Obtain the environment list of the component. | To be tested |
-|  | ListEnvTags | API for querying environment labels. | To be tested |
-|  | ShowBusinessDetail | Query details about a single application. | To be tested |
-|  | ShowTopologyTree | Obtain the application tree. | To be tested |
-| Profiling | ShowFlameLineTree |  | To be tested |
-| REGION | ListOpenRegion | This interface is used to query the information about the region enabled by a user. | To be tested |
-|  | ListSupportedRegion | Query information about all supported regions. | To be tested |
-| TOPOLOGY | SearchEnvTopology | Query the environment-level global topology information of a component. | To be tested |
-|  | SearchBusinessTopology | Query application-level global topology information. | To be tested |
-| TRACING | ShowToken | Obtain the token of the link trace application. | To be tested |
-|  | CreateBusiness | Create a link trace application | To be tested |
-|  | ShowAccessPoint | Obtain the access address of the link trace application | To be tested |
-| TRANSACTION | SearchTransactionConfig | Query the configured URL tracing configuration list. | To be tested |
-|  | ListBusinessEnv | Query the list of environments where URL tracing is enabled in the selected region. | To be tested |
-|  | SearchTransaction | Query the list of invoked URL tracing views. | To be tested |
-|  | ShowTransactionDetail | Query the details of a URL tracing view. | To be tested |
-| VIEW | ShowEnvMonitorItems | Obtain monitoring item information. | To be tested |
-|  | ShowRawTable | Obtain the original data table. | To be tested |
-|  | ShowMonitorItemDetail | Obtains details about a monitoring item. | To be tested |
-|  | ShowMonitorItemViewConfig | Query the configuration information about a monitoring item. | To be tested |
-|  | ShowSpanSearch | Interface for querying span data. | To be tested |
-|  | ShowTopology | Call chain topology. | To be tested |
-|  | ShowClobDetail | Obtain raw data details. | To be tested |
-|  | ListEnvInstances | Obtains the instance list. | To be tested |
-|  | ShowTrend | Obtain the trend chart. | To be tested |
-|  | ShowSumTable | Obtains summary table data. | To be tested |
-|  | ShowTraceEvents | Obtains all call chain data of a trace. | To be tested |
-|  | ShowEventDetail | Obtains details about an event. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="3">AKSK</td>
+                    <td>ShowAkSks</td>
+                    <td>Query the AK/SK of a tenant.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAkSk</td>
+                    <td>Create an AK/SK.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAkSk</td>
+                    <td>Delete the AK/SK.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">ALARM</td>
+                    <td>ListAlarmNotify</td>
+                    <td>Query the triggering details and history of a single alarm.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAlarmData</td>
+                    <td>Query alarms in the system.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">APM</td>
+                    <td>ChangeAgentStatus</td>
+                    <td>Changes the collection status of a specified instance, that is, enabled or disabled.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMasterAddress</td>
+                    <td>Obtain the POLB address of the master service in the region based on the region name.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAgent</td>
+                    <td>Delete an agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SaveMonitorItemConfig</td>
+                    <td>Save the monitoring item.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvMonitorItem</td>
+                    <td>Query the monitoring item list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAkSk</td>
+                    <td>Obtain the AK/SK list created by the user.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListBusiness</td>
+                    <td>This interface is used to query applications of a user.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SearchAgent</td>
+                    <td>This interface is used to search for all probes in an application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SearchApplication</td>
+                    <td>Search for components, environments, and probes in a specified region.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">App Template Management</td>
+                    <td>ListApps</td>
+                    <td>Query the application template list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteApp</td>
+                    <td>Delete an application template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">CMDB</td>
+                    <td>ShowSubBusinessDetail</td>
+                    <td>Query details about a single subapplication.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppEnvs</td>
+                    <td>Obtain the environment list of the component.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvTags</td>
+                    <td>API for querying environment labels.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowBusinessDetail</td>
+                    <td>Query details about a single application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTopologyTree</td>
+                    <td>Obtain the application tree.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Profiling</td>
+                    <td>ShowFlameLineTree</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">REGION</td>
+                    <td>ListOpenRegion</td>
+                    <td>This interface is used to query the information about the region enabled by a user.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSupportedRegion</td>
+                    <td>Query information about all supported regions.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">TOPOLOGY</td>
+                    <td>SearchEnvTopology</td>
+                    <td>Query the environment-level global topology information of a component.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SearchBusinessTopology</td>
+                    <td>Query application-level global topology information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">TRACING</td>
+                    <td>ShowToken</td>
+                    <td>Obtain the token of the link trace application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateBusiness</td>
+                    <td>Create a link trace application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAccessPoint</td>
+                    <td>Obtain the access address of the link trace application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">TRANSACTION</td>
+                    <td>SearchTransactionConfig</td>
+                    <td>Query the configured URL tracing configuration list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListBusinessEnv</td>
+                    <td>Query the list of environments where URL tracing is enabled in the selected region.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SearchTransaction</td>
+                    <td>Query the list of invoked URL tracing views.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTransactionDetail</td>
+                    <td>Query the details of a URL tracing view.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="12">VIEW</td>
+                    <td>ShowEnvMonitorItems</td>
+                    <td>Obtain monitoring item information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRawTable</td>
+                    <td>Obtain the original data table.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMonitorItemDetail</td>
+                    <td>Obtains details about a monitoring item.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMonitorItemViewConfig</td>
+                    <td>Query the configuration information about a monitoring item.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowSpanSearch</td>
+                    <td>Interface for querying span data.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTopology</td>
+                    <td>Call chain topology.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowClobDetail</td>
+                    <td>Obtain raw data details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvInstances</td>
+                    <td>Obtains the instance list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTrend</td>
+                    <td>Obtain the trend chart.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowSumTable</td>
+                    <td>Obtains summary table data.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTraceEvents</td>
+                    <td>Obtains all call chain data of a trace.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEventDetail</td>
+                    <td>Obtains details about an event.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

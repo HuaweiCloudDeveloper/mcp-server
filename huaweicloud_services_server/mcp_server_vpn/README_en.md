@@ -11,82 +11,412 @@ VPN MCP Server is a Model Context Protocol (Model Context Protocol) server, prov
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| ClientCaCertificate | CheckClientCaCertificate | When creating a server, you can invoke the pre-verification API of the client CA to check the validity of the CA. | To be tested |
-|  | UpdateClientCa | Modifying the CA certificate of the client | To be tested |
-|  | ImportClientCa | Importing the CA Certificate of the Client | To be tested |
-|  | DeleteClientCa | Delete the client CA certificate | To be tested |
-|  | ShowClientCa | Querying the CA certificate of the client | To be tested |
-| ConnectionMonitor | ListConnectionMonitors | Query the VPN connection monitoring list | To be tested |
-|  | ShowConnectionMonitor | Query a specified VPN connection based on the VPN connection monitoring ID. | To be tested |
-|  | DeleteConnectionMonitor | Deletes a specified VPN connection monitoring task based on the VPN connection monitoring ID. | To be tested |
-|  | CreateConnectionMonitor | Create a VPN connection monitoring task. | To be tested |
-| CustomerGateway | ShowCgw | Query the specified peer gateway based on the peer gateway ID. | To be tested |
-|  | DeleteCgw | Delete the specified peer gateway based on the peer gateway ID. | To be tested |
-|  | CreateCgw | Create the peer gateway used by the tenant to connect to the VPN gateway. | To be tested |
-|  | UpdateCgw | Update the specified peer gateway based on the peer gateway ID. | To be tested |
-|  | ListCgws | Query the peer gateway list | To be tested |
-| P2cVpnGateway | DeleteP2cVgwConnection | Disconnecting the P2C VPN Gateway | To be tested |
-|  | ListP2cVgwAvailabilityZones | Querying the P2C VPN Gateway AZ | To be tested |
-|  | ListP2cVgwConnections | List p2c vpn gateway connections | To be tested |
-|  | ListP2cVgws | Query the P2C VPN gateway list | To be tested |
-|  | ShowP2cVgw | Query the specified VPN gateway based on the P2C VPN gateway ID. | To be tested |
-|  | UpdateP2cVgw | Updates the specified P2C VPN gateway based on the P2C VPN gateway ID. | To be tested |
-| Tags | ShowResourceTags | Query the label information of a specified DB instance | To be tested |
-|  | BatchCreateResourceTags | Adding tags to specified instances in batches | To be tested |
-|  | ListResourcesByTags | Query the resource instance list by tag | To be tested |
-|  | ListProjectTags | Query all tags of a specified resource type in a specified project | To be tested |
-|  | BatchDeleteResourceTags | Delete tags in batches for specified instances | To be tested |
-|  | CountResourcesByTags | Query the number of resource instances by tag | To be tested |
-| VpnAccessPolicy | UpdateVpnAccessPolicy | Modifying a VPN access policy | To be tested |
-|  | DeleteVpnAccessPolicy | Delete a VPN access policy | To be tested |
-|  | ListVpnAccessPolicies | Query the VPN access policy list | To be tested |
-|  | CreateVpnAccessPolicy | Create a VPN access policy | To be tested |
-|  | ShowVpnAccessPolicy | Query VPN access policies | To be tested |
-| VpnConnection | ShowVpnConnection | Query the parameters of a specified VPN connection based on the connection ID. | To be tested |
-|  | UpdateVpnConnection | Updates the parameters of a specified VPN connection based on the connection ID. | To be tested |
-|  | ResetVpnConnection | Resets a specified VPN connection based on the connection ID. | To be tested |
-|  | CreateVpnConnection | Create a VPN connection between the VPN gateway and the peer gateway. | To be tested |
-|  | ShowVpnConnectionLog | Query the specified VPN connection logs based on the connection ID. | To be tested |
-|  | ListVpnConnections | Query the VPN connection list | To be tested |
-|  | DeleteVpnConnection | Delete a specified VPN connection based on the connection ID. | To be tested |
-| VpnConnectionsLogConfig | ShowVpnConnectionsLogConfig | Query VPN connection log configuration | To be tested |
-|  | DeleteVpnConnectionsLogConfig | Delete VPN connection log configuration | To be tested |
-|  | UpdateVpnConnectionsLogConfig | Updating VPN connection log configurations | To be tested |
-| VpnGateway | ShowVgw | Query the specified VPN gateway based on the VPN gateway ID. | To be tested |
-|  | ListExtendedAvailabilityZones | Querying the AZ of the VPN gateway | To be tested |
-|  | ShowVpnGatewayRoutingTable |  | To be tested |
-|  | UpdatePostpaidVgwSpecification | Modify the specifications of a single gateway. The configuration can be increased or decreased. | To be tested |
-|  | ListAvailabilityZones | Querying the AZ of the VPN gateway | To be tested |
-|  | CreateVgw | Create a VPN gateway. | To be tested |
-|  | UpdateVgw | Updates a specified VPN gateway based on the VPN gateway ID. | To be tested |
-|  | ListVgws | Query the VPN gateway list | To be tested |
-|  | DeleteVgw | Deletes a specified VPN gateway based on the VPN gateway ID. | To be tested |
-| VpnGatewayCertificate | ShowVpnGatewayCertificate | Query the specified VPN gateway certificate based on the VPN gateway ID. | To be tested |
-|  | UpdateVgwCertificate | Update the certificates used by the tenant VPN gateway, including the signature certificate, signature private key, encryption certificate, encryption private key, and CA certificate chain. Currently, only the Chinese secret certificate is supported. | To be tested |
-|  | CreateVgwCertificate | Import the certificates used by the tenant VPN gateway, including the signature certificate, signature private key, encryption certificate, encryption private key, and CA certificate chain. Currently, only the Chinese secret certificate is supported. | To be tested |
-| VpnQuota | ShowQuotasInfo | Query the quota of a specified tenant | To be tested |
-| VpnServer | ListVpnServersByVgw | Query the server information of a gateway | To be tested |
-|  | UpdateVpnServer | Updates a specified VPN server | To be tested |
-|  | ExportClientConfig | Export client configuration information | To be tested |
-|  | CreateVpnServer | Create a VPN server. | To be tested |
-|  | ListVpnServersByProject | Query information about all servers of a tenant | To be tested |
-| VpnUser | ListVpnUsers | Query the VPN user list | To be tested |
-|  | UpdateVpnUser | Modifying a VPN User | To be tested |
-|  | CreateVpnUser | Create a VPN user | To be tested |
-|  | BatchCreateVpnUsers | Creating P2C VPN Users in Batches | To be tested |
-|  | UpdateVpnUserPassword | Change the VPN user password | To be tested |
-|  | ShowVpnUser | Querying VPN Users | To be tested |
-|  | DeleteVpnUser | Deleting a VPN User | To be tested |
-|  | ResetVpnUserPassword | Resetting the VPN User Password | To be tested |
-|  | BatchDeleteVpnUsers | Deleting P2C VPN Users in Batches | To be tested |
-| VpnUserGroup | AddVpnUsersToGroup | Adding a VPN User to a Group | To be tested |
-|  | CreateVpnUserGroup | Create a VPN user group | To be tested |
-|  | ListVpnUserGroups | Query the VPN user group list | To be tested |
-|  | DeleteVpnUserGroup | Delete a VPN user group | To be tested |
-|  | UpdateVpnUserGroup | Modifying a VPN User Group | To be tested |
-|  | ListVpnUsersInGroup | Query VPN users in a group | To be tested |
-|  | RemoveVpnUsersFromGroup | Deleting a VPN User from a Group | To be tested |
-|  | ShowVpnUserGroup | Query VPN user groups | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="5">ClientCaCertificate</td>
+                    <td>CheckClientCaCertificate</td>
+                    <td>When creating a server, you can invoke the pre-verification API of the client CA to check the validity of the CA.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateClientCa</td>
+                    <td>Modifying the CA certificate of the client</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportClientCa</td>
+                    <td>Importing the CA Certificate of the Client</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteClientCa</td>
+                    <td>Delete the client CA certificate</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowClientCa</td>
+                    <td>Querying the CA certificate of the client</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">ConnectionMonitor</td>
+                    <td>ListConnectionMonitors</td>
+                    <td>Query the VPN connection monitoring list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowConnectionMonitor</td>
+                    <td>Query a specified VPN connection based on the VPN connection monitoring ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteConnectionMonitor</td>
+                    <td>Deletes a specified VPN connection monitoring task based on the VPN connection monitoring ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateConnectionMonitor</td>
+                    <td>Create a VPN connection monitoring task.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">CustomerGateway</td>
+                    <td>ShowCgw</td>
+                    <td>Query the specified peer gateway based on the peer gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteCgw</td>
+                    <td>Delete the specified peer gateway based on the peer gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCgw</td>
+                    <td>Create the peer gateway used by the tenant to connect to the VPN gateway.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCgw</td>
+                    <td>Update the specified peer gateway based on the peer gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListCgws</td>
+                    <td>Query the peer gateway list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">P2cVpnGateway</td>
+                    <td>DeleteP2cVgwConnection</td>
+                    <td>Disconnecting the P2C VPN Gateway</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListP2cVgwAvailabilityZones</td>
+                    <td>Querying the P2C VPN Gateway AZ</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListP2cVgwConnections</td>
+                    <td>List p2c vpn gateway connections</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListP2cVgws</td>
+                    <td>Query the P2C VPN gateway list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowP2cVgw</td>
+                    <td>Query the specified VPN gateway based on the P2C VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateP2cVgw</td>
+                    <td>Updates the specified P2C VPN gateway based on the P2C VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Tags</td>
+                    <td>ShowResourceTags</td>
+                    <td>Query the label information of a specified DB instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchCreateResourceTags</td>
+                    <td>Adding tags to specified instances in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResourcesByTags</td>
+                    <td>Query the resource instance list by tag</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProjectTags</td>
+                    <td>Query all tags of a specified resource type in a specified project</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteResourceTags</td>
+                    <td>Delete tags in batches for specified instances</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CountResourcesByTags</td>
+                    <td>Query the number of resource instances by tag</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">VpnAccessPolicy</td>
+                    <td>UpdateVpnAccessPolicy</td>
+                    <td>Modifying a VPN access policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpnAccessPolicy</td>
+                    <td>Delete a VPN access policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpnAccessPolicies</td>
+                    <td>Query the VPN access policy list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpnAccessPolicy</td>
+                    <td>Create a VPN access policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVpnAccessPolicy</td>
+                    <td>Query VPN access policies</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">VpnConnection</td>
+                    <td>ShowVpnConnection</td>
+                    <td>Query the parameters of a specified VPN connection based on the connection ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnConnection</td>
+                    <td>Updates the parameters of a specified VPN connection based on the connection ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetVpnConnection</td>
+                    <td>Resets a specified VPN connection based on the connection ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpnConnection</td>
+                    <td>Create a VPN connection between the VPN gateway and the peer gateway.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVpnConnectionLog</td>
+                    <td>Query the specified VPN connection logs based on the connection ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpnConnections</td>
+                    <td>Query the VPN connection list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpnConnection</td>
+                    <td>Delete a specified VPN connection based on the connection ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">VpnConnectionsLogConfig</td>
+                    <td>ShowVpnConnectionsLogConfig</td>
+                    <td>Query VPN connection log configuration</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpnConnectionsLogConfig</td>
+                    <td>Delete VPN connection log configuration</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnConnectionsLogConfig</td>
+                    <td>Updating VPN connection log configurations</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">VpnGateway</td>
+                    <td>ShowVgw</td>
+                    <td>Query the specified VPN gateway based on the VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListExtendedAvailabilityZones</td>
+                    <td>Querying the AZ of the VPN gateway</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVpnGatewayRoutingTable</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePostpaidVgwSpecification</td>
+                    <td>Modify the specifications of a single gateway. The configuration can be increased or decreased.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAvailabilityZones</td>
+                    <td>Querying the AZ of the VPN gateway</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVgw</td>
+                    <td>Create a VPN gateway.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVgw</td>
+                    <td>Updates a specified VPN gateway based on the VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVgws</td>
+                    <td>Query the VPN gateway list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVgw</td>
+                    <td>Deletes a specified VPN gateway based on the VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">VpnGatewayCertificate</td>
+                    <td>ShowVpnGatewayCertificate</td>
+                    <td>Query the specified VPN gateway certificate based on the VPN gateway ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVgwCertificate</td>
+                    <td>Update the certificates used by the tenant VPN gateway, including the signature certificate, signature private key, encryption certificate, encryption private key, and CA certificate chain. Currently, only the Chinese secret certificate is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVgwCertificate</td>
+                    <td>Import the certificates used by the tenant VPN gateway, including the signature certificate, signature private key, encryption certificate, encryption private key, and CA certificate chain. Currently, only the Chinese secret certificate is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">VpnQuota</td>
+                    <td>ShowQuotasInfo</td>
+                    <td>Query the quota of a specified tenant</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">VpnServer</td>
+                    <td>ListVpnServersByVgw</td>
+                    <td>Query the server information of a gateway</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnServer</td>
+                    <td>Updates a specified VPN server</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportClientConfig</td>
+                    <td>Export client configuration information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpnServer</td>
+                    <td>Create a VPN server.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpnServersByProject</td>
+                    <td>Query information about all servers of a tenant</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">VpnUser</td>
+                    <td>ListVpnUsers</td>
+                    <td>Query the VPN user list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnUser</td>
+                    <td>Modifying a VPN User</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpnUser</td>
+                    <td>Create a VPN user</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchCreateVpnUsers</td>
+                    <td>Creating P2C VPN Users in Batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnUserPassword</td>
+                    <td>Change the VPN user password</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVpnUser</td>
+                    <td>Querying VPN Users</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpnUser</td>
+                    <td>Deleting a VPN User</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetVpnUserPassword</td>
+                    <td>Resetting the VPN User Password</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteVpnUsers</td>
+                    <td>Deleting P2C VPN Users in Batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">VpnUserGroup</td>
+                    <td>AddVpnUsersToGroup</td>
+                    <td>Adding a VPN User to a Group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpnUserGroup</td>
+                    <td>Create a VPN user group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpnUserGroups</td>
+                    <td>Query the VPN user group list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpnUserGroup</td>
+                    <td>Delete a VPN user group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpnUserGroup</td>
+                    <td>Modifying a VPN User Group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpnUsersInGroup</td>
+                    <td>Query VPN users in a group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RemoveVpnUsersFromGroup</td>
+                    <td>Deleting a VPN User from a Group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVpnUserGroup</td>
+                    <td>Query VPN user groups</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

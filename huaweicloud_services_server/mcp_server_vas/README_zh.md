@@ -1,21 +1,65 @@
 # VAS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-VAS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务VAS交互的能力。可以基于自然语言对VAS资源进行全链路管理。
+VAS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service VAS. Full-chain management of VAS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 服务作业管理 | ListTasksDetails | 该接口用于获取服务作业列表 | To be tested |
-|  | StopTask | 该接口用于停止服务作业 | To be tested |
-|  | ShowTask | 该接口用于查询服务作业 | To be tested |
-|  | StartTask | 该接口用于启动服务作业 | To be tested |
-|  | UpdateTask | 该接口用于更新服务作业 | To be tested |
-|  | CreateTasks | 该接口用于创建服务作业 | To be tested |
-|  | DeleteTask | 该接口用于删除服务作业 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="2">ITaskController</td>
+                    <td>UpdateTask</td>
+                    <td>任务修改接口,用于修改任务配置</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteTask</td>
+                    <td>删除单个任务</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">服务作业管理</td>
+                    <td>ListTasksDetails</td>
+                    <td>该接口用于获取服务作业列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopTask</td>
+                    <td>该接口用于停止服务作业</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTask</td>
+                    <td>该接口用于查询服务作业</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartTask</td>
+                    <td>该接口用于启动服务作业</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTasks</td>
+                    <td>该接口用于创建服务作业</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

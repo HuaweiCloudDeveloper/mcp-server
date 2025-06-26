@@ -1,42 +1,180 @@
 # CodeArtsInspector MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-CodeArtsInspector MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务CodeArtsInspector交互的能力。可以基于自然语言对CodeArtsInspector资源进行全链路管理。
+CodeArtsInspector MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service CodeArtsInspector. Full-chain management of CodeArtsInspector resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| host_groups | ListGroups | 获取主机组列表 | To be tested |
-|  | DeleteGroup | 删除主机组 | To be tested |
-|  | AddGroup | 批量创建主机组 | To be tested |
-| host_results | ListHostResults | 获取主机漏洞扫描结果 | To be tested |
-| host_tasks | BatchStartHostTasks | 批量启动或取消主机漏洞扫描任务 | To be tested |
-| hosts | BatchCreateHosts | 批量创建租户的主机资产 | To be tested |
-|  | DeleteHost | 删除租户的主机资产 | To be tested |
-|  | ListHosts | 获取租户的主机资产列表 | To be tested |
-| purchase | CreatePurchaseOrder | 订购下单接口 | To be tested |
-|  | ShowSubscription | 资源版本查询接口 | To be tested |
-|  | UpdatePurchaseOrder | 变更下单接口 | To be tested |
-| web_results | ShowReportStatus | 获取网站扫描PDF报告生成状态 | To be tested |
-|  | DownloadTaskReport | 下载网站扫描任务PDF报告 | To be tested |
-|  | UpdateFalsePositive | 更新网站扫描漏洞的误报状态 | To be tested |
-|  | ExecuteGenerateReport | 生成网站扫描PDF报告 | To be tested |
-|  | ListPortResults | 获取网站端口扫描结果 | To be tested |
-|  | ListBusinessRisks | 获取网站业务风险扫描结果 | To be tested |
-|  | ShowResults | 获取网站漏洞扫描结果 | To be tested |
-| web_tasks | CreateTasks | 创建网站漏洞扫描任务并启动 | To be tested |
-|  | CancelTasks | 取消或重启网站漏洞扫描任务 | To be tested |
-|  | ShowTasks | 获取网站漏洞扫描任务详情 | To be tested |
-|  | ListTaskHistories | 获取网站漏洞扫描的历史扫描任务 | To be tested |
-| websites | DeleteDomains | 删除租户的网站资产 | To be tested |
-|  | AuthorizeDomains | 认证租户的网站资产 | To be tested |
-|  | UpdateDomainSettings | 更新网站登录配置 | To be tested |
-|  | CreateDomains | 创建租户的网站资产 | To be tested |
-|  | ListDomains | 获取租户的所有网站资产 | To be tested |
-|  | ShowDomainSettings | 获取网站登录配置 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">Group</td>
+                    <td>DeleteGroup</td>
+                    <td>删除代码组</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">host_groups</td>
+                    <td>ListGroups</td>
+                    <td>获取主机组列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddGroup</td>
+                    <td>批量创建主机组</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">host_results</td>
+                    <td>ListHostResults</td>
+                    <td>获取主机漏洞扫描结果</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">host_tasks</td>
+                    <td>BatchStartHostTasks</td>
+                    <td>批量启动或取消主机漏洞扫描任务</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">hosts</td>
+                    <td>BatchCreateHosts</td>
+                    <td>批量创建租户的主机资产</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">purchase</td>
+                    <td>CreatePurchaseOrder</td>
+                    <td>订购下单接口</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowSubscription</td>
+                    <td>资源版本查询接口</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePurchaseOrder</td>
+                    <td>变更下单接口</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">web_results</td>
+                    <td>ShowReportStatus</td>
+                    <td>获取网站扫描PDF报告生成状态</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DownloadTaskReport</td>
+                    <td>下载网站扫描任务PDF报告</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateFalsePositive</td>
+                    <td>更新网站扫描漏洞的误报状态</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExecuteGenerateReport</td>
+                    <td>生成网站扫描PDF报告</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPortResults</td>
+                    <td>获取网站端口扫描结果</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListBusinessRisks</td>
+                    <td>获取网站业务风险扫描结果</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResults</td>
+                    <td>获取网站漏洞扫描结果</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">web_tasks</td>
+                    <td>CancelTasks</td>
+                    <td>取消或重启网站漏洞扫描任务</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTasks</td>
+                    <td>获取网站漏洞扫描任务详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTaskHistories</td>
+                    <td>获取网站漏洞扫描的历史扫描任务</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">websites</td>
+                    <td>DeleteDomains</td>
+                    <td>删除租户的网站资产</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AuthorizeDomains</td>
+                    <td>认证租户的网站资产</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDomainSettings</td>
+                    <td>更新网站登录配置</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDomains</td>
+                    <td>创建租户的网站资产</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDomains</td>
+                    <td>获取租户的所有网站资产</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDomainSettings</td>
+                    <td>获取网站登录配置</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">云模式防护网站管理</td>
+                    <td>DeleteHost</td>
+                    <td>删除云模式防护域名</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">服务作业管理</td>
+                    <td>CreateTasks</td>
+                    <td>该接口用于创建服务作业</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">集群管理接口</td>
+                    <td>ListHosts</td>
+                    <td>该接口用于查询输入集群的主机列表详情。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,28 +1,103 @@
 # TMS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-TMS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务TMS交互的能力。可以基于自然语言对TMS资源进行全链路管理。
+TMS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service TMS. Full-chain management of TMS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 查询标签管理支持的服务 | ListProviders | 查询标签管理支持的服务。 | To be tested |
-| 查询版本操作 | ShowApiVersion | 查询指定的标签管理服务API版本号详情。 | To be tested |
-|  | ListApiVersions | 查询标签管理服务的API版本列表。 | To be tested |
-| 资源标签 | DeleteResourceTag | 用于批量移除云服务多个资源的标签,每个资源最多支持移除10个标签,每次最多支持批量操作20个资源。 | To be tested |
-|  | ListResource | 根据标签过滤资源。 | To be tested |
-|  | ShowResourceTag | 查询单个资源上的标签。 | To be tested |
-|  | ListTagValues | 查询指定区域的标签键下的所有标签值。 | To be tested |
-|  | ListTagKeys | 查询指定区域的所有标签键. | To be tested |
-|  | CreateResourceTag | 用于给云服务的多个资源添加标签,每个资源最多可添加10个标签,每次最多支持批量操作20个资源。 | To be tested |
-| 配额 | ShowTagQuota | 查询标签的配额信息。 | To be tested |
-| 预定义标签操作 | CreatePredefineTags | 用于创建预定标签。用户创建预定义标签后,可以使用预定义标签来给资源创建标签。该接口支持幂等特性和处理批量数据。 | To be tested |
-|  | DeletePredefineTags | 用于删除预定标签。 | To be tested |
-|  | UpdatePredefineTags | 修改预定义标签。 | To be tested |
-|  | ListPredefineTags | 用于查询预定义标签列表。 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">查询标签管理支持的服务</td>
+                    <td>ListProviders</td>
+                    <td>查询标签管理支持的服务。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">查询版本操作</td>
+                    <td>ShowApiVersion</td>
+                    <td>查询指定的标签管理服务API版本号详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiVersions</td>
+                    <td>查询标签管理服务的API版本列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">资源标签</td>
+                    <td>DeleteResourceTag</td>
+                    <td>用于批量移除云服务多个资源的标签,每个资源最多支持移除10个标签,每次最多支持批量操作20个资源。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResource</td>
+                    <td>根据标签过滤资源。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResourceTag</td>
+                    <td>查询单个资源上的标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTagValues</td>
+                    <td>查询指定区域的标签键下的所有标签值。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTagKeys</td>
+                    <td>查询指定区域的所有标签键.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateResourceTag</td>
+                    <td>用于给云服务的多个资源添加标签,每个资源最多可添加10个标签,每次最多支持批量操作20个资源。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">配额</td>
+                    <td>ShowTagQuota</td>
+                    <td>查询标签的配额信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">预定义标签操作</td>
+                    <td>CreatePredefineTags</td>
+                    <td>用于创建预定标签。用户创建预定义标签后,可以使用预定义标签来给资源创建标签。该接口支持幂等特性和处理批量数据。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePredefineTags</td>
+                    <td>用于删除预定标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePredefineTags</td>
+                    <td>修改预定义标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPredefineTags</td>
+                    <td>用于查询预定义标签列表。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

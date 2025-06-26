@@ -11,27 +11,129 @@ CloudPipeline MCP Server is a Model Context Protocol (Model Context Protocol) se
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| Logstash interface | ListPipelines | This API is used to query the pipeline list. | To be tested |
-| Pipeline Management--New | CreatePipelineByTemplateId | Create a pipeline based on a template | To be tested |
-|  | StopPipelineRun | Stop the pipeline | To be tested |
-|  | BatchShowPipelinesLatestStatus | Obtain pipeline status in batches | To be tested |
-|  | ListPipelineRuns | Obtains pipeline execution records. | To be tested |
-|  | DeletePipeline | Delete pipeline | To be tested |
-|  | ShowPipelineRunDetail | Obtain the pipeline status/Obtain the pipeline execution details | To be tested |
-|  | RunPipeline | Start pipeline | To be tested |
-| Pipeline Template Management--New | ListPipelineTemplates | Query the pipeline template list | To be tested |
-|  | ShowPipelineTemplateDetail | Query template details | To be tested |
-| Pipeline management | CreatePipelineByTemplate | Quickly create pipelines and pipeline tasks based on templates | To be tested |
-|  | ListPipleineBuildResult | Obtain the pipeline execution status of a project | To be tested |
-|  | StartNewPipeline | Start the pipeline | To be tested |
-|  | ShowPipleineStatus | Obtain the pipeline status, phase, and task information | To be tested |
-|  | RemovePipeline | Delete a pipeline by ID | To be tested |
-|  | StopPipelineNew | Stop the pipeline | To be tested |
-|  | ShowInstanceStatus | Check the pipeline creation status. | To be tested |
-|  | BatchShowPipelinesStatus | Obtain pipeline status and phase information in batches | To be tested |
-|  | ListPipelineSimpleInfo | API for obtaining the pipeline list | To be tested |
-| Project Information | ListTemplates | Query project template | To be tested |
-| Template Management | ShowTemplateDetail | Query template details | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">Logstash interface</td>
+                    <td>ListPipelines</td>
+                    <td>This API is used to query the pipeline list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Pipeline Management--New</td>
+                    <td>CreatePipelineByTemplateId</td>
+                    <td>Create a pipeline based on a template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopPipelineRun</td>
+                    <td>Stop the pipeline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchShowPipelinesLatestStatus</td>
+                    <td>Obtain pipeline status in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipelineRuns</td>
+                    <td>Obtains pipeline execution records.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePipeline</td>
+                    <td>Delete pipeline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipelineRunDetail</td>
+                    <td>Obtain the pipeline status/Obtain the pipeline execution details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RunPipeline</td>
+                    <td>Start pipeline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Pipeline Template Management--New</td>
+                    <td>ListPipelineTemplates</td>
+                    <td>Query the pipeline template list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipelineTemplateDetail</td>
+                    <td>Query template details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">Pipeline management</td>
+                    <td>CreatePipelineByTemplate</td>
+                    <td>Quickly create pipelines and pipeline tasks based on templates</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipleineBuildResult</td>
+                    <td>Obtain the pipeline execution status of a project</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartNewPipeline</td>
+                    <td>Start the pipeline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipleineStatus</td>
+                    <td>Obtain the pipeline status, phase, and task information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RemovePipeline</td>
+                    <td>Delete a pipeline by ID</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopPipelineNew</td>
+                    <td>Stop the pipeline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowInstanceStatus</td>
+                    <td>Check the pipeline creation status.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchShowPipelinesStatus</td>
+                    <td>Obtain pipeline status and phase information in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipelineSimpleInfo</td>
+                    <td>API for obtaining the pipeline list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Project Information</td>
+                    <td>ListTemplates</td>
+                    <td>Query project template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Template Management</td>
+                    <td>ShowTemplateDetail</td>
+                    <td>Query template details</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

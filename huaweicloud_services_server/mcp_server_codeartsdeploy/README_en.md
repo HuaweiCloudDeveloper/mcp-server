@@ -11,71 +11,357 @@ CodeArtsDeploy MCP Server is a Model Context Protocol (Model Context Protocol) s
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| AppGroupsController | MoveAppGroups | Move a single group up or down to adjust the group position on the page. | To be tested |
-|  | UpdateAppGroups | Modify a group. | To be tested |
-|  | MoveAppToGroup | Move applications to a specified group (batch applications are supported). | To be tested |
-|  | ListAppGroups | Query the group list. | To be tested |
-|  | CreateAppGroups | Create a group. | To be tested |
-|  | DeleteAppGroups | Delete a group. | To be tested |
-| AppManagement | CreateApp | This interface is used by users to create application information. | To be tested |
-| AppPermissionsController | BatchUpdateApplicationPermissions | Modify application permissions in batches. | To be tested |
-|  | ListApplicationPermissions | Query the application instance-level/project-level permission matrix. When app_id is transferred, the application instance-level permission matrix is queried. If app_id is not transferred and project_id is transferred, the application project-level permission matrix will be queried. | To be tested |
-|  | BatchUpdatePermissionLevel | Configure the authentication level of applications in batches to project-level or instance-level. | To be tested |
-|  | CheckCanCreate | Check whether the current user has the permission to create applications in the project. | To be tested |
-| Application operation | DeleteApplication | Delete a platform application. | To be tested |
-| Cluster management interface | ListHosts | This API is used to query details about the host list in the input cluster. | To be tested |
-| Host management | ListHostGroups | Query the server group list | To be tested |
-| Protection Website Management in Cloud Mode | DeleteHost | Delete the domain name in cloud mode. | To be tested |
-|  | CreateHost | Creating a domain name in cloud mode | To be tested |
-| RecordMetricController | ShowProjectSuccessRate | Obtain the application deployment success rate of a specified project. | To be tested |
-|  | ListTaskSuccessRate | Obtain the application deployment success rate of a specified application. | To be tested |
-| deploy-env-controller-v2 | ShowExecutionParams | Query the execution parameters of a deployment record. | To be tested |
-|  | DeleteDeployTask | Delete an application based on the deployment task ID. This interface will no longer be maintained after September 30, 2024. You are advised to use the new DeleteApplication interface. | To be tested |
-|  | BatchDeleteApp | Delete applications in a project in batches. | To be tested |
-|  | CheckIsDuplicateAppName | Query whether an application with the same name exists in the project. | To be tested |
-|  | StartDeployTask | Deploy the application based on the deployment task ID. | To be tested |
-|  | CreateDeployTaskByTemplate | Create an application using a template. This interface will not be maintained after September 30, 2024. You are advised to use the new CreateApp interface. | To be tested |
-|  | UpdateAppInfo | Update the application. | To be tested |
-|  | ListDeployTasks | Query the application list under a project. This interface will no longer be maintained after September 30, 2024. You are advised to use the new ListAllApp interface. | To be tested |
-|  | ListAllApp | Query the application list under a project. | To be tested |
-|  | CopyApplication | Copy the application. | To be tested |
-|  | ShowAppDetailById | This API is used to obtain application details based on the application ID. | To be tested |
-|  | UpdateAppDisableStatus | Disable or undisable an application. | To be tested |
-|  | ShowDeployTaskDetail | Obtain application details based on the deployment task ID. This interface will not be maintained after September 30, 2024. You are advised to use the ShowAppDetailById interface of the new version. | To be tested |
-|  | ListDeployTaskHistoryByDate | Query the historical deployment records of a specified application in a project based on the start time and end time. | To be tested |
-| environment-controller-v2 | UpdateEnvironment | Editing environment in the application. | To be tested |
-|  | ListEnvironments | Query the environment list of an application. | To be tested |
-|  | CreateEnvironment | Create an environment under the application. | To be tested |
-|  | ImportHostToEnvironment | Import the host in the environment. | To be tested |
-|  | ShowEnvironmentDetail | Query environment details. | To be tested |
-|  | DeleteEnvironment | Delete the environment of the application. | To be tested |
-|  | ListEnvironmentHosts | Query the host list in the environment. | To be tested |
-|  | DeleteHostFromEnvironment | Delete a host in the environment. | To be tested |
-| environment-permission-controller-v2 | ListEnvironmentPermissions | Query the environment permission. | To be tested |
-|  | UpdateEnvironmentPermission | Edit the environment permission. | To be tested |
-| hosts-controller-v2 | ListNewHosts | Query the host list in a specified host cluster based on the host cluster ID. | To be tested |
-|  | UpdateDeploymentHost | Modify host information based on the host ID. This interface will no longer be maintained after September 30, 2024. | To be tested |
-|  | BatchDeleteHosts | Delete hosts in a host cluster in batches. | To be tested |
-|  | ShowDeploymentHostDetail | Query host details based on the host ID. This interface will no longer be maintained after September 30, 2024. You are advised to use the ShowHostDetail interface of the new version. | To be tested |
-|  | ShowHostDetail | Query host details based on the host ID. | To be tested |
-|  | DeleteDeploymentHost | Delete a host based on the host ID. This interface will no longer be maintained after September 30, 2024. | To be tested |
-|  | UpdateHostInfo | Edit host information in the host cluster based on the host ID. | To be tested |
-|  | CreateDeploymentHost | This API is used to create a host in a specified host cluster. This interface will no longer be maintained after September 30, 2024. You are advised to use the new CreateHost interface. | To be tested |
-|  | CopyHostsToTarget | Replicate hosts to the target host cluster in batches. | To be tested |
-| hosts-group-controller-v2 | ListHostGroupBaseInfos | Query the basic environment information list of the application. | To be tested |
-|  | ListAssociateEnvironmentsInfos | Query the environment information associated with a host cluster. | To be tested |
-|  | ShowHostClusterDetail | Query details about a host cluster based on the host cluster ID. | To be tested |
-|  | DeleteHostCluster | Delete a host cluster based on the host cluster ID. | To be tested |
-|  | ShowDeploymentGroupDetail | Query details about a host cluster based on the host cluster ID. This interface will not be maintained after September 30, 2024. You are advised to use the new ShowHostClusterDetail interface. | To be tested |
-|  | ListHostClusters | Query the host cluster list by criteria. | To be tested |
-|  | DeleteDeploymentGroup | Delete a host cluster based on the host cluster ID. This interface will no longer be maintained after September 30, 2024. | To be tested |
-|  | UpdateDeploymentGroup | Modify the host cluster information based on the host cluster ID. This interface will no longer be maintained after September 30, 2024. | To be tested |
-|  | UpdateHostCluster | Edit the host cluster. | To be tested |
-|  | CreateHostCluster | Create a host cluster in the project. | To be tested |
-|  | CreateDeploymentGroup | Create a host cluster in the project. This interface will no longer be maintained after September 30, 2024. You are advised to use the new CreateHostCluster interface. | To be tested |
-| hosts-group-permission-controller-v2 | ListHostGroupPermissions | Query the host cluster permission matrix based on the host cluster ID. | To be tested |
-|  | UpdateHostGroupPermissions | Modify the host cluster permission matrix based on the host cluster ID. | To be tested |
-|  | CheckWhetherHostGroupCanBeCreated | Check whether the current user has the permission to create a host cluster in the project. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="6">AppGroupsController</td>
+                    <td>MoveAppGroups</td>
+                    <td>Move a single group up or down to adjust the group position on the page.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAppGroups</td>
+                    <td>Modify a group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>MoveAppToGroup</td>
+                    <td>Move applications to a specified group (batch applications are supported).</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppGroups</td>
+                    <td>Query the group list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAppGroups</td>
+                    <td>Create a group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAppGroups</td>
+                    <td>Delete a group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">AppManagement</td>
+                    <td>CreateApp</td>
+                    <td>This interface is used by users to create application information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">AppPermissionsController</td>
+                    <td>BatchUpdateApplicationPermissions</td>
+                    <td>Modify application permissions in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApplicationPermissions</td>
+                    <td>Query the application instance-level/project-level permission matrix. When app_id is transferred, the application instance-level permission matrix is queried. If app_id is not transferred and project_id is transferred, the application project-level permission matrix will be queried.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchUpdatePermissionLevel</td>
+                    <td>Configure the authentication level of applications in batches to project-level or instance-level.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckCanCreate</td>
+                    <td>Check whether the current user has the permission to create applications in the project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Application operation</td>
+                    <td>DeleteApplication</td>
+                    <td>Delete a platform application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Cluster management interface</td>
+                    <td>ListHosts</td>
+                    <td>This API is used to query details about the host list in the input cluster.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Host management</td>
+                    <td>ListHostGroups</td>
+                    <td>Query the server group list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Protection Website Management in Cloud Mode</td>
+                    <td>DeleteHost</td>
+                    <td>Delete the domain name in cloud mode.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateHost</td>
+                    <td>Creating a domain name in cloud mode</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">RecordMetricController</td>
+                    <td>ShowProjectSuccessRate</td>
+                    <td>Obtain the application deployment success rate of a specified project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTaskSuccessRate</td>
+                    <td>Obtain the application deployment success rate of a specified application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="14">deploy-env-controller-v2</td>
+                    <td>ShowExecutionParams</td>
+                    <td>Query the execution parameters of a deployment record.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDeployTask</td>
+                    <td>Delete an application based on the deployment task ID. This interface will no longer be maintained after September 30, 2024. You are advised to use the new DeleteApplication interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteApp</td>
+                    <td>Delete applications in a project in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckIsDuplicateAppName</td>
+                    <td>Query whether an application with the same name exists in the project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartDeployTask</td>
+                    <td>Deploy the application based on the deployment task ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDeployTaskByTemplate</td>
+                    <td>Create an application using a template. This interface will not be maintained after September 30, 2024. You are advised to use the new CreateApp interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAppInfo</td>
+                    <td>Update the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDeployTasks</td>
+                    <td>Query the application list under a project. This interface will no longer be maintained after September 30, 2024. You are advised to use the new ListAllApp interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAllApp</td>
+                    <td>Query the application list under a project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CopyApplication</td>
+                    <td>Copy the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAppDetailById</td>
+                    <td>This API is used to obtain application details based on the application ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAppDisableStatus</td>
+                    <td>Disable or undisable an application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDeployTaskDetail</td>
+                    <td>Obtain application details based on the deployment task ID. This interface will not be maintained after September 30, 2024. You are advised to use the ShowAppDetailById interface of the new version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDeployTaskHistoryByDate</td>
+                    <td>Query the historical deployment records of a specified application in a project based on the start time and end time.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">environment-controller-v2</td>
+                    <td>UpdateEnvironment</td>
+                    <td>Editing environment in the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvironments</td>
+                    <td>Query the environment list of an application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEnvironment</td>
+                    <td>Create an environment under the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportHostToEnvironment</td>
+                    <td>Import the host in the environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEnvironmentDetail</td>
+                    <td>Query environment details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteEnvironment</td>
+                    <td>Delete the environment of the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvironmentHosts</td>
+                    <td>Query the host list in the environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteHostFromEnvironment</td>
+                    <td>Delete a host in the environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">environment-permission-controller-v2</td>
+                    <td>ListEnvironmentPermissions</td>
+                    <td>Query the environment permission.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateEnvironmentPermission</td>
+                    <td>Edit the environment permission.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">hosts-controller-v2</td>
+                    <td>ListNewHosts</td>
+                    <td>Query the host list in a specified host cluster based on the host cluster ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDeploymentHost</td>
+                    <td>Modify host information based on the host ID. This interface will no longer be maintained after September 30, 2024.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteHosts</td>
+                    <td>Delete hosts in a host cluster in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDeploymentHostDetail</td>
+                    <td>Query host details based on the host ID. This interface will no longer be maintained after September 30, 2024. You are advised to use the ShowHostDetail interface of the new version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowHostDetail</td>
+                    <td>Query host details based on the host ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDeploymentHost</td>
+                    <td>Delete a host based on the host ID. This interface will no longer be maintained after September 30, 2024.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateHostInfo</td>
+                    <td>Edit host information in the host cluster based on the host ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDeploymentHost</td>
+                    <td>This API is used to create a host in a specified host cluster. This interface will no longer be maintained after September 30, 2024. You are advised to use the new CreateHost interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CopyHostsToTarget</td>
+                    <td>Replicate hosts to the target host cluster in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="11">hosts-group-controller-v2</td>
+                    <td>ListHostGroupBaseInfos</td>
+                    <td>Query the basic environment information list of the application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAssociateEnvironmentsInfos</td>
+                    <td>Query the environment information associated with a host cluster.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowHostClusterDetail</td>
+                    <td>Query details about a host cluster based on the host cluster ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteHostCluster</td>
+                    <td>Delete a host cluster based on the host cluster ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDeploymentGroupDetail</td>
+                    <td>Query details about a host cluster based on the host cluster ID. This interface will not be maintained after September 30, 2024. You are advised to use the new ShowHostClusterDetail interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListHostClusters</td>
+                    <td>Query the host cluster list by criteria.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDeploymentGroup</td>
+                    <td>Delete a host cluster based on the host cluster ID. This interface will no longer be maintained after September 30, 2024.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDeploymentGroup</td>
+                    <td>Modify the host cluster information based on the host cluster ID. This interface will no longer be maintained after September 30, 2024.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateHostCluster</td>
+                    <td>Edit the host cluster.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateHostCluster</td>
+                    <td>Create a host cluster in the project.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDeploymentGroup</td>
+                    <td>Create a host cluster in the project. This interface will no longer be maintained after September 30, 2024. You are advised to use the new CreateHostCluster interface.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">hosts-group-permission-controller-v2</td>
+                    <td>ListHostGroupPermissions</td>
+                    <td>Query the host cluster permission matrix based on the host cluster ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateHostGroupPermissions</td>
+                    <td>Modify the host cluster permission matrix based on the host cluster ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckWhetherHostGroupCanBeCreated</td>
+                    <td>Check whether the current user has the permission to create a host cluster in the project.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

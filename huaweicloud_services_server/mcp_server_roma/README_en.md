@@ -11,326 +11,1669 @@ ROMA MCP Server is a Model Context Protocol (Model Context Protocol) server, pro
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| ACL Policy Management | UpdateAclStrategyV2 | Modifies the specified ACL policy. The following attributes can be modified: acl_name, acl_type, and acl_value. Other attributes cannot be modified. | To be tested |
-|  | DeleteAclV2 | Delete a specified ACL policy. If an API is bound to the ACL policy, the ACL policy cannot be deleted. | To be tested |
-|  | CreateAclStrategyV2 | Add an ACL policy. The policy type is specified by the acl_type field (permit or deny). The object type can be IP address or domain. The value of acl_value corresponding to domain is the tenant name. Not a network domain name like www.exampleDomain.com | To be tested |
-|  | BatchDeleteAclV2 | Deletes multiple specified ACL policies in batches. | To be tested |
-|  | ShowDetailsOfAclPolicyV2 | Query the details about a specified ACL policy. | To be tested |
-|  | ListAclStrategiesV2 | Query all ACL policies. | To be tested |
-| API Binding ACL Policy | CreateApiAclBindingV2 | Bind the API to the ACL policy. | To be tested |
-|  | DeleteApiAclBindingV2 | Unbind an API from an ACL policy | To be tested |
-|  | BatchDeleteApiAclBindingV2 | Unbind APIs from ACL policies in batches | To be tested |
-|  | ListApisUnbindedToAclPolicyV2 | View the list of APIs that are not bound to the ACL policy. Ensure that the APIs have been published. | To be tested |
-|  | ListApisBindedToAclPolicyV2 | View the list of APIs bound to the ACL policy. | To be tested |
-|  | ListAclPolicyBindedToApiV2 | View the list of ACL policies bound to the API | To be tested |
-| API Group Management | ShowDetailsOfApiGroupV2 | Query the details about a specified group. | To be tested |
-|  | DeleteApiGroupV2 | Deletes a specified API group. | To be tested |
-|  | CheckApiGroupsV2 | Verifies whether the API group name exists. | To be tested |
-|  | UpdateApiGroupV2 | Modifies API group attributes. The name and remark attributes can be modified. Other attributes cannot be modified. | To be tested |
-|  | CreateApiGroupV2 | API groups are management units of APIs. An API group is equivalent to a service entry. When an API group is created, a subdomain name is returned as the access entry. It is recommended that APIs in an API group be related to each other. | To be tested |
-|  | ListApiGroupsV2 | Query the API group list. | To be tested |
-| API bound throttling policy | DisassociateRequestThrottlingPolicyV2 | Unbind the API from the throttling policy. | To be tested |
-|  | ListRequestThrottlingPoliciesBindedToApiV2 | Query the throttling policy list bound to an API. There should be only one flow control policy in each environment. | To be tested |
-|  | AssociateRequestThrottlingPolicyV2 | Apply a throttling policy to an API. All accesses to the API will be restricted by the throttling policy. | To be tested |
-|  | ListApisUnbindedToRequestThrottlingPolicyV2 | Query the list of all self-owned APIs that are not bound to the throttling policy. The API must have been published. Unpublished APIs will not be displayed. | To be tested |
-|  | BatchDisassociateThrottlingPolicyV2 | Unbinding APIs from throttling policies in batches | To be tested |
-|  | ListApisBindedToRequestThrottlingPolicyV2 | Query the list of APIs bound to a throttling policy. | To be tested |
-| API management | DeleteApiV2 | Delete a specified API. | To be tested |
-|  | ListApisV2 | View the API list. API details and release information is returned, but backend service information is not displayed. | To be tested |
-|  | CreateOrDeletePublishRecordForApiV2 | Publish or bring an API offline. | To be tested |
-|  | ListApiVersionDetailV2 | Query the details of a specified version. | To be tested |
-|  | ChangeApiVersionV2 | A version is generated based on the current API definition each time an API is published. The version records the definitions and status of APIs when they are published. | To be tested |
-|  | ListApiVersionsV2 | Query the historical versions of an API. Each API can have a maximum of 10 historical versions in an environment. | To be tested |
-|  | DebugApiV2 | This API is used to debug the definition of an API in the specified running environment. The API caller must have the permission to operate the API. | To be tested |
-|  | BatchPublishOrOfflineApiV2 | Publish multiple APIs to a specified environment or take multiple APIs offline from a specified environment. | To be tested |
-|  | ShowDetailsOfApiV2 | View the details about a specified API. | To be tested |
-|  | ListApiRuntimeDefinitionV2 | View the runtime definition of a specified API in the specified environment. By default, the runtime definition in the RELEASE environment is queried. | To be tested |
-|  | UpdateApiV2 | Modifies the information about a specified API, including backend service information. | To be tested |
-|  | CheckApisV2 | Verify the API definition. Check whether the path or name of the API already exists. | To be tested |
-|  | CreateApiV2 | Add an API. An API is a service interface and specific service capabilities. | To be tested |
-|  | DeleteApiByVersionIdV2 | You can take an effective API version offline. After the API version is brought offline, the API cannot be invoked in the environment where the version takes effect. | To be tested |
-| APPLICATION_MANAGEMENT | CheckRomaAppDetails | Query application details | To be tested |
-|  | AddUserToApp | - Set the user members of the application. If the array is empty, the existing application member list will be cleared. | To be tested |
-|  | ListRomaApp | Query the application list. Query by conditions is supported. All conditions are in the AND relationship. | To be tested |
-|  | ResetRomaAppSecret | Reset the application key | To be tested |
-|  | DeleteRomaApp | Delete a single application | To be tested |
-|  | CheckCanAuthUsersOfApp | Query the candidate user list of the application. Abnormal users will be filtered out. | To be tested |
-|  | CreateRomaApp | Create Application | To be tested |
-|  | ValidateRomaApp | Check whether the application that meets the specified conditions exists. | To be tested |
-|  | UpdateRomaApp | Update application | To be tested |
-|  | CheckRomaAppSecret | Query the application key | To be tested |
-|  | CheckAuthUsersOfApp | Query the user list | To be tested |
-| ASSET_MANAGEMENT | CheckAssetJobStatus | Querying the job progress | To be tested |
-|  | DeleteAsset | Delete assets in batches | To be tested |
-|  | ImportAsset | -Create an asset import task. The asset version and specific assets are read from the asset content. | To be tested |
-|  | ExportAsset | Exporting assets in batches | To be tested |
-|  | DownloadAssetArchive | -After an export job is successfully executed, this API is used to obtain the asset package generated by the export job. The asset package can be downloaded only once. | To be tested |
-| App Authorization Management | ListDuplicateApisForAppV2 | Query the list of APIs with conflicting paths in a specified app. | To be tested |
-|  | CancelingAuthorizationV2 | This API is used to cancel the authorization relationship between an API and an app. After the authorization is canceled, the app cannot invoke the API any longer. | To be tested |
-|  | ListApisUnbindedToAppV2 | Query the list of APIs that are not bound to an app in a specified environment, including self-owned APIs and APIs purchased from the Marketplace. | To be tested |
-|  | ListAppsBindedToApiV2 | Query the list of apps bound to an API. | To be tested |
-|  | CreateAuthorizingAppsV2 | After an app is created, it cannot access an API. To access an API in an environment, you need to authorize the API in the environment to the app. After the authorization is successful, the app can access the API in the environment. | To be tested |
-|  | ListApisBindedToAppV2 | Query the list of APIs bound to an app. | To be tested |
-| App Permission Management | UpdateTopicAccessPolicy | Update the topic permission. | To be tested |
-|  | ShowMqsInstanceTopicAccessPolicy | Query the topic permission. | To be tested |
-| Application Configuration Management | UpdateAppConfigV2 | Modifying Application Configuration | To be tested |
-|  | DeleteAppConfigV2 | Delete application configuration | To be tested |
-|  | CreateAppConfigV2 | Create Application Configuration | To be tested |
-|  | ShowDetailsOfAppConfigV2 | Viewing Application Configuration Details | To be tested |
-|  | ListAppConfigsV2 | Query the application configuration list | To be tested |
-| Client Configuration | ShowAppBoundAppQuota | View the application quota associated with a specified client application. | To be tested |
-|  | ShowDetailsOfAppAcl | View the access control details of the app. | To be tested |
-|  | DeleteAppCodeV2 | The App Code is deleted. After the App Code is deleted, the corresponding APIs cannot be accessed through simple authentication. | To be tested |
-|  | CreateAppCodeAutoV2 | When creating an app code, you do not need to specify the value. The background automatically generates a random character string to fill in the value. | To be tested |
-|  | ShowDetailsOfAppV2 | View detailed information about a specified app. | To be tested |
-|  | CreateAppCodeV2 | App Code is a submodule of an app. After an app code is created, simple app authentication can be implemented. | To be tested |
-|  | UpdateAppAcl | Set the access control configured on the client. | To be tested |
-|  | DeleteAppAcl | Delete the access control information configured on the client. | To be tested |
-|  | ListAppsV2 | Query the app list. | To be tested |
-|  | ListAppCodesV2 | Query the app code list. | To be tested |
-|  | ShowDetailsOfAppCodeV2 | App Code is a submodule of an app. After an app code is created, simple app authentication can be implemented. | To be tested |
-| Client Quota | UpdateAppQuota | Modifying the Client Quota | To be tested |
-|  | ListAppQuotas | Obtain the client quota list. Fuzzy query by name is supported. | To be tested |
-|  | CreateAppQuota | Create Client Quota | To be tested |
-|  | ListAppQuotaBindableApps | Query the list of client applications to which the client quota can be bound. Fuzzy search by client application name is supported. | To be tested |
-|  | DisassociateAppQuotaWithApp | Unbind the client quota from the client application | To be tested |
-|  | ListAppQuotaBoundApps | Query the list of client applications bound to the client quota. Fuzzy match by client application name is supported. | To be tested |
-|  | AssociateAppsForAppQuota | List of client applications bound to the client quota | To be tested |
-|  | ShowAppQuota | Obtain the client quota details | To be tested |
-|  | DeleteAppQuota | Delete a client quota. When deleting the client quota, delete the association between the client quota and the client application. | To be tested |
-| Configuration Management | ListProjectCofigsV2 | Query the tenant configuration list of an instance. You can use this API to view the resource configuration and usage of each type of resource. | To be tested |
-| Custom Backend Service | DebugLiveDataApiV2 | Check whether the backend API is available. | To be tested |
-|  | PublishLiveDataApiV2 | Deploy backend APIs in an instance. | To be tested |
-|  | UpdateLiveDataApiV2 | Updates backend API parameters in an instance. | To be tested |
-|  | ListLiveDataDataSourcesV2 | Query the list of customized backend service data sources. | To be tested |
-|  | ListLiveDataApiDeploymentHistoryV2 | Query the deployment records of backend APIs in an instance. | To be tested |
-|  | DeleteLiveDataApiV2 | This API is used to delete a backend API from an instance. | To be tested |
-|  | CheckLivedataApisV2 | Verify the definition of the customized backend API. Check whether the path or name of the custom backend API already exists. | To be tested |
-|  | ListLiveDataQuotaV2 | Query the quota of a user-defined backend service. | To be tested |
-|  | UnpublishLiveDataApiV2 | Undeploy backend APIs in an instance. | To be tested |
-|  | CreateLiveDataApiScriptV2 | Create a backend API script in an instance. | To be tested |
-|  | CreateLiveDataApiV2 | Create a backend API in an instance. | To be tested |
-|  | ShowLiveDataApiV2 | Query details about a backend API. | To be tested |
-|  | ListLiveDataApiTestHistoryV2 | Query the backend API test result in an instance. | To be tested |
-|  | ListLiveDataApiV2 | Obtains all backend APIs in an instance. | To be tested |
-| Customized Authentication Management | ShowDetailsOfCustomAuthorizersV2 | Viewing the details of the customized authentication | To be tested |
-|  | ListCustomAuthorizersV2 | Query the user-defined authentication list | To be tested |
-|  | CreateCustomAuthorizerV2 | Create a user-defined authentication | To be tested |
-|  | UpdateCustomAuthorizerV2 | Modifying a user-defined authentication | To be tested |
-|  | DeleteCustomAuthorizerV2 | Delete user-defined authentication | To be tested |
-| DICTIONARY_MANAGEMENT | UpdateDictionary | Update dictionary | To be tested |
-|  | CreateDictionary | creation dictionary | To be tested |
-|  | DeleteDictionary | When a single dictionary is deleted, all subdictionaries of the dictionary will be deleted. | To be tested |
-|  | CheckDictionary | Query dictionary details. | To be tested |
-|  | ValidateDictionary | Verifies whether the dictionary for the specified condition exists. The dictionary name and code are supported. | To be tested |
-|  | ListDictionary | Query the dictionary list | To be tested |
-| Data Source Management | ListDatasourceTables | Obtain all tables in the data source | To be tested |
-|  | CreateDatasourceInfo | Create a data source | To be tested |
-|  | ShowDataourceDetail | Query data sources by data source ID | To be tested |
-|  | ListDatasourceColumns | Obtain all fields in a table in the data source | To be tested |
-|  | UpdateDatasourceInfo | Modifying a Data Source | To be tested |
-|  | DeleteDatasourceInfoById | Deletes the specified data source information based on the data source ID. | To be tested |
-|  | ListDatasources | Query the data source | To be tested |
-|  | StartTestDatasource | Test the data source connectivity | To be tested |
-| Device group management | ShowDeviceGroupTree | Query all device groups | To be tested |
-|  | DeleteDeviceGroup | Delete a group | To be tested |
-|  | ShowDeviceGroup | Obtain the device group and lower-layer group information. | To be tested |
-|  | BatchAddDeviceToGroup | Adding devices to a device group in batches | To be tested |
-|  | DeleteDeviceFromGroup | Deleting a device from a device group | To be tested |
-|  | CreateDeviceGroup | Create a device group | To be tested |
-|  | UpdateDeviceGroup | Modifying a device group | To be tested |
-| Device management | ShowAuthentication | Query device authentication information | To be tested |
-|  | UpdateDevice | Modifying device information | To be tested |
-|  | ListDevices | This interface is used to obtain the list of registered GB/T 28181 devices. | To be tested |
-|  | SendCommand | Send command | To be tested |
-|  | ListSubsets | Querying a subdevice | To be tested |
-|  | ResetAuthentication | Reset device authentication information | To be tested |
-|  | BatchFreezeDevices | Batch device offline | To be tested |
-|  | AddSubsetsToGateway | Adding a subdevice to the gateway | To be tested |
-|  | CreateDevice | Create Device | To be tested |
-|  | ListShadows | Query the device shadow | To be tested |
-|  | ShowDevice | Query device details | To be tested |
-|  | DeleteDevice | This API is used to delete a specified device. | To be tested |
-| Domain name management | UpdateDomainV2 | Modify the configuration information corresponding to the bound domain name. | To be tested |
-|  | DisassociateCertificateV2 | If the domain name certificate is no longer needed or has expired, you can delete the certificate. | To be tested |
-|  | AssociateCertificateV2 | If the HTTPS request protocol is used for defining an API request during API creation, the SSL certificate must be added to the independent domain name. | To be tested |
-|  | ShowDetailsOfDomainNameCertificateV2 | View details about the certificate bound to the domain name. | To be tested |
-|  | DisassociateDomainV2 | If an API group does not need to be bound to a user-defined domain name, you can unbind the domain name from the API group. | To be tested |
-|  | AssociateDomainV2 | User-defined domain name, which takes effect only after the CNAME is added to the subdomain name of the API group. | To be tested |
-| Environment variable management | CreateEnvironmentVariableV2 | After an API is released to different environments, the environment variables, such as the API service deployment address and request version number, may vary according to the environment. | To be tested |
-|  | DeleteEnvironmentVariableV2 | Delete the specified environment variables. | To be tested |
-|  | ShowDetailsOfEnvironmentVariableV2 | View details about a specified environment variable. | To be tested |
-|  | UpdateEnvironmentVariableV2 | Modify environment variables. If an environment variable references the backend service address of an API, modifying the environment variable will release all APIs that use the variable again. | To be tested |
-|  | ListEnvironmentVariablesV2 | Query the list of all environment variables in a group. | To be tested |
-| Environmental Management | DeleteEnvironmentV2 | Delete the specified environment. | To be tested |
-|  | ListEnvironmentsV2 | Query the environment list that meets the conditions. | To be tested |
-|  | UpdateEnvironmentV2 | Modifies the information about a specified environment. The name and remark attributes can be modified. Other attributes cannot be modified. | To be tested |
-|  | CreateEnvironmentV2 | In actual production, an API provider may have multiple environments, such as the development environment, test environment, and production environment. You can release APIs to an environment for callers to invoke. | To be tested |
-| INSTANCE_MANAGEMENT | CheckRomaInstanceListV2 | Obtain the service instance list that meets the conditions. | To be tested |
-| ITaskController | DeleteTask | Delete a single task | To be tested |
-|  | ListTasks | Obtain the task list | To be tested |
-|  | UpdateTask | Task modification interface, used to modify task configurations | To be tested |
-| Instance Feature Management | CreateFeatureV2 | Configure the required features for the instance. | To be tested |
-|  | ListFeaturesV2 | View the DB instance feature list. Note: If the DB instance does not support the following features, contact technical support to upgrade the DB instance version. | To be tested |
-| Instance Management | ShowRestrictionOfInstanceV2 | View the instance constraint information | To be tested |
-|  | ShowDetailsOfInstanceV2 | Viewing DB Instance Details | To be tested |
-| MQS Instance Management | ShowMqsInstance | Query details about a specified MQS instance. | To be tested |
-|  | ListMqsInstance | Query the MQS instance list. | To be tested |
-| Message management | ResetMessages | Resend the message. | To be tested |
-|  | ShowMqsInstanceMessages | Query the offset and content of a message. | To be tested |
-| Monitoring information query | ListLatelyApiStatisticsV2 | Query the number of times that an API is invoked based on the API ID and the latest period. The statistical period is 1 minute. The query scope is within one hour. One sample is per minute. The sample value is accumulated within one minute. | To be tested |
-|  | ListStatisticsApi | Query the API statistics of an instance. | To be tested |
-| OpenAPI | ImportLiveDataApiDefinitionsV2 | Import a customized backend API. The content of the imported file must comply with the swagger standard.  | To be tested |
-|  | ImportApiDefinitionsV2 | Import an API. The imported file must comply with the swagger standard.  | To be tested |
-|  | ExportLiveDataApiDefinitionsV2 | Export the customized backend API. The exported file content complies with the swagger standard. | To be tested |
-|  | ExportApiDefinitionsV2 | Export the definition information of APIs in a group. The exported file content complies with the Swagger standard. | To be tested |
-| PUBLIC_MANAGEMENT | CheckVersion | Obtains the API version with a specified version ID. | To be tested |
-| Plug-in management | DeletePlugin | Delete the plug-in. | To be tested |
-|  | UpdatePlugin | Modifies plug-in information. | To be tested |
-|  | CreatePlugin | Create plug-in information. | To be tested |
-|  | ListPluginAttachedApis | Query information about the APIs bound to a specified plug-in | To be tested |
-|  | ListPlugins | Query details about a group of API Gateway plug-ins that meet the search criteria. | To be tested |
-|  | AttachApiToPlugin | Bind the plug-in to the API. | To be tested |
-|  | ListApiAttachablePlugins | Query information about the plug-ins that can be bound to the current API. | To be tested |
-|  | DetachApiFromPlugin | Unbind the API from the plug-in | To be tested |
-|  | ListPluginAttachableApis | Query information about the APIs that can be bound to the current plug-in. | To be tested |
-|  | ShowPlugin | Query plug-in details. | To be tested |
-|  | ListApiAttachedPlugins | Query information about the plug-ins bound to a specified API | To be tested |
-|  | DetachPluginFromApi | Unbind the plug-in from the API | To be tested |
-|  | AttachPluginToApi | Bind the plug-in to the API. | To be tested |
-| Product Management | ShowProductAuthentication | Query product authentication information | To be tested |
-|  | CreateProductTopic | Adding a product theme | To be tested |
-|  | UpdateProduct | Modifying product information | To be tested |
-|  | ListProductTopics | Query product theme | To be tested |
-|  | ShowProduct | Query product details | To be tested |
-|  | ListProducts | Query products | To be tested |
-|  | ListDevicesInProduct | Query the number of devices in a product | To be tested |
-|  | DeleteProduct | Delete a product | To be tested |
-|  | ResetProductAuthentication | Reset product authentication information | To be tested |
-|  | CreateProduct | Create a product | To be tested |
-|  | UpdateProductTopic | Update the product theme | To be tested |
-|  | UploadProduct | Importing a Product | To be tested |
-|  | DownloadProducts | Export products | To be tested |
-|  | DeleteProductTopic | Delete a product theme | To be tested |
-| Product Template | ListProductTemplates | Query a product template | To be tested |
-|  | UpdateProductTemplate | Modifying a product template | To be tested |
-|  | CreateProductTemplate | Create a product template | To be tested |
-|  | DeleteProductTemplate | Delete a product template | To be tested |
-| Query version operation | ListVersion | Query the SMN API V2 version information. | To be tested |
-| Rule engine | CreateRule | Create Rule | To be tested |
-|  | ShowRule | Querying Rule Details | To be tested |
-|  | ListSources | Query the source data source list | To be tested |
-|  | DeleteSource | Delete the source data source | To be tested |
-|  | BatchDeleteRules | Delete rules in batches | To be tested |
-|  | CreateSource | Add source data source | To be tested |
-|  | DeleteRule | Delete a rule | To be tested |
-|  | DebugRule | Rule debugging | To be tested |
-|  | DeleteDestination | Delete the target data source | To be tested |
-|  | UpdateRule | Modifying a rule | To be tested |
-|  | ListDestinations | Query the target data source list | To be tested |
-|  | CreateDestination | Add the target data source | To be tested |
-|  | ListRules | Query Rule | To be tested |
-| SSL Certificate Management | BatchAssociateDomainsV2 | Domain name bound to the SSL certificate | To be tested |
-|  | UpdateCertificateV2 | Modifying the SSL Certificate | To be tested |
-|  | CreateCertificateV2 | Create an SSL certificate | To be tested |
-|  | BatchAssociateCertsV2 | The domain name is bound to the SSL certificate. Currently, only one binding is supported. The certificate_ids field in the request body contains only one certificate ID. | To be tested |
-|  | ListAttachedDomainsV2 | Obtain the list of domain names bound to the SSL certificate. | To be tested |
-|  | ListCertificatesV2 | Obtain the SSL certificate list. | To be tested |
-|  | BatchDisassociateDomainsV2 | Unbind an SSL certificate from a domain name | To be tested |
-|  | ShowDetailsOfCertificateV2 | Viewing Certificate Details | To be tested |
-|  | DeleteCertificateV2 | This API is used to delete an SSL certificate. Only the certificate that is not associated with a domain name can be deleted. | To be tested |
-|  | BatchDisassociateCertsV2 | This API is used to unbind an SSL certificate from a domain name. Currently, only one certificate can be unbound. The certificate_ids field in the request body contains only one certificate ID. | To be tested |
-| Service Job Management | ShowTask | This interface is used to query service jobs. | To be tested |
-|  | StopTask | This interface is used to stop a service job. | To be tested |
-| Service Management | ListProperties | Query attributes | To be tested |
-|  | UpdateResponseProperty | Modifying response attributes | To be tested |
-|  | CreateService | Create a service | To be tested |
-|  | ShowCommand | Query command details | To be tested |
-|  | ShowResponseProperty | Query response attribute details | To be tested |
-|  | ListResponseProperties | Query response attributes | To be tested |
-|  | CreateRequestProperty | Create a request attribute | To be tested |
-|  | UpdateService | Modifying a service | To be tested |
-|  | CreateProperty | Create attribute | To be tested |
-|  | UpdateCommand | Modification command | To be tested |
-|  | DeleteService | Delete a service | To be tested |
-|  | CreateResponseProperty | Response attribute creation | To be tested |
-|  | DeleteCommand | Deletion command | To be tested |
-|  | UpdateRequestProperty | Modifying request attributes | To be tested |
-|  | CreateCommand | Create command | To be tested |
-|  | DeleteRequestProperty | Delete request attribute | To be tested |
-|  | ListServices | Query service | To be tested |
-|  | ShowService | Query service details | To be tested |
-|  | ListCommands | Query command | To be tested |
-|  | ListRequestProperties | Query request attributes | To be tested |
-|  | DeleteResponseProperty | Deleting a response attribute | To be tested |
-| Set Special Flow Control | ListSpecialThrottlingConfigurationsV2 | View the special configuration of the throttling policy. | To be tested |
-|  | CreateSpecialThrottlingConfigurationV2 | A throttling policy can limit the maximum number of times that an API can be accessed within a period of time, or the maximum number of times that a tenant or app can access an API within a period of time. | To be tested |
-|  | DeleteSpecialThrottlingConfigurationV2 | To delete a special configuration of a throttling policy, run the following command: | To be tested |
-|  | UpdateSpecialThrottlingConfigurationV2 | Modify a special setting in a throttling policy. | To be tested |
-| Signature Key Management | ListSignatureKeysV2 | Query information about all signature keys. | To be tested |
-|  | UpdateSignatureKeyV2 | Modifies the details about a specified signature key. | To be tested |
-|  | DeleteSignatureKeyV2 | Deletes a specified signature key. A signature key cannot be deleted if it is bound to an API. You need to unbind it from the API before deleting it. | To be tested |
-|  | CreateSignatureKeyV2 | To protect API security, it is recommended that tenants provide a protection mechanism for API access. That is, open APIs of tenants need to authenticate the request source. Requests that do not meet the authentication requirements are directly rejected. | To be tested |
-| Signing Key Binding Relationship Management | DisassociateSignatureKeyV2 | Unbind the API from the signature key. | To be tested |
-|  | ListApisNotBoundWithSignatureKeyV2 | Query the list of APIs that are not bound to the signature key. The API must have been published. Unpublished APIs will not be displayed. | To be tested |
-|  | ListApisBindedToSignatureKeyV2 | Query the list of APIs bound to a signature key. | To be tested |
-|  | ListSignatureKeysBindedToApiV2 | Query the list of signature keys bound to an API. Each API should be bound with a maximum of one signing key per environment. | To be tested |
-|  | AssociateSignatureKeyV2 | A signature key takes effect only after it is bound to an API. | To be tested |
-| Subject Management | ListMqsInstanceTopics | Query the topic list. | To be tested |
-|  | CreateMqsInstanceTopic | Create a topic. | To be tested |
-|  | BatchDeleteMqsInstanceTopic | Delete topics in batches. | To be tested |
-|  | ImportMqsInstanceTopic | Import a topic. | To be tested |
-|  | UpdateMqsInstanceTopic | Modify a topic. | To be tested |
-|  | ExportMqsInstanceTopic | Export a topic. | To be tested |
-|  | DeleteMqsInstanceTopic | Delete a topic. | To be tested |
-| Subscription management operation | ListNotification | This interface is used to query the subscription management information of a specified application. | To be tested |
-|  | UpdateNotification | This interface is used to modify the specified subscription management. | To be tested |
-|  | CreateNotification | This API is used to create device operations under the corresponding application in a specified instance and subscribe to the operation to the specified topic. | To be tested |
-|  | DeleteNotification | This interface is used to delete a specified subscription management. | To be tested |
-| Tag Management | ListTagsV2 | Query the tag list | To be tested |
-| Task Management | ShowDispatches | Query scheduling plans | To be tested |
-|  | InstallMultiTasks | Initialize combined tasks, assign task IDs, and initialize mapping | To be tested |
-|  | CreateCommonTask | Create a common task (different from a combined task) | To be tested |
-|  | CreateDispatches | Create a scheduling plan | To be tested |
-|  | UpdateDispatches | Modifying a scheduling plan by task ID and scheduling ID | To be tested |
-|  | ResetMultiTaskOffset | Resetting the progress of a combined task | To be tested |
-|  | CreateMultiTaskMappings | Create combined task mapping | To be tested |
-|  | RunTask | Manually trigger task scheduling | To be tested |
-|  | BatchStartOrStopTasks | Start/Stop Tasks in Batches | To be tested |
-|  | UpdateMultiTasks | Modifying a combined task | To be tested |
-|  | CountTasks | Count the number of tasks in different states of different types. | To be tested |
-|  | DeleteMultiTaskMapping | Delete a task mapping by mapping ID | To be tested |
-|  | CreateMultiTasks | Create a combined task | To be tested |
-| Task Monitor Management | ListMonitorLog | Query all logs of a single task | To be tested |
-|  | ListMonitorInfos | Query the monitoring information about all tasks | To be tested |
-| Throttling Policy Management | UpdateRequestThrottlingPolicyV2 | Modifies the details about a specified throttling policy. | To be tested |
-|  | DeleteRequestThrottlingPolicyV2 | Deletes a specified throttling policy. If the throttling policy is bound to an API, you need to unbind the throttling policy from the API and then delete the throttling policy. | To be tested |
-|  | ShowDetailsOfRequestThrottlingPolicyV2 | View the details about a specified throttling policy. | To be tested |
-|  | CreateRequestThrottlingPolicyV2 | After an API is brought online, the system provides a default throttling policy for each API. API providers can change the throttling policy based on the API service capability and load status. | To be tested |
-|  | BatchDeleteThrottlingPolicyV2 | Delete throttling policies in batches. | To be tested |
-|  | ListRequestThrottlingPolicyV2 | To query the information about all throttling policies | To be tested |
-| Topic operation | ListTopics | Query the topic list by page. Topics are sorted in descending order by topic creation time. You can specify the offset and limit for pagination query. If no topic exists, an empty list is returned. | To be tested |
-| VPC Channel Management | DeleteBackendInstanceV2 | Delete a backend instance from a specified VPC channel. | To be tested |
-|  | DeleteVpcChannelV2 | Delete a specified VPC channel | To be tested |
-|  | CreateMemberGroup | Create a VPC channel backend server group on the Service Integration page. You can determine whether to associate VPC channel backend instances with the backend instance server group to manage backend server nodes. | To be tested |
-|  | UpdateHealthCheck | Modifies the VPC channel health check. | To be tested |
-|  | AddingBackendInstancesV2 | Adding a backend instance to a specified VPC channel | To be tested |
-|  | ShowDetailsOfVpcChannelV2 | View details about a specified VPC channel. | To be tested |
-|  | ListBackendInstancesV2 | View the list of backend instances in a specified VPC channel. | To be tested |
-|  | UpdateVpcChannelV2 | Updates the parameters of a specified VPC channel. | To be tested |
-|  | ListMemberGroups | Query the list of backend cloud service groups in a VPC channel | To be tested |
-|  | BatchDisableMembers | Failed to modify the status of backend servers in batches. | To be tested |
-|  | CreateVpcChannelV2 | In the service integration, create channels for connecting to private VPC resources. When creating an API, configure backend nodes to use these VPC channels so that the service integration can directly access private VPC resources. | To be tested |
-|  | BatchEnableMembers | Changing the status of backend servers in batches is available. | To be tested |
-|  | UpdateMemberGroup | Updates a specified VPC channel backend server group | To be tested |
-|  | ShowDetailsOfMemberGroup | View details about a specified VPC channel backend server group. | To be tested |
-|  | UpdateBackendInstancesV2 | This API is used to update the backend instance of a specified VPC channel. During the update, the input request parameters are used to fully overwrite the backend instances of the corresponding cloud service group. If the ECS group to be modified is not specified, the system overwrites the entire ECS group. | To be tested |
-|  | ListVpcChannelsV2 | View the VPC channel list | To be tested |
-|  | DeleteMemberGroup | Delete a specified VPC channel backend server group. | To be tested |
-| VPC channel management-project | CreateProjectVpcChannel | This API is used to create a VPC channel and associate it with multiple instances. The VPC channel name must be unique in the same project. Note: The instance feature vpc_name_modifiable is available only when it is set to off. | To be tested |
-|  | ListProjectVpcChannelsV2 | Query the VPC channel list of all instances in a project | To be tested |
-|  | CreateProjectVpcChannelSyncs | This API is used to synchronize VPC channels to multiple instances. Note: The instance feature vpc_name_modifiable is available only when it is set to off. | To be tested |
-|  | UpdateProjectVpcChannel | This API is used to modify VPC channels in multiple instances in a project in batches based on the VPC channel name. If the VPC channel does not exist in the instance, create it. Note: The instance feature vpc_name_modifiable is available only when it is set to off. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="6">ACL Policy Management</td>
+                    <td>UpdateAclStrategyV2</td>
+                    <td>Modifies the specified ACL policy. The following attributes can be modified: acl_name, acl_type, and acl_value. Other attributes cannot be modified.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAclV2</td>
+                    <td>Delete a specified ACL policy. If an API is bound to the ACL policy, the ACL policy cannot be deleted.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAclStrategyV2</td>
+                    <td>Add an ACL policy. The policy type is specified by the acl_type field (permit or deny). The object type can be IP address or domain. The value of acl_value corresponding to domain is the tenant name. Not a network domain name like www.exampleDomain.com</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteAclV2</td>
+                    <td>Deletes multiple specified ACL policies in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfAclPolicyV2</td>
+                    <td>Query the details about a specified ACL policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAclStrategiesV2</td>
+                    <td>Query all ACL policies.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">API Binding ACL Policy</td>
+                    <td>CreateApiAclBindingV2</td>
+                    <td>Bind the API to the ACL policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteApiAclBindingV2</td>
+                    <td>Unbind an API from an ACL policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteApiAclBindingV2</td>
+                    <td>Unbind APIs from ACL policies in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisUnbindedToAclPolicyV2</td>
+                    <td>View the list of APIs that are not bound to the ACL policy. Ensure that the APIs have been published.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisBindedToAclPolicyV2</td>
+                    <td>View the list of APIs bound to the ACL policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAclPolicyBindedToApiV2</td>
+                    <td>View the list of ACL policies bound to the API</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">API Group Management</td>
+                    <td>ShowDetailsOfApiGroupV2</td>
+                    <td>Query the details about a specified group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteApiGroupV2</td>
+                    <td>Deletes a specified API group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckApiGroupsV2</td>
+                    <td>Verifies whether the API group name exists.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateApiGroupV2</td>
+                    <td>Modifies API group attributes. The name and remark attributes can be modified. Other attributes cannot be modified.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateApiGroupV2</td>
+                    <td>API groups are management units of APIs. An API group is equivalent to a service entry. When an API group is created, a subdomain name is returned as the access entry. It is recommended that APIs in an API group be related to each other.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiGroupsV2</td>
+                    <td>Query the API group list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">API bound throttling policy</td>
+                    <td>DisassociateRequestThrottlingPolicyV2</td>
+                    <td>Unbind the API from the throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRequestThrottlingPoliciesBindedToApiV2</td>
+                    <td>Query the throttling policy list bound to an API. There should be only one flow control policy in each environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateRequestThrottlingPolicyV2</td>
+                    <td>Apply a throttling policy to an API. All accesses to the API will be restricted by the throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisUnbindedToRequestThrottlingPolicyV2</td>
+                    <td>Query the list of all self-owned APIs that are not bound to the throttling policy. The API must have been published. Unpublished APIs will not be displayed.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDisassociateThrottlingPolicyV2</td>
+                    <td>Unbinding APIs from throttling policies in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisBindedToRequestThrottlingPolicyV2</td>
+                    <td>Query the list of APIs bound to a throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="14">API management</td>
+                    <td>DeleteApiV2</td>
+                    <td>Delete a specified API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisV2</td>
+                    <td>View the API list. API details and release information is returned, but backend service information is not displayed.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateOrDeletePublishRecordForApiV2</td>
+                    <td>Publish or bring an API offline.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiVersionDetailV2</td>
+                    <td>Query the details of a specified version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ChangeApiVersionV2</td>
+                    <td>A version is generated based on the current API definition each time an API is published. The version records the definitions and status of APIs when they are published.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiVersionsV2</td>
+                    <td>Query the historical versions of an API. Each API can have a maximum of 10 historical versions in an environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DebugApiV2</td>
+                    <td>This API is used to debug the definition of an API in the specified running environment. The API caller must have the permission to operate the API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchPublishOrOfflineApiV2</td>
+                    <td>Publish multiple APIs to a specified environment or take multiple APIs offline from a specified environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfApiV2</td>
+                    <td>View the details about a specified API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiRuntimeDefinitionV2</td>
+                    <td>View the runtime definition of a specified API in the specified environment. By default, the runtime definition in the RELEASE environment is queried.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateApiV2</td>
+                    <td>Modifies the information about a specified API, including backend service information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckApisV2</td>
+                    <td>Verify the API definition. Check whether the path or name of the API already exists.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateApiV2</td>
+                    <td>Add an API. An API is a service interface and specific service capabilities.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteApiByVersionIdV2</td>
+                    <td>You can take an effective API version offline. After the API version is brought offline, the API cannot be invoked in the environment where the version takes effect.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="11">APPLICATION_MANAGEMENT</td>
+                    <td>CheckRomaAppDetails</td>
+                    <td>Query application details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddUserToApp</td>
+                    <td>- Set the user members of the application. If the array is empty, the existing application member list will be cleared.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRomaApp</td>
+                    <td>Query the application list. Query by conditions is supported. All conditions are in the AND relationship.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetRomaAppSecret</td>
+                    <td>Reset the application key</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRomaApp</td>
+                    <td>Delete a single application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckCanAuthUsersOfApp</td>
+                    <td>Query the candidate user list of the application. Abnormal users will be filtered out.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRomaApp</td>
+                    <td>Create Application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ValidateRomaApp</td>
+                    <td>Check whether the application that meets the specified conditions exists.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateRomaApp</td>
+                    <td>Update application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckRomaAppSecret</td>
+                    <td>Query the application key</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckAuthUsersOfApp</td>
+                    <td>Query the user list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">ASSET_MANAGEMENT</td>
+                    <td>CheckAssetJobStatus</td>
+                    <td>Querying the job progress</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAsset</td>
+                    <td>Delete assets in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportAsset</td>
+                    <td>-Create an asset import task. The asset version and specific assets are read from the asset content.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportAsset</td>
+                    <td>Exporting assets in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DownloadAssetArchive</td>
+                    <td>-After an export job is successfully executed, this API is used to obtain the asset package generated by the export job. The asset package can be downloaded only once.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">App Authorization Management</td>
+                    <td>ListDuplicateApisForAppV2</td>
+                    <td>Query the list of APIs with conflicting paths in a specified app.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CancelingAuthorizationV2</td>
+                    <td>This API is used to cancel the authorization relationship between an API and an app. After the authorization is canceled, the app cannot invoke the API any longer.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisUnbindedToAppV2</td>
+                    <td>Query the list of APIs that are not bound to an app in a specified environment, including self-owned APIs and APIs purchased from the Marketplace.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppsBindedToApiV2</td>
+                    <td>Query the list of apps bound to an API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAuthorizingAppsV2</td>
+                    <td>After an app is created, it cannot access an API. To access an API in an environment, you need to authorize the API in the environment to the app. After the authorization is successful, the app can access the API in the environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisBindedToAppV2</td>
+                    <td>Query the list of APIs bound to an app.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">App Permission Management</td>
+                    <td>UpdateTopicAccessPolicy</td>
+                    <td>Update the topic permission.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMqsInstanceTopicAccessPolicy</td>
+                    <td>Query the topic permission.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Application Configuration Management</td>
+                    <td>UpdateAppConfigV2</td>
+                    <td>Modifying Application Configuration</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAppConfigV2</td>
+                    <td>Delete application configuration</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAppConfigV2</td>
+                    <td>Create Application Configuration</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfAppConfigV2</td>
+                    <td>Viewing Application Configuration Details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppConfigsV2</td>
+                    <td>Query the application configuration list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="11">Client Configuration</td>
+                    <td>ShowAppBoundAppQuota</td>
+                    <td>View the application quota associated with a specified client application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfAppAcl</td>
+                    <td>View the access control details of the app.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAppCodeV2</td>
+                    <td>The App Code is deleted. After the App Code is deleted, the corresponding APIs cannot be accessed through simple authentication.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAppCodeAutoV2</td>
+                    <td>When creating an app code, you do not need to specify the value. The background automatically generates a random character string to fill in the value.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfAppV2</td>
+                    <td>View detailed information about a specified app.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAppCodeV2</td>
+                    <td>App Code is a submodule of an app. After an app code is created, simple app authentication can be implemented.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAppAcl</td>
+                    <td>Set the access control configured on the client.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAppAcl</td>
+                    <td>Delete the access control information configured on the client.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppsV2</td>
+                    <td>Query the app list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppCodesV2</td>
+                    <td>Query the app code list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfAppCodeV2</td>
+                    <td>App Code is a submodule of an app. After an app code is created, simple app authentication can be implemented.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">Client Quota</td>
+                    <td>UpdateAppQuota</td>
+                    <td>Modifying the Client Quota</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppQuotas</td>
+                    <td>Obtain the client quota list. Fuzzy query by name is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAppQuota</td>
+                    <td>Create Client Quota</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppQuotaBindableApps</td>
+                    <td>Query the list of client applications to which the client quota can be bound. Fuzzy search by client application name is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisassociateAppQuotaWithApp</td>
+                    <td>Unbind the client quota from the client application</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAppQuotaBoundApps</td>
+                    <td>Query the list of client applications bound to the client quota. Fuzzy match by client application name is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateAppsForAppQuota</td>
+                    <td>List of client applications bound to the client quota</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAppQuota</td>
+                    <td>Obtain the client quota details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAppQuota</td>
+                    <td>Delete a client quota. When deleting the client quota, delete the association between the client quota and the client application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Configuration Management</td>
+                    <td>ListProjectCofigsV2</td>
+                    <td>Query the tenant configuration list of an instance. You can use this API to view the resource configuration and usage of each type of resource.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="14">Custom Backend Service</td>
+                    <td>DebugLiveDataApiV2</td>
+                    <td>Check whether the backend API is available.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>PublishLiveDataApiV2</td>
+                    <td>Deploy backend APIs in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateLiveDataApiV2</td>
+                    <td>Updates backend API parameters in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLiveDataDataSourcesV2</td>
+                    <td>Query the list of customized backend service data sources.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLiveDataApiDeploymentHistoryV2</td>
+                    <td>Query the deployment records of backend APIs in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteLiveDataApiV2</td>
+                    <td>This API is used to delete a backend API from an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckLivedataApisV2</td>
+                    <td>Verify the definition of the customized backend API. Check whether the path or name of the custom backend API already exists.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLiveDataQuotaV2</td>
+                    <td>Query the quota of a user-defined backend service.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UnpublishLiveDataApiV2</td>
+                    <td>Undeploy backend APIs in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateLiveDataApiScriptV2</td>
+                    <td>Create a backend API script in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateLiveDataApiV2</td>
+                    <td>Create a backend API in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowLiveDataApiV2</td>
+                    <td>Query details about a backend API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLiveDataApiTestHistoryV2</td>
+                    <td>Query the backend API test result in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListLiveDataApiV2</td>
+                    <td>Obtains all backend APIs in an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Customized Authentication Management</td>
+                    <td>ShowDetailsOfCustomAuthorizersV2</td>
+                    <td>Viewing the details of the customized authentication</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListCustomAuthorizersV2</td>
+                    <td>Query the user-defined authentication list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCustomAuthorizerV2</td>
+                    <td>Create a user-defined authentication</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCustomAuthorizerV2</td>
+                    <td>Modifying a user-defined authentication</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteCustomAuthorizerV2</td>
+                    <td>Delete user-defined authentication</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">DICTIONARY_MANAGEMENT</td>
+                    <td>UpdateDictionary</td>
+                    <td>Update dictionary</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDictionary</td>
+                    <td>creation dictionary</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDictionary</td>
+                    <td>When a single dictionary is deleted, all subdictionaries of the dictionary will be deleted.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckDictionary</td>
+                    <td>Query dictionary details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ValidateDictionary</td>
+                    <td>Verifies whether the dictionary for the specified condition exists. The dictionary name and code are supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDictionary</td>
+                    <td>Query the dictionary list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">Data Source Management</td>
+                    <td>ListDatasourceTables</td>
+                    <td>Obtain all tables in the data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDatasourceInfo</td>
+                    <td>Create a data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDataourceDetail</td>
+                    <td>Query data sources by data source ID</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDatasourceColumns</td>
+                    <td>Obtain all fields in a table in the data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDatasourceInfo</td>
+                    <td>Modifying a Data Source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDatasourceInfoById</td>
+                    <td>Deletes the specified data source information based on the data source ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDatasources</td>
+                    <td>Query the data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartTestDatasource</td>
+                    <td>Test the data source connectivity</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Device group management</td>
+                    <td>ShowDeviceGroupTree</td>
+                    <td>Query all device groups</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDeviceGroup</td>
+                    <td>Delete a group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDeviceGroup</td>
+                    <td>Obtain the device group and lower-layer group information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchAddDeviceToGroup</td>
+                    <td>Adding devices to a device group in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDeviceFromGroup</td>
+                    <td>Deleting a device from a device group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDeviceGroup</td>
+                    <td>Create a device group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDeviceGroup</td>
+                    <td>Modifying a device group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="12">Device management</td>
+                    <td>ShowAuthentication</td>
+                    <td>Query device authentication information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDevice</td>
+                    <td>Modifying device information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDevices</td>
+                    <td>This interface is used to obtain the list of registered GB/T 28181 devices.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SendCommand</td>
+                    <td>Send command</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSubsets</td>
+                    <td>Querying a subdevice</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetAuthentication</td>
+                    <td>Reset device authentication information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchFreezeDevices</td>
+                    <td>Batch device offline</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddSubsetsToGateway</td>
+                    <td>Adding a subdevice to the gateway</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDevice</td>
+                    <td>Create Device</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListShadows</td>
+                    <td>Query the device shadow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDevice</td>
+                    <td>Query device details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDevice</td>
+                    <td>This API is used to delete a specified device.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Domain name management</td>
+                    <td>UpdateDomainV2</td>
+                    <td>Modify the configuration information corresponding to the bound domain name.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisassociateCertificateV2</td>
+                    <td>If the domain name certificate is no longer needed or has expired, you can delete the certificate.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateCertificateV2</td>
+                    <td>If the HTTPS request protocol is used for defining an API request during API creation, the SSL certificate must be added to the independent domain name.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfDomainNameCertificateV2</td>
+                    <td>View details about the certificate bound to the domain name.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisassociateDomainV2</td>
+                    <td>If an API group does not need to be bound to a user-defined domain name, you can unbind the domain name from the API group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateDomainV2</td>
+                    <td>User-defined domain name, which takes effect only after the CNAME is added to the subdomain name of the API group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Environment variable management</td>
+                    <td>CreateEnvironmentVariableV2</td>
+                    <td>After an API is released to different environments, the environment variables, such as the API service deployment address and request version number, may vary according to the environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteEnvironmentVariableV2</td>
+                    <td>Delete the specified environment variables.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfEnvironmentVariableV2</td>
+                    <td>View details about a specified environment variable.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateEnvironmentVariableV2</td>
+                    <td>Modify environment variables. If an environment variable references the backend service address of an API, modifying the environment variable will release all APIs that use the variable again.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvironmentVariablesV2</td>
+                    <td>Query the list of all environment variables in a group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Environmental Management</td>
+                    <td>DeleteEnvironmentV2</td>
+                    <td>Delete the specified environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnvironmentsV2</td>
+                    <td>Query the environment list that meets the conditions.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateEnvironmentV2</td>
+                    <td>Modifies the information about a specified environment. The name and remark attributes can be modified. Other attributes cannot be modified.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEnvironmentV2</td>
+                    <td>In actual production, an API provider may have multiple environments, such as the development environment, test environment, and production environment. You can release APIs to an environment for callers to invoke.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">INSTANCE_MANAGEMENT</td>
+                    <td>CheckRomaInstanceListV2</td>
+                    <td>Obtain the service instance list that meets the conditions.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">ITaskController</td>
+                    <td>DeleteTask</td>
+                    <td>Delete a single task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTasks</td>
+                    <td>Obtain the task list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateTask</td>
+                    <td>Task modification interface, used to modify task configurations</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Instance Feature Management</td>
+                    <td>CreateFeatureV2</td>
+                    <td>Configure the required features for the instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListFeaturesV2</td>
+                    <td>View the DB instance feature list. Note: If the DB instance does not support the following features, contact technical support to upgrade the DB instance version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Instance Management</td>
+                    <td>ShowRestrictionOfInstanceV2</td>
+                    <td>View the instance constraint information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfInstanceV2</td>
+                    <td>Viewing DB Instance Details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">MQS Instance Management</td>
+                    <td>ShowMqsInstance</td>
+                    <td>Query details about a specified MQS instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListMqsInstance</td>
+                    <td>Query the MQS instance list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Message management</td>
+                    <td>ResetMessages</td>
+                    <td>Resend the message.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMqsInstanceMessages</td>
+                    <td>Query the offset and content of a message.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Monitoring information query</td>
+                    <td>ListLatelyApiStatisticsV2</td>
+                    <td>Query the number of times that an API is invoked based on the API ID and the latest period. The statistical period is 1 minute. The query scope is within one hour. One sample is per minute. The sample value is accumulated within one minute.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListStatisticsApi</td>
+                    <td>Query the API statistics of an instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">OpenAPI</td>
+                    <td>ImportLiveDataApiDefinitionsV2</td>
+                    <td>Import a customized backend API. The content of the imported file must comply with the swagger standard.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportApiDefinitionsV2</td>
+                    <td>Import an API. The imported file must comply with the swagger standard.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportLiveDataApiDefinitionsV2</td>
+                    <td>Export the customized backend API. The exported file content complies with the swagger standard.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportApiDefinitionsV2</td>
+                    <td>Export the definition information of APIs in a group. The exported file content complies with the Swagger standard.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">PUBLIC_MANAGEMENT</td>
+                    <td>CheckVersion</td>
+                    <td>Obtains the API version with a specified version ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="13">Plug-in management</td>
+                    <td>DeletePlugin</td>
+                    <td>Delete the plug-in.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePlugin</td>
+                    <td>Modifies plug-in information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlugin</td>
+                    <td>Create plug-in information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPluginAttachedApis</td>
+                    <td>Query information about the APIs bound to a specified plug-in</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPlugins</td>
+                    <td>Query details about a group of API Gateway plug-ins that meet the search criteria.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AttachApiToPlugin</td>
+                    <td>Bind the plug-in to the API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiAttachablePlugins</td>
+                    <td>Query information about the plug-ins that can be bound to the current API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DetachApiFromPlugin</td>
+                    <td>Unbind the API from the plug-in</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPluginAttachableApis</td>
+                    <td>Query information about the APIs that can be bound to the current plug-in.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlugin</td>
+                    <td>Query plug-in details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiAttachedPlugins</td>
+                    <td>Query information about the plug-ins bound to a specified API</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DetachPluginFromApi</td>
+                    <td>Unbind the plug-in from the API</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AttachPluginToApi</td>
+                    <td>Bind the plug-in to the API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="14">Product Management</td>
+                    <td>ShowProductAuthentication</td>
+                    <td>Query product authentication information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateProductTopic</td>
+                    <td>Adding a product theme</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateProduct</td>
+                    <td>Modifying product information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProductTopics</td>
+                    <td>Query product theme</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowProduct</td>
+                    <td>Query product details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProducts</td>
+                    <td>Query products</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDevicesInProduct</td>
+                    <td>Query the number of devices in a product</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteProduct</td>
+                    <td>Delete a product</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetProductAuthentication</td>
+                    <td>Reset product authentication information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateProduct</td>
+                    <td>Create a product</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateProductTopic</td>
+                    <td>Update the product theme</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UploadProduct</td>
+                    <td>Importing a Product</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DownloadProducts</td>
+                    <td>Export products</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteProductTopic</td>
+                    <td>Delete a product theme</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Product Template</td>
+                    <td>ListProductTemplates</td>
+                    <td>Query a product template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateProductTemplate</td>
+                    <td>Modifying a product template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateProductTemplate</td>
+                    <td>Create a product template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteProductTemplate</td>
+                    <td>Delete a product template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Query version operation</td>
+                    <td>ListVersion</td>
+                    <td>Query the SMN API V2 version information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="13">Rule engine</td>
+                    <td>CreateRule</td>
+                    <td>Create Rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRule</td>
+                    <td>Querying Rule Details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSources</td>
+                    <td>Query the source data source list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteSource</td>
+                    <td>Delete the source data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteRules</td>
+                    <td>Delete rules in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateSource</td>
+                    <td>Add source data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRule</td>
+                    <td>Delete a rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DebugRule</td>
+                    <td>Rule debugging</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDestination</td>
+                    <td>Delete the target data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateRule</td>
+                    <td>Modifying a rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDestinations</td>
+                    <td>Query the target data source list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDestination</td>
+                    <td>Add the target data source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRules</td>
+                    <td>Query Rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="10">SSL Certificate Management</td>
+                    <td>BatchAssociateDomainsV2</td>
+                    <td>Domain name bound to the SSL certificate</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCertificateV2</td>
+                    <td>Modifying the SSL Certificate</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCertificateV2</td>
+                    <td>Create an SSL certificate</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchAssociateCertsV2</td>
+                    <td>The domain name is bound to the SSL certificate. Currently, only one binding is supported. The certificate_ids field in the request body contains only one certificate ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAttachedDomainsV2</td>
+                    <td>Obtain the list of domain names bound to the SSL certificate.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListCertificatesV2</td>
+                    <td>Obtain the SSL certificate list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDisassociateDomainsV2</td>
+                    <td>Unbind an SSL certificate from a domain name</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfCertificateV2</td>
+                    <td>Viewing Certificate Details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteCertificateV2</td>
+                    <td>This API is used to delete an SSL certificate. Only the certificate that is not associated with a domain name can be deleted.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDisassociateCertsV2</td>
+                    <td>This API is used to unbind an SSL certificate from a domain name. Currently, only one certificate can be unbound. The certificate_ids field in the request body contains only one certificate ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Service Job Management</td>
+                    <td>ShowTask</td>
+                    <td>This interface is used to query service jobs.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopTask</td>
+                    <td>This interface is used to stop a service job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="21">Service Management</td>
+                    <td>ListProperties</td>
+                    <td>Query attributes</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateResponseProperty</td>
+                    <td>Modifying response attributes</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateService</td>
+                    <td>Create a service</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowCommand</td>
+                    <td>Query command details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResponseProperty</td>
+                    <td>Query response attribute details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResponseProperties</td>
+                    <td>Query response attributes</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRequestProperty</td>
+                    <td>Create a request attribute</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateService</td>
+                    <td>Modifying a service</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateProperty</td>
+                    <td>Create attribute</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCommand</td>
+                    <td>Modification command</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteService</td>
+                    <td>Delete a service</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateResponseProperty</td>
+                    <td>Response attribute creation</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteCommand</td>
+                    <td>Deletion command</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateRequestProperty</td>
+                    <td>Modifying request attributes</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCommand</td>
+                    <td>Create command</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRequestProperty</td>
+                    <td>Delete request attribute</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListServices</td>
+                    <td>Query service</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowService</td>
+                    <td>Query service details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListCommands</td>
+                    <td>Query command</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRequestProperties</td>
+                    <td>Query request attributes</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteResponseProperty</td>
+                    <td>Deleting a response attribute</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Set Special Flow Control</td>
+                    <td>ListSpecialThrottlingConfigurationsV2</td>
+                    <td>View the special configuration of the throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateSpecialThrottlingConfigurationV2</td>
+                    <td>A throttling policy can limit the maximum number of times that an API can be accessed within a period of time, or the maximum number of times that a tenant or app can access an API within a period of time.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteSpecialThrottlingConfigurationV2</td>
+                    <td>To delete a special configuration of a throttling policy, run the following command:</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateSpecialThrottlingConfigurationV2</td>
+                    <td>Modify a special setting in a throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Signature Key Management</td>
+                    <td>ListSignatureKeysV2</td>
+                    <td>Query information about all signature keys.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateSignatureKeyV2</td>
+                    <td>Modifies the details about a specified signature key.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteSignatureKeyV2</td>
+                    <td>Deletes a specified signature key. A signature key cannot be deleted if it is bound to an API. You need to unbind it from the API before deleting it.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateSignatureKeyV2</td>
+                    <td>To protect API security, it is recommended that tenants provide a protection mechanism for API access. That is, open APIs of tenants need to authenticate the request source. Requests that do not meet the authentication requirements are directly rejected.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Signing Key Binding Relationship Management</td>
+                    <td>DisassociateSignatureKeyV2</td>
+                    <td>Unbind the API from the signature key.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisNotBoundWithSignatureKeyV2</td>
+                    <td>Query the list of APIs that are not bound to the signature key. The API must have been published. Unpublished APIs will not be displayed.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApisBindedToSignatureKeyV2</td>
+                    <td>Query the list of APIs bound to a signature key.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSignatureKeysBindedToApiV2</td>
+                    <td>Query the list of signature keys bound to an API. Each API should be bound with a maximum of one signing key per environment.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AssociateSignatureKeyV2</td>
+                    <td>A signature key takes effect only after it is bound to an API.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Subject Management</td>
+                    <td>ListMqsInstanceTopics</td>
+                    <td>Query the topic list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateMqsInstanceTopic</td>
+                    <td>Create a topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteMqsInstanceTopic</td>
+                    <td>Delete topics in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportMqsInstanceTopic</td>
+                    <td>Import a topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateMqsInstanceTopic</td>
+                    <td>Modify a topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportMqsInstanceTopic</td>
+                    <td>Export a topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteMqsInstanceTopic</td>
+                    <td>Delete a topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Subscription management operation</td>
+                    <td>ListNotification</td>
+                    <td>This interface is used to query the subscription management information of a specified application.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateNotification</td>
+                    <td>This interface is used to modify the specified subscription management.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateNotification</td>
+                    <td>This API is used to create device operations under the corresponding application in a specified instance and subscribe to the operation to the specified topic.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteNotification</td>
+                    <td>This interface is used to delete a specified subscription management.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Tag Management</td>
+                    <td>ListTagsV2</td>
+                    <td>Query the tag list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="13">Task Management</td>
+                    <td>ShowDispatches</td>
+                    <td>Query scheduling plans</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>InstallMultiTasks</td>
+                    <td>Initialize combined tasks, assign task IDs, and initialize mapping</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCommonTask</td>
+                    <td>Create a common task (different from a combined task)</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDispatches</td>
+                    <td>Create a scheduling plan</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDispatches</td>
+                    <td>Modifying a scheduling plan by task ID and scheduling ID</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetMultiTaskOffset</td>
+                    <td>Resetting the progress of a combined task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateMultiTaskMappings</td>
+                    <td>Create combined task mapping</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RunTask</td>
+                    <td>Manually trigger task scheduling</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchStartOrStopTasks</td>
+                    <td>Start/Stop Tasks in Batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateMultiTasks</td>
+                    <td>Modifying a combined task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CountTasks</td>
+                    <td>Count the number of tasks in different states of different types.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteMultiTaskMapping</td>
+                    <td>Delete a task mapping by mapping ID</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateMultiTasks</td>
+                    <td>Create a combined task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Task Monitor Management</td>
+                    <td>ListMonitorLog</td>
+                    <td>Query all logs of a single task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListMonitorInfos</td>
+                    <td>Query the monitoring information about all tasks</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Throttling Policy Management</td>
+                    <td>UpdateRequestThrottlingPolicyV2</td>
+                    <td>Modifies the details about a specified throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteRequestThrottlingPolicyV2</td>
+                    <td>Deletes a specified throttling policy. If the throttling policy is bound to an API, you need to unbind the throttling policy from the API and then delete the throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfRequestThrottlingPolicyV2</td>
+                    <td>View the details about a specified throttling policy.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateRequestThrottlingPolicyV2</td>
+                    <td>After an API is brought online, the system provides a default throttling policy for each API. API providers can change the throttling policy based on the API service capability and load status.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDeleteThrottlingPolicyV2</td>
+                    <td>Delete throttling policies in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRequestThrottlingPolicyV2</td>
+                    <td>To query the information about all throttling policies</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Topic operation</td>
+                    <td>ListTopics</td>
+                    <td>Query the topic list by page. Topics are sorted in descending order by topic creation time. You can specify the offset and limit for pagination query. If no topic exists, an empty list is returned.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="17">VPC Channel Management</td>
+                    <td>DeleteBackendInstanceV2</td>
+                    <td>Delete a backend instance from a specified VPC channel.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVpcChannelV2</td>
+                    <td>Delete a specified VPC channel</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateMemberGroup</td>
+                    <td>Create a VPC channel backend server group on the Service Integration page. You can determine whether to associate VPC channel backend instances with the backend instance server group to manage backend server nodes.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateHealthCheck</td>
+                    <td>Modifies the VPC channel health check.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddingBackendInstancesV2</td>
+                    <td>Adding a backend instance to a specified VPC channel</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfVpcChannelV2</td>
+                    <td>View details about a specified VPC channel.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListBackendInstancesV2</td>
+                    <td>View the list of backend instances in a specified VPC channel.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVpcChannelV2</td>
+                    <td>Updates the parameters of a specified VPC channel.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListMemberGroups</td>
+                    <td>Query the list of backend cloud service groups in a VPC channel</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchDisableMembers</td>
+                    <td>Failed to modify the status of backend servers in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVpcChannelV2</td>
+                    <td>In the service integration, create channels for connecting to private VPC resources. When creating an API, configure backend nodes to use these VPC channels so that the service integration can directly access private VPC resources.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchEnableMembers</td>
+                    <td>Changing the status of backend servers in batches is available.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateMemberGroup</td>
+                    <td>Updates a specified VPC channel backend server group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDetailsOfMemberGroup</td>
+                    <td>View details about a specified VPC channel backend server group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateBackendInstancesV2</td>
+                    <td>This API is used to update the backend instance of a specified VPC channel. During the update, the input request parameters are used to fully overwrite the backend instances of the corresponding cloud service group. If the ECS group to be modified is not specified, the system overwrites the entire ECS group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVpcChannelsV2</td>
+                    <td>View the VPC channel list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteMemberGroup</td>
+                    <td>Delete a specified VPC channel backend server group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">VPC channel management-project</td>
+                    <td>CreateProjectVpcChannel</td>
+                    <td>This API is used to create a VPC channel and associate it with multiple instances. The VPC channel name must be unique in the same project. Note: The instance feature vpc_name_modifiable is available only when it is set to off.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProjectVpcChannelsV2</td>
+                    <td>Query the VPC channel list of all instances in a project</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateProjectVpcChannelSyncs</td>
+                    <td>This API is used to synchronize VPC channels to multiple instances. Note: The instance feature vpc_name_modifiable is available only when it is set to off.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateProjectVpcChannel</td>
+                    <td>This API is used to modify VPC channels in multiple instances in a project in batches based on the VPC channel name. If the VPC channel does not exist in the instance, create it. Note: The instance feature vpc_name_modifiable is available only when it is set to off.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

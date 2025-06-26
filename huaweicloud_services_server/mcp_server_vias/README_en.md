@@ -11,35 +11,169 @@ VIAS MCP Server is a Model Context Protocol (Model Context Protocol) server, pro
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| IAlgorithmController | ShowServiceDetail | Obtain service details | To be tested |
-|  | StopDeployAlgorithm | Stopping Algorithm Deployment | To be tested |
-|  | ListUserServices | My algorithm service list | To be tested |
-|  | DeployAlgorithm | Deployment algorithm | To be tested |
-| IBatchTaskController | CreateBatchTask | Add a batch task | To be tested |
-|  | DeleteBatchTask | Delete batch configurations | To be tested |
-|  | ListBatchTasks | Obtain the batch configuration task list | To be tested |
-|  | BatchStartStopTask | Start or stop a batch configuration task | To be tested |
-|  | UpdateBatchTask | Modifying a batch configuration task | To be tested |
-| IEdgePoolController | CreateEdgePool | Create an edge resource pool | To be tested |
-|  | ShowEdgePoolInfo | Query details about an edge resource pool | To be tested |
-|  | DeleteEdgePool | Delete an edge resource pool. | To be tested |
-|  | ListEdgePools | Query the edge resource pool list | To be tested |
-| ITaskController | ShowTaskInfo | This interface is used to obtain the details of an intelligent video analysis task. | To be tested |
-|  | DeleteTask | Delete a single task | To be tested |
-|  | UpdateTask | Task modification interface, used to modify task configurations | To be tested |
-|  | CreateTask | This interface is used to create a task. | To be tested |
-|  | StartStopTask | This interface is used to start or stop a task. | To be tested |
-|  | ListTasks | Obtain the task list | To be tested |
-| IVideoGroupController | ShowVideoGroupDetail | Obtains video source group details. | To be tested |
-|  | UpdateVideoGroup | Update the video source group | To be tested |
-|  | DeleteVideoGroup | Delete a video source group | To be tested |
-|  | ListVideoGroups | Obtain the video source group list | To be tested |
-|  | CreateVideoGroup | Creating a video source group | To be tested |
-| IVideoSourceController | CreateVideoSource | Create a video source | To be tested |
-|  | ListVideoSources | Obtain the video source list. | To be tested |
-|  | DeleteVideoSource | Delete a video source | To be tested |
-|  | ShowVideoSourceDetail | Displays video source details. | To be tested |
-|  | UpdateVideoSource | Modifying a video source | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">IAlgorithmController</td>
+                    <td>ShowServiceDetail</td>
+                    <td>Obtain service details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopDeployAlgorithm</td>
+                    <td>Stopping Algorithm Deployment</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListUserServices</td>
+                    <td>My algorithm service list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeployAlgorithm</td>
+                    <td>Deployment algorithm</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">IBatchTaskController</td>
+                    <td>CreateBatchTask</td>
+                    <td>Add a batch task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteBatchTask</td>
+                    <td>Delete batch configurations</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListBatchTasks</td>
+                    <td>Obtain the batch configuration task list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchStartStopTask</td>
+                    <td>Start or stop a batch configuration task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateBatchTask</td>
+                    <td>Modifying a batch configuration task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">IEdgePoolController</td>
+                    <td>CreateEdgePool</td>
+                    <td>Create an edge resource pool</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEdgePoolInfo</td>
+                    <td>Query details about an edge resource pool</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteEdgePool</td>
+                    <td>Delete an edge resource pool.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEdgePools</td>
+                    <td>Query the edge resource pool list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">ITaskController</td>
+                    <td>ShowTaskInfo</td>
+                    <td>This interface is used to obtain the details of an intelligent video analysis task.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteTask</td>
+                    <td>Delete a single task</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateTask</td>
+                    <td>Task modification interface, used to modify task configurations</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTask</td>
+                    <td>This interface is used to create a task.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartStopTask</td>
+                    <td>This interface is used to start or stop a task.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTasks</td>
+                    <td>Obtain the task list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">IVideoGroupController</td>
+                    <td>ShowVideoGroupDetail</td>
+                    <td>Obtains video source group details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVideoGroup</td>
+                    <td>Update the video source group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVideoGroup</td>
+                    <td>Delete a video source group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVideoGroups</td>
+                    <td>Obtain the video source group list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVideoGroup</td>
+                    <td>Creating a video source group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">IVideoSourceController</td>
+                    <td>CreateVideoSource</td>
+                    <td>Create a video source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVideoSources</td>
+                    <td>Obtain the video source list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVideoSource</td>
+                    <td>Delete a video source</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowVideoSourceDetail</td>
+                    <td>Displays video source details.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateVideoSource</td>
+                    <td>Modifying a video source</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

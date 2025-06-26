@@ -11,14 +11,60 @@ VCM MCP Server is a Model Context Protocol (Model Context Protocol) server, prov
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| Approve long voice content | CheckAudioJob | This API is used to query and display the details of a single job. | To be tested |
-|  | CreateAudioJob | This API is used to create a voice content moderation job. | To be tested |
-|  | DeleteDemoInfo | Delete a voice job | To be tested |
-|  | ListAudioJobs | Query the job list | To be tested |
-| Video Moderation | CheckVideoJob | This API is used to query and display the details of a single job. | To be tested |
-|  | DeleteVideoJob | This API is used to delete a specified job. | To be tested |
-|  | CreateVideoJob | This API is used to create a Video Moderation job. | To be tested |
-|  | ListVideoJobs | This API is used to query and display the job list of Video Content Moderation. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">Approve long voice content</td>
+                    <td>CheckAudioJob</td>
+                    <td>This API is used to query and display the details of a single job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAudioJob</td>
+                    <td>This API is used to create a voice content moderation job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDemoInfo</td>
+                    <td>Delete a voice job</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAudioJobs</td>
+                    <td>Query the job list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Video Moderation</td>
+                    <td>CheckVideoJob</td>
+                    <td>This API is used to query and display the details of a single job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteVideoJob</td>
+                    <td>This API is used to delete a specified job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateVideoJob</td>
+                    <td>This API is used to create a Video Moderation job.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListVideoJobs</td>
+                    <td>This API is used to query and display the job list of Video Content Moderation.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

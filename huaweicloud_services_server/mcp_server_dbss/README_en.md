@@ -11,45 +11,223 @@ DBSS MCP Server is a Model Context Protocol (Model Context Protocol) server, pro
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| Audit Agent | DownloadAuditAgent | Download the audit agent | To be tested |
-|  | ListAuditAgent | Query the database agent list | To be tested |
-|  | AddAuditAgent | Adding the audit database agent | To be tested |
-|  | DeleteAuditAgent | Delete the database agent | To be tested |
-|  | SwitchAgent | Enables or disables the Agent audit function. After the function is enabled, the system starts to capture user access information. | To be tested |
-| Audit Database | DeleteAuditDatabase | Delete a database | To be tested |
-|  | AddRdsDatabase | Adding an RDS database | To be tested |
-|  | ListRdsDatabases | Query the RDS database list | To be tested |
-|  | ListAuditDatabases | Query the database list | To be tested |
-|  | SwitchAuditDatabase | Start and shut down the database | To be tested |
-|  | AddAuditDatabase | Adding a self-built database | To be tested |
-| Audit Instance | ListAuditInstanceJobs | Query the instance creation task information | To be tested |
-|  | UpdateAuditSecurityGroup | Modifying the security group of an instance | To be tested |
-|  | RebootAuditInstance | Restart the audit instance | To be tested |
-|  | CreateInstancesPeriodOrder | Creating an audit instance in yearly/monthly billing mode | To be tested |
-|  | StopAuditInstance | Stop the audit instance | To be tested |
-|  | ListAuditInstances | Query the audit instance list | To be tested |
-|  | UpdateAuditInstance | Updates audit instance information | To be tested |
-|  | StartAuditInstance | Enable an audit instance | To be tested |
-| Audit Rule | SwitchRiskRule | Enable or disable risk rules | To be tested |
-|  | ListSqlInjectionRules | Query SQL injection rule policies | To be tested |
-|  | ShowAuditRuleRisk | Query a specified risk rule policy | To be tested |
-|  | ListAuditRuleScopes | Query the audit scope policy list | To be tested |
-|  | ListAuditRuleRisks | Query a risk rule policy | To be tested |
-|  | ListAuditSensitiveMasks | Query the privacy data anonymization rule | To be tested |
-| Data analysis | ListAuditSummaryInfos | Query audit summary information | To be tested |
-|  | ListAuditAlarmLog | Query audit alarm information | To be tested |
-|  | ListAuditSqls | Query the SQL statement for auditing | To be tested |
-| Edge Instance | DeleteInstances | This API is used to delete edge instances in batches. | To be tested |
-| Interface to go offline | AddRdsNoAgentDatabase | Add an RDS database. V1 is no longer maintained and will be brought offline. | To be tested |
-| Query on the management side | ListAvailabilityZoneInfos | Query AZ information | To be tested |
-|  | ShowAuditQuota | Query account quota information | To be tested |
-|  | ListEcsSpecification | Query ECS specifications | To be tested |
-|  | ListAuditOperateLogs | Query user operation logs | To be tested |
-| TMS Label | CountResourceInstanceByTag | Query the number of resource instances by tag | To be tested |
-|  | ListProjectResourceTags | Query project tags | To be tested |
-|  | ListResourceInstanceByTag | Query the resource instance list by tag | To be tested |
-|  | BatchAddResourceTag | Add resource tags in batches | To be tested |
-| Tag Management | BatchDeleteResourceTag | This API is used to delete tags from a specified cluster in batches. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="5">Audit Agent</td>
+                    <td>DownloadAuditAgent</td>
+                    <td>Download the audit agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditAgent</td>
+                    <td>Query the database agent list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddAuditAgent</td>
+                    <td>Adding the audit database agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAuditAgent</td>
+                    <td>Delete the database agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SwitchAgent</td>
+                    <td>Enables or disables the Agent audit function. After the function is enabled, the system starts to capture user access information.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Audit Database</td>
+                    <td>DeleteAuditDatabase</td>
+                    <td>Delete a database</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddRdsDatabase</td>
+                    <td>Adding an RDS database</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRdsDatabases</td>
+                    <td>Query the RDS database list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditDatabases</td>
+                    <td>Query the database list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SwitchAuditDatabase</td>
+                    <td>Start and shut down the database</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddAuditDatabase</td>
+                    <td>Adding a self-built database</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">Audit Instance</td>
+                    <td>ListAuditInstanceJobs</td>
+                    <td>Query the instance creation task information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAuditSecurityGroup</td>
+                    <td>Modifying the security group of an instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RebootAuditInstance</td>
+                    <td>Restart the audit instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateInstancesPeriodOrder</td>
+                    <td>Creating an audit instance in yearly/monthly billing mode</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopAuditInstance</td>
+                    <td>Stop the audit instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditInstances</td>
+                    <td>Query the audit instance list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAuditInstance</td>
+                    <td>Updates audit instance information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartAuditInstance</td>
+                    <td>Enable an audit instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Audit Rule</td>
+                    <td>SwitchRiskRule</td>
+                    <td>Enable or disable risk rules</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSqlInjectionRules</td>
+                    <td>Query SQL injection rule policies</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAuditRuleRisk</td>
+                    <td>Query a specified risk rule policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditRuleScopes</td>
+                    <td>Query the audit scope policy list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditRuleRisks</td>
+                    <td>Query a risk rule policy</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditSensitiveMasks</td>
+                    <td>Query the privacy data anonymization rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Data analysis</td>
+                    <td>ListAuditSummaryInfos</td>
+                    <td>Query audit summary information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditAlarmLog</td>
+                    <td>Query audit alarm information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditSqls</td>
+                    <td>Query the SQL statement for auditing</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Edge Instance</td>
+                    <td>DeleteInstances</td>
+                    <td>This API is used to delete edge instances in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Interface to go offline</td>
+                    <td>AddRdsNoAgentDatabase</td>
+                    <td>Add an RDS database. V1 is no longer maintained and will be brought offline.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Query on the management side</td>
+                    <td>ListAvailabilityZoneInfos</td>
+                    <td>Query AZ information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAuditQuota</td>
+                    <td>Query account quota information</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEcsSpecification</td>
+                    <td>Query ECS specifications</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditOperateLogs</td>
+                    <td>Query user operation logs</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">TMS Label</td>
+                    <td>CountResourceInstanceByTag</td>
+                    <td>Query the number of resource instances by tag</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProjectResourceTags</td>
+                    <td>Query project tags</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResourceInstanceByTag</td>
+                    <td>Query the resource instance list by tag</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchAddResourceTag</td>
+                    <td>Add resource tags in batches</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Tag Management</td>
+                    <td>BatchDeleteResourceTag</td>
+                    <td>This API is used to delete tags from a specified cluster in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

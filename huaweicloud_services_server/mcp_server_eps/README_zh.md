@@ -1,26 +1,91 @@
 # EPS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-EPS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务EPS交互的能力。可以基于自然语言对EPS资源进行全链路管理。
+EPS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service EPS. Full-chain management of EPS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 企业项目管理操作 | ShowEnterpriseProjectQuota | 查询企业项目的配额信息。 | To be tested |
-|  | EnableEnterpriseProject | 启用企业项目。 | To be tested |
-|  | ShowEnterpriseProject | 查询企业项目详情。 | To be tested |
-|  | UpdateEnterpriseProject | 修改企业项目。当前仅支持修改名称和描述。 | To be tested |
-|  | MigrateResource | 迁移资源到目标企业项目。 | To be tested |
-|  | CreateEnterpriseProject | 创建企业项目。 | To be tested |
-|  | DisableEnterpriseProject | 停用企业项目。 | To be tested |
-|  | ShowResourceBindEnterpriseProject | 查询企业项目下绑定的资源详情。 | To be tested |
-|  | ListEnterpriseProject | 查询当前用户已授权的企业项目列表,用户可以使用企业项目绑定资源。 | To be tested |
-| 查询企业项目支持的服务 | ListProviders | 查询企业项目支持的服务 | To be tested |
-| 查询版本操作 | ShowApiVersion | 查询指定的企业项目API版本号详情 | To be tested |
-|  | ListApiVersions | 查询企业项目的API版本列表。 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="9">企业项目管理操作</td>
+                    <td>ShowEnterpriseProjectQuota</td>
+                    <td>查询企业项目的配额信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>EnableEnterpriseProject</td>
+                    <td>启用企业项目。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowEnterpriseProject</td>
+                    <td>查询企业项目详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateEnterpriseProject</td>
+                    <td>修改企业项目。当前仅支持修改名称和描述。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>MigrateResource</td>
+                    <td>迁移资源到目标企业项目。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateEnterpriseProject</td>
+                    <td>创建企业项目。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisableEnterpriseProject</td>
+                    <td>停用企业项目。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResourceBindEnterpriseProject</td>
+                    <td>查询企业项目下绑定的资源详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEnterpriseProject</td>
+                    <td>查询当前用户已授权的企业项目列表,用户可以使用企业项目绑定资源。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">查询标签管理支持的服务</td>
+                    <td>ListProviders</td>
+                    <td>查询标签管理支持的服务。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">查询版本操作</td>
+                    <td>ShowApiVersion</td>
+                    <td>查询指定的标签管理服务API版本号详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListApiVersions</td>
+                    <td>查询标签管理服务的API版本列表。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,16 +1,40 @@
 # STS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-STS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务STS交互的能力。可以基于自然语言对STS资源进行全链路管理。
+STS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service STS. Full-chain management of STS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| AuthorizationResult | DecodeAuthorizationMessage | 解密鉴权失败的原因。 | To be tested |
-| Caller | GetCallerIdentity | 获取调用者(华为云用户,代理等)身份信息。 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">AuthorizationResult</td>
+                    <td>DecodeAuthorizationMessage</td>
+                    <td>解密鉴权失败的原因。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Caller</td>
+                    <td>GetCallerIdentity</td>
+                    <td>获取调用者(华为云用户,代理等)身份信息。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

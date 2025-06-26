@@ -1,53 +1,236 @@
 # DLF MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-DLF MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务DLF交互的能力。可以基于自然语言对DLF资源进行全链路管理。
+DLF MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service DLF. Full-chain management of DLF resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 作业相关的API | ShowJob |  | To be tested |
-|  | CreateJob |  | To be tested |
-|  | ListSystemTasks |  | To be tested |
-|  | ExportJob |  | To be tested |
-|  | RunOnce |  | To be tested |
-|  | RestoreJobInstance |  | To be tested |
-|  | StopJobInstance |  | To be tested |
-|  | ShowFileInfo |  | To be tested |
-|  | DeleteJob |  | To be tested |
-|  | StopJob |  | To be tested |
-|  | ListJobs |  | To be tested |
-|  | UpdateJob |  | To be tested |
-|  | ExportJobList |  | To be tested |
-|  | ImportJob |  | To be tested |
-|  | ShowJobStatus |  | To be tested |
-|  | ShowJobInstance |  | To be tested |
-|  | StartJob |  | To be tested |
-|  | ListJobInstances |  | To be tested |
-| 目录树相关的API | ShowDirectoryTree |  | To be tested |
-| 脚本相关的API | ListScripts |  | To be tested |
-|  | ShowScript |  | To be tested |
-|  | CancelScript |  | To be tested |
-|  | DeleteScript |  | To be tested |
-|  | CreateScript |  | To be tested |
-|  | UpdateScript |  | To be tested |
-|  | ExecuteScript |  | To be tested |
-|  | ListScriptResults |  | To be tested |
-| 资源相关的API | UpdateResource |  | To be tested |
-|  | CreateResource |  | To be tested |
-|  | ShowResource |  | To be tested |
-|  | DeleteResource |  | To be tested |
-|  | ListResources |  | To be tested |
-| 连接相关的API | CreateConnection |  | To be tested |
-|  | UpdateConnection |  | To be tested |
-|  | ExportConnections |  | To be tested |
-|  | ImportConnections |  | To be tested |
-|  | ListConnections |  | To be tested |
-|  | DeleteConnction |  | To be tested |
-|  | ShowConnection |  | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">Job管理</td>
+                    <td>ShowJobStatus</td>
+                    <td>查询job的执行状态。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Resource</td>
+                    <td>ListResources</td>
+                    <td>返回当前租户下特定资源类型的资源,需要当前用户有rms:resources:list权限。比如查询云服务器,对应的RMS资源类型是ecs.cloudservers,其中provider为ecs,type为cloudservers。 RMS支持的服务和资源类型参见[支持的服务和区域](https://console.huaweicloud.com/eps/#/resources/supported)。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">任务中心API</td>
+                    <td>ListJobs</td>
+                    <td>查询管理面任务中心。当前创建图、关闭图、启动图、删除图、增加备份、导入图、导出图、升级图等操作为异步任务,该API用于查询这些任务的详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">任务管理</td>
+                    <td>DeleteJob</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="11">作业相关的API</td>
+                    <td>ListSystemTasks</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportJob</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RunOnce</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RestoreJobInstance</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopJobInstance</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowFileInfo</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExportJobList</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportJob</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowJobInstance</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartJob</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListJobInstances</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">作业管理接口</td>
+                    <td>StopJob</td>
+                    <td>在MRS集群中终止指定作业。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">实例管理</td>
+                    <td>CreateJob</td>
+                    <td>创建单个任务,根据请求参数不同,可以创建单个实时迁移、实时同步、实时灾备等任务。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateJob</td>
+                    <td>更新租户指定ID任务详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">目录树相关的API</td>
+                    <td>ShowDirectoryTree</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">目标连接管理</td>
+                    <td>CreateConnection</td>
+                    <td>创建目标连接。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateConnection</td>
+                    <td>更新目标连接。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListConnections</td>
+                    <td>查询目标连接列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">脚本相关的API</td>
+                    <td>ListScripts</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CancelScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExecuteScript</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListScriptResults</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">资源相关的API</td>
+                    <td>UpdateResource</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateResource</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowResource</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteResource</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">连接相关的API</td>
+                    <td>ExportConnections</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ImportConnections</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteConnction</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowConnection</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">镜像任务</td>
+                    <td>ShowJob</td>
+                    <td>该接口为扩展接口,主要用于查询异步接口执行情况,比如查询导出镜像任务的执行状态。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

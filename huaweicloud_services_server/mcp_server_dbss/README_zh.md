@@ -1,53 +1,233 @@
 # DBSS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-DBSS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务DBSS交互的能力。可以基于自然语言对DBSS资源进行全链路管理。
+DBSS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service DBSS. Full-chain management of DBSS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| TMS标签 | BatchDeleteResourceTag | 批量删除资源标签 | To be tested |
-|  | CountResourceInstanceByTag | 根据标签查询资源实例数量 | To be tested |
-|  | ListProjectResourceTags | 查询项目标签 | To be tested |
-|  | ListResourceInstanceByTag | 根据标签查询资源实例列表 | To be tested |
-|  | BatchAddResourceTag | 批量添加资源标签 | To be tested |
-| 审计Agent | DownloadAuditAgent | 下载审计Agent | To be tested |
-|  | ListAuditAgent | 查询数据库Agent列表 | To be tested |
-|  | AddAuditAgent | 添加审计数据库Agent | To be tested |
-|  | DeleteAuditAgent | 删除数据库Agent | To be tested |
-|  | SwitchAgent | 用于开启和关闭Agent审计的功能,当开启后,开始抓取用户的访问信息。 | To be tested |
-| 审计实例 | ListAuditInstanceJobs | 查询实例创建任务信息 | To be tested |
-|  | DeleteInstances | 只有按需计费模式实例没有任务时 或 包周期模式实例状态为故障时,才能执行此操作。 | To be tested |
-|  | UpdateAuditSecurityGroup | 修改实例安全组 | To be tested |
-|  | RebootAuditInstance | 重启审计实例 | To be tested |
-|  | CreateInstancesPeriodOrder | 包年包月计费模式创建审计实例 | To be tested |
-|  | StopAuditInstance | 关闭审计实例 | To be tested |
-|  | ListAuditInstances | 查询审计实例列表 | To be tested |
-|  | UpdateAuditInstance | 更新审计实例信息 | To be tested |
-|  | StartAuditInstance | 开启审计实例 | To be tested |
-| 审计数据库 | DeleteAuditDatabase | 删除数据库 | To be tested |
-|  | AddRdsDatabase | 添加RDS数据库 | To be tested |
-|  | ListRdsDatabases | 查询RDS数据库列表 | To be tested |
-|  | ListAuditDatabases | 查询数据库列表 | To be tested |
-|  | SwitchAuditDatabase | 开启关闭数据库 | To be tested |
-|  | AddAuditDatabase | 添加自建数据库 | To be tested |
-| 审计规则 | SwitchRiskRule | 开启关闭风险规则 | To be tested |
-|  | ListSqlInjectionRules | 查询SQL注入规则策略 | To be tested |
-|  | ShowAuditRuleRisk | 查询指定风险规则策略 | To be tested |
-|  | ListAuditRuleScopes | 查询审计范围策略列表 | To be tested |
-|  | ListAuditRuleRisks | 查询风险规则策略 | To be tested |
-|  | ListAuditSensitiveMasks | 查询隐私数据脱敏规则 | To be tested |
-| 待下线接口 | AddRdsNoAgentDatabase | 添加RDS数据库。V1版本已不再维护,待下线。 | To be tested |
-| 数据分析 | ListAuditSummaryInfos | 查询审计汇总信息 | To be tested |
-|  | ListAuditAlarmLog | 查询审计告警信息 | To be tested |
-|  | ListAuditSqls | 查询审计SQL语句 | To be tested |
-| 管理侧查询 | ListAvailabilityZoneInfos | 查询可用区信息 | To be tested |
-|  | ShowAuditQuota | 查询账户配额信息 | To be tested |
-|  | ListEcsSpecification | 查询ECS服务器规格信息 | To be tested |
-|  | ListAuditOperateLogs | 查询用户操作日志信息 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">TMS标签</td>
+                    <td>CountResourceInstanceByTag</td>
+                    <td>根据标签查询资源实例数量</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListProjectResourceTags</td>
+                    <td>查询项目标签</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListResourceInstanceByTag</td>
+                    <td>根据标签查询资源实例列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchAddResourceTag</td>
+                    <td>批量添加资源标签</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">审计Agent</td>
+                    <td>DownloadAuditAgent</td>
+                    <td>下载审计Agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditAgent</td>
+                    <td>查询数据库Agent列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddAuditAgent</td>
+                    <td>添加审计数据库Agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAuditAgent</td>
+                    <td>删除数据库Agent</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SwitchAgent</td>
+                    <td>用于开启和关闭Agent审计的功能,当开启后,开始抓取用户的访问信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">审计实例</td>
+                    <td>ListAuditInstanceJobs</td>
+                    <td>查询实例创建任务信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAuditSecurityGroup</td>
+                    <td>修改实例安全组</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RebootAuditInstance</td>
+                    <td>重启审计实例</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateInstancesPeriodOrder</td>
+                    <td>包年包月计费模式创建审计实例</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopAuditInstance</td>
+                    <td>关闭审计实例</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditInstances</td>
+                    <td>查询审计实例列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAuditInstance</td>
+                    <td>更新审计实例信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartAuditInstance</td>
+                    <td>开启审计实例</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">审计数据库</td>
+                    <td>DeleteAuditDatabase</td>
+                    <td>删除数据库</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddRdsDatabase</td>
+                    <td>添加RDS数据库</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListRdsDatabases</td>
+                    <td>查询RDS数据库列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditDatabases</td>
+                    <td>查询数据库列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SwitchAuditDatabase</td>
+                    <td>开启关闭数据库</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>AddAuditDatabase</td>
+                    <td>添加自建数据库</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">审计规则</td>
+                    <td>SwitchRiskRule</td>
+                    <td>开启关闭风险规则</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListSqlInjectionRules</td>
+                    <td>查询SQL注入规则策略</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAuditRuleRisk</td>
+                    <td>查询指定风险规则策略</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditRuleScopes</td>
+                    <td>查询审计范围策略列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditRuleRisks</td>
+                    <td>查询风险规则策略</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditSensitiveMasks</td>
+                    <td>查询隐私数据脱敏规则</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">待下线接口</td>
+                    <td>AddRdsNoAgentDatabase</td>
+                    <td>添加RDS数据库。V1版本已不再维护,待下线。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">数据分析</td>
+                    <td>ListAuditSummaryInfos</td>
+                    <td>查询审计汇总信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditAlarmLog</td>
+                    <td>查询审计告警信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditSqls</td>
+                    <td>查询审计SQL语句</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">标签管理</td>
+                    <td>BatchDeleteResourceTag</td>
+                    <td>为指定集群批量删除标签。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">管理侧查询</td>
+                    <td>ListAvailabilityZoneInfos</td>
+                    <td>查询可用区信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAuditQuota</td>
+                    <td>查询账户配额信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEcsSpecification</td>
+                    <td>查询ECS服务器规格信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAuditOperateLogs</td>
+                    <td>查询用户操作日志信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">边缘实例</td>
+                    <td>DeleteInstances</td>
+                    <td>批量删除边缘实例。</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

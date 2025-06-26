@@ -1,25 +1,88 @@
 # EDS MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-EDS MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务EDS交互的能力。可以基于自然语言对EDS资源进行全链路管理。
+EDS MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service EDS. Full-chain management of EDS resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| offer | ListOffers | 查询指定连接器下的offer列表 | To be tested |
-|  | ShowOffer | 查询指定offer详情 | To be tested |
-| user | AddConnectorUser | 分配子账号 | To be tested |
-|  | DeleteConnectorUser | 账号回收 | To be tested |
-| 合约 | CommitContract | 提交合约 | To be tested |
-|  | CancelContract | 终止合约 | To be tested |
-|  | ShowContract | 查询合约 | To be tested |
-| 审计日志 | ShowAuditLog | 查询数据资产的审计日志 | To be tested |
-| 连接器 | ShowConnector | 查询指定租户的连接器详情 | To be tested |
-|  | ListConnectorsByInstanceUser | 按空间用户查询连接器列表 | To be tested |
-|  | ListConnectorsByInstanceManger | 按空间管理员查询连接器列表 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="2">offer</td>
+                    <td>ListOffers</td>
+                    <td>查询指定连接器下的offer列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowOffer</td>
+                    <td>查询指定offer详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">user</td>
+                    <td>AddConnectorUser</td>
+                    <td>分配子账号</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteConnectorUser</td>
+                    <td>账号回收</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">合约</td>
+                    <td>CommitContract</td>
+                    <td>提交合约</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CancelContract</td>
+                    <td>终止合约</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowContract</td>
+                    <td>查询合约</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">审计日志</td>
+                    <td>ShowAuditLog</td>
+                    <td>查询数据资产的审计日志</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">连接器</td>
+                    <td>ShowConnector</td>
+                    <td>查询指定租户的连接器详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListConnectorsByInstanceUser</td>
+                    <td>按空间用户查询连接器列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListConnectorsByInstanceManger</td>
+                    <td>按空间管理员查询连接器列表</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

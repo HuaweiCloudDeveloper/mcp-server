@@ -11,10 +11,41 @@ DSS MCP Server is a Model Context Protocol (Model Context Protocol) server, prov
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| Backend ECS group | ShowPool | Query details about a backend ECS group based on the specified ID. | To be tested |
-|  | ListPools | Query the list of backend ECS groups. | To be tested |
-| Query the API version information about the CMK | ShowVersions | - Function description: This API is used to query the API version list. | To be tested |
-| Query version operation | ListVersion | Query the SMN API V2 version information. | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="2">Backend ECS group</td>
+                    <td>ShowPool</td>
+                    <td>Query details about a backend ECS group based on the specified ID.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPools</td>
+                    <td>Query the list of backend ECS groups.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Query the API version information about the CMK</td>
+                    <td>ShowVersions</td>
+                    <td>- Function description: This API is used to query the API version list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Query version operation</td>
+                    <td>ListVersion</td>
+                    <td>Query the SMN API V2 version information.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

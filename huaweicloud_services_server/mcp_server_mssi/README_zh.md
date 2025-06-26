@@ -1,30 +1,112 @@
 # MSSI MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-MSSI MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务MSSI交互的能力。可以基于自然语言对MSSI资源进行全链路管理。
+MSSI MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service MSSI. Full-chain management of MSSI resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 流 | ShowAllFlows | 查询所有Flow | To be tested |
-|  | SearchFlowById | 查询特定flow | To be tested |
-|  | CreateFlow | 创建flow | To be tested |
-|  | DeleteFlow | 删除Flow | To be tested |
-|  | UpdateFlow | 更新flow | To be tested |
-| 流模板 | CreateFlowTemplateFromFlow |  | To be tested |
-| 连接 | UpdateConnectionInfo |  | To be tested |
-|  | ShowSingleConnection | 查询单个连接 | To be tested |
-|  | ShowAllConnections | 查询所有连接 | To be tested |
-|  | CreateConnectionInfo | 新建连接 | To be tested |
-|  | DeleteConnectionInfo | 删除Connection | To be tested |
-| 连接器 | DeleteCustomConnector | 删除自定义连接器 | To be tested |
-|  | ShowCustomConnectors | 查询CustomConnector列表 | To be tested |
-|  | ShowCustomConnector | 发布连接器 | To be tested |
-|  | ShowConnectors | 查询Connector列表 | To be tested |
-|  | CreateCustomConnectorFromOpenapi | 新建自定义连接器(导入swagger方式) | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="5">流</td>
+                    <td>ShowAllFlows</td>
+                    <td>查询所有Flow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>SearchFlowById</td>
+                    <td>查询特定flow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateFlow</td>
+                    <td>创建flow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteFlow</td>
+                    <td>删除Flow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateFlow</td>
+                    <td>更新flow</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">流模板</td>
+                    <td>CreateFlowTemplateFromFlow</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">连接</td>
+                    <td>UpdateConnectionInfo</td>
+                    <td></td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowSingleConnection</td>
+                    <td>查询单个连接</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAllConnections</td>
+                    <td>查询所有连接</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateConnectionInfo</td>
+                    <td>新建连接</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteConnectionInfo</td>
+                    <td>删除Connection</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">连接器</td>
+                    <td>DeleteCustomConnector</td>
+                    <td>删除自定义连接器</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowCustomConnectors</td>
+                    <td>查询CustomConnector列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowCustomConnector</td>
+                    <td>发布连接器</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowConnectors</td>
+                    <td>查询Connector列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateCustomConnectorFromOpenapi</td>
+                    <td>新建自定义连接器(导入swagger方式)</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

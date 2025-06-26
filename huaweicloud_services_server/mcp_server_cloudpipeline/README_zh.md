@@ -1,35 +1,139 @@
 # CloudPipeline MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-CloudPipeline MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务CloudPipeline交互的能力。可以基于自然语言对CloudPipeline资源进行全链路管理。
+CloudPipeline MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service CloudPipeline. Full-chain management of CloudPipeline resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 模板管理 | ListTemplates | 查询模板列表,支持分页查询,支持模板名字模糊查询 | To be tested |
-|  | ShowTemplateDetail | 查询模板详情 | To be tested |
-| 流水线模板管理--新 | ListPipelineTemplates | 查询流水线模板列表 | To be tested |
-|  | ShowPipelineTemplateDetail | 查询模板详情 | To be tested |
-| 流水线管理 | CreatePipelineByTemplate | 基于模板快速创建流水线及流水线内任务 | To be tested |
-|  | ListPipleineBuildResult | 获取项目下流水线执行状况 | To be tested |
-|  | StartNewPipeline | 启动流水线 | To be tested |
-|  | ShowPipleineStatus | 获取流水线状态,阶段及任务信息 | To be tested |
-|  | RemovePipeline | 根据id删除流水线 | To be tested |
-|  | StopPipelineNew | 停止流水线 | To be tested |
-|  | ShowInstanceStatus | 检查流水线创建状态 | To be tested |
-|  | BatchShowPipelinesStatus | 批量获取流水线状态和阶段信息 | To be tested |
-|  | ListPipelineSimpleInfo | 获取流水线列表接口 | To be tested |
-| 流水线管理--新 | CreatePipelineByTemplateId | 基于模板创建流水线 | To be tested |
-|  | StopPipelineRun | 停止流水线 | To be tested |
-|  | ListPipelines | 获取流水线列表/获取项目下流水线执行状况 | To be tested |
-|  | BatchShowPipelinesLatestStatus | 批量获取流水线状态 | To be tested |
-|  | ListPipelineRuns | 获取流水线执行记录 | To be tested |
-|  | DeletePipeline | 删除流水线 | To be tested |
-|  | ShowPipelineRunDetail | 获取流水线状态/获取流水线执行详情 | To be tested |
-|  | RunPipeline | 启动流水线 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">Logstash接口</td>
+                    <td>ListPipelines</td>
+                    <td>该接口用于查询pipeline列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">模板管理</td>
+                    <td>ShowTemplateDetail</td>
+                    <td>查询模板详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">流水线模板管理--新</td>
+                    <td>ListPipelineTemplates</td>
+                    <td>查询流水线模板列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipelineTemplateDetail</td>
+                    <td>查询模板详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="9">流水线管理</td>
+                    <td>CreatePipelineByTemplate</td>
+                    <td>基于模板快速创建流水线及流水线内任务</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipleineBuildResult</td>
+                    <td>获取项目下流水线执行状况</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StartNewPipeline</td>
+                    <td>启动流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipleineStatus</td>
+                    <td>获取流水线状态,阶段及任务信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RemovePipeline</td>
+                    <td>根据id删除流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopPipelineNew</td>
+                    <td>停止流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowInstanceStatus</td>
+                    <td>检查流水线创建状态</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchShowPipelinesStatus</td>
+                    <td>批量获取流水线状态和阶段信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipelineSimpleInfo</td>
+                    <td>获取流水线列表接口</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">流水线管理--新</td>
+                    <td>CreatePipelineByTemplateId</td>
+                    <td>基于模板创建流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>StopPipelineRun</td>
+                    <td>停止流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>BatchShowPipelinesLatestStatus</td>
+                    <td>批量获取流水线状态</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPipelineRuns</td>
+                    <td>获取流水线执行记录</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePipeline</td>
+                    <td>删除流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPipelineRunDetail</td>
+                    <td>获取流水线状态/获取流水线执行详情</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RunPipeline</td>
+                    <td>启动流水线</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">项目信息</td>
+                    <td>ListTemplates</td>
+                    <td>查询项目模板</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

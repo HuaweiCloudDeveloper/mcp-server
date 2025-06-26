@@ -1,18 +1,49 @@
 # ASM MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-ASM MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务ASM交互的能力。可以基于自然语言对ASM资源进行全链路管理。
+ASM MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service ASM. Full-chain management of ASM resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| 网格接口 | DeleteMesh | 该API用于删除一个指定的网格 | To be tested |
-|  | ShowMesh | 该API用于获取指定网格的详细信息 | To be tested |
-|  | ListMeshes | 该API用于获取用户所有网格的详细信息 | To be tested |
-|  | CreateMesh | 该API用于创建一个网格 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">网格接口</td>
+                    <td>DeleteMesh</td>
+                    <td>该API用于删除一个指定的网格</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowMesh</td>
+                    <td>该API用于获取指定网格的详细信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListMeshes</td>
+                    <td>该API用于获取用户所有网格的详细信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateMesh</td>
+                    <td>该API用于创建一个网格</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

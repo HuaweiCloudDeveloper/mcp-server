@@ -1,70 +1,326 @@
 # DDM MCP Server 
 
-## 版本信息
+
+## Version
 v0.1.0
 
-## 产品描述
+## Overview
 
-DDM MCP Server 是一个模型上下文协议(Model Context Protocol)服务器，为MCP客户端(如Claude Desktop、Cline、Cursor)提供与华为云服务DDM交互的能力。可以基于自然语言对DDM资源进行全链路管理。
+DDM MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service DDM. Full-chain management of DDM resources can be carried out based on natural language.
 
-## 可用工具
-覆盖全量API, 按需使用，列表以及状态如下：
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| DDM会话管理 | ExecuteKillPhysicalProcesses | kill物理会话 | To be tested |
-|  | ShowProcessesAuditLog | 查询kill会话审计日志 | To be tested |
-|  | ShowLogicalProcesses | 查询逻辑会话列表 | To be tested |
-|  | ShowPhysicalProcesses | 查询物理会话列表 | To be tested |
-|  | ExecuteKillLogicalProcesses | kill逻辑会话 | To be tested |
-| DDM实例管理 | ShrinkInstanceNodes | 对指定的DDM实例的节点个数进行缩容。 | To be tested |
-|  | CreateInstance | 创建一个DDM实例。 | To be tested |
-|  | UpdateReadAndWriteStrategy | 修改DDM已关联的数据库实例的读策略。 | To be tested |
-|  | RestartInstance | 重启指定的DDM实例。 | To be tested |
-|  | ExpandDdmInstanceNodes | 对指定的DDM实例的节点个数进行扩容,支持按需实例与包周期实例。 | To be tested |
-|  | ListInstances | 查询DDM实例列表。 | To be tested |
-|  | ShowInstanceParam | 查询DDM指定实例的参数详情。 | To be tested |
-|  | ListDdmEngines | 查询DDM引擎信息 | To be tested |
-|  | ListNodes | 查询DDM实例节点列表。 | To be tested |
-|  | UpdateDatabaseInfo | 同步当前DDM实例已关联的所有DN实例配置信息。 | To be tested |
-|  | SwitchSsl | 为实例设置SSL数据加密。 | To be tested |
-|  | ShowInstance | 查询指定DDM实例的详细信息。 | To be tested |
-|  | ShowNode | 查询DDM实例节点详情。 | To be tested |
-|  | CreateGroup | 创建组 | To be tested |
-|  | UpdateInstanceParam | 修改DDM实例参数。 | To be tested |
-|  | UpdateInstanceSecurityGroup | 修改DDM实例安全组。 | To be tested |
-|  | ShowDdmJobResult | 获取指定ID的任务信息 | To be tested |
-|  | ListGroup | 获取实例组信息列表 | To be tested |
-|  | DeleteInstance | 删除指定的DDM实例,释放该实例的所有资源。 | To be tested |
-|  | ResizeFlavor | 变更DDM实例规格。 | To be tested |
-|  | ListDdmFlavors | 查询DDM可用区规格信息 | To be tested |
-|  | ListFlavors | 查询DDM可用区规格信息详情。 | To be tested |
-|  | ListEngines | 查询DDM引擎信息详情。 | To be tested |
-|  | DeleteDdmInstance | 删除指定的DDM实例,释放该实例的所有资源。 | To be tested |
-|  | RebuildConfig | DDM实例跨region容灾场景下,针对目标DDM实例实现表数据reload,使数据同步。 | To be tested |
-|  | ExpandInstanceNodes | 对指定的DDM实例的节点个数进行扩容,支持按需实例与包周期实例。 | To be tested |
-|  | UpdateInstanceName | 修改DDM实例名称。 | To be tested |
-| DDM帐号管理 | ResetAdministrator | 首次调用时新建DDM管理员帐号并设置密码。后续调用时仅更新管理员密码。 | To be tested |
-|  | ResetUserPassword | 重置现有DDM帐号的密码。 | To be tested |
-|  | CreateUsers | DDM帐号用于连接和管理逻辑库。一个DDM实例最多能创建100个DDM帐号,一个DDM帐号可以关联多个逻辑库。 | To be tested |
-|  | UpdateUser | 修改现有DDM帐号的权限或者与逻辑库的管理关系。 | To be tested |
-|  | ValidateWeakPassword | 弱密码校验 | To be tested |
-|  | ListUsers | 查询DDM帐号列表。 | To be tested |
-|  | DeleteUser | 删除指定的DDM实例帐号,如果帐号关联了逻辑库,则对应的关联关系也会删除。 | To be tested |
-| DDM监控管理 | ListSlowLog | 查询指定时间段内在DDM实例上执行过的慢sql相关信息。 | To be tested |
-|  | ListReadWriteRatio | 查询指定时间段内在DDM实例的读写次数。 | To be tested |
-|  | ListSlowLogs | 查询指定时间段内在DDM实例上执行过的慢sql相关信息。 | To be tested |
-| DDM逻辑库管理 | DeleteDatabase | 删除指定的逻辑库,释放该逻辑库的所有资源。 | To be tested |
-|  | ListDatabases | 查询DDM逻辑库列表。 | To be tested |
-|  | ShowDatabase | 查询指定逻辑库的详细信息。 | To be tested |
-|  | CreateDdmDatabase | 创建DDM逻辑库。 | To be tested |
-|  | ListAvailableRdsList | 查询创建逻辑库可选取的数据库实例列表。 | To be tested |
-|  | CreateDatabase | 创建DDM逻辑库。 | To be tested |
-|  | DeleteDdmDatabase | 删除指定的逻辑库。 | To be tested |
-| 参数配置 | ListDdmConfigurations | 获取参数模板列表,包括所有DDM的默认参数模板和用户创建的参数模板。 | To be tested |
-|  | ShowConfiguration | 获取指定参数模板的参数 | To be tested |
-| 查询API版本 | ListApiVersion | 查询API版本列表。 | To be tested |
-| 版本管理 | ChangeDatabaseVersion | 变更内核版本 | To be tested |
-|  | ShowRiskInfo | 内核版本风险提醒 | To be tested |
-|  | ListDatabaseAvailableVersions | 查询可变更内核版本 | To be tested |
-|  | RollBackDatabaseVersion | 回滚内核版本 | To be tested |
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="5">DDM会话管理</td>
+                    <td>ExecuteKillPhysicalProcesses</td>
+                    <td>kill物理会话</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowProcessesAuditLog</td>
+                    <td>查询kill会话审计日志</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowLogicalProcesses</td>
+                    <td>查询逻辑会话列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPhysicalProcesses</td>
+                    <td>查询物理会话列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExecuteKillLogicalProcesses</td>
+                    <td>kill逻辑会话</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="17">DDM实例管理</td>
+                    <td>UpdateReadAndWriteStrategy</td>
+                    <td>修改DDM已关联的数据库实例的读策略。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExpandDdmInstanceNodes</td>
+                    <td>对指定的DDM实例的节点个数进行扩容,支持按需实例与包周期实例。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowInstanceParam</td>
+                    <td>查询DDM指定实例的参数详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDdmEngines</td>
+                    <td>查询DDM引擎信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateDatabaseInfo</td>
+                    <td>同步当前DDM实例已关联的所有DN实例配置信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowNode</td>
+                    <td>查询DDM实例节点详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateGroup</td>
+                    <td>创建组</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateInstanceParam</td>
+                    <td>修改DDM实例参数。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateInstanceSecurityGroup</td>
+                    <td>修改DDM实例安全组。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowDdmJobResult</td>
+                    <td>获取指定ID的任务信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListGroup</td>
+                    <td>获取实例组信息列表</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResizeFlavor</td>
+                    <td>变更DDM实例规格。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDdmFlavors</td>
+                    <td>查询DDM可用区规格信息</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListEngines</td>
+                    <td>查询DDM引擎信息详情。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDdmInstance</td>
+                    <td>删除指定的DDM实例,释放该实例的所有资源。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RebuildConfig</td>
+                    <td>DDM实例跨region容灾场景下,针对目标DDM实例实现表数据reload,使数据同步。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ExpandInstanceNodes</td>
+                    <td>对指定的DDM实例的节点个数进行扩容,支持按需实例与包周期实例。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">DDM帐号管理</td>
+                    <td>ResetAdministrator</td>
+                    <td>首次调用时新建DDM管理员帐号并设置密码。后续调用时仅更新管理员密码。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ResetUserPassword</td>
+                    <td>重置现有DDM帐号的密码。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateUsers</td>
+                    <td>DDM帐号用于连接和管理逻辑库。一个DDM实例最多能创建100个DDM帐号,一个DDM帐号可以关联多个逻辑库。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">DDM监控管理</td>
+                    <td>ListSlowLog</td>
+                    <td>查询指定时间段内在DDM实例上执行过的慢sql相关信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListReadWriteRatio</td>
+                    <td>查询指定时间段内在DDM实例的读写次数。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">DDM逻辑库管理</td>
+                    <td>ShowDatabase</td>
+                    <td>查询指定逻辑库的详细信息。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDdmDatabase</td>
+                    <td>创建DDM逻辑库。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAvailableRdsList</td>
+                    <td>查询创建逻辑库可选取的数据库实例列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDdmDatabase</td>
+                    <td>删除指定的逻辑库。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">OpenStack - API版本信息</td>
+                    <td>ListApiVersion</td>
+                    <td>返回当前API所有可用的版本(仅针对OpenStack原生接口)。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">参数配置</td>
+                    <td>ListDdmConfigurations</td>
+                    <td>获取参数模板列表,包括所有DDM的默认参数模板和用户创建的参数模板。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowConfiguration</td>
+                    <td>获取指定参数模板的参数。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">实例管理</td>
+                    <td>ShrinkInstanceNodes</td>
+                    <td>删除实例的节点。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RestartInstance</td>
+                    <td>重启指定实例。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ValidateWeakPassword</td>
+                    <td>校验数据库root用户密码的安全性。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateInstanceName</td>
+                    <td>修改实例名称。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">引擎版本和规格</td>
+                    <td>ListFlavors</td>
+                    <td>查询数据库规格。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">数据库安全性</td>
+                    <td>SwitchSsl</td>
+                    <td>设置SSL数据加密。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">版本管理</td>
+                    <td>ChangeDatabaseVersion</td>
+                    <td>变更内核版本</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowRiskInfo</td>
+                    <td>内核版本风险提醒</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDatabaseAvailableVersions</td>
+                    <td>查询可变更内核版本</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RollBackDatabaseVersion</td>
+                    <td>回滚内核版本</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">独享实例管理</td>
+                    <td>CreateInstance</td>
+                    <td>创建WAF独享引擎实例。独享模式支持的局点包括:华东-青岛、中东-利雅得、华北-北京一、华北-北京四、华北-乌兰察布一、华东-上海一、华东-上海二、华南-广州、华南-深圳、中国-香港、西南-贵阳一、亚太-曼谷、 亚太-新加坡、非洲约翰内斯堡、土耳其-伊斯坦布尔;普通租户类独享支持的局点:华北-北京四、华东-上海一、华南-广州、中国-香港、亚太-曼谷、 亚太-新加坡。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowInstance</td>
+                    <td>查询WAF独享引擎信息。独享模式只在部分局点支持,包括:华北-北京四、华东-上海一、华南-广州、华南-深圳 、中国-香港、亚太-曼谷、 亚太-新加坡。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteInstance</td>
+                    <td>删除WAF独享引擎信息。独享模式只在部分局点支持,包括:华北-北京四、华东-上海一、华南-广州、华南-深圳 、中国-香港、亚太-曼谷、 亚太-新加坡。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">生命周期管理</td>
+                    <td>ListInstances</td>
+                    <td>查询租户的实例列表,支持按照条件查询。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">用户管理</td>
+                    <td>UpdateUser</td>
+                    <td>修改用户参数。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteUser</td>
+                    <td>删除用户。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">管理数据库和用户(MySQL)</td>
+                    <td>DeleteDatabase</td>
+                    <td>删除数据库。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDatabases</td>
+                    <td>查询数据库列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDatabase</td>
+                    <td>创建数据库。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">联盟管理</td>
+                    <td>ListNodes</td>
+                    <td>功能描述:用户可以使用该接口查询联盟可信节点(包含聚合节点和计算节点)列表。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">获取日志信息</td>
+                    <td>ListSlowLogs</td>
+                    <td>查询数据库慢日志。</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">资产管理</td>
+                    <td>ListUsers</td>
+                    <td>查询账号的服务器列表</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

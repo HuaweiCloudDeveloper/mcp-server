@@ -11,67 +11,336 @@ SA MCP Server is a Model Context Protocol (Model Context Protocol) server, provi
 ## Available Tools
 Cover all apis, use as needed, the list and status are as follows:
 
-| 类别 | 工具名称 | 功能描述 | 状态 |
-| --- | --- | --- | --- |
-| AlertRules | EnableAlertRule | Enable alert rule | To be tested |
-|  | CreateAlertRuleSimulation | Simulate alert rule | To be tested |
-|  | ListAlertRules | List alert rules | To be tested |
-|  | ShowAlertRuleTemplate | List alert rule templates | To be tested |
-|  | DeleteAlertRule | Delete alert rule | To be tested |
-|  | DisableAlertRule | Disable alert rule | To be tested |
-|  | ShowAlertRule | Get alert rule | To be tested |
-|  | CreateAlertRule | Create alert rule | To be tested |
-|  | ListAlertRuleTemplates | List alert rule templates | To be tested |
-|  | ListAlertRuleMetrics | List alert rule metrics | To be tested |
-|  | UpdateAlertRule | Update alert rule | To be tested |
-| Alerts | ChangeAlert | Edit the alarm and update the alarm based on the actual attribute modification. Columns that are not modified are not updated. | To be tested |
-|  | ShowAlert | Obtain alarm details | To be tested |
-|  | CreateAlert | Create alarm | To be tested |
-|  | DeleteAlert | Delete an alarm | To be tested |
-|  | CreateBatchOrderAlerts | Converting an alarm to an event | To be tested |
-|  | ListAlerts | Searching for alarms | To be tested |
-| Event management | ImportEvents | A maximum of 50 data records can be reported in batches. | To be tested |
-| Incidents | CreateIncident | Create Event | To be tested |
-|  | DeleteIncident | Create Event | To be tested |
-|  | ListIncidents | Search event list | To be tested |
-|  | ShowIncident | Obtain event details | To be tested |
-|  | ListIncidentTypes | Obtain the event type list | To be tested |
-|  | ChangeIncident | Edit the event. Update the attribute based on the actual modification. Columns that are not modified are not updated. | To be tested |
-| Indicator | ShowIndicatorDetail | Query indicator details (only CN East-Shanghai1) | To be tested |
-|  | CreateIndicator | Create an indicator (only CN East-Shanghai1) | To be tested |
-|  | UpdateIndicator | Update metrics (only CN East-Shanghai1) | To be tested |
-|  | DeleteIndicator | Delete an indicator (only for CN East-Shanghai1) | To be tested |
-|  | ListIndicators | List all indicators | To be tested |
-| Playbook | ListPlaybooks | List all playbooks. | To be tested |
-|  | ShowPlaybookStatistics | Screenplay statistics | To be tested |
-|  | DeletePlaybook | Delete playbook. | To be tested |
-|  | ShowPlaybookMonitors | Monitoring script running | To be tested |
-|  | ShowPlaybook | Show playbook | To be tested |
-|  | UpdatePlaybook | Update playbook. | To be tested |
-|  | CreatePlaybook | Create playbook. | To be tested |
-| Playbook action | UpdatePlaybookAction | Update action. | To be tested |
-|  | ListPlaybookActions | List all actions. | To be tested |
-|  | CreatePlaybookAction | Create action. | To be tested |
-|  | DeletePlaybookAction | Delete action. | To be tested |
-| Playbook approve | ListPlaybookApproves | List approves. | To be tested |
-|  | CreatePlaybookApprove | Create playbook approve. | To be tested |
-| Playbook instance | ShowPlaybookInstance | Show playbook instance | To be tested |
-|  | ShowPlaybookTopology | Show playbook Topology | To be tested |
-|  | ListPlaybookAuditLogs | List audit logs. | To be tested |
-|  | ChangePlaybookInstance | Operation Playbook Instance. | To be tested |
-|  | ListPlaybookInstances | List playbook instances | To be tested |
-| Playbook rule | UpdatePlaybookRule | Update rule. | To be tested |
-|  | CreatePlaybookRule | Create rule. | To be tested |
-|  | DeletePlaybookRule | Delete rule. | To be tested |
-|  | ShowPlaybookRule | Show rule formation. | To be tested |
-| Playbook version | UpdatePlaybookVersion | Update playbook version. | To be tested |
-|  | CreatePlaybookVersion | Create playbook version. | To be tested |
-|  | ShowPlaybookVersion | Show playbook version version | To be tested |
-|  | ListPlaybookVersions | List all versions of playbook. | To be tested |
-|  | DeletePlaybookVersion | Delete playbook version. | To be tested |
-|  | CopyPlaybookVersion | Copy Playbook and version to a new one | To be tested |
-| Product Management | CheckProductHealthy | The SA provides the heartbeat interface. Integration products send heartbeat packets to the situational awareness at a scheduled time (every 5 minutes) to check whether the path between integration products and SA is normal. | To be tested |
-| Relation | ListDataobjectRelation | List Dataobject Relation | To be tested |
-|  | CreateDataobjectRelation | Create Dataobject Relation | To be tested |
-|  | DeleteDataobjectRelation | Delete Dataobject Relation | To be tested |
-
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="11">AlertRules</td>
+                    <td>EnableAlertRule</td>
+                    <td>Enable alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAlertRuleSimulation</td>
+                    <td>Simulate alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAlertRules</td>
+                    <td>List alert rules</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAlertRuleTemplate</td>
+                    <td>List alert rule templates</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAlertRule</td>
+                    <td>Delete alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DisableAlertRule</td>
+                    <td>Disable alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAlertRule</td>
+                    <td>Get alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAlertRule</td>
+                    <td>Create alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAlertRuleTemplates</td>
+                    <td>List alert rule templates</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAlertRuleMetrics</td>
+                    <td>List alert rule metrics</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAlertRule</td>
+                    <td>Update alert rule</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Alerts</td>
+                    <td>ChangeAlert</td>
+                    <td>Edit the alarm and update the alarm based on the actual attribute modification. Columns that are not modified are not updated.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAlert</td>
+                    <td>Obtain alarm details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAlert</td>
+                    <td>Create alarm</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAlert</td>
+                    <td>Delete an alarm</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateBatchOrderAlerts</td>
+                    <td>Converting an alarm to an event</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAlerts</td>
+                    <td>Searching for alarms</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Event management</td>
+                    <td>ImportEvents</td>
+                    <td>A maximum of 50 data records can be reported in batches.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Incidents</td>
+                    <td>CreateIncident</td>
+                    <td>Create Event</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteIncident</td>
+                    <td>Create Event</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListIncidents</td>
+                    <td>Search event list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowIncident</td>
+                    <td>Obtain event details</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListIncidentTypes</td>
+                    <td>Obtain the event type list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ChangeIncident</td>
+                    <td>Edit the event. Update the attribute based on the actual modification. Columns that are not modified are not updated.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Indicator</td>
+                    <td>ShowIndicatorDetail</td>
+                    <td>Query indicator details (only CN East-Shanghai1)</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateIndicator</td>
+                    <td>Create an indicator (only CN East-Shanghai1)</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateIndicator</td>
+                    <td>Update metrics (only CN East-Shanghai1)</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteIndicator</td>
+                    <td>Delete an indicator (only for CN East-Shanghai1)</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListIndicators</td>
+                    <td>List all indicators</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Playbook</td>
+                    <td>ListPlaybooks</td>
+                    <td>List all playbooks.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybookStatistics</td>
+                    <td>Screenplay statistics</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePlaybook</td>
+                    <td>Delete playbook.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybookMonitors</td>
+                    <td>Monitoring script running</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybook</td>
+                    <td>Show playbook</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdatePlaybook</td>
+                    <td>Update playbook.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlaybook</td>
+                    <td>Create playbook.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Playbook action</td>
+                    <td>UpdatePlaybookAction</td>
+                    <td>Update action.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPlaybookActions</td>
+                    <td>List all actions.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlaybookAction</td>
+                    <td>Create action.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePlaybookAction</td>
+                    <td>Delete action.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Playbook approve</td>
+                    <td>ListPlaybookApproves</td>
+                    <td>List approves.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlaybookApprove</td>
+                    <td>Create playbook approve.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Playbook instance</td>
+                    <td>ShowPlaybookInstance</td>
+                    <td>Show playbook instance</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybookTopology</td>
+                    <td>Show playbook Topology</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPlaybookAuditLogs</td>
+                    <td>List audit logs.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ChangePlaybookInstance</td>
+                    <td>Operation Playbook Instance.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPlaybookInstances</td>
+                    <td>List playbook instances</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Playbook rule</td>
+                    <td>UpdatePlaybookRule</td>
+                    <td>Update rule.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlaybookRule</td>
+                    <td>Create rule.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePlaybookRule</td>
+                    <td>Delete rule.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybookRule</td>
+                    <td>Show rule formation.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">Playbook version</td>
+                    <td>UpdatePlaybookVersion</td>
+                    <td>Update playbook version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePlaybookVersion</td>
+                    <td>Create playbook version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowPlaybookVersion</td>
+                    <td>Show playbook version version</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListPlaybookVersions</td>
+                    <td>List all versions of playbook.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeletePlaybookVersion</td>
+                    <td>Delete playbook version.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CopyPlaybookVersion</td>
+                    <td>Copy Playbook and version to a new one</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Product Management</td>
+                    <td>CheckProductHealthy</td>
+                    <td>The SA provides the heartbeat interface. Integration products send heartbeat packets to the situational awareness at a scheduled time (every 5 minutes) to check whether the path between integration products and SA is normal.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Relation</td>
+                    <td>ListDataobjectRelation</td>
+                    <td>List Dataobject Relation</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateDataobjectRelation</td>
+                    <td>Create Dataobject Relation</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteDataobjectRelation</td>
+                    <td>Delete Dataobject Relation</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
