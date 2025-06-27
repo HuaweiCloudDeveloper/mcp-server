@@ -124,7 +124,7 @@ def build_http_info(name, arguments, openapi_spec, mcp_tools):
     for property_name, property_body in properties.items():
         if property_name in ['X-Auth-Token']:
             pass
-        elif property_body.get('required') and arguments.get(property_name) is None:
+        elif property_name in invoked_tool.inputSchema.get('required', []) and arguments.get(property_name) is None:
             raise Exception(f"{property_name}为必填参数.")
 
         property_in = property_body.get('in')
