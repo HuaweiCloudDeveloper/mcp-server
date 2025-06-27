@@ -468,7 +468,7 @@ Directly enter the directory path of the sub-project, such as the run.py file un
   </tr>
   <tr>
     <td>TaurusDB</td>
-    <td>GaussDB</td>
+    <td>TaurusDB</td>
   </tr>
   <tr>
     <td>GaussDB</td>
@@ -476,7 +476,7 @@ Directly enter the directory path of the sub-project, such as the run.py file un
   </tr>
   <tr>
     <td>GeminiDB</td>
-    <td>GaussDBforNoSQL</td>
+    <td>GeminiDB</td>
   </tr>
   <tr>
     <td>Data Replication Service</td>

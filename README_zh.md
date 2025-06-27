@@ -1010,7 +1010,7 @@
     <td>LMS</td>
   </tr>
   <tr>
-    <td rowspan="16">数据库</td>
+    <td rowspan="15">数据库</td>
     <td>云数据库</td>
     <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rds">RDS</a></td>
   </tr>
@@ -1043,12 +1043,8 @@
     <td>TaurusDB</td>
   </tr>
   <tr>
-    <td>云数据库TaurusDB</td>
-    <td>GaussDB</td>
-  </tr>
-  <tr>
     <td>云数据库 GeminiDB</td>
-    <td>GaussDBforNoSQL</td>
+    <td>GeminiDB</td>
   </tr>
   <tr>
     <td>GeminiDB Cassandra 接口</td>
