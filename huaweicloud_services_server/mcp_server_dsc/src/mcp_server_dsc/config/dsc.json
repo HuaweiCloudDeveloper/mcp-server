@@ -1,0 +1,4106 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "DSC-敏感数据发现",
+    "title" : "DSC",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "RuleGroupRequest" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "description" : "规则类别,内置规则(BUILT_IN)或自建规则(BUILT_SELF)",
+            "type" : "string",
+            "enum" : [ "BUILT_IN", "BUILT_SELF" ]
+          },
+          "default_status" : {
+            "description" : "是否默认规则组",
+            "type" : "boolean"
+          },
+          "group_desc" : {
+            "description" : "规则组描述",
+            "type" : "string"
+          },
+          "group_name" : {
+            "description" : "规则组名称",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "规则组ID",
+            "type" : "string"
+          },
+          "rule_ids" : {
+            "description" : "包含的规则ID列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "title" : "RuleGroupRequest"
+      },
+      "ErrorReturnInfo" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "错误码"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "错误信息"
+          }
+        },
+        "required" : [ "error_code", "error_msg" ],
+        "type" : "object"
+      },
+      "SimpleStatusResponse" : {
+        "type" : "object",
+        "properties" : {
+          "msg" : {
+            "description" : "返回消息",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "返回状态,如'200','400'",
+            "type" : "string"
+          }
+        },
+        "title" : "SimpleStatusResponse"
+      },
+      "BucketsRequest" : {
+        "type" : "object",
+        "properties" : {
+          "buckets" : {
+            "description" : "OBS桶列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BucketBean"
+            }
+          }
+        },
+        "title" : "BucketsRequest"
+      },
+      "BucketBean" : {
+        "type" : "object",
+        "properties" : {
+          "asset_name" : {
+            "description" : "资产名称",
+            "type" : "string"
+          },
+          "location" : {
+            "description" : "桶位置",
+            "type" : "string"
+          },
+          "bucket_name" : {
+            "description" : "桶名称",
+            "type" : "string"
+          },
+          "bucket_policy" : {
+            "description" : "桶策略",
+            "type" : "string"
+          }
+        },
+        "title" : "BucketBean"
+      },
+      "DefaultTopicRequest" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "DSC告警主题ID(非消息通知服务主题ID)",
+            "type" : "string"
+          },
+          "project_id" : {
+            "description" : "项目ID",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "告警通知状态",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "topic_urn" : {
+            "description" : "消息通知主题的唯一资源标识符",
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "topic_urn" ],
+        "title" : "DefaultTopicRequest"
+      },
+      "Bucket" : {
+        "type" : "object",
+        "properties" : {
+          "asset_name" : {
+            "description" : "资产名称",
+            "type" : "string"
+          },
+          "bucket_location" : {
+            "description" : "桶位置",
+            "type" : "string"
+          },
+          "bucket_name" : {
+            "description" : "桶名称",
+            "type" : "string"
+          },
+          "bucket_policy" : {
+            "description" : "桶策略",
+            "type" : "string"
+          },
+          "create_time" : {
+            "description" : "创建时间",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "deleted" : {
+            "description" : "是否被删除",
+            "type" : "boolean"
+          },
+          "id" : {
+            "description" : "桶ID",
+            "type" : "string"
+          },
+          "is_deleted" : {
+            "description" : "是否被删除",
+            "type" : "boolean"
+          }
+        },
+        "title" : "Bucket"
+      },
+      "BucketsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "buckets" : {
+            "description" : "OBS桶列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Bucket"
+            }
+          },
+          "total" : {
+            "description" : "OBS桶总数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "title" : "BucketsResponse"
+      },
+      "RuleChangeRequest" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "description" : "规则类别,内置规则(BUILT_IN)或自建规则(BUILT_SELF)",
+            "type" : "string",
+            "enum" : [ "BUILT_IN", "BUILT_SELF" ]
+          },
+          "id" : {
+            "description" : "规则ID",
+            "type" : "string"
+          },
+          "logic_operator" : {
+            "description" : "逻辑运算符,\"AND\",\"OR\",\"REGEX\"",
+            "type" : "string"
+          },
+          "min_match" : {
+            "description" : "最小匹配次数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "risk_level" : {
+            "description" : "风险等级",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rule_content" : {
+            "description" : "规则内容",
+            "type" : "string"
+          },
+          "rule_desc" : {
+            "description" : "规则描述",
+            "type" : "string"
+          },
+          "rule_name" : {
+            "description" : "规则名称",
+            "type" : "string"
+          },
+          "rule_type" : {
+            "description" : "规则类型,关键字(KEYWORD)、正则表达式(REGEX)或自然语言(NLP)",
+            "type" : "string",
+            "enum" : [ "KEYWORD", "REGEX", "NLP" ]
+          }
+        },
+        "required" : [ "id", "category", "logic_operator", "min_match", "risk_level", "rule_content", "rule_name", "rule_type" ],
+        "title" : "RuleChangeRequest"
+      },
+      "MaskSwitchRequest" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "description" : "脱敏任务状态",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "status" ],
+        "title" : "MaskSwitchRequest"
+      },
+      "OpenApiCalledRecord" : {
+        "description" : "OpenApi调用记录",
+        "properties" : {
+          "user_name" : {
+            "type" : "string",
+            "description" : "调用API的user_name"
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "调用API的user_id"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "description" : "调用API的domain_name"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "调用API的domain_id"
+          },
+          "request_url" : {
+            "type" : "string",
+            "description" : "调用API的URL"
+          },
+          "request_method" : {
+            "type" : "string",
+            "description" : "http请求方法"
+          },
+          "response_code" : {
+            "type" : "string",
+            "description" : "http状态码"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "description" : "调用API失败原因"
+          },
+          "timestamp" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "调用API的时间(Unix timestamp),单位:毫秒"
+          }
+        },
+        "type" : "object"
+      },
+      "OpenApiCalledRecordResponse" : {
+        "description" : "OpenApi调用记录",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "调用API总次数"
+          },
+          "succeed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "调用API成功次数"
+          },
+          "failed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "调用API失败次数"
+          },
+          "openapi_called_records" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/OpenApiCalledRecord"
+            },
+            "description" : "API调用记录列表"
+          },
+          "next_marker" : {
+            "type" : "string",
+            "description" : "获取下一页所需的标识符。"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowImageWatermarkByAddressRequestBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "项目所在region的id,如:xx-xx-1。"
+          },
+          "src_file" : {
+            "type" : "string",
+            "description" : "待提取文字暗水印的图片地址,当前只支持华为云OBS,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          },
+          "mark_len" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "指定待提取水印的长度,最小0,最大32.。设置后可以提升水印提取性能。",
+            "minimum" : 0,
+            "maximum" : 32
+          }
+        },
+        "required" : [ "region_id", "src_file" ],
+        "type" : "object"
+      },
+      "PicutureWaterMark" : {
+        "required" : [ "watermark" ],
+        "properties" : {
+          "watermark" : {
+            "type" : "string",
+            "description" : "暗水印内容,长度不超过32个字节"
+          }
+        },
+        "type" : "object"
+      },
+      "ResponseRules" : {
+        "type" : "object",
+        "properties" : {
+          "rules" : {
+            "description" : "规则列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResponseRule"
+            }
+          },
+          "total" : {
+            "description" : "规则总数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "title" : "ResponseRules"
+      },
+      "ResponseRule" : {
+        "description" : "扫描规则",
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "description" : "规则类别,内置规则(BUILT_IN)或自建规则(BUILT_SELF)",
+            "type" : "string",
+            "enum" : [ "BUILT_IN", "BUILT_SELF" ]
+          },
+          "delete_allowed" : {
+            "description" : "是否允许删除",
+            "type" : "boolean"
+          },
+          "group_names" : {
+            "description" : "相关的规则组",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "规则ID",
+            "type" : "string"
+          },
+          "logic_operator" : {
+            "description" : "逻辑运算符,\"AND\",\"OR\",\"REGEX\"",
+            "type" : "string"
+          },
+          "min_match" : {
+            "description" : "最小匹配次数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "risk_level" : {
+            "description" : "风险等级",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rule_content" : {
+            "description" : "规则内容",
+            "type" : "string"
+          },
+          "rule_desc" : {
+            "description" : "规则描述",
+            "type" : "string"
+          },
+          "rule_name" : {
+            "description" : "规则名称",
+            "type" : "string"
+          },
+          "rule_type" : {
+            "description" : "规则类型,关键字(KEYWORD)、正则表达式(REGEX)或自然语言(NLP)",
+            "type" : "string",
+            "enum" : [ "KEYWORD", "REGEX", "NLP" ]
+          },
+          "selected" : {
+            "description" : "是否可选",
+            "type" : "boolean"
+          }
+        },
+        "title" : "ResponseRule"
+      },
+      "DBMaskTaskInfo" : {
+        "type" : "object",
+        "properties" : {
+          "db_type" : {
+            "description" : "DB类型",
+            "type" : "string"
+          },
+          "end_time" : {
+            "description" : "任务结束时间",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "execute_line" : {
+            "description" : "执行行数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "id" : {
+            "description" : "任务ID",
+            "type" : "string"
+          },
+          "progress" : {
+            "description" : "执行进度",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "run_status" : {
+            "description" : "任务运行状态",
+            "type" : "string"
+          },
+          "start_time" : {
+            "description" : "任务开始时间",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_template_id" : {
+            "description" : "任务模板ID",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "任务类型",
+            "type" : "string"
+          }
+        },
+        "title" : "DBMaskTaskInfo"
+      },
+      "DBTaskResponse" : {
+        "type" : "object",
+        "properties" : {
+          "tasks" : {
+            "description" : "脱敏任务列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DBMaskTaskInfo"
+            }
+          },
+          "total" : {
+            "description" : "脱敏任务总数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "title" : "DBTaskResponse"
+      },
+      "ObsScanResultInfo" : {
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务ID"
+          },
+          "bucket_id" : {
+            "type" : "string",
+            "description" : "OBS桶ID"
+          },
+          "bucket_name" : {
+            "type" : "string",
+            "description" : "OBS桶名称"
+          },
+          "file_path" : {
+            "type" : "string",
+            "description" : "文件路径"
+          },
+          "file_name" : {
+            "type" : "string",
+            "description" : "文件名"
+          },
+          "md5" : {
+            "type" : "string",
+            "description" : "文件md5值"
+          },
+          "risk_level" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "风险等级"
+          },
+          "sensitive_data_type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "风险数据类型"
+          }
+        },
+        "type" : "object"
+      },
+      "EsScanResultInfo" : {
+        "description" : "ES扫描结果信息",
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务ID"
+          },
+          "index_name" : {
+            "type" : "string",
+            "description" : "索引名"
+          },
+          "type_id" : {
+            "type" : "string",
+            "description" : "类型ID"
+          },
+          "type_name" : {
+            "type" : "string",
+            "description" : "类型名"
+          },
+          "risk_level" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "风险等级"
+          },
+          "sensitive_data_type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "敏感数据类型"
+          },
+          "match_info" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EsMatchInfo"
+            },
+            "description" : "规则匹配具体信息"
+          }
+        },
+        "type" : "object"
+      },
+      "ObsScanResult" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "扫描结果总数"
+          },
+          "db_scan_results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ObsScanResultInfo"
+            },
+            "description" : "OBS扫描结果列表"
+          }
+        },
+        "description" : "OBS扫描结果",
+        "type" : "object"
+      },
+      "EsScanResult" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "扫描结果总数"
+          },
+          "db_scan_results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EsScanResultInfo"
+            },
+            "description" : "ES扫描结果列表"
+          }
+        },
+        "description" : "ES扫描结果",
+        "type" : "object"
+      },
+      "DbScanResult" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "description" : "扫描结果总数"
+          },
+          "db_scan_results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DbScanResultInfo"
+            },
+            "description" : "数据库扫描结果列表"
+          }
+        },
+        "description" : "数据库扫描结果",
+        "type" : "object"
+      },
+      "DbMatchInfo" : {
+        "properties" : {
+          "column_name" : {
+            "type" : "string",
+            "description" : "列名"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "description" : "匹配的规则名"
+          },
+          "rule_id" : {
+            "type" : "string",
+            "description" : "匹配的规则ID"
+          },
+          "rule_risk_level" : {
+            "type" : "integer",
+            "description" : "匹配规则风险等级"
+          },
+          "column_line" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64"
+            },
+            "description" : "风险数据行"
+          }
+        },
+        "type" : "object"
+      },
+      "EsMatchInfo" : {
+        "description" : "ES数据项匹配信息",
+        "properties" : {
+          "field_name" : {
+            "type" : "string",
+            "description" : "数据字段名"
+          },
+          "rule_name" : {
+            "type" : "string",
+            "description" : "规则名"
+          },
+          "rule_id" : {
+            "type" : "string",
+            "description" : "规则ID"
+          },
+          "rule_risk_level" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "规则风险等级"
+          }
+        },
+        "type" : "object"
+      },
+      "ScanResultResponse" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID"
+          },
+          "job_name" : {
+            "type" : "string",
+            "description" : "任务名"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "查询资产类型"
+          },
+          "db_scan_result" : {
+            "$ref" : "#/components/schemas/DbScanResult"
+          },
+          "obs_scan_result" : {
+            "$ref" : "#/components/schemas/ObsScanResult"
+          },
+          "es_scan_result" : {
+            "$ref" : "#/components/schemas/EsScanResult"
+          }
+        },
+        "type" : "object"
+      },
+      "DbScanResultInfo" : {
+        "properties" : {
+          "task_id" : {
+            "type" : "string",
+            "description" : "任务ID"
+          },
+          "db_name" : {
+            "type" : "string",
+            "description" : "数据库名称"
+          },
+          "table_id" : {
+            "type" : "string",
+            "description" : "表ID"
+          },
+          "table_name" : {
+            "type" : "string",
+            "description" : "表名称"
+          },
+          "risk_level" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "风险等级"
+          },
+          "sensitive_data_type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "匹配到的规则"
+          },
+          "match_info" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DbMatchInfo"
+            },
+            "description" : "表中各列匹配到的规则"
+          }
+        },
+        "type" : "object"
+      },
+      "EmbededMarkData" : {
+        "properties" : {
+          "marked_data" : {
+            "type" : "array",
+            "description" : "嵌入水印后的数据",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "description" : "嵌入水印后的数据",
+                "type" : "object"
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "EmbeddedDatabaseWatermark" : {
+        "example" : "watermark_content:\"watermark\" watermark_key:\"key\" columns:{} data:{}",
+        "required" : [ "watermark_content", "watermark_key", "columns", "data" ],
+        "properties" : {
+          "watermark_content" : {
+            "type" : "string",
+            "description" : "添加水印的内容"
+          },
+          "watermark_key" : {
+            "type" : "string",
+            "description" : "水印密钥"
+          },
+          "columns" : {
+            "type" : "array",
+            "description" : "字段类型列表,最大长度100。使用时,至少包含两个字段,一个“primary_key”为true表示主键,一个为false用来嵌入水印",
+            "items" : {
+              "$ref" : "#/components/schemas/Columns"
+            }
+          },
+          "data" : {
+            "description" : "嵌入可提取水印的行数限制1500-50000行。内容建议:数据具有随机性,内容重复率低",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "description" : "待加水印的数据",
+                "type" : "object"
+              }
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "Columns" : {
+        "description" : "字段类型列表,最大长度100",
+        "required" : [ "name", "type", "primary_key" ],
+        "example" : "name:\"col1\" type:\"INTEGER\" primary_key:false",
+        "properties" : {
+          "name" : {
+            "description" : "数据的字段名称,最大支持长度256",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 1
+          },
+          "type" : {
+            "description" : "数据的字段类型",
+            "type" : "string",
+            "enum" : [ "INTEGER", "STRING", "DOUBLE" ]
+          },
+          "primary_key" : {
+            "description" : "标记该字段是否为主键。true为主键,表示用来定位水印位置;false为非主键,将在该列嵌入/提取水印内容。字段类型列表中可同时包含多个为true或为false的字段",
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "ExtractedDataMark" : {
+        "properties" : {
+          "watermarks" : {
+            "description" : "提取水印内容列表。上传数据中不同列可能包含不同水印,返回时将所有提取到的水印返回,列表中水印个数不超过100",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ExtractedDatabaseWatermark" : {
+        "required" : [ "watermark_key", "columns", "data" ],
+        "example" : {
+          "watermark_key" : "key",
+          "columns" : "{}",
+          "data" : "{}"
+        },
+        "properties" : {
+          "watermark_key" : {
+            "description" : "水印密钥",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 1
+          },
+          "columns" : {
+            "type" : "array",
+            "description" : "字段类型列表,最大长度100。使用时,要包含嵌入时所有“primary_key”为true的字段,和至少一个为false的字段用来提取水印",
+            "items" : {
+              "$ref" : "#/components/schemas/Columns"
+            }
+          },
+          "data" : {
+            "description" : "水印数据,数据条数不超过30,000条",
+            "maxItems" : 2000,
+            "minItems" : 1,
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "description" : "待提取水印的数据",
+                "type" : "object"
+              }
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "AssetNameRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "description" : "资产名称",
+            "type" : "string"
+          }
+        },
+        "title" : "AssetNameRequest"
+      },
+      "ScanJob" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "任务ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "任务名称"
+          },
+          "rule_groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "任务使用的规则组"
+          },
+          "cycle" : {
+            "type" : "string",
+            "description" : "任务执行方式",
+            "enum" : [ "ONCE", "DAY", "WEEK", "MONTH" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "任务当前状态",
+            "enum" : [ "INIT", "WAITING", "RUNNING", "FAILED", "STOPPED", "FINISHED", "TERMINATED" ]
+          },
+          "last_run_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务上一次执行时间"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务创建时间"
+          },
+          "last_scan_risk" : {
+            "type" : "string",
+            "description" : "任务上一次扫描风险等级结果"
+          },
+          "use_nlp" : {
+            "type" : "boolean",
+            "description" : "是否使用了NLP进行扫描"
+          },
+          "open" : {
+            "type" : "boolean",
+            "description" : "任务开启状态"
+          },
+          "topic_urn" : {
+            "type" : "string",
+            "description" : "SMN服务通知主题"
+          },
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务启动时间"
+          }
+        },
+        "type" : "object"
+      },
+      "ScanJobListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ScanJob"
+            },
+            "description" : "本次返回的扫描任务列表"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务总数"
+          }
+        }
+      },
+      "ResponseRuleGroups" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "description" : "规则组总数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "groups" : {
+            "description" : "规则组列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResponseGroup"
+            }
+          }
+        },
+        "title" : "ResponseRuleGroups"
+      },
+      "ResponseGroup" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "description" : "规则类别,内置规则(BUILT_IN)或自建规则(BUILT_SELF)",
+            "type" : "string",
+            "enum" : [ "BUILT_IN", "BUILT_SELF" ]
+          },
+          "delete_allowed" : {
+            "description" : "是否允许删除",
+            "type" : "boolean"
+          },
+          "group_desc" : {
+            "description" : "规则组描述",
+            "type" : "string"
+          },
+          "group_name" : {
+            "description" : "规则组名称",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "规则组ID",
+            "type" : "string"
+          },
+          "rule_names" : {
+            "description" : "规则名称",
+            "type" : "string"
+          },
+          "task_names" : {
+            "description" : "扫描任务名称",
+            "type" : "string"
+          },
+          "is_default" : {
+            "description" : "是否为默认规则组",
+            "type" : "boolean"
+          }
+        },
+        "title" : "ResponseGroup"
+      },
+      "ProductInfo" : {
+        "description" : "产品信息",
+        "type" : "object",
+        "properties" : {
+          "allResourceNames" : {
+            "description" : "资源名称列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "cloudServiceType" : {
+            "description" : "云服务类型",
+            "type" : "string"
+          },
+          "displayId" : {
+            "description" : "展示ID",
+            "type" : "string"
+          },
+          "productId" : {
+            "description" : "产品ID",
+            "type" : "string"
+          },
+          "productSpecDesc" : {
+            "description" : "产品规格描述",
+            "type" : "string"
+          },
+          "resourceName" : {
+            "description" : "资源名称",
+            "type" : "string"
+          },
+          "resourceSize" : {
+            "description" : "产品支持的数据库数量,或者支持obs的扫描量",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resourceSizeMeasureId" : {
+            "description" : "资源容量度量标识,枚举值举例如下:15:mbps(购买带宽时使用),17:gb(购买云硬盘时使用),14:个/次",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resourceSpecCode" : {
+            "description" : "产品编码",
+            "type" : "string"
+          },
+          "resourceType" : {
+            "description" : "资源类型",
+            "type" : "string"
+          },
+          "usageFactor" : {
+            "description" : "已使用系数",
+            "type" : "string"
+          },
+          "usageMeasureId" : {
+            "description" : "已使用容量度量标识",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "usageValue" : {
+            "description" : "已使用值",
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "title" : "ProductInfo"
+      },
+      "ProductOrderListResponse" : {
+        "type" : "object",
+        "properties" : {
+          "orderInfos" : {
+            "description" : "订单列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductOrderInfo"
+            }
+          }
+        },
+        "title" : "ProductOrderListResponse"
+      },
+      "ProductOrderInfo" : {
+        "type" : "object",
+        "properties" : {
+          "tenantId" : {
+            "description" : "租户ID",
+            "type" : "string"
+          },
+          "periodType" : {
+            "description" : "订购周期类型",
+            "type" : "string"
+          },
+          "periodNum" : {
+            "description" : "订购周期数量",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resourceId" : {
+            "description" : "资源ID",
+            "type" : "string"
+          },
+          "productInfo" : {
+            "$ref" : "#/components/schemas/ProductInfo"
+          }
+        },
+        "title" : "ProductOrderInfo"
+      },
+      "ShowDocWatermarkByAddressRequestBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "项目所在region的id,如:xx-xx-1。"
+          },
+          "doc_type" : {
+            "type" : "string",
+            "description" : "待提取水印的文档类型",
+            "enum" : [ "WORD", "EXCEL", "PDF", "PPT" ]
+          },
+          "src_file" : {
+            "type" : "string",
+            "description" : "待提取文字暗水印的文档的地址,当前只支持华为云OBS对象,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.doc**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.doc为对象全路径名。"
+          },
+          "file_password" : {
+            "type" : "string",
+            "description" : "解密文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+            "minLength" : 0,
+            "maxLength" : 256
+          }
+        },
+        "required" : [ "region_id", "doc_type", "src_file" ],
+        "type" : "object"
+      },
+      "ShowImageWatermarkWithImageByAddressRequestBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "项目所在region的id,如:xx-xx-1。"
+          },
+          "src_file" : {
+            "type" : "string",
+            "description" : "待提取图片暗水印的图片地址,当前只支持华为云OBS对象,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          },
+          "image_watermark" : {
+            "type" : "string",
+            "description" : "提取出来的水印图片存放地址,格式要求同src_file。"
+          }
+        },
+        "required" : [ "region_id", "src_file", "image_watermark" ],
+        "type" : "object"
+      },
+      "ShowImageWatermarkWithImageByAddressResponseBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "当前项目所在region的id,如:xx-xx-1。"
+          },
+          "image_watermark" : {
+            "type" : "string",
+            "description" : "提取出的水印图片存放地址,当前只支持华为云OBS对象,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          }
+        },
+        "required" : [ "image_watermark" ],
+        "type" : "object"
+      },
+      "TopicsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "DSC告警主题ID(非消息通知服务主题ID)",
+            "type" : "string"
+          },
+          "default_topic_urn" : {
+            "description" : "默认消息通知主题的唯一资源标识符",
+            "type" : "string"
+          },
+          "topic_count" : {
+            "description" : "已确认的消息通知主题数量",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "topics" : {
+            "description" : "已确认的消息通知主题列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TopicBean"
+            }
+          }
+        },
+        "title" : "TopicsResponse"
+      },
+      "TopicBean" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "description" : "消息通知主题名称",
+            "type" : "string"
+          },
+          "topic_urn" : {
+            "description" : "消息通知主题的唯一资源标识符",
+            "type" : "string"
+          }
+        },
+        "title" : "TopicBean"
+      },
+      "ScanJobRequest" : {
+        "type" : "object",
+        "required" : [ "name", "cycle", "asset_ids", "rule_group_ids" ],
+        "properties" : {
+          "asset_ids" : {
+            "description" : "资产ID列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "cycle" : {
+            "description" : "扫描周期,日(DAY),周(WEEK),月(MONTH),单次扫描(ONCE)",
+            "type" : "string",
+            "enum" : [ "ONCE", "DAY", "WEEK", "MONTH" ]
+          },
+          "name" : {
+            "description" : "扫描任务名",
+            "type" : "string"
+          },
+          "open" : {
+            "description" : "是否开启任务",
+            "type" : "boolean"
+          },
+          "rule_group_ids" : {
+            "description" : "规则组ID列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "start_time" : {
+            "description" : "扫描任务开始时间",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "time_zone" : {
+            "description" : "时区",
+            "type" : "string"
+          },
+          "topic_urn" : {
+            "description" : "主题的唯一资源标识符",
+            "type" : "string"
+          },
+          "use_nlp" : {
+            "description" : "是否用nlp",
+            "type" : "boolean"
+          }
+        },
+        "title" : "ScanJobRequest"
+      },
+      "CreateImageWatermarkByAddressResponseBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "当前项目所在region的id,如:xx-xx-1。"
+          },
+          "watermarked_file" : {
+            "type" : "string",
+            "description" : "添加水印后的OBS图片地址,当前只支持华为云OBS文件,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          }
+        },
+        "required" : [ "region_id", "watermarked_file" ],
+        "type" : "object"
+      },
+      "CreateImageWatermarkByAddressRequestBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "当前项目所在region的id,如:xx-xx-1。"
+          },
+          "src_file" : {
+            "type" : "string",
+            "description" : "待加暗水印的图片地址,当前只支持华为云OBS文件,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          },
+          "blind_watermark" : {
+            "type" : "string",
+            "description" : "待嵌入的文字暗水印内容,长度不超过32个字符。当前仅支持数字及英文大小写。与图片暗水印image_watermark二选一。",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "image_watermark" : {
+            "type" : "string",
+            "description" : "待嵌入的图片暗水印地址,格式要求同src_file字段,与文字暗水印 blind_watermark 二选一,都填写时,生效image_watermark。"
+          },
+          "dst_file" : {
+            "type" : "string",
+            "description" : "添加水印后的图片存放的地址,格式要求同src_file字段,不设置时,默认取src_file的值,即添加水印后覆盖原文件。"
+          }
+        },
+        "required" : [ "region_id", "src_file" ],
+        "type" : "object"
+      },
+      "MaskStrategies" : {
+        "required" : [ "name", "algorithm" ],
+        "description" : "脱敏策略列表,每个策略对应一个字段,脱敏策略数最多100个。详情见“动态脱敏策略配置”。",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "需要脱敏的字段名称,最大支持长度256。"
+          },
+          "algorithm" : {
+            "type" : "string",
+            "description" : "脱敏算法名称,详情见附录\"动态脱敏策略配置\"。",
+            "enum" : [ "SHA256", "SHA512", "AES", "PRESNM", "MASKNM", "PRESXY", "MASKXY", "SYMBOL", "KEYWORD", "NUMERIC" ]
+          },
+          "parameters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            },
+            "description" : "脱敏算法参数,详情见附录\"动态脱敏策略配置\"。"
+          }
+        },
+        "type" : "object"
+      },
+      "DynamicDataMask" : {
+        "properties" : {
+          "mask_strategies" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MaskStrategies"
+            },
+            "description" : "脱敏策略列表,每一个策略对应一个字段,脱敏策略数最多100个。"
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "数据列表。",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "description" : "待脱敏的数据",
+                "type" : "object"
+              }
+            },
+            "maxItems" : 2000,
+            "minItems" : 0
+          }
+        },
+        "required" : [ "mask_strategies", "data" ],
+        "type" : "object"
+      },
+      "MaskedData" : {
+        "properties" : {
+          "masked_data" : {
+            "description" : "脱敏后的数据的数据列表,结构与请求中结构相同",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "description" : "脱敏后的数据",
+                "type" : "object"
+              }
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "masked_data" ],
+        "type" : "object"
+      },
+      "PeriodOrderRequest" : {
+        "type" : "object",
+        "properties" : {
+          "charging_mode" : {
+            "description" : "计费模式,0:包周期计费,1:按需计费,2:一次性计费",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cloud_service_type" : {
+            "description" : "云服务类型",
+            "type" : "string"
+          },
+          "composite_product_id" : {
+            "description" : "组合套餐ID",
+            "type" : "string"
+          },
+          "discount_id" : {
+            "description" : "折扣ID",
+            "type" : "string"
+          },
+          "is_auto_renew" : {
+            "description" : "是否自动续费",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "period_num" : {
+            "description" : "订购周期数目",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "period_type" : {
+            "description" : "订购周期类型,2:月,3:年",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "product_infos" : {
+            "description" : "产品信息列表",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProductInfoBean"
+            }
+          },
+          "promotion_activity_id" : {
+            "description" : "促销ID",
+            "type" : "string"
+          },
+          "promotion_info" : {
+            "description" : "促销信息",
+            "type" : "string"
+          },
+          "region_id" : {
+            "description" : "当前项目所在region的id,如:xx-xx-1。",
+            "type" : "string"
+          },
+          "zone" : {
+            "description" : "所属国家区域",
+            "type" : "string"
+          }
+        },
+        "required" : [ "charging_mode", "cloud_service_type", "period_num", "period_type", "product_infos", "region_id", "zone" ],
+        "title" : "PeriodOrderRequest"
+      },
+      "OrderResponse" : {
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "description" : "订单ID",
+            "type" : "string"
+          }
+        },
+        "title" : "OrderResponse"
+      },
+      "ProductInfoBean" : {
+        "description" : "产品信息",
+        "type" : "object",
+        "properties" : {
+          "all_resource_names" : {
+            "description" : "资源名称列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "cloud_service_type" : {
+            "description" : "云服务类型",
+            "type" : "string"
+          },
+          "display_id" : {
+            "description" : "展示ID",
+            "type" : "string"
+          },
+          "product_id" : {
+            "description" : "产品ID",
+            "type" : "string"
+          },
+          "product_spec_desc" : {
+            "description" : "产品规格描述",
+            "type" : "string"
+          },
+          "resource_name" : {
+            "description" : "资源名称",
+            "type" : "string"
+          },
+          "resource_size" : {
+            "description" : "产品支持的数据库数量,或者支持obs的扫描量",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resource_size_measure_id" : {
+            "description" : "资源容量度量标识,枚举值举例如下:15:mbps(购买带宽时使用),17:gb(购买云硬盘时使用),14:个/次",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resource_spec_code" : {
+            "description" : "产品编码",
+            "type" : "string"
+          },
+          "resource_type" : {
+            "description" : "资源类型",
+            "type" : "string"
+          },
+          "usage_factor" : {
+            "description" : "已使用系数",
+            "type" : "string"
+          },
+          "usage_measure_id" : {
+            "description" : "已使用容量度量标识",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "usage_value" : {
+            "description" : "已使用值",
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "required" : [ "cloud_service_type", "product_id", "resource_spec_code", "resource_size", "resource_size_measure_id", "resource_type" ],
+        "title" : "ProductInfoBean"
+      },
+      "RuleRequest" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "description" : "规则类别,内置规则(BUILT_IN)或自建规则(BUILT_SELF)",
+            "type" : "string",
+            "enum" : [ "BUILT_IN", "BUILT_SELF" ]
+          },
+          "id" : {
+            "description" : "规则ID",
+            "type" : "string"
+          },
+          "logic_operator" : {
+            "description" : "逻辑运算符,\"AND\",\"OR\",\"REGEX\"",
+            "type" : "string"
+          },
+          "min_match" : {
+            "description" : "最小匹配次数",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "risk_level" : {
+            "description" : "风险等级",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rule_content" : {
+            "description" : "规则内容",
+            "type" : "string"
+          },
+          "rule_desc" : {
+            "description" : "规则描述",
+            "type" : "string"
+          },
+          "rule_name" : {
+            "description" : "规则名称",
+            "type" : "string"
+          },
+          "rule_type" : {
+            "description" : "规则类型,关键字(KEYWORD)、正则表达式(REGEX)或自然语言(NLP)",
+            "type" : "string",
+            "enum" : [ "KEYWORD", "REGEX", "NLP" ]
+          }
+        },
+        "required" : [ "category", "logic_operator", "min_match", "risk_level", "rule_content", "rule_name", "rule_type" ],
+        "title" : "RuleRequest"
+      },
+      "CreateDocWatermarkByAddressResponseBody" : {
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "当前项目所在region的id,如:xx-xx-1。"
+          },
+          "watermarked_file" : {
+            "type" : "string",
+            "description" : "添加水印后的文档地址,当前只支持华为云OBS对象,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.doc**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.doc为对象全路径名。"
+          }
+        },
+        "required" : [ "region_id", "watermarked_file" ],
+        "type" : "object"
+      },
+      "CreateDocWatermarkByAddressRequestBody" : {
+        "description" : "OBS文档嵌入水印请求体",
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "description" : "项目所在region的id,如:xx-xx-1。"
+          },
+          "src_file" : {
+            "type" : "string",
+            "description" : "待添加水印的文档地址,当前只支持华为云OBS对象,格式为 **obs://bucket/object** ,其中bucket为和当前项目处于同一区域的OBS桶名称,object为对象全路径名。例如:**obs://hwbucket/hwinfo/hw.png**,其中obs://表示OBS存储,hwbucket为桶名,hwinfo/hw.png为对象全路径名。"
+          },
+          "doc_type" : {
+            "type" : "string",
+            "description" : "待嵌入水印的文档类型。",
+            "example" : "WORD",
+            "enum" : [ "WORD", "EXCEL", "PDF", "PPT" ]
+          },
+          "dst_file" : {
+            "type" : "string",
+            "description" : "添加水印后的文档存放地址,格式和要求同src_file字段,不设置时,默认取src_file的值,即添加水印后覆盖原文件。"
+          },
+          "blind_watermark" : {
+            "type" : "string",
+            "description" : "暗文字水印内容,与“visible_watermark”字段至少有一个不为空"
+          },
+          "visible_watermark" : {
+            "type" : "string",
+            "description" : "明文字水印内容,与暗水印“blind_watermark”字段至少有一个不为空。"
+          },
+          "image_mark" : {
+            "type" : "string",
+            "description" : "待嵌入的图形明水印文件的地址,  字段格式要求同src_file字段,图形文件的格式必须为“png”或“jpg”,否则返回参数错误;图像文件大小不超过1MB"
+          },
+          "visible_type" : {
+            "type" : "string",
+            "description" : "该字段控制明水印嵌入文字还是图片。默认为**TEXT**类型,需填写visible_watermark字段设置明文字水印; 当该字段为**IMAGE**时,需填写image_watermark字段设置水印图片地址此时 ,“visible_watermark”,“font_size”,“rotation”和“opacity”字段无效。",
+            "enum" : [ "TEXT", "IMAGE" ]
+          },
+          "file_password" : {
+            "type" : "string",
+            "description" : "待加水印文件有密码时,读取文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+            "minLength" : 0,
+            "maxLength" : 256
+          },
+          "marked_file_password" : {
+            "type" : "string",
+            "description" : "添加水印后给文件设置密码, 最大支持长度256。默认不加文档密码。",
+            "minLength" : 0,
+            "maxLength" : 256
+          },
+          "readonly_password" : {
+            "type" : "string",
+            "description" : "添加水印后给文件设置只读密码, 最大支持长度256。默认不加只读密码。",
+            "minLength" : 0,
+            "maxLength" : 256
+          },
+          "front" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "明水印字体大小,取值为[1,100],默认值50",
+            "minimum" : 1,
+            "maximum" : 100
+          },
+          "rotation" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "明水印旋转角度,逆时针方向,取值为[0,90],默认值45。",
+            "minimum" : 0,
+            "maximum" : 90
+          },
+          "opacity" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "明水印的透明度,取值[0,1],默认值为0.3;",
+            "minimum" : 0,
+            "maximum" : 1
+          }
+        },
+        "required" : [ "region_id", "src_file", "doc_type" ],
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/AddRuleGroup" : {
+      "post" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "创建扫描规则组",
+        "description" : "根据指定的规则组名称和扫描规则列表创建敏感数据扫描规则组",
+        "operationId" : "AddRuleGroup",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleGroupRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddRuleGroup",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/groups"
+    },
+    "/DeleteScanJob" : {
+      "delete" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "删除扫描任务",
+        "description" : "删除扫描任务",
+        "operationId" : "DeleteScanJob",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteScanJob",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/scan/job/{job_id}"
+    },
+    "/AddBuckets" : {
+      "post" : {
+        "tags" : [ "资产管理" ],
+        "summary" : "添加资产授权",
+        "description" : "添加数据资产扫描授权",
+        "operationId" : "AddBuckets",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "资产类型",
+          "required" : false,
+          "schema" : {
+            "description" : "资产类型",
+            "type" : "string",
+            "default" : "private"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BucketsRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddBuckets",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/asset/obs/buckets"
+    },
+    "/DeleteRuleGroup" : {
+      "delete" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "删除扫描规则组",
+        "description" : "根据扫描规则组ID删除指定的扫描规则组",
+        "operationId" : "DeleteRuleGroup",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "规则组ID",
+          "required" : true,
+          "schema" : {
+            "description" : "规则组ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRuleGroup",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/groups/{group_id}"
+    },
+    "/UpdateDefaultTopic" : {
+      "put" : {
+        "tags" : [ "告警通知" ],
+        "summary" : "修改告警通知主题",
+        "description" : "修改告警通知的关联项目ID、通知主题、通知状态(0为关闭通知,1为开启通知)等通用配置",
+        "operationId" : "UpdateDefaultTopic",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DefaultTopicRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDefaultTopic",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/smn/topic"
+    },
+    "/ListBuckets" : {
+      "get" : {
+        "tags" : [ "资产管理" ],
+        "summary" : "查看资产列表",
+        "description" : "查询数据资产扫描授权列表",
+        "operationId" : "ListBuckets",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BucketsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "added",
+          "in" : "query",
+          "description" : "已授权",
+          "required" : false,
+          "schema" : {
+            "description" : "已授权",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBuckets",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/asset/obs/buckets"
+    },
+    "/ChangeRule" : {
+      "put" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "修改扫描规则",
+        "description" : "修改自定义的敏感数据识别规则",
+        "operationId" : "ChangeRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleChangeRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ChangeRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/rules"
+    },
+    "/ChangeDbTemplateOperation" : {
+      "post" : {
+        "tags" : [ "数据静态脱敏" ],
+        "summary" : "开启/停止脱敏任务",
+        "description" : "开启/停止脱敏任务",
+        "operationId" : "ChangeDbTemplateOperation",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "template_id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "description" : "模板ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MaskSwitchRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ChangeDbTemplateOperation",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/mask/dbs/templates/{template_id}/operation"
+    },
+    "/CreateImageWatermark" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "图片嵌入暗水印",
+        "description" : "对图片嵌入文字暗水印或者图片暗水印,用户以formData的格式传入待加水印图片和水印相关信息,DSC服务对图片加完水印后返回给用户已嵌入水印的图片二进制流,目前支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "CreateImageWatermark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "要添加水印的图片文件,添加的图片短边尺寸需要超过512像素。",
+          "required" : true,
+          "schema" : {
+            "description" : "要添加水印的图片文件,添加的图片短边尺寸需要超过512像素。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "blind_watermark",
+          "in" : "formData",
+          "description" : "待嵌入的文字暗水印内容,长度不超过32个字符。当前仅支持数字及英文大小写。与图片暗水印image_watermark二选一填充。",
+          "required" : false,
+          "schema" : {
+            "description" : "待嵌入的文字暗水印内容,长度不超过32个字符。当前仅支持数字及英文大小写。与图片暗水印image_watermark二选一填充。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "image_watermark",
+          "in" : "formData",
+          "description" : "待嵌入的图片暗水印文件,与文字暗水印 blind_watermark 二选一填充。",
+          "required" : false,
+          "schema" : {
+            "description" : "待嵌入的图片暗水印文件,与文字暗水印 blind_watermark 二选一填充。",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateImageWatermark",
+      "x-url" : "{endpoint}/v1/{project_id}/image/watermark/embed"
+    },
+    "/ShowImageWatermarkWithImage" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "提取图片中的图片暗水印",
+        "description" : "对已嵌入图片暗水印的图片进行水印提取,用户以formData的格式传入待提取水印的图片,DSC服务以图片二进制流的格式返回从图片里提取的出的图片暗水印。目前支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "ShowImageWatermarkWithImage",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "待提取暗水印的图片文件。",
+          "required" : true,
+          "schema" : {
+            "description" : "待提取暗水印的图片文件。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowImageWatermarkWithImage",
+      "x-url" : "{endpoint}/v1/{project_id}/image/watermark/extract-image"
+    },
+    "/DeleteBucket" : {
+      "delete" : {
+        "tags" : [ "资产管理" ],
+        "summary" : "删除资产授权",
+        "description" : "删除数据资产扫描授权",
+        "operationId" : "DeleteBucket",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "bucket_id",
+          "in" : "path",
+          "description" : "桶ID",
+          "required" : true,
+          "schema" : {
+            "description" : "桶ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteBucket",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/asset/obs/bucket/{bucket_id}"
+    },
+    "/ShowOpenApiCalledRecords" : {
+      "get" : {
+        "tags" : [ "API调用记录" ],
+        "summary" : "查询OpenApi调用记录",
+        "description" : "查询OpenApi调用记录",
+        "operationId" : "ShowOpenApiCalledRecords",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpenApiCalledRecordResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小,默认1000,最大2000。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小,默认1000,最大2000。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1000,
+            "maximum" : 2000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "called_url",
+          "in" : "query",
+          "description" : "需要查询调用记录的URL,例如:/v1/{project_id}/sdg/database/watermark/embed",
+          "required" : false,
+          "schema" : {
+            "description" : "需要查询调用记录的URL,例如:/v1/{project_id}/sdg/database/watermark/embed",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "开始时间(Unix timestamp),单位:毫秒,例如:0",
+          "required" : false,
+          "schema" : {
+            "description" : "开始时间(Unix timestamp),单位:毫秒,例如:0",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间(Unix timestamp),单位:毫秒,例如:1638515803572",
+          "required" : false,
+          "schema" : {
+            "description" : "结束时间(Unix timestamp),单位:毫秒,例如:1638515803572",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "指定一个标识符。获取第一页时不用赋值,获取下一页时取上页查询结果的返回值。",
+          "required" : false,
+          "schema" : {
+            "description" : "指定一个标识符。获取第一页时不用赋值,获取下一页时取上页查询结果的返回值。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOpenApiCalledRecords",
+      "x-url" : "{endpoint}/v1/{project_id}/openapi/called-records"
+    },
+    "/CreateDocWatermark" : {
+      "post" : {
+        "tags" : [ "文档水印" ],
+        "summary" : "文档嵌入水印",
+        "description" : "对WORD(.docx),PPT(.pptx),EXCEL(.xlsx),PDF(.pdf) 类型的文件嵌入文字暗水印、文字明水印或者图片明水印,用户以formData的格式传入待加水印的文件和水印相关信息,DSC服务给文件加完水印后返回给用户已嵌入水印的文件的二进制流。",
+        "operationId" : "CreateDocWatermark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "doc_type",
+          "in" : "formData",
+          "description" : "要嵌入水印的文档类型",
+          "required" : true,
+          "schema" : {
+            "example" : "EXCEL",
+            "description" : "要嵌入水印的文档类型",
+            "type" : "string",
+            "enum" : [ "WORD", "EXCEL", "PDF", "PPT" ]
+          }
+        }, {
+          "name" : "file_password",
+          "in" : "formData",
+          "description" : "输入文件有密码时,读取文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+          "required" : false,
+          "schema" : {
+            "example" : "password",
+            "description" : "输入文件有密码时,读取文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "marked_file_password",
+          "in" : "formData",
+          "description" : "添加水印后给文件设置密码, 最大支持长度256。默认不加文档密码。",
+          "required" : false,
+          "schema" : {
+            "description" : "添加水印后给文件设置密码, 最大支持长度256。默认不加文档密码。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "readonly_password",
+          "in" : "formData",
+          "description" : "添加水印后给文件设置只读密码, 最大支持长度256。默认不加只读密码。",
+          "required" : false,
+          "schema" : {
+            "description" : "添加水印后给文件设置只读密码, 最大支持长度256。默认不加只读密码。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "visible_watermark",
+          "in" : "formData",
+          "description" : "明水印内容,与“blind_watermark”字段至少有一个不为空",
+          "required" : false,
+          "schema" : {
+            "example" : "watermark",
+            "description" : "明水印内容,与“blind_watermark”字段至少有一个不为空",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "font_size",
+          "in" : "formData",
+          "description" : "明水印字体大小,取值为[1,100],默认值50",
+          "required" : false,
+          "schema" : {
+            "example" : "50",
+            "description" : "明水印字体大小,取值为[1,100],默认值50",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "rotation",
+          "in" : "formData",
+          "description" : "明水印旋转角度,逆时针方向,取值为[0,90],默认值45",
+          "required" : false,
+          "schema" : {
+            "example" : "45",
+            "description" : "明水印旋转角度,逆时针方向,取值为[0,90],默认值45",
+            "type" : "string",
+            "maxLength" : 90,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "opacity",
+          "in" : "formData",
+          "description" : "明水印的透明度,取值[0,1],默认值为0.3;",
+          "required" : false,
+          "schema" : {
+            "example" : "0.3",
+            "description" : "明水印的透明度,取值[0,1],默认值为0.3;",
+            "type" : "string",
+            "maxLength" : 8,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "blind_watermark",
+          "in" : "formData",
+          "description" : "暗水印内容,与“visible_watermark”字段至少有一个不为空",
+          "required" : false,
+          "schema" : {
+            "example" : "blind watermark",
+            "description" : "暗水印内容,与“visible_watermark”字段至少有一个不为空",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "05c214d53400d5c52fe7c00b83c93dsc",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "要添加水印的文档",
+          "required" : true,
+          "schema" : {
+            "example" : "file",
+            "description" : "要添加水印的文档",
+            "type" : "file"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "image_mark",
+          "in" : "formData",
+          "description" : "图形水印的字节流。图形文件的格式必须为“png”或“jpg”,否则返回参数错误;图像文件大小不超过1MB;在分段的请求体“Content-Disposition”部分,参数“name”的值必须为“image_mark”。",
+          "required" : false,
+          "schema" : {
+            "description" : "图形水印的字节流。图形文件的格式必须为“png”或“jpg”,否则返回参数错误;图像文件大小不超过1MB;在分段的请求体“Content-Disposition”部分,参数“name”的值必须为“image_mark”。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "visible_type",
+          "in" : "formData",
+          "description" : "该字段为空时,默认为**TEXT**类型。",
+          "required" : false,
+          "schema" : {
+            "description" : "该字段为空时,默认为**TEXT**类型。",
+            "type" : "string",
+            "enum" : [ "TEXT", "IMAGE" ]
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDocWatermark",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/doc/watermark/embed"
+    },
+    "/ShowImageWatermarkByAddress" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "提取图片中的文字暗水印(文件地址版本)",
+        "description" : "对指定存储地址信息(目前支持华为云OBS)的已嵌入文字暗水印的图片提取文字暗水印,支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "ShowImageWatermarkByAddress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PicutureWaterMark"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowImageWatermarkByAddressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowImageWatermarkByAddress",
+      "x-url" : "{endpoint}/v1/{project_id}/image-address/watermark/extract"
+    },
+    "/ShowRules" : {
+      "get" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "查看规则列表",
+        "description" : "查询扫描规则列表,返回扫描规则总数和扫描规则列表",
+        "operationId" : "ShowRules",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseRules"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRules",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/rules"
+    },
+    "/ListDbMaskTask" : {
+      "get" : {
+        "tags" : [ "数据静态脱敏" ],
+        "summary" : "查询脱敏任务执行列表",
+        "description" : "查询脱敏任务执行列表",
+        "operationId" : "ListDbMaskTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DBTaskResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "template_id",
+          "in" : "path",
+          "description" : "模板ID",
+          "required" : true,
+          "schema" : {
+            "description" : "模板ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "workspace_id",
+          "in" : "query",
+          "description" : "工作区ID",
+          "required" : false,
+          "schema" : {
+            "description" : "工作区ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDbMaskTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/mask/dbs/templates/{template_id}/tasks"
+    },
+    "/ShowScanJobResults" : {
+      "get" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "查询指定任务扫描结果",
+        "description" : "查询指定任务扫描结果",
+        "operationId" : "ShowScanJobResults",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScanResultResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "资产类型",
+          "required" : false,
+          "schema" : {
+            "description" : "资产类型",
+            "type" : "string",
+            "default" : "DATABASE",
+            "enum" : [ "DATABASE", "OBS", "BIGDATA" ]
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "起始时间(预留,待启用)",
+          "required" : false,
+          "schema" : {
+            "description" : "起始时间(预留,待启用)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间(预留,待启用)",
+          "required" : false,
+          "schema" : {
+            "description" : "结束时间(预留,待启用)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowScanJobResults",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/scan/job/{job_id}/results"
+    },
+    "/CreateDatabaseWaterMark" : {
+      "post" : {
+        "tags" : [ "数据水印" ],
+        "summary" : "嵌入数据水印",
+        "description" : "对json体中数据动态添加水印",
+        "operationId" : "CreateDatabaseWaterMark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmbededMarkData"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EmbeddedDatabaseWatermark"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDatabaseWaterMark",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/database/watermark/embed"
+    },
+    "/ShowDatabaseWaterMark" : {
+      "post" : {
+        "tags" : [ "数据水印" ],
+        "summary" : "提取数据水印",
+        "description" : "提取请求数据中水印内容",
+        "operationId" : "ShowDatabaseWaterMark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExtractedDataMark"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExtractedDatabaseWatermark"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDatabaseWaterMark",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/database/watermark/extract"
+    },
+    "/UpdateAssetName" : {
+      "put" : {
+        "tags" : [ "资产管理" ],
+        "summary" : "编辑资产名称",
+        "description" : "编辑数据资产名称",
+        "operationId" : "UpdateAssetName",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "asset_id",
+          "in" : "path",
+          "description" : "资产ID",
+          "required" : true,
+          "schema" : {
+            "description" : "资产ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AssetNameRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAssetName",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/asset/{asset_id}/name"
+    },
+    "/ShowScanJobs" : {
+      "get" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "查询扫描任务列表",
+        "description" : "查询扫描任务列表",
+        "operationId" : "ShowScanJobs",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScanJobListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        }, {
+          "name" : "content",
+          "in" : "query",
+          "description" : "内容",
+          "required" : false,
+          "schema" : {
+            "description" : "内容",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "预留,待启用",
+          "required" : false,
+          "schema" : {
+            "description" : "预留,待启用",
+            "type" : "string"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "预留,待启用",
+          "required" : false,
+          "schema" : {
+            "description" : "预留,待启用",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowScanJobs",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/scan/jobs"
+    },
+    "/DeleteRule" : {
+      "delete" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "删除扫描规则",
+        "description" : "删除指定的敏感数据识别规则",
+        "operationId" : "DeleteRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "description" : "规则ID",
+          "required" : true,
+          "schema" : {
+            "description" : "规则ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/rules/{rule_id}"
+    },
+    "/ShowDocWatermark" : {
+      "post" : {
+        "tags" : [ "文档水印" ],
+        "summary" : "文档提取暗水印",
+        "description" : "对已嵌入文字暗水印的WORD(.docx),PPT(.pptx),EXCEL(.xlsx),PDF(.pdf)类型的文档进行文字暗水印提取,用户以formData的格式传入待提取水印的文件,DSC服务以JSON的格式返回从文档里提取的出的文字暗水印内容。",
+        "operationId" : "ShowDocWatermark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PicutureWaterMark"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "05c214d53400d5c52fe7c00b83c93dsc",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "doc_type",
+          "in" : "formData",
+          "description" : "待提取水印的文档类型",
+          "required" : true,
+          "schema" : {
+            "example" : "EXCEL",
+            "description" : "待提取水印的文档类型",
+            "type" : "string",
+            "enum" : [ "WORD", "EXCEL", "PDF", "PPT" ]
+          }
+        }, {
+          "name" : "file_password",
+          "in" : "formData",
+          "description" : "解密文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+          "required" : false,
+          "schema" : {
+            "example" : "password",
+            "description" : "解密文件的密码, 最大支持长度256。如果Office文档有读密码或域控的权限密码,请输入读密码,或者有读权限的域控密码。",
+            "type" : "string",
+            "maxLength" : 256,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "上传要提取水印的文档",
+          "required" : true,
+          "schema" : {
+            "example" : "file",
+            "description" : "上传要提取水印的文档",
+            "type" : "file"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDocWatermark",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/doc/watermark/extract"
+    },
+    "/ListRuleGroups" : {
+      "get" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "查询扫描规则组列表",
+        "description" : "根据指定的项目ID查询扫描规则组列表",
+        "operationId" : "ListRuleGroups",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseRuleGroups"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRuleGroups",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/groups"
+    },
+    "/ShowSpecification" : {
+      "get" : {
+        "tags" : [ "资源管理" ],
+        "summary" : "查询资源开通信息",
+        "description" : "查询资源开通信息,根据项目ID查询订单详情",
+        "operationId" : "ShowSpecification",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProductOrderListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSpecification",
+      "x-url" : "{endpoint}/v1/{project_id}/period/product/specification"
+    },
+    "/ShowDocWatermarkByAddress" : {
+      "post" : {
+        "tags" : [ "文档水印" ],
+        "summary" : "文档提取暗水印(文档地址版本)",
+        "description" : "支持对已嵌入文字暗水印的WORD(.docx),PPT(.pptx),EXCEL(.xlsx),PDF(.pdf)类型的文档进行水印提取,用户传入待提取水印的文档地址(目前支持OBS),DSC服务以JSON的格式返回从文档里提取的出的文字暗水印内容。",
+        "operationId" : "ShowDocWatermarkByAddress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PicutureWaterMark"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "05c214d53400d5c52fe7c00b83c93dsc",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowDocWatermarkByAddressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDocWatermarkByAddress",
+      "x-url" : "{endpoint}/v1/{project_id}/doc-address/watermark/extract"
+    },
+    "/ShowImageWatermarkWithImageByAddress" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "提取图片中的图片暗水印(文件地址版本)",
+        "description" : "对指定存储地址信息(目前支持华为云OBS)的已嵌入图片暗水印的图片提取图片暗水印,提取出的水印图片将存放在用户指定的位置(目前支持华为云OBS),支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "ShowImageWatermarkWithImageByAddress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowImageWatermarkWithImageByAddressResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowImageWatermarkWithImageByAddressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowImageWatermarkWithImageByAddress",
+      "x-url" : "{endpoint}/v1/{project_id}/image-address/watermark/extract-image"
+    },
+    "/ShowTopics" : {
+      "get" : {
+        "tags" : [ "告警通知" ],
+        "summary" : "查询告警通知主题",
+        "description" : "查询告警通知主题,返回默认主题、已确认主题数量及列表",
+        "operationId" : "ShowTopics",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TopicsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码",
+          "required" : false,
+          "schema" : {
+            "description" : "页码",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页大小",
+          "required" : false,
+          "schema" : {
+            "description" : "分页大小",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 100
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTopics",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/smn/topics"
+    },
+    "/AddScanJob" : {
+      "post" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "创建扫描任务",
+        "description" : "根据指定的任务名称、扫描方式、扫描周期、扫描规则组、扫描时间创建扫描任务",
+        "operationId" : "AddScanJob",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScanJobRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddScanJob",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/scan/job"
+    },
+    "/CreateImageWatermarkByAddress" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "图片嵌入暗水印(文件地址版本)",
+        "description" : "对指定存储地址信息(目前支持华为云OBS)的图片嵌入文字暗水印或者图片暗水印,已嵌入的水印的图片将存放在用户指定的位置(目前支持华为云OBS),支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "CreateImageWatermarkByAddress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateImageWatermarkByAddressResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateImageWatermarkByAddressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateImageWatermarkByAddress",
+      "x-url" : "{endpoint}/v1/{project_id}/image-address/watermark/embed"
+    },
+    "/BatchAddDataMask" : {
+      "post" : {
+        "tags" : [ "数据动态脱敏" ],
+        "summary" : "对数据进行脱敏",
+        "description" : "对数据进行脱敏",
+        "operationId" : "BatchAddDataMask",
+        "responses" : {
+          "200" : {
+            "description" : "脱敏成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MaskedData"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicDataMask"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddDataMask",
+      "x-url" : "{endpoint}/v1/{project_id}/data/mask"
+    },
+    "/ShowImageWatermark" : {
+      "post" : {
+        "tags" : [ "图片水印" ],
+        "summary" : "提取图片中的文字暗水印",
+        "description" : "对已嵌入文字暗水印的图片进行水印提取,用户以formData的格式传入待提取水印的图片,DSC服务以JSON的格式返回从图片里提取的出的文字暗水印。目前支持的图片格式为:*.jpg, *.jpeg, *.jpe, *.png, *.bmp, *.dib, *.rle, *.tiff, *.tif, *.ppm, *.webp, *.tga, *.tpic, *.gif。",
+        "operationId" : "ShowImageWatermark",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PicutureWaterMark"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "待提取暗水印的图片文件。",
+          "required" : true,
+          "schema" : {
+            "description" : "待提取暗水印的图片文件。",
+            "type" : "file"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "mark_len",
+          "in" : "formData",
+          "description" : "指定待提取水印的长度,mark_len长度大于0,小于32。设置后可以提升水印提取性能",
+          "required" : false,
+          "schema" : {
+            "description" : "指定待提取水印的长度,mark_len长度大于0,小于32。设置后可以提升水印提取性能",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowImageWatermark",
+      "x-url" : "{endpoint}/v1/{project_id}/image/watermark/extract"
+    },
+    "/CreateProductOrder" : {
+      "post" : {
+        "tags" : [ "资源管理" ],
+        "summary" : "实例下单",
+        "description" : "根据计费方式、计费周期等信息进行实例下单",
+        "operationId" : "CreateProductOrder",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PeriodOrderRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateProductOrder",
+      "x-url" : "{endpoint}/v1/{project_id}/period/order"
+    },
+    "/AddRule" : {
+      "post" : {
+        "tags" : [ "敏感数据发现" ],
+        "summary" : "创建扫描规则",
+        "description" : "根据指定的规则名称、规则类型、风险等级、最小匹配次数等参数创建自定义的敏感数据识别规则",
+        "operationId" : "AddRule",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SimpleStatusResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RuleRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sdg/server/scan/rules"
+    },
+    "/CreateDocWatermarkByAddress" : {
+      "post" : {
+        "tags" : [ "文档水印" ],
+        "summary" : "文档嵌入水印(文件地址版本)",
+        "description" : "对WORD(.docx),PPT(.pptx),EXCEL(.xlsx),PDF(.pdf)*类型的文档嵌入文字暗水印、文字明水印或者图片明水印,用户传入待加水印的文档地址(目前支持OBS)和水印相关信息,DSC服务对文档加完水印后返回给用户已嵌入水印的文档的存放地址。",
+        "operationId" : "CreateDocWatermarkByAddress",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateDocWatermarkByAddressResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "无效请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReturnInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "05c214d53400d5c52fe7c00b83c93dsc",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务“获取用户Token接口”获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDocWatermarkByAddressRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDocWatermarkByAddress",
+      "x-url" : "{endpoint}/v1/{project_id}/doc-address/watermark/embed"
+    }
+  }
+}

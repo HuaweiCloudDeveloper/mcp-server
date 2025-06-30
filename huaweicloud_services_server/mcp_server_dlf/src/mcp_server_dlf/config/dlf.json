@@ -1,0 +1,2891 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "DLF-作业相关的API",
+    "title" : "DLF",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "Node" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "nodeType" : {
+            "type" : "string",
+            "enum" : [ "HiveSQL", "SparkSQL", "DWSSQL", "DLISQL", "Shell", "CDMJob", "DISTransferTask", "CSJob", "CloudTableManage", "OBSManager", "RESTAPI", "MachineLearning", "SMN", "MRSSpark", "MapReduce", "DLISpark" ],
+            "description" : "节点的类型"
+          },
+          "location" : {
+            "$ref" : "#/components/schemas/Location"
+          },
+          "preNodeNames" : {
+            "type" : "string",
+            "description" : "本节点依赖的前一个节点名称"
+          },
+          "condition" : {
+            "type" : "array",
+            "description" : "节点执行条件",
+            "items" : {
+              "$ref" : "#/components/schemas/Condition"
+            }
+          },
+          "nodeProperties" : {
+            "type" : "string",
+            "description" : "节点的属性"
+          },
+          "pollingInterval" : {
+            "type" : "integer",
+            "description" : "轮询节点执行结果时间间隔"
+          },
+          "maxExecutionTime" : {
+            "type" : "integer",
+            "description" : "节点最大执行时间"
+          },
+          "retryTimes" : {
+            "type" : "integer",
+            "description" : "节点失败重试次数"
+          },
+          "retryInterval" : {
+            "type" : "integer",
+            "description" : "失败重试时间间隔"
+          },
+          "failPolicy" : {
+            "type" : "string",
+            "description" : "作业失败策略",
+            "enum" : [ "FAIL", "IGNORE", "SUSPEND" ]
+          },
+          "eventTrigger" : {
+            "$ref" : "#/components/schemas/Event"
+          },
+          "cronTrigger" : {
+            "$ref" : "#/components/schemas/Cron"
+          }
+        },
+        "type" : "object"
+      },
+      "Cron" : {
+        "properties" : {
+          "startTime" : {
+            "type" : "string"
+          },
+          "endTime" : {
+            "type" : "string"
+          },
+          "expression" : {
+            "type" : "string",
+            "description" : "Cron表达式"
+          },
+          "dependPrePeriod" : {
+            "type" : "boolean",
+            "description" : "是否依赖本作业上一个运行周期任务的执行结果"
+          },
+          "dependJobs" : {
+            "$ref" : "#/components/schemas/DependJob",
+            "description" : "依赖其它作业列表"
+          }
+        },
+        "type" : "object"
+      },
+      "dependWorkSpaceJob" : {
+        "properties" : {
+          "dependOnLastPeriod" : {
+            "type" : "boolean",
+            "description" : "是否依赖最近一个周期",
+            "default" : false
+          },
+          "jobName" : {
+            "type" : "string",
+            "description" : "作业名"
+          },
+          "workSpace" : {
+            "type" : "string",
+            "description" : "工作空间名"
+          }
+        },
+        "type" : "object"
+      },
+      "Condition" : {
+        "properties" : {
+          "preNodeName" : {
+            "type" : "string"
+          },
+          "expression" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Event" : {
+        "properties" : {
+          "eventType" : {
+            "type" : "string",
+            "description" : "事件类型"
+          },
+          "channel" : {
+            "type" : "string",
+            "description" : "DIS通道名称"
+          },
+          "failPolicy" : {
+            "type" : "string",
+            "description" : "执行失败处理策略"
+          },
+          "concurrent" : {
+            "type" : "integer",
+            "description" : "调度并发数"
+          },
+          "readPolicy" : {
+            "type" : "string",
+            "description" : "读取策略"
+          }
+        },
+        "type" : "object"
+      },
+      "JobInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer"
+          },
+          "nodes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Node"
+            }
+          },
+          "schedule" : {
+            "$ref" : "#/components/schemas/Schedule"
+          },
+          "params" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobParam"
+            }
+          },
+          "directory" : {
+            "type" : "string"
+          },
+          "jobType" : {
+            "type" : "string",
+            "enum" : [ "BATCH", "REAL_TIME" ]
+          },
+          "lastUpdateUser" : {
+            "type" : "string"
+          },
+          "basicConfig" : {
+            "$ref" : "#/components/schemas/BasicInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "Location" : {
+        "properties" : {
+          "x" : {
+            "type" : "integer"
+          },
+          "y" : {
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "DependJob" : {
+        "properties" : {
+          "jobs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "依赖的作业名称列表,必须依赖已存在的作业."
+          },
+          "dependPeriod" : {
+            "type" : "string",
+            "description" : "依赖周期"
+          },
+          "dependFailPolicy" : {
+            "type" : "string",
+            "enum" : [ "FAIL", "IGNORE", "SUSPEND" ],
+            "description" : "依赖作业任务执行失败处理策略"
+          },
+          "sameWorkSpaceJobs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/dependWorkSpaceJob"
+            },
+            "description" : "依赖本工作空间的作业名称列表"
+          },
+          "otherWorkSpaceJobs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/dependWorkSpaceJob"
+            },
+            "description" : "依赖其他工作空间的作业名称列表"
+          }
+        },
+        "required" : [ "jobs" ],
+        "type" : "object"
+      },
+      "JobParam" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          },
+          "paramType" : {
+            "type" : "string",
+            "enum" : [ "variable", "constants" ]
+          }
+        },
+        "type" : "object"
+      },
+      "BasicInfo" : {
+        "properties" : {
+          "owner" : {
+            "type" : "string",
+            "description" : "作业责任人"
+          },
+          "priority" : {
+            "type" : "integer",
+            "description" : "作业优先级"
+          },
+          "executeUser" : {
+            "type" : "string",
+            "description" : "作业执行用户"
+          },
+          "instanceTimeout" : {
+            "type" : "integer",
+            "description" : "实例超时时间"
+          },
+          "customFields" : {
+            "type" : "object",
+            "description" : "用户自定义属性字段"
+          }
+        },
+        "type" : "object"
+      },
+      "Schedule" : {
+        "properties" : {
+          "scheType" : {
+            "type" : "string",
+            "enum" : [ "EXECUTE_ONCE", "CRON", "EVENT" ]
+          },
+          "cron" : {
+            "$ref" : "#/components/schemas/Cron"
+          },
+          "event" : {
+            "$ref" : "#/components/schemas/Event"
+          }
+        },
+        "type" : "object"
+      },
+      "TreeNodeElement" : {
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "job", "script" ]
+          },
+          "parent_directory_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "element_id" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "type" : "string"
+          },
+          "process_type" : {
+            "type" : "string"
+          },
+          "is_single_node_job" : {
+            "type" : "boolean"
+          }
+        },
+        "type" : "object"
+      },
+      "DirectoryTreeResp" : {
+        "properties" : {
+          "parent_directory_id" : {
+            "type" : "string"
+          },
+          "directory_name" : {
+            "type" : "string"
+          },
+          "category_type" : {
+            "type" : "string"
+          },
+          "directory_id" : {
+            "type" : "string"
+          },
+          "paging" : {
+            "type" : "boolean"
+          },
+          "offset" : {
+            "type" : "integer"
+          },
+          "limit" : {
+            "type" : "integer"
+          },
+          "count" : {
+            "type" : "integer"
+          },
+          "elements" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TreeNodeElement"
+            }
+          },
+          "sub_directories" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DirectoryTreeResp"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ScriptInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "FlinkSQL", "DLISQL", "SparkSQL", "HiveSQL", "DWSSQL", "Shell" ],
+            "description" : "脚本类型"
+          },
+          "directory" : {
+            "type" : "string",
+            "description" : "脚本关联的目录"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "脚本内容"
+          },
+          "connectionName" : {
+            "type" : "string",
+            "description" : "脚本关联的连接名称"
+          },
+          "database" : {
+            "type" : "string",
+            "description" : "脚本执行所在的数据库"
+          },
+          "queueName" : {
+            "type" : "string",
+            "description" : "脚本关联的DLI队列名称"
+          },
+          "configuration" : {
+            "type" : "string",
+            "description" : "脚本的配置项参数"
+          }
+        },
+        "type" : "object"
+      },
+      "ScriptInfoListResp" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer"
+          },
+          "scripts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ScriptInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "SubTaskStatus" : {
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "startTime" : {
+            "type" : "string"
+          },
+          "endTime" : {
+            "type" : "string"
+          },
+          "lastUpdate" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "RUNNING", "SUCCESSFUL", "FAILED" ]
+          }
+        },
+        "type" : "object"
+      },
+      "QuerySystemTaskResp" : {
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "startTime" : {
+            "type" : "string"
+          },
+          "endTime" : {
+            "type" : "string"
+          },
+          "lastUpdate" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "RUNNING", "SUCCESSFUL", "FAILED" ]
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "subTasks" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SubTaskStatus"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ConnectionInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "DWS", "DLI", "SparkSQL", "Hive", "RDS", "CloudTable" ]
+          },
+          "config" : {
+            "type" : "object"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "type" ],
+        "type" : "object"
+      },
+      "ResourceInfo" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "archive", "file", "jar" ]
+          },
+          "location" : {
+            "type" : "string",
+            "description" : "资源文件所在OBS路径"
+          },
+          "dependFiles" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "desc" : {
+            "type" : "string"
+          },
+          "directory" : {
+            "type" : "string",
+            "description" : "资源所在目录"
+          }
+        },
+        "type" : "object"
+      },
+      "RunOnceResp" : {
+        "properties" : {
+          "instanceId" : {
+            "type" : "string",
+            "description" : "作业实例id"
+          }
+        },
+        "type" : "object"
+      },
+      "StartJobReq" : {
+        "properties" : {
+          "jobParams" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobParam"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "FilePath" : {
+        "properties" : {
+          "path" : {
+            "type" : "string",
+            "description" : "文件在OBS上的路径"
+          }
+        },
+        "type" : "object"
+      },
+      "FileInfoResp" : {
+        "properties" : {
+          "jobs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Job"
+            }
+          },
+          "scripts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Script"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Script" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Job" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string"
+          },
+          "params" : {
+            "type" : "object"
+          }
+        },
+        "type" : "object"
+      },
+      "ListJobResp" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer"
+          },
+          "jobs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ImportConnectionResp" : {
+        "properties" : {
+          "taskId" : {
+            "type" : "string",
+            "description" : "任务id"
+          }
+        },
+        "type" : "object"
+      },
+      "ConnectionParam" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "connectionType" : {
+            "type" : "string",
+            "enum" : [ "DWS", "DLI", "SparkSQL", "Hive", "RDS", "CloudTable" ]
+          },
+          "params" : {
+            "type" : "object"
+          }
+        },
+        "type" : "object"
+      },
+      "ImportConnectionReq" : {
+        "properties" : {
+          "path" : {
+            "type" : "string"
+          },
+          "params" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectionParam"
+            },
+            "description" : "连接参数"
+          },
+          "sameNamePolicy" : {
+            "type" : "string",
+            "enum" : [ "SKIP", "OVERWRITE" ]
+          }
+        },
+        "type" : "object"
+      },
+      "QueryConnectionListResp" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer"
+          },
+          "connections" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectionInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ExportJobsReq" : {
+        "properties" : {
+          "jobList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "exportDepend" : {
+            "type" : "boolean",
+            "description" : "是否导出作业依赖的脚本和资源"
+          }
+        },
+        "type" : "object"
+      },
+      "ImportFileReq" : {
+        "properties" : {
+          "path" : {
+            "type" : "string"
+          },
+          "params" : {
+            "type" : "object",
+            "description" : "公共作业参数"
+          },
+          "sameNamePolicy" : {
+            "type" : "string",
+            "enum" : [ "SKIP", "OVERWRITE" ]
+          },
+          "jobsParam" : {
+            "type" : "object",
+            "description" : "指定作业参数"
+          },
+          "executeUser" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ImportJobResp" : {
+        "properties" : {
+          "taskId" : {
+            "type" : "string",
+            "description" : "任务id"
+          }
+        },
+        "type" : "object"
+      },
+      "RealTimeJobStatusResp" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "STARTTING", "NORMAL", "EXCEPTION", "STOPPING", "STOPPED" ]
+          },
+          "starttime" : {
+            "type" : "string"
+          },
+          "endTime" : {
+            "type" : "string"
+          },
+          "lastUpdateTime" : {
+            "type" : "string",
+            "description" : "状态最后更新时间"
+          },
+          "nodes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RealTimeNodeStatus"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "RealTimeNodeStatus" : {
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "STARTTING", "NORMAL", "EXCEPTION", "STOPPING", "STOPPED" ]
+          },
+          "logPath" : {
+            "type" : "string"
+          },
+          "nodeType" : {
+            "type" : "string",
+            "enum" : [ "HiveSQL", "SparkSQL", "DWSSQL", "DLISQL", "Shell", "CDMJob", "DISTransferTask", "CSJob", "CloudTableManage", "OBSManager", "RESTAPI", "MachineLearning", "SMN", "MRSSpark", "MapReduce", "DLISpark" ]
+          }
+        },
+        "type" : "object"
+      },
+      "QueryJobInstanceResp" : {
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "planTime" : {
+            "type" : "integer"
+          },
+          "startTime" : {
+            "type" : "integer"
+          },
+          "endTime" : {
+            "type" : "integer"
+          },
+          "executeTime" : {
+            "type" : "integer"
+          },
+          "instancesId" : {
+            "type" : "string"
+          },
+          "total" : {
+            "type" : "integer"
+          },
+          "nodes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NodeInstance"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "NodeInstance" : {
+        "properties" : {
+          "nodeName" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "planTime" : {
+            "type" : "integer"
+          },
+          "startTime" : {
+            "type" : "integer"
+          },
+          "endTime" : {
+            "type" : "integer"
+          },
+          "executeTime" : {
+            "type" : "integer"
+          },
+          "nodeType" : {
+            "type" : "string"
+          },
+          "retryTimes" : {
+            "type" : "integer"
+          },
+          "instanceId" : {
+            "type" : "integer"
+          },
+          "inputRowCount" : {
+            "type" : "integer"
+          },
+          "outputRowCount" : {
+            "type" : "integer"
+          },
+          "logPath" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ExecuteScriptResp" : {
+        "properties" : {
+          "instanceId" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ExecuteScriptReq" : {
+        "properties" : {
+          "params" : {
+            "type" : "object",
+            "description" : "脚本的执行参数"
+          }
+        },
+        "type" : "object"
+      },
+      "ScriptStatus" : {
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "result" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Result"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Result" : {
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "rowCount" : {
+            "type" : "integer"
+          },
+          "rows" : {
+            "type" : "string"
+          },
+          "schema" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ResourceList" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer"
+          },
+          "resources" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "JobInstance" : {
+        "properties" : {
+          "jobName" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "planTime" : {
+            "type" : "integer"
+          },
+          "startTime" : {
+            "type" : "integer"
+          },
+          "endTime" : {
+            "type" : "integer"
+          },
+          "executeTime" : {
+            "type" : "integer"
+          },
+          "instancesId" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "QueryJobInstanceListResp" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer"
+          },
+          "instances" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobInstance"
+            }
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowJob" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询作业详情",
+        "operationId" : "ShowJob",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}"
+    },
+    "/ShowDirectoryTree" : {
+      "get" : {
+        "tags" : [ "目录树相关的API" ],
+        "summary" : "查询目录树",
+        "operationId" : "ShowDirectoryTree",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DirectoryTreeResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "查询的目录节点类型.",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的目录节点类型.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "directory_id",
+          "in" : "query",
+          "description" : "目录编号.",
+          "required" : false,
+          "schema" : {
+            "description" : "目录编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "目标元素名称.",
+          "required" : false,
+          "schema" : {
+            "description" : "目标元素名称.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询偏移量.",
+          "required" : false,
+          "schema" : {
+            "description" : "查询偏移量.",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量.",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量.",
+            "type" : "integer"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDirectoryTree",
+      "x-url" : "{endpoint}/v1.0/{project_id}/directory/tree"
+    },
+    "/ListScripts" : {
+      "get" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "查询脚本列表",
+        "operationId" : "ListScripts",
+        "responses" : {
+          "200" : {
+            "description" : "Get Script Information List",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScriptInfoListResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListScripts",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts"
+    },
+    "/ShowScript" : {
+      "get" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "查询脚本信息",
+        "operationId" : "ShowScript",
+        "responses" : {
+          "200" : {
+            "description" : "Get Script Information",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScriptInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}"
+    },
+    "/CreateJob" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "创建作业",
+        "operationId" : "CreateJob",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JobInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs"
+    },
+    "/ListSystemTasks" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询系统任务详情",
+        "operationId" : "ListSystemTasks",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuerySystemTaskResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "系统任务id.",
+          "required" : true,
+          "schema" : {
+            "description" : "系统任务id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSystemTasks",
+      "x-url" : "{endpoint}/v1/{project_id}/system-tasks/{task_id}"
+    },
+    "/CreateConnection" : {
+      "post" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "创建连接",
+        "operationId" : "CreateConnection",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConnectionInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateConnection",
+      "x-url" : "{endpoint}/v1/{project_id}/connections"
+    },
+    "/ExportJob" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "导出作业",
+        "operationId" : "ExportJob",
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/export"
+    },
+    "/UpdateResource" : {
+      "put" : {
+        "tags" : [ "资源相关的API" ],
+        "summary" : "修改资源",
+        "operationId" : "UpdateResource",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源id.",
+          "required" : true,
+          "schema" : {
+            "description" : "资源id.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceInfo"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateResource",
+      "x-url" : "{endpoint}/v1/{project_id}/resources/{resource_id}"
+    },
+    "/RunOnce" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "单次执行作业",
+        "operationId" : "RunOnce",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RunOnceResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartJobReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunOnce",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/run-immediate"
+    },
+    "/RestoreJobInstance" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "重跑作业实例",
+        "operationId" : "RestoreJobInstance",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "作业实例id.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业实例id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RestoreJobInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/instances/{instance_id}/restart"
+    },
+    "/CancelScript" : {
+      "post" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "停止脚本实例的执行",
+        "operationId" : "CancelScript",
+        "responses" : {
+          "204" : {
+            "description" : "cancel execute Script success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CancelScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}/instances/{instance_id}/stop"
+    },
+    "/StopJobInstance" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "停止作业实例",
+        "operationId" : "StopJobInstance",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "作业实例id.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业实例id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopJobInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/instances/{instance_id}/stop"
+    },
+    "/ShowFileInfo" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "检查导入作业文件中的作业和脚本",
+        "operationId" : "ShowFileInfo",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FileInfoResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FilePath"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFileInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/check-file"
+    },
+    "/UpdateConnection" : {
+      "put" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "修改连接",
+        "operationId" : "UpdateConnection",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connection_name",
+          "in" : "path",
+          "description" : "连接名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "连接名称.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ConnectionInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateConnection",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connection_name}"
+    },
+    "/CreateResource" : {
+      "post" : {
+        "tags" : [ "资源相关的API" ],
+        "summary" : "创建资源",
+        "operationId" : "CreateResource",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResourceInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateResource",
+      "x-url" : "{endpoint}/v1/{project_id}/resources"
+    },
+    "/ExportConnections" : {
+      "post" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "导出连接",
+        "operationId" : "ExportConnections",
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportConnections",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/export"
+    },
+    "/DeleteJob" : {
+      "delete" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "删除作业",
+        "operationId" : "DeleteJob",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}"
+    },
+    "/StopJob" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "停止作业",
+        "operationId" : "StopJob",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/stop"
+    },
+    "/ListJobs" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询作业列表",
+        "operationId" : "ListJobs",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListJobResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListJobs",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs"
+    },
+    "/UpdateJob" : {
+      "put" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "修改作业",
+        "operationId" : "UpdateJob",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JobInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}"
+    },
+    "/DeleteScript" : {
+      "delete" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "删除脚本",
+        "operationId" : "DeleteScript",
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}"
+    },
+    "/ImportConnections" : {
+      "post" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "导入连接",
+        "operationId" : "ImportConnections",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImportConnectionResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImportConnectionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportConnections",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/import"
+    },
+    "/ListConnections" : {
+      "get" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "查询连接列表",
+        "operationId" : "ListConnections",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryConnectionListResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListConnections",
+      "x-url" : "{endpoint}/v1/{project_id}/connections"
+    },
+    "/DeleteConnction" : {
+      "delete" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "删除连接",
+        "operationId" : "DeleteConnction",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connection_name",
+          "in" : "path",
+          "description" : "连接名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "连接名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteConnction",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connection_name}"
+    },
+    "/ExportJobList" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "批量导出作业",
+        "operationId" : "ExportJobList",
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExportJobsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportJobList",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/batch-export"
+    },
+    "/ShowResource" : {
+      "get" : {
+        "tags" : [ "资源相关的API" ],
+        "summary" : "查询资源详情",
+        "operationId" : "ShowResource",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResourceInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源id.",
+          "required" : true,
+          "schema" : {
+            "description" : "资源id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResource",
+      "x-url" : "{endpoint}/v1/{project_id}/resources/{resource_id}"
+    },
+    "/ImportJob" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "导入作业",
+        "operationId" : "ImportJob",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImportJobResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImportFileReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/import"
+    },
+    "/ShowJobStatus" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询实时作业的运行状态",
+        "operationId" : "ShowJobStatus",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RealTimeJobStatusResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobStatus",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/status"
+    },
+    "/CreateScript" : {
+      "post" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "创建脚本",
+        "operationId" : "CreateScript",
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScriptInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts"
+    },
+    "/DeleteResource" : {
+      "delete" : {
+        "tags" : [ "资源相关的API" ],
+        "summary" : "删除资源",
+        "operationId" : "DeleteResource",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源id.",
+          "required" : true,
+          "schema" : {
+            "description" : "资源id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteResource",
+      "x-url" : "{endpoint}/v1/{project_id}/resources/{resource_id}"
+    },
+    "/UpdateScript" : {
+      "put" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "修改脚本内容",
+        "operationId" : "UpdateScript",
+        "responses" : {
+          "204" : {
+            "description" : "Success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScriptInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}"
+    },
+    "/ShowJobInstance" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询作业实例详情",
+        "operationId" : "ShowJobInstance",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryJobInstanceResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "作业实例id.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业实例id.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/instances/{instance_id}"
+    },
+    "/StartJob" : {
+      "post" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "启动作业",
+        "operationId" : "StartJob",
+        "responses" : {
+          "204" : {
+            "description" : "success"
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_name",
+          "in" : "path",
+          "description" : "作业名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "作业名称.",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartJobReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_name}/start"
+    },
+    "/ExecuteScript" : {
+      "post" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "执行脚本",
+        "operationId" : "ExecuteScript",
+        "responses" : {
+          "200" : {
+            "description" : "execute Script Information",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExecuteScriptResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExecuteScriptReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteScript",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}/execute"
+    },
+    "/ListScriptResults" : {
+      "get" : {
+        "tags" : [ "脚本相关的API" ],
+        "summary" : "查询脚本实例执行结果",
+        "operationId" : "ListScriptResults",
+        "responses" : {
+          "200" : {
+            "description" : "execute Script result",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ScriptStatus"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "script_name",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "description" : "",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListScriptResults",
+      "x-url" : "{endpoint}/v1/{project_id}/scripts/{script_name}/instances/{instance_id}"
+    },
+    "/ShowConnection" : {
+      "get" : {
+        "tags" : [ "连接相关的API" ],
+        "summary" : "查询连接详情",
+        "operationId" : "ShowConnection",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectionInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connection_name",
+          "in" : "path",
+          "description" : "连接名称.",
+          "required" : true,
+          "schema" : {
+            "description" : "连接名称.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowConnection",
+      "x-url" : "{endpoint}/v1/{project_id}/connections/{connection_name}"
+    },
+    "/ListResources" : {
+      "get" : {
+        "tags" : [ "资源相关的API" ],
+        "summary" : "查询资源列表",
+        "operationId" : "ListResources",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResourceList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResources",
+      "x-url" : "{endpoint}/v1/{project_id}/resources"
+    },
+    "/ListJobInstances" : {
+      "get" : {
+        "tags" : [ "作业相关的API" ],
+        "summary" : "查询作业实例列表",
+        "operationId" : "ListJobInstances",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryJobInstanceListResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "workspace",
+          "in" : "header",
+          "description" : "工作空间id",
+          "required" : false,
+          "schema" : {
+            "description" : "工作空间id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目编号.",
+          "required" : true,
+          "schema" : {
+            "description" : "项目编号.",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListJobInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/instances/detail"
+    }
+  }
+}

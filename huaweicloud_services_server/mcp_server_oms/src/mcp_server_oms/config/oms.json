@@ -1,0 +1,5311 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "OMS-迁移任务组管理",
+    "title" : "OMS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ErrorResp" : {
+        "properties" : {
+          "error_msg" : {
+            "type" : "string",
+            "example" : "Error message.",
+            "description" : "错误信息。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "error_code" : {
+            "type" : "string",
+            "example" : "OMS.0001",
+            "description" : "错误码。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          }
+        },
+        "description" : "标准错误响应体。",
+        "type" : "object"
+      },
+      "ErrorReasonResp" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "迁移失败的错误码。",
+            "maxLength" : 10,
+            "minLength" : 0
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "迁移失败的原因。",
+            "maxLength" : 1024,
+            "minLength" : 0
+          }
+        },
+        "description" : "迁移任务查询接口中返回的任务失败信息提示",
+        "type" : "object"
+      },
+      "SyncTaskStatisticResp" : {
+        "description" : "查询同步任务统计的响应体",
+        "properties" : {
+          "sync_task_id" : {
+            "type" : "string",
+            "description" : "同步任务id",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 1
+          },
+          "statistic_time_type" : {
+            "type" : "string",
+            "description" : "统计结果时间间隔说明描述",
+            "enum" : [ "FIVE_MINUTES", "ONE_HOUR" ],
+            "maxLength" : 255,
+            "minLength" : 1,
+            "example" : "FIVE_MINUTES"
+          },
+          "statistic_datas" : {
+            "type" : "array",
+            "description" : "查询的同步任务统计结果集",
+            "maxItems" : 1000,
+            "minItems" : 0,
+            "items" : {
+              "$ref" : "#/components/schemas/StatisticTypeData"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "StatisticData" : {
+        "description" : "查询同步任务统计结果",
+        "properties" : {
+          "time_stamp" : {
+            "type" : "integer",
+            "description" : "统计时间戳",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "statistic_num" : {
+            "type" : "integer",
+            "description" : "统计数量",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          }
+        },
+        "type" : "object"
+      },
+      "StatisticTypeData" : {
+        "description" : "查询同步任务统计结果",
+        "properties" : {
+          "data_type" : {
+            "type" : "string",
+            "description" : "统计数据类型:",
+            "maxLength" : 255,
+            "minLength" : 1,
+            "enum" : [ "REQUEST", "SUCCESS", "FAILURE", "SKIP", "SIZE" ]
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "查询的同步任务统计结果集",
+            "maxItems" : 1000,
+            "minItems" : 0,
+            "items" : {
+              "$ref" : "#/components/schemas/StatisticData"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowBucketRegionReq" : {
+        "description" : "查询桶对应的region",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ListBucketsReq"
+        }, {
+          "required" : [ "bucket_name" ],
+          "type" : "object",
+          "properties" : {
+            "bucket_name" : {
+              "type" : "string",
+              "description" : "桶名",
+              "example" : "xxx",
+              "minLength" : 0,
+              "maxLength" : 100,
+              "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+            }
+          }
+        } ],
+        "type" : "object"
+      },
+      "ShowBucketRegionResp" : {
+        "type" : "object",
+        "description" : "查询桶region响应体",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "region ID",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "region 名称",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "support" : {
+            "type" : "boolean",
+            "description" : "此region是否支持迁移",
+            "example" : false
+          }
+        }
+      },
+      "ListBucketsReq" : {
+        "type" : "object",
+        "description" : "查询桶列表请求体",
+        "properties" : {
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "云类型",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "default" : "Aliyun",
+            "example" : "HuaweiCloud",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Qiniu|Google|URLSource|UCloud|HEC)$"
+          },
+          "ak" : {
+            "type" : "string",
+            "description" : "源端桶的AK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "example" : "xxxxak",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "sk" : {
+            "type" : "string",
+            "description" : "源端桶的SK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "example" : "xxxxsk",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,会返回此参数。",
+            "example" : "apptest123",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 255
+          }
+        },
+        "required" : [ "cloud_type" ]
+      },
+      "BandwidthPolicyDto" : {
+        "required" : [ "end", "max_bandwidth", "start" ],
+        "properties" : {
+          "end" : {
+            "type" : "string",
+            "example" : "23:59",
+            "description" : "流量控制结束时间(包含),格式为“hh:mm”。例如“12:03”表示12时03分。",
+            "pattern" : "^(20|21|22|23|[0-1]\\d):[0-5]\\d"
+          },
+          "max_bandwidth" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 5242880,
+            "description" : "时段内允许的最大流量带宽,单位Byte/s,取值范围为>= 1048576Byte/s(相当于1MB/s)且<=209715200Byte/s(相当于200MB/s)。",
+            "minimum" : 1048576,
+            "maximum" : 209715200
+          },
+          "start" : {
+            "type" : "string",
+            "example" : "00:00",
+            "description" : "流量控制开始时间(包含),格式为“hh:mm”。例如“12:03”表示12时03分。",
+            "pattern" : "^(20|21|22|23|[0-1]\\d):[0-5]\\d"
+          }
+        },
+        "description" : "带宽限速策略。",
+        "type" : "object"
+      },
+      "UpdateBandwidthPolicyReq" : {
+        "required" : [ "bandwidth_policy" ],
+        "properties" : {
+          "bandwidth_policy" : {
+            "type" : "array",
+            "description" : "配置流量控制策略。数组中一个元素对应一个时段的最大带宽,最多允许5个时段,且时段不能重叠。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "ShowRegionInfoResp" : {
+        "type" : "object",
+        "description" : "查询Region信息响应体",
+        "properties" : {
+          "service_name" : {
+            "type" : "string",
+            "description" : "服务名称",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "region_list" : {
+            "type" : "array",
+            "description" : "Region列表",
+            "minItems" : 0,
+            "maxItems" : 1024,
+            "items" : {
+              "$ref" : "#/components/schemas/RegionInfo"
+            }
+          }
+        }
+      },
+      "RegionInfo" : {
+        "type" : "object",
+        "description" : "Region信息",
+        "properties" : {
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "云服务名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "region名称",
+            "minLength" : 1,
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "region的描述信息",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        }
+      },
+      "CreateSyncTaskResp" : {
+        "description" : "创建同步任务的响应体",
+        "properties" : {
+          "sync_task_id" : {
+            "type" : "string",
+            "description" : "同步任务ID",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "CreateSyncTaskReq" : {
+        "description" : "创建同步请求body体",
+        "properties" : {
+          "src_cloud_type" : {
+            "type" : "string",
+            "description" : "源端云服务提供商。",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Qiniu|UCloud)$",
+            "default" : "Aliyun"
+          },
+          "src_region" : {
+            "type" : "string",
+            "description" : "源端桶所处的区域",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "src_bucket" : {
+            "type" : "string",
+            "description" : "源端桶名",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "src_ak" : {
+            "type" : "string",
+            "description" : "源端桶的AK(最大长度100个字符)。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "src_sk" : {
+            "type" : "string",
+            "description" : "源端桶的SK(最大长度100个字符)。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "dst_ak" : {
+            "type" : "string",
+            "description" : "目的端桶的AK(最大长度100个字符)。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "dst_sk" : {
+            "type" : "string",
+            "description" : "目的端桶的SK(最大长度100个字符)。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "dst_region" : {
+            "type" : "string",
+            "description" : "目的端region",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "dst_bucket" : {
+            "type" : "string",
+            "description" : "目的端桶名",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述,不能超过255个字符,且不能包含<>()\"'&等特殊字符。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。",
+            "default" : false
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "description" : "是否开启KMS加密,默认不开启。",
+            "default" : false
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "description" : "是否自动解冻归档数据,默认否。",
+            "default" : false
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,需要填写此参数。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "source_cdn" : {
+            "description" : "指定是否启用CDN迁移支持,若包含此字段则为支持,否则为不支持,启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。",
+            "$ref" : "#/components/schemas/SourceCdnReq"
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "一致性校验方式,用于迁移前/后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "default" : "size_last_modified",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "transmission" ]
+          }
+        },
+        "required" : [ "src_region", "src_bucket", "src_ak", "src_sk", "dst_ak", "dst_sk", "dst_region", "dst_bucket" ],
+        "type" : "object"
+      },
+      "SourceCdnReq" : {
+        "required" : [ "authentication_type", "domain", "protocol" ],
+        "properties" : {
+          "authentication_key" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "CDN鉴权秘钥,如果CDN需要进行鉴权,则此选项为必选。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "authentication_type" : {
+            "type" : "string",
+            "example" : "ALIYUN_OSS_A",
+            "description" : "鉴权类型:",
+            "enum" : [ "NONE", "QINIU_PRIVATE_AUTHENTICATION", "ALIYUN_OSS_A", "ALIYUN_OSS_B", "ALIYUN_OSS_C", "KSYUN_PRIVATE_AUTHENTICATION", "AZURE_SAS_TOKEN", "TENCENT_COS_A", "TENCENT_COS_B", "TENCENT_COS_C", "TENCENT_COS_D" ],
+            "default" : "NONE"
+          },
+          "domain" : {
+            "type" : "string",
+            "example" : "xxx.xxx.xxx",
+            "description" : "\t",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^(?=^.{3,255}$)(?!^.*\\.myhuaweicloud.com$)(?!^.*\\.myhwclouds.com$)((?!^.*(\\d)+$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$)"
+          },
+          "protocol" : {
+            "type" : "string",
+            "example" : "https",
+            "description" : "协议类型,支持http和https协议。",
+            "enum" : [ "http", "https" ]
+          }
+        },
+        "description" : "源端CDN配置。",
+        "type" : "object"
+      },
+      "ListFile" : {
+        "required" : [ "list_file_key", "obs_bucket" ],
+        "properties" : {
+          "list_file_key" : {
+            "type" : "string",
+            "example" : "object_list_file.txt",
+            "description" : "对象列表文件或URL列表文件对象名。",
+            "minLength" : 1,
+            "maxLength" : 1024
+          },
+          "obs_bucket" : {
+            "type" : "string",
+            "example" : "obs_bucket",
+            "description" : "存放对象列表文件的OBS桶名。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "list_file_num" : {
+            "type" : "string",
+            "description" : "存放对象列表文件的数量",
+            "example" : 10,
+            "minLength" : 0,
+            "maxLength" : 65535
+          }
+        },
+        "description" : "列表文件配置。",
+        "type" : "object"
+      },
+      "TaskGroupResp" : {
+        "description" : "返回的查询的迁移任务组信息",
+        "properties" : {
+          "group_id" : {
+            "type" : "string",
+            "description" : "任务组id",
+            "minLength" : 1,
+            "maxLength" : 100
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "迁移组任务状态。",
+            "minimum" : 0,
+            "maximum" : 9
+          },
+          "error_reason" : {
+            "description" : "任务组失败原因,非失败状态时该字段为空字符串。",
+            "$ref" : "#/components/schemas/ErrorReasonResp"
+          },
+          "src_node" : {
+            "$ref" : "#/components/schemas/TaskGroupSrcNodeResp",
+            "description" : "源端信息"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述,不能超过255个字符,且不能包含^<>&\"'等特殊字符。",
+            "example" : "这是一个迁移任务",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "dst_node" : {
+            "description" : "目的端信息。",
+            "$ref" : "#/components/schemas/TaskGroupDstNodeResp"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。",
+            "default" : "false",
+            "example" : "true"
+          },
+          "enable_failed_object_recording" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否开启记录失败对象",
+            "pattern" : "^.{0,100}$"
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否自动解冻归档数据,(由于对象存储解冻需要源端存储等待一定时间,开启自动解冻会对迁移速度有较大影响,建议先完成归档存储数据解冻后再启动迁移)。"
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "example" : "true",
+            "description" : "存储入OBS时是否使用KMS加密。"
+          },
+          "task_type" : {
+            "type" : "string",
+            "example" : "PREFIX",
+            "description" : "任务类型,默认为PREFIX。",
+            "enum" : [ "LIST", "URL_LIST", "PREFIX" ]
+          },
+          "bandwidth_policy" : {
+            "items" : {
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "type" : "array",
+            "description" : "配置流量控制策略。数组中一个元素对应一个时段的最大带宽,最多允许5个时段,且时段不能重叠。",
+            "minItems" : 0,
+            "maxItems" : 5
+          },
+          "smn_config" : {
+            "description" : "SMN消息发送配置。",
+            "$ref" : "#/components/schemas/SmnInfo"
+          },
+          "source_cdn" : {
+            "$ref" : "#/components/schemas/SourceCdnResp",
+            "description" : "指定是否启用CDN迁移支持,若包含此字段则为支持,否则为不支持,启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。"
+          },
+          "migrate_since" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移指定时间(时间戳,毫秒),表示仅迁移在指定时间之后修改的源端待迁移对象。默认为0,表示不设置迁移指定时间。",
+            "default" : 0,
+            "example" : 1586490079,
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "migrate_speed" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务组迁移速度(Byte/s)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "total_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移任务组总耗时(毫秒)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移任务组的启动时间(Unix时间戳,毫秒)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "total_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务组包含的迁移任务总数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "create_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已创建的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "failed_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "失败的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "complete_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已完成的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "paused_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "暂停的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "executing_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "正在运行的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "waiting_task_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "等待中的迁移任务数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移任务组包含的对象总数量",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "create_complete_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已完成任务创建的对象总数量",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "success_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "成功的对象数量",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "fail_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "失败的对象数量",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "skip_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "忽略的对象数量",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "total_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务迁移总大小(Byte)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "create_complete_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已创建迁移任务包含的对象总大小(Byte)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "complete_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "已迁移成功的对象总大小(Byte)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "failed_object_record" : {
+            "description" : "失败对象记录",
+            "$ref" : "#/components/schemas/FailedObjectRecordDto"
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "一致性校验方式,用于迁移前/后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          },
+          "enable_requester_pays" : {
+            "type" : "boolean",
+            "description" : "是否开启请求者付款,在启用后,请求者支付请求和数据传输费用。",
+            "example" : "true"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskGroupDstNodeResp" : {
+        "description" : "迁移任务组目的端节点信息",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "目的端桶的名称。",
+            "example" : "dst_bucket",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "目的端桶所处的区域。",
+            "example" : "cn-north-1",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "save_prefix" : {
+            "type" : "string",
+            "example" : "1000-files",
+            "description" : "目的端桶内路径前缀(拼接在对象key前面,组成新的key,拼接后不能超过1024个字符)。",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "type" : "object"
+      },
+      "FailedObjectRecordDto" : {
+        "properties" : {
+          "result" : {
+            "type" : "boolean",
+            "description" : "是否支持失败对象重传。",
+            "example" : true
+          },
+          "list_file_key" : {
+            "type" : "string",
+            "description" : "失败对象列表文件路径。",
+            "maxLength" : 1024,
+            "minLength" : 0,
+            "example" : "oms/failed_object_lists/hw-source-oms-test-01-20200808072749593_159_20200808072749593-0.failed_list.txt"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "失败对象列表上传失败的错误码。",
+            "maxLength" : 10,
+            "minLength" : 0,
+            "example" : "S3M.0001"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TaskGroupSrcNodeResp" : {
+        "description" : "源端迁移任务组节点信息。",
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "源端桶的名称。",
+            "example" : "src_bucket",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "源端云服务提供商。",
+            "example" : "HUAWEICLOUD",
+            "enum" : [ "AWS", "AZURE", "ALIYUN", "TENCENT", "HUAWEICLOUD", "QINGCLOUD", "KINGSOFTCLOUD", "BAIDU", "QINIU", "URLSOURCE", "UCLOUD", "GOOGLE" ]
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "源端桶所处的区域。",
+            "example" : "cn-north-1",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,会返回此参数。",
+            "example" : "apptest123",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "object_key" : {
+            "type" : "array",
+            "description" : "任务组类型为前缀迁移任务时,表示待迁移前缀。",
+            "minItems" : 0,
+            "maxItems" : 500,
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 1024
+            }
+          },
+          "list_file" : {
+            "description" : "列表文件配置,当task_type为list或url_list时,list_file为必选参数。",
+            "$ref" : "#/components/schemas/ListFile"
+          }
+        },
+        "type" : "object"
+      },
+      "SmnInfo" : {
+        "properties" : {
+          "notify_result" : {
+            "type" : "boolean",
+            "description" : "记录迁移任务执行完毕后SMN消息是否发送成功。",
+            "example" : false
+          },
+          "notify_error_message" : {
+            "type" : "string",
+            "description" : "记录SMN消息发送失败原因的错误码(迁移任务成功时为空)。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "example" : "S3M.0001"
+          },
+          "topic_name" : {
+            "type" : "string",
+            "description" : "SMN Topic的名称(SMN消息发送成功时为空)。",
+            "minLength" : 0,
+            "maxLength" : 5120,
+            "example" : "smn:xxxxxx"
+          }
+        },
+        "description" : "smn 消息通知结果",
+        "type" : "object"
+      },
+      "SourceCdnResp" : {
+        "required" : [ "domain", "protocol" ],
+        "properties" : {
+          "domain" : {
+            "type" : "string",
+            "example" : "xxx.xxx.xxx",
+            "description" : "\t",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^(?=^.{3,255}$)(?!^.*\\.myhuaweicloud.com$)(?!^.*\\.myhwclouds.com$)((?!^.*(\\d)+$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$)"
+          },
+          "protocol" : {
+            "type" : "string",
+            "example" : "https",
+            "description" : "协议类型,支持http和https协议。",
+            "enum" : [ "http", "https" ]
+          },
+          "authentication_type" : {
+            "type" : "string",
+            "description" : "鉴权类型:",
+            "enum" : [ "NONE", "QINIU_PRIVATE_AUTHENTICATION", "ALIYUN_OSS_A", "ALIYUN_OSS_B", "ALIYUN_OSS_C", "KSYUN_PRIVATE_AUTHENTICATION", "AZURE_SAS_TOKEN", "TENCENT_COS_A", "TENCENT_COS_B", "TENCENT_COS_C", "TENCENT_COS_D" ]
+          }
+        },
+        "description" : "源端CDN配置返回值。",
+        "type" : "object"
+      },
+      "SmnConfig" : {
+        "required" : [ "topic_urn", "trigger_conditions" ],
+        "properties" : {
+          "language" : {
+            "type" : "string",
+            "example" : "en-us",
+            "description" : "当前用户所使用的管理控制台的语言。",
+            "enum" : [ "zh-cn", "en-us" ],
+            "default" : "en-us"
+          },
+          "topic_urn" : {
+            "type" : "string",
+            "example" : "urn:smn:region:4cf2090802d94440b4cdd72ef26857b2:OMS",
+            "description" : "迁移任务所绑定的SMN消息主题的urn号。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "trigger_conditions" : {
+            "type" : "array",
+            "example" : "[\"SUCCESS\",\"FAIL\"]",
+            "description" : "SMN消息的触发条件,取决于迁移任务状态。",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "pattern" : "^(SUCCESS|FAILURE)$"
+            },
+            "maxItems" : 2,
+            "minItems" : 1
+          },
+          "message_template_name" : {
+            "type" : "string",
+            "description" : "如果设置此值,则表示用模板方式发送smn信息。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          }
+        },
+        "description" : "SMN消息通知配置。",
+        "type" : "object"
+      },
+      "DstNodeReq" : {
+        "required" : [ "ak", "bucket", "region", "sk" ],
+        "properties" : {
+          "ak" : {
+            "type" : "string",
+            "example" : "9NV6VOXXX...",
+            "description" : "目的端桶的AK(最大长度100个字符)。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "sk" : {
+            "type" : "string",
+            "example" : "HTqVahv2cBXXXXXX...",
+            "description" : "目的端桶的SK(最大长度100个字符)。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "security_token" : {
+            "type" : "string",
+            "example" : "HtqVaHv2cBxxxxxxx",
+            "description" : "目的端的临时Token(最大长度16384个字符)。",
+            "minLength" : 0,
+            "maxLength" : 16384,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "bucket" : {
+            "type" : "string",
+            "example" : "dst_bucket",
+            "description" : "目的端桶的名称。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "save_prefix" : {
+            "type" : "string",
+            "example" : "1000-files",
+            "description" : "目的端桶内路径前缀(拼接在对象key前面,组成新的key,拼接后不能超过1024个字符)。",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "cn-north-1",
+            "description" : "目的端桶所处的区域。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CreateTaskResp" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务ID。",
+            "minimum" : 0,
+            "maximum" : 999999999999999,
+            "example" : 200844628315687
+          },
+          "task_name" : {
+            "type" : "string",
+            "description" : "任务名称。",
+            "minLength" : 0,
+            "maxLength" : 2048,
+            "example" : "test-bucket-oms-test-01-20200810115700121_779"
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "SrcNodeReq" : {
+        "properties" : {
+          "cloud_type" : {
+            "type" : "string",
+            "example" : "HuaweiCloud",
+            "description" : "源端云服务提供商,task_type为非url_list时,本参数为URLSource。",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Qiniu|Google|URLSource|UCloud)$",
+            "default" : "Aliyun"
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "cn-north-1",
+            "description" : "源端桶所处的区域,task_type为非url_list时,本参数为必选。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "ak" : {
+            "type" : "string",
+            "example" : "src_ak",
+            "description" : "源端桶的AK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "sk" : {
+            "type" : "string",
+            "example" : "src_sk",
+            "description" : "源端桶的SK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "security_token" : {
+            "type" : "string",
+            "example" : "security_token",
+            "description" : "源端桶的临时Token(最大长度16384个字符)",
+            "minLength" : 0,
+            "maxLength" : 16384,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,需要填写此参数。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "apptest123"
+          },
+          "bucket" : {
+            "type" : "string",
+            "example" : "src_bucket",
+            "description" : "源端桶的名称,task_type为非url_list时,本参数为必选。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "object_key" : {
+            "type" : "array",
+            "description" : "任务类型为对象迁移任务时,表示待迁移对象名称(以“/”结尾的字符串代表待迁移的文件夹,非“/”结尾的字符串代表待迁移的文件。);",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "minLength" : 0,
+              "maxLength" : 1024
+            },
+            "minItems" : 0,
+            "maxItems" : 500
+          },
+          "list_file" : {
+            "description" : "列表文件配置,当task_type为list或url_list时,list_file为必选参数。",
+            "$ref" : "#/components/schemas/ListFile"
+          }
+        },
+        "description" : "源端节点信息。",
+        "type" : "object"
+      },
+      "CreateTaskReq" : {
+        "properties" : {
+          "task_type" : {
+            "type" : "string",
+            "example" : "object",
+            "description" : "任务类型,默认为object。",
+            "enum" : [ "list", "url_list", "object", "prefix" ],
+            "default" : "object"
+          },
+          "src_node" : {
+            "description" : "源端信息。",
+            "$ref" : "#/components/schemas/SrcNodeReq"
+          },
+          "dst_node" : {
+            "description" : "目的端信息。",
+            "$ref" : "#/components/schemas/DstNodeReq"
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否开启KMS加密,默认不开启。",
+            "default" : false
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述,不能超过255个字符,且不能包含^<>&\"'等特殊字符。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "这是一个迁移任务"
+          },
+          "migrate_since" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1586490079,
+            "description" : "以时间戳方式表示的迁移指定时间(单位:秒),表示仅迁移在指定时间之后修改的源端待迁移对象。默认不设置迁移指定时间。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "default" : 0
+          },
+          "bandwidth_policy" : {
+            "type" : "array",
+            "description" : "配置流量控制策略。数组中一个元素对应一个时段的最大带宽,最多允许5个时段,且时段不能重叠。",
+            "items" : {
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          },
+          "source_cdn" : {
+            "description" : "指定是否启用CDN迁移支持,若包含此字段则为支持,否则为不支持,启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。",
+            "$ref" : "#/components/schemas/SourceCdnReq"
+          },
+          "smn_config" : {
+            "description" : "SMN消息发送配置。",
+            "$ref" : "#/components/schemas/SmnConfig"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。",
+            "default" : false
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否自动解冻归档数据,默认否。",
+            "default" : false
+          },
+          "enable_failed_object_recording" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否记录失败对象,默认开启。",
+            "default" : true
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "一致性校验方式,用于迁移前/后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "default" : "size_last_modified",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          },
+          "enable_requester_pays" : {
+            "type" : "boolean",
+            "description" : "是否开启请求者付款,在启用后,请求者支付请求和数据传输费用。",
+            "default" : "false",
+            "example" : "true"
+          },
+          "task_priority" : {
+            "type" : "string",
+            "description" : "HIGH:高优先级",
+            "enum" : [ "HIGH", "MEDIUM", "LOW" ]
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "required" : [ "src_node", "dst_node" ],
+        "type" : "object"
+      },
+      "ShowBucketReq" : {
+        "type" : "object",
+        "description" : "查询桶请求体",
+        "properties" : {
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "云类型",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "HuaweiCloud",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Google|Qiniu|URLSource|UCloud|HEC)$"
+          },
+          "file_path" : {
+            "type" : "string",
+            "description" : "目标桶中需要查询的对象文件路径,/结尾",
+            "example" : "xxx/",
+            "minLength" : 0,
+            "maxLength" : 1023
+          },
+          "ak" : {
+            "type" : "string",
+            "description" : "源端桶的AK(最大长度100个字符)",
+            "example" : "xxxxxak",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "sk" : {
+            "type" : "string",
+            "description" : "源端桶的SK(最大长度100个字符)",
+            "example" : "xxxxxsk",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "data_center" : {
+            "type" : "string",
+            "description" : "数据中心,区域",
+            "example" : "cn-north-x",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "page_size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "分页信息,页大小",
+            "example" : 100,
+            "minimum" : 0,
+            "maximum" : 100
+          },
+          "behind_filename" : {
+            "type" : "string",
+            "description" : "分页信息,当前页最后一个对象名称(偏移量)",
+            "example" : "xxx",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,会返回此参数。",
+            "example" : "apptest123",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "bucket_name" : {
+            "type" : "string",
+            "description" : "桶名",
+            "example" : "xxxx",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          }
+        },
+        "required" : [ "cloud_type", "file_path", "data_center", "page_size", "behind_filename", "bucket_name" ]
+      },
+      "ShowBucketRecord" : {
+        "type" : "object",
+        "description" : "查询桶返回的record信息",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "对象名",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "size" : {
+            "type" : "string",
+            "description" : "对象大小,若对象无size属性,则返回--",
+            "minLength" : 0,
+            "maxLength" : 100
+          }
+        }
+      },
+      "ShowBucketResp" : {
+        "type" : "object",
+        "description" : "查询桶信息相应体",
+        "properties" : {
+          "next_page" : {
+            "type" : "boolean",
+            "description" : "是否存在下一页"
+          },
+          "next_marker" : {
+            "type" : "string",
+            "description" : "查询下一页所需要的标记(此页末尾对象名,偏移量)",
+            "minLength" : 0,
+            "maxLength" : 1024
+          },
+          "records" : {
+            "type" : "array",
+            "description" : "查询桶信息返回的record",
+            "items" : {
+              "$ref" : "#/components/schemas/ShowBucketRecord"
+            },
+            "minItems" : 0,
+            "maxItems" : 100
+          }
+        }
+      },
+      "SyncObjectReq" : {
+        "required" : [ "object_keys" ],
+        "properties" : {
+          "object_keys" : {
+            "type" : "array",
+            "description" : "待同步对象的列表,其中待同步对象最大数量为10,列表中object_key为URL编码处理后的结果",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 16384,
+              "minLength" : 1,
+              "description" : "待同步对象的object_key进行URL编码处理后的结果"
+            },
+            "maxItems" : 100,
+            "minItems" : 1
+          }
+        },
+        "description" : "同步事件请求体",
+        "type" : "object"
+      },
+      "Version" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "v1",
+            "description" : "版本号,例如v1。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "links" : {
+            "type" : "array",
+            "example" : "[{\"rel\":\"self\",\"href\":\"https://oms.cn-north-1.myhuaweicloud.com/v1/\"}]",
+            "description" : "链接地址信息。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Link"
+            },
+            "maxItems" : 100,
+            "minItems" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "SUPPORTED",
+            "description" : "版本状态。",
+            "enum" : [ "CURRENT", "DEPRECATED", "SUPPORTED" ]
+          },
+          "updated" : {
+            "type" : "string",
+            "example" : "2020-01-01T12:00:00Z",
+            "description" : "版本更新时间。",
+            "minLength" : 0,
+            "maxLength" : 32
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Link" : {
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "example" : "https://oms.cn-north-1.myhuaweicloud.com/v1/",
+            "description" : "链接地址。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "rel" : {
+            "type" : "string",
+            "example" : "self",
+            "description" : "取值为“self”,表示href为本地链接。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          }
+        },
+        "description" : "链接信息。",
+        "type" : "object"
+      },
+      "TaskResp" : {
+        "properties" : {
+          "bandwidth_policy" : {
+            "type" : "array",
+            "description" : "流量控制策略,每个任务最多可设置5条限速策略。",
+            "items" : {
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          },
+          "complete_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务迁移完成大小(Byte)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 9651103
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "test log",
+            "description" : "任务描述,没有设置时为空字符串。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "dst_node" : {
+            "description" : "目的端节点信息",
+            "$ref" : "#/components/schemas/DstNodeResp"
+          },
+          "enable_failed_object_recording" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否记录失败对象。开启后,如果有迁移失败对象,会在目的端存储失败对象信息。"
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "存储入OBS时是否使用KMS加密。"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。"
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否自动解冻归档数据,(由于对象存储解冻需要源端存储等待一定时间,开启自动解冻会对迁移速度有较大影响,建议先完成归档存储数据解冻后再启动迁移)。"
+          },
+          "error_reason" : {
+            "description" : "任务失败原因,非失败状态时该字段为空字符串。",
+            "$ref" : "#/components/schemas/ErrorReasonResp"
+          },
+          "failed_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移失败对象数量。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 1024
+          },
+          "failed_object_record" : {
+            "description" : "失败对象列表记录结果,记录成功时提供失败对象列表存放链接,记录失败时显示失败原因。",
+            "$ref" : "#/components/schemas/FailedObjectRecordDto"
+          },
+          "group_id" : {
+            "type" : "string",
+            "example" : "group_id",
+            "description" : "迁移任务组ID,当任务由迁移任务组创建时会包含迁移任务组的id信息。",
+            "minLength" : 0,
+            "maxLength" : 36
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务ID。",
+            "minimum" : 0,
+            "maximum" : 999999999999999,
+            "example" : 20200810368547
+          },
+          "is_query_over" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "迁移任务是否完成源端对象统计数据扫描。"
+          },
+          "left_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务剩余时间(毫秒)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 6854775807
+          },
+          "migrate_since" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移指定时间(时间戳,毫秒),表示仅迁移在指定时间之后修改的源端待迁移对象。默认为0,表示不设置迁移指定时间。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 6854775807
+          },
+          "migrate_speed" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务迁移速度(Byte/s)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 6854775807
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "taskname",
+            "description" : "任务名称。",
+            "minLength" : 0,
+            "maxLength" : 10240
+          },
+          "progress" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "任务进度,例如:0.522代表任务进度为52.2%,1代表任务进度为100%。",
+            "minimum" : 0,
+            "maximum" : 1,
+            "example" : 0.522
+          },
+          "real_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "实际迁移对象总大小(Byte),忽略对象的大小不会统计在内。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 6854775807
+          },
+          "skipped_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移忽略对象数(存在以下两种情况会自动跳过:1.源端对象最后修改时间在迁移指定时间前;2.目的端已有该对象。)",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 10240
+          },
+          "src_node" : {
+            "description" : "源端节点信息",
+            "$ref" : "#/components/schemas/SrcNodeResp"
+          },
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务启动时间(Unix时间戳,毫秒)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 6854775807
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "任务状态。",
+            "minimum" : 1,
+            "maximum" : 7
+          },
+          "successful_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移成功对象数量。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 409600
+          },
+          "task_type" : {
+            "type" : "string",
+            "example" : "string",
+            "description" : "任务类型,为空默认设置为object。",
+            "enum" : [ "list", "object", "prefix", "url_list" ],
+            "default" : "object"
+          },
+          "group_type" : {
+            "type" : "string",
+            "example" : "NORMAL_TASK",
+            "description" : "分组类型",
+            "enum" : [ "NORMAL_TASK", "SYNC_TASK", "GROUP_TASK" ],
+            "default" : "NORMAL_TASK"
+          },
+          "total_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "迁移任务对象总数量。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 409600
+          },
+          "total_size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务迁移总大小(Byte)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 337203685
+          },
+          "total_time" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务总耗时(毫秒)。",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 36854775807
+          },
+          "smn_info" : {
+            "description" : "SMN消息通知结果",
+            "$ref" : "#/components/schemas/SmnInfo"
+          },
+          "source_cdn" : {
+            "description" : "指定是否启用CDN迁移支持。启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。若包含此字段则为支持,否则为不支持。",
+            "$ref" : "#/components/schemas/SourceCdnResp"
+          },
+          "success_record_error_reason" : {
+            "type" : "string",
+            "example" : "S3M.0309",
+            "description" : "迁移成功对象列表记录失败错误码,记录成功时为空",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "skip_record_error_reason" : {
+            "type" : "string",
+            "example" : "S3M.0311",
+            "description" : "迁移忽略对象列表记录失败错误码,记录记录成功时为空。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "一致性校验方式,用于迁移前/后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          },
+          "enable_requester_pays" : {
+            "type" : "boolean",
+            "description" : "是否开启请求者付款,在启用后,请求者支付请求和数据传输费用。",
+            "example" : "true"
+          },
+          "task_priority" : {
+            "type" : "string",
+            "description" : "HIGH:高优先级",
+            "enum" : [ "HIGH", "MEDIUM", "LOW" ]
+          }
+        },
+        "type" : "object"
+      },
+      "QueryAllTasksResp" : {
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "description" : "查询的任务详情",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/TaskResp"
+            },
+            "minItems" : 0,
+            "maxItems" : 100
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "满足查询条件的任务总数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807,
+            "example" : 1024
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "SrcNodeResp" : {
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "example" : "src_bucket",
+            "description" : "源端桶的名称。",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$"
+          },
+          "cloud_type" : {
+            "type" : "string",
+            "example" : "HuaweiCloud",
+            "description" : "源端云服务提供商。",
+            "enum" : [ "AWS", "Azure", "Aliyun", "Tencent", "HuaweiCloud", "QingCloud", "KingsoftCloud", "Baidu", "Qiniu", "URLSource", "UCloud", "Google" ]
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "cn-north-1",
+            "description" : "源端桶所处的区域。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$"
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,会返回此参数。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$",
+            "example" : "apptest123"
+          },
+          "object_key" : {
+            "type" : "array",
+            "description" : "任务类型为对象迁移任务时,表示待迁移对象名称;",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 1024
+            },
+            "minItems" : 0,
+            "maxItems" : 500
+          },
+          "list_file" : {
+            "description" : "列表文件配置,当task_type为list或url_list时,list_file为必选参数。",
+            "$ref" : "#/components/schemas/ListFile"
+          }
+        },
+        "description" : "源端节点信息。",
+        "type" : "object"
+      },
+      "DstNodeResp" : {
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "example" : "dst_bucket",
+            "description" : "目的端桶的名称。",
+            "maxLength" : 1024,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$"
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "cn-north-1",
+            "description" : "目的端桶所处的区域。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]$"
+          },
+          "save_prefix" : {
+            "type" : "string",
+            "example" : "1000-files",
+            "description" : "目的端桶内路径前缀(拼接在对象key前面,组成新的key,拼接后不能超过1024个字符)。",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "QueryApiVersionsResp" : {
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "版本信息列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Version"
+            },
+            "minItems" : 0,
+            "maxItems" : 1024
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "BatchUpdateTasksReq" : {
+        "required" : [ "bandwidth_policy" ],
+        "properties" : {
+          "group_id" : {
+            "type" : "string",
+            "example" : "bb8bccfd-9e50-4b94-8e83-c717b697128e",
+            "description" : "迁移任务组ID,表示批量更新该任务组下所有任务。",
+            "minLength" : 1,
+            "maxLength" : 36
+          },
+          "ids" : {
+            "type" : "array",
+            "description" : "迁移任务id数组,包含所有需要批量更新操作的任务id。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64",
+              "minimum" : 0,
+              "maximum" : 9223372036854775807
+            },
+            "minItems" : 0,
+            "maxItems" : 20
+          },
+          "bandwidth_policy" : {
+            "type" : "array",
+            "description" : "配置流量控制策略。数组中一个元素对应一个时段的最大带宽,最多允许5个时段,且时段不能重叠。",
+            "items" : {
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "minItems" : 0,
+            "maxItems" : 5
+          },
+          "task_priority" : {
+            "type" : "string",
+            "description" : "任务优先级配置,存在高中低三个优先级档次,限制仅在等待中、已暂停、已失败的任务进行修改",
+            "enum" : [ "HIGH", "MEDIUM", "LOW" ]
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "RetryTaskGroupReq" : {
+        "description" : "重试迁移任务组请求参数",
+        "properties" : {
+          "src_ak" : {
+            "type" : "string",
+            "description" : "源端ak(最大长度100个字符)",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "AMFKYZ2J...........",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "src_sk" : {
+            "type" : "string",
+            "description" : "源端sk(最大长度100个字符)",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "lIJPzzPBgJHvEDZh67NvF.................",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "dst_ak" : {
+            "type" : "string",
+            "description" : "目的端ak(最大长度100个字符)",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "AMFKYZ2J...........",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "dst_sk" : {
+            "type" : "string",
+            "description" : "目的端sk(最大长度100个字符)",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "lIJPzzPBgJHvEDZh67NvF.................",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "source_cdn_authentication_key" : {
+            "type" : "string",
+            "description" : "cdn鉴权秘钥",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "AtqPaHv2cBxxxxxxx..."
+          },
+          "migrate_failed_object" : {
+            "type" : "boolean",
+            "description" : "失败任务重试方式,标识是否为全量重新迁移,默认false(全量重新迁移)。 值为true时表示只重传失败对象。 值为空或者为false时表示全量重新迁移(默认跳过目的端已迁移对象)。",
+            "example" : "false",
+            "default" : "false"
+          }
+        },
+        "type" : "object"
+      },
+      "StartTaskGroupReq" : {
+        "properties" : {
+          "src_ak" : {
+            "type" : "string",
+            "description" : "源端节点AK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_ak"
+          },
+          "src_sk" : {
+            "type" : "string",
+            "description" : "源端节点SK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_sk"
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "dst_ak" : {
+            "type" : "string",
+            "description" : "目的端节点AK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_ak"
+          },
+          "dst_sk" : {
+            "type" : "string",
+            "description" : "目的端节点SK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_sk"
+          },
+          "source_cdn_authentication_key" : {
+            "type" : "string",
+            "description" : "CDN鉴权秘钥。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "AtqPaHv2cBxxxxxxx..."
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "required" : [ "dst_ak", "dst_sk" ],
+        "type" : "object"
+      },
+      "SyncTaskInfo" : {
+        "description" : "查询同步任务列表时返回的单个同步任务信息实体",
+        "properties" : {
+          "sync_task_id" : {
+            "type" : "string",
+            "description" : "同步任务ID",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "src_cloud_type" : {
+            "type" : "string",
+            "description" : "源端云服务提供商。",
+            "enum" : [ "AWS", "Azure", "Aliyun", "Tencent", "HuaweiCloud", "QingCloud", "KingsoftCloud", "Baidu", "Qiniu", "UCloud" ]
+          },
+          "src_region" : {
+            "type" : "string",
+            "description" : "源端桶所处的区域",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "src_bucket" : {
+            "type" : "string",
+            "description" : "源端桶",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "同步任务创建时间(Unix时间戳,毫秒)",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "last_start_time" : {
+            "type" : "integer",
+            "description" : "最近启动同步任务时间(Unix时间戳,毫秒)",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "dst_bucket" : {
+            "type" : "string",
+            "description" : "目的端桶。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "dst_region" : {
+            "type" : "string",
+            "description" : "目的端region",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述,不能超过255个字符,且不能包含<>()\"'&等特殊字符。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "同步任务状态",
+            "enum" : [ "SYNCHRONIZING", "STOPPED" ]
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "description" : "是否开启KMS加密,默认不开启。"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。"
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "description" : "是否自动解冻归档数据,默认否。 开启后,如果遇到归档类型数据,会自动解冻再进行迁移。"
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,需要填写此参数。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "source_cdn" : {
+            "description" : "指定是否启用CDN迁移支持。启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。若包含此字段则为支持,否则为不支持。",
+            "$ref" : "#/components/schemas/SourceCdnResp"
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "迁移后对象一致性校验方式,用于迁移后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ListSyncTasksResp" : {
+        "description" : "查询所有同步请求的响应体",
+        "properties" : {
+          "tasks" : {
+            "type" : "array",
+            "description" : "查询的同步任务详情",
+            "maxItems" : 100,
+            "minItems" : 0,
+            "items" : {
+              "$ref" : "#/components/schemas/SyncTaskInfo"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "满足查询条件的同步任务总数",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTaskGroupReq" : {
+        "description" : "迁移任务组创建请求体",
+        "properties" : {
+          "src_node" : {
+            "$ref" : "#/components/schemas/TaskGroupSrcNode",
+            "description" : "源端信息"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务组描述,不能超过255个字符,且不能包含^<>&\"'等特殊字符。",
+            "example" : "这是一个迁移任务",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "dst_node" : {
+            "description" : "目的端信息。",
+            "$ref" : "#/components/schemas/TaskGroupDstNode"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。",
+            "default" : "false",
+            "example" : "true"
+          },
+          "enable_failed_object_recording" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "是否开启记录失败对象",
+            "pattern" : "^.{0,100}$",
+            "default" : "true"
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "是否自动解冻归档数据,默认否。 开启后,如果遇到归档类型数据,会自动解冻再进行迁移。",
+            "pattern" : "^.{0,100}$"
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "example" : "true",
+            "description" : "是否开启KMS加密,默认不开启。",
+            "default" : "false"
+          },
+          "task_type" : {
+            "type" : "string",
+            "example" : "PREFIX",
+            "description" : "任务类型,默认为PREFIX。",
+            "enum" : [ "LIST", "URL_LIST", "PREFIX" ]
+          },
+          "bandwidth_policy" : {
+            "items" : {
+              "$ref" : "#/components/schemas/BandwidthPolicyDto"
+            },
+            "type" : "array",
+            "description" : "配置流量控制策略。数组中一个元素对应一个时段的最大带宽,最多允许5个时段,且时段不能重叠。",
+            "minItems" : 0,
+            "maxItems" : 5
+          },
+          "smn_config" : {
+            "description" : "SMN消息发送配置。",
+            "$ref" : "#/components/schemas/SmnConfig"
+          },
+          "source_cdn" : {
+            "$ref" : "#/components/schemas/SourceCdnReq",
+            "description" : "指定是否启用CDN迁移支持,若包含此字段则为支持,否则为不支持,启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。"
+          },
+          "migrate_since" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "以时间戳方式表示的迁移指定时间(单位:秒),表示仅迁移在指定时间之后修改的源端待迁移对象。默认不设置迁移指定时间。",
+            "default" : 0,
+            "example" : 1586490079,
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "一致性校验方式,用于迁移前/后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "default" : "size_last_modified",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          },
+          "enable_requester_pays" : {
+            "type" : "boolean",
+            "description" : "是否开启请求者付款,在启用后,请求者支付请求和数据传输费用。",
+            "default" : "false",
+            "example" : "true"
+          }
+        },
+        "required" : [ "src_node", "dst_node", "enable_kms" ],
+        "type" : "object"
+      },
+      "CreateTaskGroupResp" : {
+        "description" : "创建迁移任务组响应",
+        "properties" : {
+          "group_id" : {
+            "type" : "string",
+            "description" : "创建的迁移任务组id",
+            "minLength" : 1,
+            "maxLength" : 100
+          }
+        },
+        "type" : "object"
+      },
+      "TaskGroupSrcNode" : {
+        "description" : "迁移任务组的源端节点",
+        "properties" : {
+          "ak" : {
+            "type" : "string",
+            "description" : "源端桶的AK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "example" : "src_ak",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "sk" : {
+            "type" : "string",
+            "description" : "源端桶的SK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "example" : "src_sk",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,需要填写此参数。",
+            "example" : "apptest123",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "源端桶所处的区域,task_type为非URL_LIST时,本参数为必选。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "cn-north-1",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "object_key" : {
+            "type" : "array",
+            "description" : "任务类型为前缀迁移任务时,表示待迁移前缀。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 1024
+            },
+            "minItems" : 0,
+            "maxItems" : 500
+          },
+          "bucket" : {
+            "type" : "string",
+            "description" : "源端所在桶",
+            "maxLength" : 1024,
+            "minLength" : 0,
+            "example" : "src_bucket",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "源端云服务提供商,当task_type为URL_LIST时,本参数为URLSource且必选。可选值有AWS、Azure、Aliyun、Tencent、HuaweiCloud、QingCloud、KingsoftCloud、Baidu、Qiniu、URLSource、Google或者UCloud。默认值为Aliyun。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "default" : "Aliyun",
+            "example" : "HuaweiCloud",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Qiniu|URLSource|Google|UCloud)$"
+          },
+          "list_file" : {
+            "$ref" : "#/components/schemas/ListFile",
+            "description" : "列表文件配置,当task_type为LIST或URL_LIST时,list_file为必选参数。"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskGroupDstNode" : {
+        "description" : "迁移任务组目的端节点信息",
+        "properties" : {
+          "ak" : {
+            "type" : "string",
+            "description" : "目的端桶的AK(最大长度100个字符)。",
+            "example" : "9NV6VOXXX...",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "sk" : {
+            "type" : "string",
+            "description" : "目的端桶的SK(最大长度100个字符)。",
+            "example" : "HTqVahv2cBXXXXXX...",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "目的端桶所处的区域。",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "cn-north-1",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "bucket" : {
+            "type" : "string",
+            "description" : "目的端的桶名称",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "example" : "dst_bucket",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "华为云目的端信息,默认为HEC",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "default" : "HEC",
+            "example" : "HEC",
+            "pattern" : "^(HEC)$"
+          },
+          "save_prefix" : {
+            "type" : "string",
+            "example" : "1000-files",
+            "description" : "目的端桶内路径前缀(拼接在对象key前面,组成新的key,拼接后不能超过1024个字符)。",
+            "minLength" : 0,
+            "maxLength" : 1024
+          }
+        },
+        "required" : [ "ak", "sk", "region", "bucket" ],
+        "type" : "object"
+      },
+      "StartSyncTaskReq" : {
+        "required" : [ "src_ak", "src_sk", "dst_ak", "dst_sk" ],
+        "properties" : {
+          "src_ak" : {
+            "type" : "string",
+            "description" : "源端节点AK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_ak"
+          },
+          "src_sk" : {
+            "type" : "string",
+            "description" : "源端节点SK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_sk"
+          },
+          "dst_ak" : {
+            "type" : "string",
+            "description" : "目的端节点AK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_ak"
+          },
+          "dst_sk" : {
+            "type" : "string",
+            "description" : "目的端节点SK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_sk"
+          },
+          "source_cdn_authentication_key" : {
+            "type" : "string",
+            "description" : "CDN鉴权秘钥。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "source_cdn_authentication_key"
+          }
+        },
+        "description" : "启动同步任务body体",
+        "type" : "object"
+      },
+      "SyncTaskResp" : {
+        "description" : "查询指定id同步任务请求的响应体",
+        "properties" : {
+          "sync_task_id" : {
+            "type" : "string",
+            "description" : "同步任务ID",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "src_cloud_type" : {
+            "type" : "string",
+            "description" : "源端云服务提供商。",
+            "enum" : [ "AWS", "Azure", "Aliyun", "Tencent", "HuaweiCloud", "QingCloud", "KingsoftCloud", "Baidu", "Qiniu", "UCloud" ]
+          },
+          "src_region" : {
+            "type" : "string",
+            "description" : "源端桶所处的区域",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "src_bucket" : {
+            "type" : "string",
+            "description" : "源端桶",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "create_time" : {
+            "type" : "integer",
+            "description" : "同步任务创建时间(Unix时间戳,毫秒)",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "last_start_time" : {
+            "type" : "integer",
+            "description" : "最近启动同步任务时间(Unix时间戳,毫秒)",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "dst_bucket" : {
+            "type" : "string",
+            "description" : "目的端桶。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 1024,
+            "minLength" : 0
+          },
+          "dst_region" : {
+            "type" : "string",
+            "description" : "目的端region",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 100,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述,不能超过255个字符,且不能包含<>()\"'&等特殊字符。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "同步任务状态",
+            "enum" : [ "SYNCHRONIZING", "STOPPED" ]
+          },
+          "enable_kms" : {
+            "type" : "boolean",
+            "description" : "是否开启KMS加密,默认不开启。"
+          },
+          "enable_metadata_migration" : {
+            "type" : "boolean",
+            "description" : "是否启用元数据迁移,默认否。不启用时,为保证迁移任务正常运行,仍将为您迁移ContentType元数据。"
+          },
+          "enable_restore" : {
+            "type" : "boolean",
+            "description" : "是否自动解冻归档数据,默认否。 开启后,如果遇到归档类型数据,会自动解冻再进行迁移。"
+          },
+          "dst_storage_policy" : {
+            "type" : "string",
+            "description" : "目的端存储类型设置,当且仅当目的端为华为云OBS时需要,默认为标准存储",
+            "default" : "STANDARD",
+            "example" : "STANDARD",
+            "enum" : [ "STANDARD", "IA", "ARCHIVE", "DEEP_ARCHIVE", "SRC_STORAGE_MAPPING" ],
+            "minLength" : 0,
+            "maxLength" : 128
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,需要填写此参数。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "maxLength" : 255,
+            "minLength" : 0
+          },
+          "monthly_acceptance_request" : {
+            "type" : "integer",
+            "description" : "当月接收同步请求对象数",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "monthly_success_object" : {
+            "type" : "integer",
+            "description" : "当月同步成功对象数",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "monthly_failure_object" : {
+            "type" : "integer",
+            "description" : "当月同步失败对象数",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "monthly_skip_object" : {
+            "type" : "integer",
+            "description" : "当月同步忽略对象数",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "monthly_size" : {
+            "type" : "integer",
+            "description" : "当月同步对象容量大小(Byte)。",
+            "maximum" : 9223372036854775807,
+            "minimum" : 0,
+            "format" : "int64"
+          },
+          "object_overwrite_mode" : {
+            "type" : "string",
+            "description" : "迁移前同名对象覆盖方式,用于迁移前判断源端与目的端有同名对象时,覆盖目的端或跳过迁移。默认SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE。",
+            "example" : "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE",
+            "enum" : [ "NO_OVERWRITE", "SIZE_LAST_MODIFIED_COMPARISON_OVERWRITE", "CRC64_COMPARISON_OVERWRITE", "FULL_OVERWRITE" ]
+          },
+          "consistency_check" : {
+            "type" : "string",
+            "description" : "迁移后对象一致性校验方式,用于迁移后校验对象是否一致,所有校验方式需满足源端/目的端对象的加密状态一致,具体校验方式和校验结果可通过对象列表查看。默认size_last_modified。",
+            "example" : "size_last_modified",
+            "enum" : [ "size_last_modified", "crc64", "no_check" ]
+          }
+        },
+        "type" : "object"
+      },
+      "QueryTaskGroupsResp" : {
+        "description" : "返回根据条件查询的任务组集合信息",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "满足查询条件的任务组总数",
+            "minimum" : 0,
+            "maximum" : 9223372036854775807
+          },
+          "taskgroups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskGroupResp"
+            },
+            "description" : "查询的迁移任务组详情",
+            "minItems" : 0,
+            "maxItems" : 100
+          }
+        },
+        "required" : [ "count", "taskgroups" ],
+        "type" : "object"
+      },
+      "StartTaskReq" : {
+        "required" : [ "dst_ak", "dst_sk" ],
+        "properties" : {
+          "src_ak" : {
+            "type" : "string",
+            "description" : "源端节点AK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_ak"
+          },
+          "src_sk" : {
+            "type" : "string",
+            "description" : "源端节点SK(最大长度100个字符)。URL列表迁移任务不需要填写此参数。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_sk"
+          },
+          "json_auth_file" : {
+            "type" : "string",
+            "description" : "用于谷歌云Cloud Storage鉴权",
+            "minLength" : 0,
+            "maxLength" : 65535
+          },
+          "src_security_token" : {
+            "type" : "string",
+            "description" : "源端节点临时Token",
+            "minLength" : 0,
+            "maxLength" : 16384,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "src_security_token"
+          },
+          "dst_ak" : {
+            "type" : "string",
+            "description" : "目的端节点AK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_ak"
+          },
+          "dst_sk" : {
+            "type" : "string",
+            "description" : "目的端节点SK(最大长度100个字符)。",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_sk"
+          },
+          "dst_security_token" : {
+            "type" : "string",
+            "description" : "目标端节点临时Token",
+            "minLength" : 0,
+            "maxLength" : 16384,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "dst_security_token"
+          },
+          "source_cdn_authentication_key" : {
+            "type" : "string",
+            "description" : "CDN鉴权秘钥。",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "example" : "source_cdn_authentication_key"
+          },
+          "migrate_failed_object" : {
+            "type" : "boolean",
+            "example" : false,
+            "description" : "迁移类型,标识是否为全量迁移,默认false(全量迁移)。",
+            "default" : false
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "CheckPrefixResp" : {
+        "type" : "object",
+        "description" : "校验前缀响应体",
+        "properties" : {
+          "exist" : {
+            "type" : "boolean",
+            "description" : "是否存在",
+            "default" : false
+          }
+        }
+      },
+      "CheckPrefixReq" : {
+        "description" : "检查前缀请求体",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ShowBucketRegionReq"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "file_name" : {
+              "type" : "string",
+              "description" : "前缀名称",
+              "minLength" : 0,
+              "maxLength" : 1024,
+              "example" : "xxxx"
+            },
+            "data_center" : {
+              "type" : "string",
+              "description" : "数据中心,区域",
+              "example" : "cn-north-x",
+              "minLength" : 0,
+              "maxLength" : 100
+            },
+            "security_token" : {
+              "type" : "string",
+              "description" : "安全令牌",
+              "minLength" : 0,
+              "maxLength" : 16384
+            }
+          },
+          "required" : [ "file_name", "data_center" ]
+        } ],
+        "type" : "object"
+      },
+      "CheckedKey" : {
+        "type" : "object",
+        "description" : "检查键",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键",
+            "minLength" : 0,
+            "maxLength" : 2048
+          },
+          "is_etag_matching" : {
+            "type" : "boolean",
+            "description" : "是否电子标签匹配"
+          },
+          "is_object_existing" : {
+            "type" : "boolean",
+            "description" : "是否存在对象"
+          }
+        }
+      },
+      "PrefixKeyInfo" : {
+        "type" : "object",
+        "description" : "前缀key",
+        "required" : [ "keys" ],
+        "properties" : {
+          "keys" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 2048,
+              "minLength" : 0
+            },
+            "description" : "键",
+            "minItems" : 0,
+            "maxItems" : 100
+          }
+        }
+      },
+      "ShowCdnInfoReq" : {
+        "type" : "object",
+        "description" : "查桶对应的CDN信息",
+        "properties" : {
+          "ak" : {
+            "type" : "string",
+            "description" : "源端桶的AK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "sk" : {
+            "type" : "string",
+            "description" : "源端桶的SK(最大长度100个字符),task_type为非url_list时,本参数为必选。",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "cloud_type" : {
+            "type" : "string",
+            "description" : "云类型",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "example" : "HuaweiCloud",
+            "pattern" : "^(AWS|Azure|Aliyun|Tencent|HuaweiCloud|QingCloud|KingsoftCloud|Baidu|Qiniu|URLSource|UCloud|HEC)$"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "区域",
+            "example" : "cn-north-x",
+            "minLength" : 0,
+            "maxLength" : 100
+          },
+          "app_id" : {
+            "type" : "string",
+            "description" : "当源端为腾讯云时,会返回此参数。",
+            "example" : "xxxxx",
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "bucket" : {
+            "type" : "string",
+            "description" : "桶名",
+            "example" : "xxx",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "pattern" : "^[^<>&\\\"'\\\\\\\\]*$"
+          },
+          "prefix" : {
+            "description" : "前缀",
+            "$ref" : "#/components/schemas/PrefixKeyInfo"
+          },
+          "source_cdn" : {
+            "$ref" : "#/components/schemas/SourceCdnReq",
+            "description" : "指定是否启用CDN迁移支持,若包含此字段则为支持,否则为不支持,启用CDN迁移支持后,迁移时将从CDN域名获取源端对象。"
+          }
+        },
+        "required" : [ "ak", "sk", "cloud_type", "region", "bucket", "source_cdn" ]
+      },
+      "ShowCdnInfoResp" : {
+        "type" : "object",
+        "description" : "查询CDN信息响应体",
+        "properties" : {
+          "is_same_cloud_type" : {
+            "type" : "boolean",
+            "description" : "是否相同云类型"
+          },
+          "is_download_available" : {
+            "type" : "boolean",
+            "description" : "是否下载可用"
+          },
+          "checked_keys" : {
+            "type" : "array",
+            "description" : "返回的已检查的对象数组",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "items" : {
+              "$ref" : "#/components/schemas/CheckedKey"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/StopTaskGroup" : {
+      "put" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "暂停指定id的迁移任务组",
+        "description" : "当迁移任务组处于创建任务中或监控中时,调用该接口暂停指定迁移任务组。",
+        "operationId" : "StopTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}/stop"
+    },
+    "/DeleteTask" : {
+      "delete" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "删除迁移任务",
+        "description" : "调用该接口删除迁移任务。",
+        "operationId" : "DeleteTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "迁移任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "200149363247928",
+            "description" : "迁移任务ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}"
+    },
+    "/DeleteSyncTask" : {
+      "delete" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "删除同步任务",
+        "description" : "调用该接口删除同步任务。",
+        "operationId" : "DeleteSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "0d146099-8cf4-437d-b6ef-88e043771c8b",
+            "description" : "同步任务ID。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSyncTask",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}"
+    },
+    "/DeleteTaskGroup" : {
+      "delete" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "删除指定id的迁移任务组",
+        "description" : "删除指定的迁移任务组.",
+        "operationId" : "DeleteTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReasonResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorReasonResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}"
+    },
+    "/ListSyncTaskStatistic" : {
+      "get" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "查询指定ID的同步任务统计数据",
+        "description" : "查询指定ID同步任务的接收同步请求对象数、同步成功对象数、同步失败对象数、同步跳过对象数、同步成功对象容量统计数据(目前只支持华北-北京四、华东-上海一地区)。",
+        "operationId" : "ListSyncTaskStatistic",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SyncTaskStatisticResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "0d146099-8cf4-437d-b6ef-88e043771c8b",
+            "description" : "同步任务ID。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "data_type",
+          "in" : "query",
+          "description" : "统计数据类型:",
+          "required" : true,
+          "schema" : {
+            "example" : "REQUEST",
+            "description" : "统计数据类型:",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 1,
+            "enum" : [ "REQUEST", "SUCCESS", "FAILURE", "SKIP", "SIZE" ]
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "查询开始时间",
+          "required" : true,
+          "schema" : {
+            "example" : "15512871000",
+            "description" : "查询开始时间",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "查询开始时间",
+          "required" : true,
+          "schema" : {
+            "example" : "15512879000",
+            "description" : "查询开始时间",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSyncTaskStatistic",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}/statistics"
+    },
+    "/ShowBucketRegion" : {
+      "post" : {
+        "tags" : [ "桶操作" ],
+        "summary" : "查询桶对应的region",
+        "description" : "查询桶对应的region",
+        "operationId" : "ShowBucketRegion",
+        "responses" : {
+          "200" : {
+            "description" : "查询桶对应region响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowBucketRegionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "标准错误响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowBucketRegionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBucketRegion",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/buckets/regions"
+    },
+    "/UpdateTaskGroup" : {
+      "put" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "更新指定id的迁移任务组的流控策略",
+        "description" : "当迁移任务组未执行完成时,修改迁移任务组的流量控制策略。",
+        "operationId" : "UpdateTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateBandwidthPolicyReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}/update"
+    },
+    "/ShowRegionInfo" : {
+      "get" : {
+        "tags" : [ "区域" ],
+        "summary" : "查询云厂商支持的reigon",
+        "description" : "查询云厂商支持的reigon",
+        "operationId" : "ShowRegionInfo",
+        "responses" : {
+          "200" : {
+            "description" : "查询Region信息响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ShowRegionInfoResp"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRegionInfo",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/data-center"
+    },
+    "/CreateSyncTask" : {
+      "post" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "创建同步任务",
+        "description" : "创建同步任务,创建成功后,任务会被自动启动,不需要额外调用启动任务命令。",
+        "operationId" : "CreateSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateSyncTaskResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIPGwYJKoZIhvcN...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateSyncTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSyncTask",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks"
+    },
+    "/ShowTaskGroup" : {
+      "get" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "获取指定id的taskgroup信息",
+        "description" : "获取指定id的taskgroup信息",
+        "operationId" : "ShowTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskGroupResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}"
+    },
+    "/CreateTask" : {
+      "post" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "创建迁移任务",
+        "description" : "创建迁移任务,创建成功后,任务会被自动启动,不需要额外调用启动任务命令。",
+        "operationId" : "CreateTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTaskResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIPGwYJKoZIhvcN...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks"
+    },
+    "/ShowBucketObjects" : {
+      "post" : {
+        "tags" : [ "桶操作" ],
+        "summary" : "查询桶对象列表",
+        "description" : "查询桶对象列表",
+        "operationId" : "ShowBucketObjects",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "查询桶信息返回体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowBucketResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "标准错误响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowBucketReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBucketObjects",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/buckets/objects"
+    },
+    "/CreateSyncEvents" : {
+      "post" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "创建同步事件",
+        "description" : "源端有对象需要进行同步时,调用该接口创建一个同步事件,系统将根据同步事件中包含的对象名称进行同步(目前只支持华北-北京四、华东-上海一地区)。",
+        "operationId" : "CreateSyncEvents",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK 创建同步事件成功"
+          },
+          "400" : {
+            "description" : "Bad Request 请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found 同步任务不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service UnAvailable 服务暂不可用,请稍后再试",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "f4e146cac1de45669c3fed73dc9b9c6f",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "f4e146cac1de456623243dc9b9c6f",
+            "description" : "同步任务ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "API认证鉴权的Token认证方式。推荐使用Authorization签名认证方式,具体请参考API认证鉴权",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "API认证鉴权的Token认证方式。推荐使用Authorization签名认证方式,具体请参考API认证鉴权",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SyncObjectReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSyncEvents",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}/events"
+    },
+    "/ShowApiInfo" : {
+      "get" : {
+        "tags" : [ "查询API版本信息" ],
+        "summary" : "查询指定API版本信息",
+        "description" : "查询对象存储迁移服务指定API版本信息。",
+        "operationId" : "ShowApiInfo",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "版本信息。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Version"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "version",
+          "in" : "path",
+          "description" : "版本信息。",
+          "required" : true,
+          "schema" : {
+            "example" : "v2",
+            "description" : "版本信息。",
+            "type" : "string",
+            "maxLength" : 10,
+            "minLength" : 1,
+            "pattern" : "^v[.0-9a-zA-Z]*$"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApiInfo",
+      "x-url" : "{endpoint}/{version}"
+    },
+    "/ListTasks" : {
+      "get" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "查询迁移任务列表",
+        "description" : "查询用户账户下的所有任务信息。",
+        "operationId" : "ListTasks",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryAllTasksResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "46cd57dsjuerhxxxxx...",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "query",
+          "description" : "迁移任务组group_id",
+          "required" : false,
+          "schema" : {
+            "example" : "9ba5c2da-e7e6-4e9e-9c7f-d0e722d69465",
+            "description" : "迁移任务组group_id",
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回迁移任务列表当前页面的数量,默认查询10条。",
+          "required" : false,
+          "schema" : {
+            "example" : 100,
+            "description" : "查询返回迁移任务列表当前页面的数量,默认查询10条。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始的任务序号,默认为0。",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "起始的任务序号,默认为0。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "迁移任务状态(无该参数时代表查询所有状态的任务):",
+          "required" : false,
+          "schema" : {
+            "example" : 2,
+            "description" : "迁移任务状态(无该参数时代表查询所有状态的任务):",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 7,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM 鉴权 Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM 鉴权 Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks"
+    },
+    "/ListApiVersions" : {
+      "get" : {
+        "tags" : [ "查询API版本信息" ],
+        "summary" : "查询API版本信息列表",
+        "description" : "查询对象存储迁移服务的API版本信息。",
+        "operationId" : "ListApiVersions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryApiVersionsResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApiVersions",
+      "x-url" : "{endpoint}/"
+    },
+    "/BatchUpdateTasks" : {
+      "post" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "批量更新任务",
+        "description" : "批量更新迁移任务,可指定单个迁移任务组下所有的迁移任务或通过迁移任务ID来执行。",
+        "operationId" : "BatchUpdateTasks",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK 批量更新任务操作成功"
+          },
+          "400" : {
+            "description" : "Bad Request 请求参数错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "f4e146cac1de45669c3fed73dc9b9c6f",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchUpdateTasksReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchUpdateTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/batch-update"
+    },
+    "/ShowCloudType" : {
+      "get" : {
+        "tags" : [ "云服务" ],
+        "summary" : "查询所有支持的云厂商",
+        "description" : "查询所有支持的云厂商",
+        "operationId" : "ShowCloudType",
+        "responses" : {
+          "200" : {
+            "description" : "支持的云服务类型",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "标准错误响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "连接端类型源端(src),目的端(dst)",
+          "required" : true,
+          "schema" : {
+            "description" : "连接端类型源端(src),目的端(dst)",
+            "type" : "string",
+            "maxLength" : 25,
+            "minLength" : 1,
+            "pattern" : "^(src|dst)$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCloudType",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/cloud-type"
+    },
+    "/StopTask" : {
+      "post" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "暂停迁移任务",
+        "description" : "当迁移任务处于迁移中时,调用该接口停止任务。",
+        "operationId" : "StopTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "迁移任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "200149363247928",
+            "description" : "迁移任务ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/stop"
+    },
+    "/RetryTaskGroup" : {
+      "put" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "对已经失败的指定id迁移任务组进行重启",
+        "description" : "当迁移任务组处于迁移失败状态时,调用该接口重启指定id的迁移任务组。",
+        "operationId" : "RetryTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RetryTaskGroupReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RetryTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}/retry"
+    },
+    "/StartTaskGroup" : {
+      "put" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "恢复指定id的迁移任务组",
+        "description" : "当迁移任务组处于暂停状态时,调用该接口启动指定id的迁移任务组。",
+        "operationId" : "StartTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "任务组id",
+          "required" : true,
+          "schema" : {
+            "description" : "任务组id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartTaskGroupReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups/{group_id}/start"
+    },
+    "/StopSyncTask" : {
+      "post" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "暂停同步任务",
+        "description" : "当同步任务处于同步中时,调用该接口停止任务(目前只支持华北-北京四、华东-上海一地区)。",
+        "operationId" : "StopSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "0d146099-8cf4-437d-b6ef-88e043771c8b",
+            "description" : "同步任务ID。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StopSyncTask",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}/stop"
+    },
+    "/ListSyncTasks" : {
+      "get" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "查询同步任务列表",
+        "description" : "查询用户名下所有同步任务信息",
+        "operationId" : "ListSyncTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSyncTasksResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "f4e146cac1de45669c3fed73dc9b9c6f",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM 鉴权 Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM 鉴权 Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回同步任务列表当前页面的数量,默认查询10条。",
+          "required" : false,
+          "schema" : {
+            "example" : 100,
+            "description" : "查询返回同步任务列表当前页面的数量,默认查询10条。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始的任务序号,默认为0。",
+          "required" : false,
+          "schema" : {
+            "example" : 0,
+            "description" : "起始的任务序号,默认为0。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 10000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "同步任务状态(无该参数时代表查询所有状态的任务):",
+          "required" : false,
+          "schema" : {
+            "example" : "SYNCHRONIZING",
+            "description" : "同步任务状态(无该参数时代表查询所有状态的任务):",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^(SYNCHRONIZING|STOPPED)$"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSyncTasks",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks"
+    },
+    "/CreateTaskGroup" : {
+      "post" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "创建迁移任务组",
+        "description" : "创建迁移任务组,创建成功后,迁移任务组会自动创建迁移任务,不需要额外调用启动任务命令。",
+        "operationId" : "CreateTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTaskGroupResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskGroupReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups"
+    },
+    "/ShowBucketList" : {
+      "post" : {
+        "tags" : [ "桶操作" ],
+        "summary" : "查询桶列表",
+        "description" : "查询桶列表",
+        "operationId" : "ShowBucketList",
+        "responses" : {
+          "200" : {
+            "description" : "桶名列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "标准错误响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListBucketsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBucketList",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/buckets"
+    },
+    "/StartSyncTask" : {
+      "post" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "启动同步任务",
+        "description" : "同步任务停止后,调用该接口以启动同步任务(目前只支持华北-北京四、华东-上海一地区)。",
+        "operationId" : "StartSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "0d146099-8cf4-437d-b6ef-88e043771c8b",
+            "description" : "同步任务ID。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartSyncTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartSyncTask",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}/start"
+    },
+    "/ShowTask" : {
+      "get" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "查询指定ID的任务详情",
+        "description" : "查询指定ID的任务详情。",
+        "operationId" : "ShowTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "200844628315687",
+            "description" : "任务ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM 鉴权 Token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM 鉴权 Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}"
+    },
+    "/ShowSyncTask" : {
+      "get" : {
+        "tags" : [ "同步任务" ],
+        "summary" : "查询指定ID的同步任务详情",
+        "description" : "查询指定ID的同步任务详情。",
+        "operationId" : "ShowSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SyncTaskResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "sync_task_id",
+          "in" : "path",
+          "description" : "同步任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "0d146099-8cf4-437d-b6ef-88e043771c8b",
+            "description" : "同步任务ID。",
+            "type" : "string",
+            "maxLength" : 255,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "query_time",
+          "in" : "query",
+          "description" : "查询同步任务详情的时间(毫秒),依据该值返回所在月份的统计数据。",
+          "required" : true,
+          "schema" : {
+            "example" : "1607329316000",
+            "description" : "查询同步任务详情的时间(毫秒),依据该值返回所在月份的统计数据。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSyncTask",
+      "x-url" : "{endpoint}/v2/{project_id}/sync-tasks/{sync_task_id}"
+    },
+    "/ListTaskGroup" : {
+      "get" : {
+        "tags" : [ "迁移任务组管理" ],
+        "summary" : "查询迁移任务组列表",
+        "description" : "查询用户账户下的任务组信息",
+        "operationId" : "ListTaskGroup",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryTaskGroupsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM 鉴权 Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM 鉴权 Token",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询返回迁移组任务列表当前页面的数量,默认查询10条。 最多返回100条迁移任务信息。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询返回迁移组任务列表当前页面的数量,默认查询10条。 最多返回100条迁移任务信息。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始的任务序号,默认为0。 取值大于等于0,取值为0时从第一条开始查询。",
+          "required" : false,
+          "schema" : {
+            "description" : "起始的任务序号,默认为0。 取值大于等于0,取值为0时从第一条开始查询。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 2147483647,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "迁移任务组状态(无该参数时代表查询所有状态的任务)",
+          "required" : false,
+          "schema" : {
+            "description" : "迁移任务组状态(无该参数时代表查询所有状态的任务)",
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 9,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTaskGroup",
+      "x-url" : "{endpoint}/v2/{project_id}/taskgroups"
+    },
+    "/UpdateBandwidthPolicy" : {
+      "put" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "更新任务带宽策略",
+        "description" : "当迁移任务未执行完成时,修改迁移任务的流量控制策略。",
+        "operationId" : "UpdateBandwidthPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "200149363247928",
+            "description" : "任务ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateBandwidthPolicyReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateBandwidthPolicy",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/bandwidth-policy"
+    },
+    "/StartTask" : {
+      "post" : {
+        "tags" : [ "迁移任务管理" ],
+        "summary" : "启动迁移任务",
+        "description" : "迁移任务暂停或失败后,调用该接口以启动任务。",
+        "operationId" : "StartTask",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "45ac6df9hjxxxx...",
+            "description" : "项目ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "迁移任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "200149363247928",
+            "description" : "迁移任务ID。",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM鉴权Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "IAM鉴权Token。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "StartTask",
+      "x-url" : "{endpoint}/v2/{project_id}/tasks/{task_id}/start"
+    },
+    "/CheckPrefix" : {
+      "post" : {
+        "tags" : [ "桶操作" ],
+        "summary" : "检查前缀是否在源端桶中存在",
+        "description" : "检查前缀是否在源端桶中存在",
+        "operationId" : "CheckPrefix",
+        "responses" : {
+          "200" : {
+            "description" : "校验前缀响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CheckPrefixResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "标准错误响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CheckPrefixReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckPrefix",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/buckets/prefix"
+    },
+    "/ShowCdnInfo" : {
+      "post" : {
+        "tags" : [ "桶操作" ],
+        "summary" : "查桶对应的CDN信息",
+        "description" : "查桶对应的CDN信息",
+        "operationId" : "ShowCdnInfo",
+        "responses" : {
+          "200" : {
+            "description" : "查询CDN信息响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowCdnInfoResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "通用异常响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID",
+            "type" : "string",
+            "maxLength" : 1024,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM Token认证,需要确认Token中包含的Project ID与请求URI中修改资源的Project ID匹配。",
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowCdnInfoReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCdnInfo",
+      "x-url" : "{endpoint}/v2/{project_id}/objectstorage/buckets/cdn-info"
+    }
+  }
+}

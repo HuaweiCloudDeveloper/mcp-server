@@ -1,0 +1,10 @@
+# 配置文件
+# Configuration file for mcp_server_aom
+service_code: cce
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8012 # sse 模式需要设定端口
+
+
+
+ # Configuration file for mcp_server_asm
+# Configuration file for mcp_server_bms

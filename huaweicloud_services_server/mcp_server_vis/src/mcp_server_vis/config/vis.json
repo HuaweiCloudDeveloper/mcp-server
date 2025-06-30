@@ -1,0 +1,4059 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VIS-凭证管理",
+    "title" : "VIS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : {
+      "Authorization" : {
+        "name" : "Authorization",
+        "in" : "header",
+        "description" : "使用AK/SK方式认证时必选,携带的鉴权信息。",
+        "required" : false,
+        "schema" : {
+          "example" : "SDK-HMAC-SHA256 Access=xxx, SignedHeaders=content-type;host;x-sdk-date, Signature=xxx",
+          "description" : "使用AK/SK方式认证时必选,携带的鉴权信息。",
+          "type" : "string",
+          "maxLength" : 256,
+          "minLength" : 1
+        },
+        "type" : "object"
+      },
+      "project_id" : {
+        "name" : "project_id",
+        "in" : "path",
+        "description" : "项目ID,获取方法请参考[获取项目ID](https://support.huaweicloud.com/api-vis/vis_03_0005.html)",
+        "required" : true,
+        "schema" : {
+          "description" : "项目ID,获取方法请参考[获取项目ID](https://support.huaweicloud.com/api-vis/vis_03_0005.html)",
+          "type" : "string",
+          "maxLength" : 32,
+          "minLength" : 32
+        },
+        "type" : "object"
+      },
+      "X-Auth-Token" : {
+        "name" : "X-Auth-Token",
+        "in" : "header",
+        "description" : "普通租户的token。",
+        "required" : true,
+        "schema" : {
+          "description" : "普通租户的token。",
+          "type" : "string",
+          "maxLength" : 10240,
+          "minLength" : 1
+        },
+        "type" : "object"
+      },
+      "X-Project-Id" : {
+        "name" : "X-Project-Id",
+        "in" : "header",
+        "description" : "使用AK/SK方式认证时必选,携带项目ID信息。",
+        "required" : false,
+        "schema" : {
+          "example" : "70b76xxxxxx34253880af501cdxxxxxx",
+          "description" : "使用AK/SK方式认证时必选,携带项目ID信息。",
+          "type" : "string",
+          "maxLength" : 64,
+          "minLength" : 1
+        },
+        "type" : "object"
+      },
+      "X-Sdk-Date" : {
+        "name" : "X-Sdk-Date",
+        "in" : "header",
+        "description" : "使用AK/SK方式认证时必选,请求的发生时间。",
+        "required" : false,
+        "schema" : {
+          "example" : "20191115T033655Z",
+          "description" : "使用AK/SK方式认证时必选,请求的发生时间。",
+          "type" : "string",
+          "maxLength" : 256,
+          "minLength" : 1
+        },
+        "type" : "object"
+      }
+    },
+    "schemas" : {
+      "CreateDeviceCertificate" : {
+        "required" : [ "username", "password" ],
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "凭证用户名,全局唯一。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "NORMAL",
+            "description" : "凭证类型,可选值如下。"
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "123us****",
+            "description" : "凭证密码。长度为8位~32位的字符串,至少包含以下三种字符:大写字母、小写字母、数字和特殊字符(@#_-*)。密码不能与凭证用户名相同,也不能与用户名的倒序相同。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "凭证描述,长度不超过500个字符。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateDeviceCertificateResponseBody" : {
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "凭证用户名。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "this is for device",
+            "description" : "凭证描述。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "normal",
+            "description" : "凭证类型。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetAKSKCertificateResponseBody" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "aksk_1",
+            "description" : "凭证名称。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "凭证AK。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "this is for RTMP",
+            "description" : "凭证描述。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "1530587861001",
+            "description" : "凭证创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "1530587861001",
+            "description" : "凭证更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "EquipmentIndexAccessStrategy" : {
+        "properties" : {
+          "random_strategy" : {
+            "type" : "string",
+            "example" : "RANDOM",
+            "description" : "接入类型。包括如下。"
+          },
+          "start_time" : {
+            "type" : "string",
+            "example" : "10:20",
+            "description" : "接入策略开始时间。"
+          },
+          "end_time" : {
+            "type" : "string",
+            "example" : "12:10",
+            "description" : "接入策略结束时间。"
+          },
+          "total_length" : {
+            "type" : "string",
+            "example" : "10",
+            "description" : "接入总时长。单位:分钟。"
+          },
+          "periodicity" : {
+            "type" : "string",
+            "example" : "DAY",
+            "description" : "接入周期型。取值范围如下。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "ACTIVE",
+            "description" : "前接入策略启用状态。可选值如下。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetEquipmentIndexResponse" : {
+        "properties" : {
+          "channels_query" : {
+            "type" : "string",
+            "example" : "IDEL",
+            "description" : "设备通道更新状态。"
+          },
+          "device_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "设备ID。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "UNREGISTERED",
+            "description" : "设备状态。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "NVR",
+            "description" : "设备类型。"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "设备注册时所使用的GB/T28181用户名。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "aaa",
+            "description" : "视频流名称后缀。"
+          },
+          "channels" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EquipmentIndexChannels"
+            },
+            "description" : "通道列表详情。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "描述信息。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "创建时间。格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "更新时间。格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          }
+        },
+        "type" : "object"
+      },
+      "EquipmentIndexChannels" : {
+        "properties" : {
+          "channel_id" : {
+            "type" : "string",
+            "example" : "34020000001**********",
+            "description" : "通道ID。"
+          },
+          "device_id" : {
+            "type" : "string",
+            "example" : "2388252780**********",
+            "description" : "设备ID。"
+          },
+          "access_strategy" : {
+            "$ref" : "#/components/schemas/EquipmentIndexAccessStrategy",
+            "description" : "视频定时接入策略。"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "通道关联的视频流ID。"
+          },
+          "stream_name" : {
+            "type" : "string",
+            "example" : "channel_9217403129**********_9217403129**********",
+            "description" : "通道关联的视频流名称。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "aaa",
+            "description" : "视频流名称后缀。"
+          },
+          "invitation_status" : {
+            "type" : "string",
+            "example" : "INVITING",
+            "description" : "邀约状态如下。"
+          },
+          "tcp_priority" : {
+            "type" : "string",
+            "example" : "TRUE",
+            "description" : "是否配置通道优先选择TCP协议传输。取值范围如下。"
+          },
+          "tcp_support" : {
+            "type" : "string",
+            "example" : "TRUE",
+            "description" : "通道是否支持TCP协议传输。取值范围如下。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-09-30T03:59:08Z",
+            "description" : "通道注册时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-09-30T03:59:08Z",
+            "description" : "通道更新时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetDeviceCertificateResponseBody" : {
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "凭证用户名。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "this is for device",
+            "description" : "凭证描述。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "normal",
+            "description" : "凭证类型。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "StreamTag" : {
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "example" : "group",
+            "description" : "标签的键。最大长度为36个UNICODE字符(一-鿿),可以包含大小写字母、数字、中划线(-)或者下划线(_),不能包含其他的特殊字符。"
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "number1",
+            "description" : "标签的值。最大长度为43个UNICODE字符(一-鿿),可以包含大小写字母、数字、点(.)、中划线(-)或者下划线(_),不能包含其他的特殊字符,也可以为空字符串。"
+          }
+        },
+        "type" : "object"
+      },
+      "Video" : {
+        "properties" : {
+          "video" : {
+            "$ref" : "#/components/schemas/VideoInfo",
+            "description" : "推流视频流视频相关数据。"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoInfo" : {
+        "properties" : {
+          "codec" : {
+            "type" : "string",
+            "example" : "H264",
+            "description" : "视频编码格式。"
+          },
+          "width" : {
+            "type" : "string",
+            "example" : "400",
+            "description" : "视频分辨率水平方向像素。"
+          },
+          "height" : {
+            "type" : "string",
+            "example" : "600",
+            "description" : "视频分辨率垂直方向像素。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetStreamInfoResponseBody" : {
+        "properties" : {
+          "access_type" : {
+            "type" : "string",
+            "example" : "RTMP",
+            "description" : "视频接入类型(例如HTTP-FLV、RTMP、GB/T28181)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-12-25T12:59:37Z",
+            "description" : "视频流更新时间。"
+          },
+          "share_type" : {
+            "type" : "string",
+            "example" : "PUBLIC",
+            "description" : "视频流共享类型。"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "视频流ID。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "RTMP视频流的密钥。接入类型(access_type)为RTMP时,才有该参数。"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "https://xxxxxxxx.com/live",
+            "description" : "HTTP-FLV视频流的地址。接入类型(access_type)为HTTP-FLV时,才有该参数。"
+          },
+          "transfer_protocol" : {
+            "type" : "string",
+            "example" : "TCP",
+            "description" : "GB视频传输协议(TCP|UDP)。只有当视频接入类型为GB/T28181时,才有该参数。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "channel_9812399046132*****",
+            "description" : "视频流名称。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2019-01-28T07:57:21Z",
+            "description" : "视频流创建时间。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "视频流描述信息。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "description" : "视频流状态。"
+          },
+          "tag" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StreamTag"
+            },
+            "description" : "和视频流关联的标签。"
+          },
+          "retention" : {
+            "description" : "视频转储信息。",
+            "$ref" : "#/components/schemas/retention"
+          },
+          "stream_flow_info" : {
+            "description" : "视频流详细信息。",
+            "$ref" : "#/components/schemas/Stream_Flow_Info"
+          },
+          "encode_type" : {
+            "type" : "string",
+            "example" : "H264",
+            "description" : "视频流编码格式。"
+          },
+          "retention_state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "description" : "按视频流转储状态过滤,可选值如下。"
+          }
+        },
+        "type" : "object"
+      },
+      "retention" : {
+        "properties" : {
+          "retention_in_hour" : {
+            "type" : "integer",
+            "example" : 1,
+            "description" : "保存时长,以小时为单位。"
+          },
+          "Retention_forever" : {
+            "type" : "boolean",
+            "example" : "false",
+            "description" : "是否永久保存。"
+          },
+          "store_type" : {
+            "type" : "string",
+            "example" : "obs",
+            "description" : "转储位置,可为“obs”,即存储到华为云对象存储OBS上。"
+          },
+          "bucket" : {
+            "type" : "string",
+            "example" : "iva-ly-test",
+            "description" : "OBS桶名。"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "testRetention/***",
+            "description" : "OBS目录。"
+          },
+          "timezone" : {
+            "type" : "string",
+            "example" : "GMT+08:00",
+            "description" : "时区信息。"
+          },
+          "slice_in_minute" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "分片长度,以分钟为单位。取值范围为1~60,默认为5。"
+          }
+        },
+        "type" : "object"
+      },
+      "Stream_Flow_Info" : {
+        "properties" : {
+          "is_publishing" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "视频流是否在推流/拉流。"
+          },
+          "bw_out" : {
+            "type" : "string",
+            "example" : "0 Kb/s",
+            "description" : "出流带宽。 正在推流(即is_publishing为true)时会返回该字段。"
+          },
+          "bw_in" : {
+            "type" : "string",
+            "example" : "102.883 Kb/s",
+            "description" : "推流码率。正在推流(即is_publishing为true)时会返回该字段。"
+          },
+          "bw_video" : {
+            "type" : "string",
+            "example" : "102.883 Kb/s",
+            "description" : "视频带宽。正在推流(即is_publishing为true)时会返回该字段。"
+          },
+          "bw_audio" : {
+            "type" : "string",
+            "example" : "0 Kb/s",
+            "description" : "音频带宽。正在推流(即is_publishing为true)时会返回该字段。"
+          },
+          "bytes_out" : {
+            "type" : "string",
+            "example" : "15.775 GB",
+            "description" : "出流总量。"
+          },
+          "bytes_in" : {
+            "type" : "string",
+            "example" : "17.412 GB",
+            "description" : "入流总量。"
+          },
+          "num_play_clients" : {
+            "type" : "string",
+            "example" : "0",
+            "description" : "正在拉取该视频流数据的客户端数量。正在推流(即is_publishing为true)时会返回该字段。"
+          },
+          "meta" : {
+            "description" : "实时推流视频流元数据。正在推流(即is_publishing为true)时会返回该字段。",
+            "$ref" : "#/components/schemas/Video"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateResponse" : {
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "example" : "success",
+            "description" : "处理成功时返回"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDeviceChannelStrategy" : {
+        "properties" : {
+          "random_strategy" : {
+            "type" : "string",
+            "enum" : [ "RANDOM", "CONSECUTIVE" ],
+            "example" : "RANDOM",
+            "description" : "视频采集类型,可选值如下。"
+          },
+          "start_time" : {
+            "type" : "string",
+            "pattern" : "(?:0[0-9]|1[0-9]|2[0-3]):([0-5]0)",
+            "example" : "10:20",
+            "description" : "一天中视频接入的开始时间,时间格式为HH:MM,取值范围是00:10~23:40。分钟数值须为10的倍数,例如10:10、10:20、10:30等。第一次设置接入测略时,该参数必填。后续更新接入策略时,该参数可选。"
+          },
+          "end_time" : {
+            "type" : "string",
+            "example" : "12:10",
+            "description" : "一天中视频接入的结束时间,时间格式为HH:MM,取值范围是00:10~23:50。分钟数值须为10的倍数,如23:10、23:20等。end_time必须晚于start_time。第一次设置视频采集类型为RANDOM时,该参数必填。后续更新接入策略时,该参数可选采集类型为CONSECUTIVE时,该参数被忽略。"
+          },
+          "total_length" : {
+            "type" : "integer",
+            "minimum" : 10,
+            "maximum" : 1440,
+            "example" : 10,
+            "description" : "视频接入总采集时长,单位:分钟。参数值须为10的倍数,最小值为10分钟,最大值根据用户的配额决定。不同的视频采集类型,total_length有不同的配额设置:采集类型为RANDOM时,start_time加上total_length后的时间不能超过end_time。采集类型为CONSECUTIVE时,start_time加上total_length后的时间不能超过24:00,即采集时长不允许跨天。第一次设置接入测试略时,该参数必填。后续更新接入策略时,该参数可选。"
+          },
+          "periodicity" : {
+            "type" : "string",
+            "enum" : [ "DAY", "ONCE" ],
+            "example" : "DAY",
+            "description" : "采集周期,可选值如下。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "ACTIVE",
+            "enum" : [ "ACTIVE", "STOPPED" ],
+            "description" : "视频接入状态,可选值如下。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateAKSKRequestBody" : {
+        "properties" : {
+          "name" : {
+            "description" : "凭证名称。长度为1位到32位之间,可以包含字母、数字、中划线或者下划线,不能包含其他的特殊字符。",
+            "type" : "string"
+          },
+          "description" : {
+            "description" : "凭证描述,不填为空。可填字符串最大长度为500。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Active_StreamInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 200,
+            "description" : "可激活视频流总配额量。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 4,
+            "description" : "视频流已激活量。"
+          }
+        },
+        "type" : "object"
+      },
+      "StreamInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 100000,
+            "description" : "视频流总配额量。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 8,
+            "description" : "视频流已创建量。"
+          }
+        },
+        "type" : "object"
+      },
+      "AKSKInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 10,
+            "description" : "AKSK凭证总配额量。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 6,
+            "description" : "AKSK凭证已创建量。"
+          }
+        },
+        "type" : "object"
+      },
+      "DeviceInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 100000,
+            "description" : "设备总配额量。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 0,
+            "description" : "设备已创建量。"
+          }
+        },
+        "type" : "object"
+      },
+      "Random_Access_TimeInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 240,
+            "description" : "GB/T28181设备随机接入的总时长。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 240,
+            "description" : "GB/T28181设备随机已接入的时长。"
+          }
+        },
+        "type" : "object"
+      },
+      "SubscriptionResponse" : {
+        "properties" : {
+          "user_id" : {
+            "type" : "string",
+            "example" : "******6045184a8194e021113e******",
+            "description" : "用户ID。"
+          },
+          "sip_ip" : {
+            "type" : "string",
+            "example" : "10.**.144.***",
+            "description" : "SIP服务器地址,VIS对外提供的设备注册地址。"
+          },
+          "sip_port" : {
+            "type" : "string",
+            "example" : "5080",
+            "description" : "SIP服务器端口,VIS对外提供的设备注册端口,固定为5080。"
+          },
+          "quota" : {
+            "$ref" : "#/components/schemas/quotaInfo"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T03:06:10Z",
+            "description" : "创建时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "is_subscribed" : {
+            "type" : "boolean",
+            "example" : "true",
+            "description" : "用户是否开通服务。"
+          }
+        },
+        "type" : "object"
+      },
+      "HttpInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 10,
+            "description" : "http_flv总配额数量"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "http_flv已创建数量"
+          }
+        },
+        "type" : "object"
+      },
+      "HttpActiveInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 10,
+            "description" : "http_flv激活总配额数量"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "http_flv已激活数量"
+          }
+        },
+        "type" : "object"
+      },
+      "Consecutive_Access_TimeInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 120,
+            "description" : "设备连续接入的总时长。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 120,
+            "description" : "设备已使用的时长。"
+          }
+        },
+        "type" : "object"
+      },
+      "RtmpInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 10,
+            "description" : "rtmp总配额数量"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "rtmp已创建数量"
+          }
+        },
+        "type" : "object"
+      },
+      "PassWordInfo" : {
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "example" : 10,
+            "description" : "GB/T28181凭证总配额量。"
+          },
+          "used" : {
+            "type" : "integer",
+            "example" : 2,
+            "description" : "GB/T28181凭证已创建量。"
+          }
+        },
+        "type" : "object"
+      },
+      "quotaInfo" : {
+        "properties" : {
+          "password" : {
+            "$ref" : "#/components/schemas/PassWordInfo",
+            "description" : "GB/T28181凭证配额信息。"
+          },
+          "consecutive_access_time" : {
+            "$ref" : "#/components/schemas/Consecutive_Access_TimeInfo",
+            "description" : "GB/T28181设备连续接入时长的配额信息。"
+          },
+          "random_access_time" : {
+            "$ref" : "#/components/schemas/Random_Access_TimeInfo",
+            "description" : "GB/T28181设备随机接入时长的配额信息。"
+          },
+          "stream" : {
+            "$ref" : "#/components/schemas/StreamInfo",
+            "description" : "视频流配额信息。"
+          },
+          "active_stream" : {
+            "$ref" : "#/components/schemas/Active_StreamInfo",
+            "description" : "激活视频流配额信息。"
+          },
+          "device" : {
+            "$ref" : "#/components/schemas/DeviceInfo",
+            "description" : "设备配额信息。"
+          },
+          "aksk" : {
+            "$ref" : "#/components/schemas/AKSKInfo",
+            "description" : "AKSK凭证配额信息。"
+          },
+          "http_num" : {
+            "$ref" : "#/components/schemas/HttpInfo",
+            "description" : "http_flv配额信息。"
+          },
+          "http_active_num" : {
+            "$ref" : "#/components/schemas/HttpActiveInfo",
+            "description" : "http_flv激活配额信息。"
+          },
+          "rtmp_num" : {
+            "$ref" : "#/components/schemas/RtmpInfo",
+            "description" : "rtmp配额信息。"
+          }
+        },
+        "description" : "开通服务返回的quota体。",
+        "type" : "object"
+      },
+      "StreamResponse" : {
+        "properties" : {
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "视频流ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "RTMP******",
+            "description" : "视频流的名称。"
+          },
+          "encode_type" : {
+            "type" : "string",
+            "example" : "H264",
+            "description" : "视频流编码格式。"
+          },
+          "access_type" : {
+            "type" : "string",
+            "example" : "RTMP",
+            "description" : "视频接入类型。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "RTMP视频流的密钥。接入类型(access_type)为RTMP时,才有该参数。"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "HTTP-FLV视频流的拉流地址。接入类型(access_type)为HTTP-FLV时,才有该参数。"
+          },
+          "share_type" : {
+            "type" : "string",
+            "example" : "PRIVATE",
+            "description" : "视频流共享类型。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "description" : "视频流状态。"
+          },
+          "created_at" : {
+            "type" : "number",
+            "example" : "2018-06-12T13:00:01Z",
+            "description" : "视频流创建时间,UTC时间,格式为:YYYY-MM-DDTHH:MM:SSZ。"
+          },
+          "updated_at" : {
+            "type" : "number",
+            "example" : "2018-06-12T13:00:01Z",
+            "description" : "视频流更新时间,UTC时间,格式为:YYYY-MM-DDTHH:MM:SSZ。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "视频流描述信息。"
+          },
+          "tag" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StreamTag"
+            },
+            "description" : "和视频流关联的标签。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateStreamRequestList" : {
+        "required" : [ "name", "access_type", "encode_type" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "RTMP******",
+            "description" : "自定义流名称只能使用英文字母a~z,A-Z)、数字(0~9)以及连接符(-、_),连接符(-、__)不能连续出现、不能单独注册,也不能放在开头和结尾。长度不低于 8,不超过128个字符。",
+            "pattern" : "^[A-Za-z0-9\\-_]*"
+          },
+          "access_type" : {
+            "type" : "string",
+            "example" : "RTMP",
+            "description" : "视频接入类型,当前支持HTTP-FLV和RTMP协议,不区分大小写。",
+            "pattern" : "^[A-Za-z0-9\\-]*",
+            "enum" : [ "HTTP-FLV", "RTMP", "RTP" ]
+          },
+          "encode_type" : {
+            "type" : "string",
+            "example" : "H264",
+            "enum" : [ "H264", "H265", "NONE" ],
+            "description" : "视频流编码格式,当前支持H264,不区分大小写。"
+          },
+          "share_type" : {
+            "type" : "string",
+            "example" : "PUBLIC",
+            "enum" : [ "PRIVATE", "PUBLIC" ],
+            "default" : "PRIVATE",
+            "description" : "视频流共享类型。"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "https://xxxxxxxx.com/live",
+            "description" : "当视频类型为RTMP协议时,不需要该参数。当视频类型为HTTP-FLV协议时,该参数必填,表示HTTP-FLV协议视频流的拉流地址。该地址必须是http或https协议的合法URL,格式要求以“http://”或“https://”开头的字符串,例如“http://xxxx.xxx”。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "当视频类型为HTTP-FLV时,不需要该参数。视频接入类型是RTMP时,该参数表示秘钥access_key,用户可根据自己实际需求选择是否配置。如果配置了秘钥access_key,则进行RTMP推流时需要提供认证Token。这里的秘钥access_key由[创建AK/SK凭证](https://support.huaweicloud.com/api-vis/CreateAkskCertificate.html)接口生成。配置了秘钥access_key后,在推流时,需要在原始推流地址后面加上若干查询参数,作为推流认证信息,具体请参见[推流鉴权规则](https://support.huaweicloud.com/usermanual-vis/vis_02_0012.html)。如果不配置该参数,表示不提供access_key,则推流时不需要进行认证。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "视频流的描述信息,可填字符串最大长度为500。"
+          },
+          "tag" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/StreamTag"
+            },
+            "description" : "和视频流关联的标签,一个视频流最多添加10个标签。"
+          }
+        },
+        "type" : "object"
+      },
+      "Channels" : {
+        "properties" : {
+          "device_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "设备ID。"
+          },
+          "channel_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "通道ID。"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "通道关联的视频流ID。"
+          },
+          "stream_name" : {
+            "type" : "string",
+            "example" : "channel_2388252780**********_3402000000**********",
+            "description" : "通道关联的视频流名称。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "xc",
+            "description" : "视频流名称后缀。"
+          },
+          "invitation_status" : {
+            "type" : "string",
+            "example" : "OFFLINE",
+            "description" : "邀约状态如下。"
+          },
+          "tcp_priority" : {
+            "type" : "string",
+            "example" : "FALSE",
+            "description" : "是否配置通道优先选择TCP协议传输。取值范围如下。"
+          },
+          "tcp_support" : {
+            "type" : "string",
+            "example" : "FALSE",
+            "description" : "通道是否支持TCP协议传输。取值范围如下。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2019-04-17T12:26:24Z",
+            "description" : "通道注册时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2019-04-16T01:43:11Z",
+            "description" : "通道更新时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "access_strategy" : {
+            "type" : "array",
+            "$ref" : "#/components/schemas/Access_Strategy",
+            "description" : "视频定时接入策略。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetDeviceListResponseBody" : {
+        "properties" : {
+          "channels_query" : {
+            "type" : "string",
+            "example" : "QUERIED",
+            "description" : "设备通道更新状态。"
+          },
+          "device_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "设备ID。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "UNREGISTERED",
+            "description" : "设备状态。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "NVR",
+            "description" : "设备类型。"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "2388252780**********",
+            "description" : "设备注册时所使用的GB/T28181用户名。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : null,
+            "description" : "视频流名称后缀。"
+          },
+          "channels" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Channels"
+            },
+            "description" : "通道列表详情。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "描述信息。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2019-04-15T09:37:58Z",
+            "description" : "设备注册时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2019-04-17T14:30:02Z",
+            "description" : "更新时间。"
+          },
+          "auto_invite" : {
+            "type" : "boolean",
+            "example" : true,
+            "description" : "自动邀约。"
+          }
+        },
+        "type" : "object"
+      },
+      "Access_Strategy" : {
+        "properties" : {
+          "start_time" : {
+            "type" : "string",
+            "example" : "10:40",
+            "description" : "接入策略开始时间,格式为HH:MM(UTC+8)。"
+          },
+          "end_time" : {
+            "type" : "string",
+            "example" : "12:00",
+            "description" : "接入策略结束时间,格式为HH:MM(UTC+8)。"
+          },
+          "periodicity" : {
+            "type" : "string",
+            "example" : "DAY",
+            "description" : "接入周期类型。"
+          },
+          "total_length" : {
+            "type" : "string",
+            "example" : "10",
+            "description" : "接入总时长,以分钟为单位。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "description" : "当前接入策略启用状态如下。"
+          },
+          "random_strategy" : {
+            "type" : "string",
+            "example" : "RANDOM",
+            "description" : "接入类型。"
+          }
+        },
+        "type" : "object"
+      },
+      "StreamResponseList" : {
+        "properties" : {
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "视频流ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "stream_test1",
+            "description" : "视频流名称。"
+          },
+          "encode_type" : {
+            "type" : "string",
+            "example" : "H264",
+            "description" : "视频流编码格式。"
+          },
+          "access_type" : {
+            "type" : "string",
+            "example" : "RTMP",
+            "description" : "视频接入类型。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "RTMP视频流的密钥。接入类型(access_type)为RTMP时,才有该参数。"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : " https://xxxxxxxx.com/live",
+            "description" : "HTTP-FLV视频流的地址。接入类型(access_type)为HTTP-FLV时,才有该参数。"
+          },
+          "transfer_protocol" : {
+            "type" : "string",
+            "example" : "streamtngw6xsj",
+            "description" : "GB视频传输协议(TCP|UDP)。只有当视频介入类型为GB/T28181时,才有该参数。"
+          },
+          "share_type" : {
+            "type" : "string",
+            "example" : "PUBLIC",
+            "description" : "视频流共享类型。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "ACTIVE",
+            "description" : "视频流状态。"
+          },
+          "retention" : {
+            "$ref" : "#/components/schemas/retention",
+            "description" : "视频流转储信息。"
+          },
+          "retention_state" : {
+            "type" : "string",
+            "example" : "ACTIVE",
+            "description" : "按视频流转储状态过滤,可选值如下。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-12-25T12:59:37Z",
+            "description" : "视频流创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-12-25T12:59:37Z",
+            "description" : "视频流更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDeviceCertificate" : {
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "example" : "********",
+            "description" : "凭证密码,如果要修改密码,则必须带有原密码。"
+          },
+          "new_password" : {
+            "type" : "string",
+            "example" : "********",
+            "description" : "设置的新密码。长度为8位~32位的字符串,至少包含以下两种字符:大写字母、小写字母、数字和特殊字符(@#_-*)。不能与凭证用户名或与其倒序相同,且不能与原密码相同。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "this is for device",
+            "description" : "凭证描述,最大字符串长度为500。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateDeviceChannelRequestBody" : {
+        "required" : [ "type", "username" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "example" : "IPC",
+            "description" : "设备类型,目前仅支持IPC和NVR类型的设备,不区分大小写。"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "关联的GB/T28181设备密码对应的用户名。"
+          },
+          "quantity" : {
+            "type" : "integer",
+            "example" : "2",
+            "description" : "创建设备的个数。最小值为1,最大值为用户当前可以创建设备的剩余配额,不填该参数时默认值为1。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "description for device",
+            "description" : "设备的描述,可填字符串最大长度为500。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "abc",
+            "description" : "设备通道关联的视频流名称后缀。国标设备注册后,会自动创建该设备关联的视频流,视频流的名称可以添加suffix字段作为名称后缀以帮助用户更好区分不同的视频流。后缀长度为0位到30位之间(长度为0时表示不设置后缀),可以包含字母、数字、中划线(-)或者下划线(_),不能包含其他的特殊字符。"
+          },
+          "auto_invite" : {
+            "type" : "boolean",
+            "example" : "true",
+            "description" : "是否开启自动邀约,取值范围如下。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateDeviceChannelResponseBody" : {
+        "properties" : {
+          "device_id_list" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "创建成功的设备ID列表。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateRetentionRequestList" : {
+        "required" : [ "timezone" ],
+        "properties" : {
+          "store_type" : {
+            "type" : "string",
+            "enum" : [ "OBS" ],
+            "example" : "obs",
+            "description" : "视频转储位置,可为“obs”,即存储到云服务OBS上。第一次创建转储信息时必选,不区分大小写。"
+          },
+          "bucket" : {
+            "type" : "string",
+            "example" : "obs-momo",
+            "description" : "OBS桶名,当“store_type”为“obs”时必选。"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "path/to/video/",
+            "description" : "OBS目录,当“store_type”为“obs”时,该参数必选。该目录下的文件夹最多为N+2个,N为转储时长。"
+          },
+          "slice_in_minute" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 60,
+            "example" : "1",
+            "description" : "分片长度,以分钟为单位。取值范围为1~60,默认为5。"
+          },
+          "timezone" : {
+            "type" : "string",
+            "pattern" : "GMT(\\+|-)([0]?)([0-9]|1[0-2]):00",
+            "example" : "GMT+8:00",
+            "description" : "当地时区。格式为GMT+HH:00,如GMT+8:00表示东八区。转储时路径命名以该时区时间为准。"
+          },
+          "state" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "STOPPED" ],
+            "example" : "ACTIVE",
+            "description" : "转储状态。"
+          },
+          "format" : {
+            "type" : "string",
+            "enum" : [ "MP4", "FLV" ],
+            "example" : "FLV",
+            "default" : "FLV",
+            "description" : "视频流转储格式。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateStreamRequestList" : {
+        "properties" : {
+          "access_type" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "pattern" : "^[A-Za-z0-9\\-_]*",
+            "enum" : [ "HTTP-FLV", "RTMP", "RTP" ],
+            "example" : "RTMP",
+            "description" : "视频接入类型,例如HTTP-FLV、RTMP等,不区分大小写。当视频流处于ACTIVE状态时,不允许修改该项。"
+          },
+          "encode_type" : {
+            "type" : "string",
+            "example" : "H264",
+            "enum" : [ "H264", "H265", "NONE" ],
+            "description" : "视频流编码格式,当前支持H264,不区分大小写。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "RTMP视频流绑定的秘钥Access Key。"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "https://xxxxxxxx.com/live",
+            "description" : "HTTP-FLV视频流的拉流地址。URL必须是http或https协议的合法URL。格式要求:以“http://”或“https://”开头的字符串,例如“http://xxxx.xxx”。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "maxLength" : 500,
+            "description" : "视频流的描述信息。"
+          },
+          "share_type" : {
+            "type" : "string",
+            "example" : "PRIVATE",
+            "enum" : [ "PUBLIC", "PRIVATE" ],
+            "description" : "视频流共享类型。"
+          },
+          "tag" : {
+            "type" : "array",
+            "minimum" : 0,
+            "maximum" : 10,
+            "items" : {
+              "$ref" : "#/components/schemas/StreamTag"
+            },
+            "description" : "和视频流关联的标签,一个视频流最多添加10个标签。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "STOPPED",
+            "enum" : [ "ACTIVE", "STOPPED" ],
+            "description" : "视频流状态,可选值如下。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateDeviceChannelRequestBody" : {
+        "required" : [ "state" ],
+        "properties" : {
+          "state" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "STOPPED" ],
+            "example" : "ACTIVE",
+            "description" : "视频流状态。"
+          },
+          "tcp_priority" : {
+            "type" : "string",
+            "enum" : [ true, false ],
+            "example" : "",
+            "description" : "是否优先使用TCP传输的配置。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetStreamAddressResponseBody" : {
+        "properties" : {
+          "pull_flow_address" : {
+            "type" : "string",
+            "example" : "http://cecb3f14149**********e92f26ca72c.apigw.com/live/work001?app=vis&stream=RTMP******",
+            "description" : "拉流地址,视频流编码格式为H264和H265均会返回该字段。如果视频流的共享类型为PRIVATE(非共享),拉流时必须在请求头中添加X-Auth-Token,值为创建视频流的用户的token。"
+          },
+          "push_flow_protocol" : {
+            "type" : "string",
+            "example" : "RTMP",
+            "description" : "只有RTMP类型的流,该字段才有实际参考意义,代表推流协议。"
+          },
+          "push_flow_address" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "只有RTMP类型的流,该字段才有实际参考意义,代表推流地址。"
+          },
+          "hls_pull_flow_address" : {
+            "type" : "string",
+            "example" : "rtmp://10.104.11.66:64/vis/RTMP******",
+            "description" : "HLS(HTTP Live Streaming)拉流地址,视频编码格式为H265和H264均会返回HLS拉流地址。"
+          }
+        },
+        "type" : "object"
+      },
+      "TodayPacketReceivedRateDeviceListResponse" : {
+        "properties" : {
+          "device_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "设备ID。"
+          },
+          "channel_id" : {
+            "type" : "string",
+            "example" : "197548112413200***",
+            "description" : "通道ID。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2019-07-15T11:40:33Z",
+            "description" : "创建时间。格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2019-07-15T11:24:52Z",
+            "description" : "更新时间。格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "ONLINE",
+            "description" : "设备状态。"
+          },
+          "packet_received_rate" : {
+            "type" : "string",
+            "example" : "4511/4511",
+            "description" : "接受包个数/期望包个数。说明:暂时无法提供视频包接受率,数据内容无意义"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateAKSKCertificateResponseBody" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[A-Za-z0-9\\-_]*",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "example" : "aksk_1",
+            "description" : "凭证名称。"
+          },
+          "access_key" : {
+            "type" : "string",
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "凭证AK。"
+          },
+          "secret_key" : {
+            "type" : "string",
+            "example" : "TT1S1HXRQVS8ADCW9J**********Q68YOJREADUHAL9BUR0LVYWWUSGM********",
+            "description" : "凭证SK。"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 500,
+            "example" : "this is for RTMP",
+            "description" : "凭证描述。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-10-25T11:45:01Z",
+            "description" : "凭证更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateAKSKCertificate" : {
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "aksk_1",
+            "description" : "凭证名称。长度为1~32,可以包含字母、数字、中划线(-)或者下划线(_),不能包含其他的特殊字符。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "this is for RTMP",
+            "description" : "凭证描述,字符串最大长度为500。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateAuthorityRequestBody" : {
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "example" : "bucketName",
+            "description" : "桶名称"
+          },
+          "operation" : {
+            "type" : "string",
+            "enum" : [ "ON", "OFF" ],
+            "example" : "ON",
+            "description" : "表示授权还是取消授权的动作,ON表示授权,OFF表示取消授权"
+          }
+        },
+        "type" : "object"
+      },
+      "NVRChannels" : {
+        "properties" : {
+          "channel_id" : {
+            "type" : "string",
+            "example" : "921740312913240*****",
+            "description" : "通道ID。"
+          },
+          "stream_id" : {
+            "type" : "string",
+            "example" : "stream-0P5g9fQ2",
+            "description" : "通道关联的视频流ID。"
+          },
+          "stream_name" : {
+            "type" : "string",
+            "example" : "channel_9217403129**********_9217403129**********",
+            "description" : "通道关联的视频流名称。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "aaa",
+            "description" : "视频流名称后缀。"
+          },
+          "invitation_status" : {
+            "type" : "string",
+            "example" : "INVITING",
+            "description" : "邀约状态。"
+          },
+          "tcp_priority" : {
+            "type" : "string",
+            "example" : "TRUE",
+            "description" : "是否配置通道优先选择TCP协议传输。"
+          },
+          "tcp_support" : {
+            "type" : "string",
+            "example" : "TRUE",
+            "description" : "通道是否支持TCP协议传输。取值范围如下。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "2018-09-30T03:59:08Z",
+            "description" : "通道注册时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "2018-09-30T03:59:08Z",
+            "description" : "通道更新时间,格式为:YYYY-MM-DDTHH:MM:SSZ(UTC时间)。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetNVRChannelResponseBody" : {
+        "properties" : {
+          "channels_query" : {
+            "type" : "string",
+            "example" : "IDEL",
+            "description" : "设备通道更新状态。"
+          },
+          "device_id" : {
+            "type" : "string",
+            "example" : "3402000000**********",
+            "description" : "设备ID。"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "UNREGISTERED",
+            "description" : "设备状态。"
+          },
+          "type" : {
+            "type" : "string",
+            "example" : "NVR",
+            "description" : "设备类型。"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "0000",
+            "description" : "设备注册时所使用的GB/T28181用户名。"
+          },
+          "suffix" : {
+            "type" : "string",
+            "example" : "aaa",
+            "description" : "视频流名称后缀。"
+          },
+          "channels" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NVRChannels"
+            },
+            "description" : "通道列表详情。"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "描述信息。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "设备注册时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "更新时间。"
+          }
+        },
+        "type" : "object"
+      },
+      "PolicyResponseList" : {
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "example" : "bucketName",
+            "description" : "桶名称"
+          },
+          "authorized" : {
+            "type" : "boolean",
+            "enum" : [ true, false ],
+            "example" : true,
+            "description" : "桶授权信息,表示桶是否已经进行了授权"
+          }
+        },
+        "type" : "object"
+      },
+      "PolicyResponse" : {
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 2147483647,
+            "example" : 30,
+            "description" : "桶列表总数"
+          },
+          "buckets" : {
+            "$ref" : "#/components/schemas/PolicyResponseList",
+            "description" : "桶列表信息"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateDeviceCertificate" : {
+      "post" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "创建GB/T28181凭证",
+        "description" : "该接口用于创建GB/T28181凭证,该凭证用于GB/T28181设备注册时使用。",
+        "operationId" : "CreateDeviceCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateDeviceCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDeviceCertificate"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDeviceCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/codes"
+    },
+    "/ListAkskCertificates" : {
+      "get" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "获取AK/SK凭证列表",
+        "description" : "该接口用于获取所有AK/SK凭证。",
+        "operationId" : "ListAkskCertificates",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetAKSKCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "3",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "34",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "name",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "根据凭证用户名过滤,支持模糊搜索。",
+          "required" : false,
+          "schema" : {
+            "example" : "aksk_1",
+            "description" : "根据凭证用户名过滤,支持模糊搜索。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "access_key",
+          "in" : "query",
+          "description" : "根据access_key过滤,支持模糊查询索。",
+          "required" : false,
+          "schema" : {
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "根据access_key过滤,支持模糊查询索。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAkskCertificates",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/aksks"
+    },
+    "/ListLongTermOfflineDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取长期不在线设备列表",
+        "description" : "获取当前project下,长期不在线的GB/T28181设备列表。",
+        "operationId" : "ListLongTermOfflineDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "21",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "11",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListLongTermOfflineDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/longTermOfflineDeviceList"
+    },
+    "/ListDevicesCertificates" : {
+      "get" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "获取GB/T28181凭证列表",
+        "description" : "该接口用于获取所有GB/T28181凭证。",
+        "operationId" : "ListDevicesCertificates",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDeviceCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "2",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "44",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "username",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "username",
+          "in" : "query",
+          "description" : "根据凭证用户名过滤,支持模糊搜索。",
+          "required" : false,
+          "schema" : {
+            "example" : "",
+            "description" : "根据凭证用户名过滤,支持模糊搜索。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "根据凭证类型过滤,可选值如下。",
+          "required" : false,
+          "schema" : {
+            "example" : "NORMAL",
+            "description" : "根据凭证类型过滤,可选值如下。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDevicesCertificates",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/codes"
+    },
+    "/ListStreamInfos" : {
+      "get" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "获取视频流信息",
+        "description" : "此接口用于获取指定视频流的详细信息。",
+        "operationId" : "ListStreamInfos",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetStreamInfoResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "视频流名称",
+          "required" : true,
+          "schema" : {
+            "example" : "stream****",
+            "description" : "视频流名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStreamInfos",
+      "x-url" : "{endpoint}/v1/{project_id}/streams/{stream_name}"
+    },
+    "/UpdateNvrDeviceChannel" : {
+      "put" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "更新NVR设备通道列表",
+        "description" : "该接口用于更新NVR设备的通道列表。",
+        "operationId" : "UpdateNvrDeviceChannel",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "device_id",
+          "in" : "path",
+          "description" : "设备ID",
+          "required" : true,
+          "schema" : {
+            "example" : "device***23sadf",
+            "description" : "设备ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNvrDeviceChannel",
+      "x-url" : "{endpoint}/v1/{project_id}/devices/{device_id}/channel-refresh"
+    },
+    "/UpdateDeviceChannelStrategy" : {
+      "put" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "更新GB/T28181设备通道接入策略",
+        "description" : "该接口用于设置GB/T28181设备的视频接入策略。用户可以通过设置接入策略定时自动进行设备的接入。",
+        "operationId" : "UpdateDeviceChannelStrategy",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "device_id",
+          "in" : "path",
+          "description" : "设备ID",
+          "required" : true,
+          "schema" : {
+            "example" : "devi****3123sadf",
+            "description" : "设备ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "channel_id",
+          "in" : "path",
+          "description" : "通道ID",
+          "required" : true,
+          "schema" : {
+            "example" : "933908423*****000001",
+            "description" : "通道ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDeviceChannelStrategy"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDeviceChannelStrategy",
+      "x-url" : "{endpoint}/v1/{project_id}/devices/{device_id}/channels/{channel_id}/access-strategy"
+    },
+    "/UpdateAksk" : {
+      "put" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "更新AK/SK凭证",
+        "description" : "该接口用于更新AK/SK凭证,AK/SK用于RTMP推流的鉴权",
+        "operationId" : "UpdateAksk",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "access_key",
+          "in" : "path",
+          "description" : "凭证AK",
+          "required" : true,
+          "schema" : {
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "凭证AK",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateAKSKRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAksk",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/aksks/{access_key}"
+    },
+    "/DeleteDeviceCertificate" : {
+      "delete" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "删除GB/T28181凭证",
+        "description" : "该接口用于删除GB/T28181用户的凭证。",
+        "operationId" : "DeleteDeviceCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "username",
+          "in" : "path",
+          "description" : "凭证用户名",
+          "required" : true,
+          "schema" : {
+            "example" : "0000",
+            "description" : "凭证用户名",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDeviceCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/codes/{username}"
+    },
+    "/CreateSubscription" : {
+      "post" : {
+        "tags" : [ "服务开通管理" ],
+        "summary" : "开通服务",
+        "description" : "此接口用于用户申请开通视频接入服务",
+        "operationId" : "CreateSubscription",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSubscription",
+      "x-url" : "{endpoint}/v1/{project_id}/subscription"
+    },
+    "/CreateStream" : {
+      "post" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "创建视频流",
+        "description" : "该接口用于创建视频流。包括RTMP以及HTTP-FLV类型视频流。",
+        "operationId" : "CreateStream",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateStreamRequestList"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateStream",
+      "x-url" : "{endpoint}/v1/{project_id}/streams"
+    },
+    "/DeleteDevice" : {
+      "delete" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "删除GB/T28181设备",
+        "description" : "此接口用于删除指定设备。",
+        "operationId" : "DeleteDevice",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "device_id",
+          "in" : "path",
+          "description" : "设备ID",
+          "required" : true,
+          "schema" : {
+            "example" : "91267***0026",
+            "description" : "设备ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDevice",
+      "x-url" : "{endpoint}/v1/{project_id}/devices/{device_id}"
+    },
+    "/ListTodayNewOnlineDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取新上线设备列表",
+        "description" : "获取当前project下,最新上线(即之前没有上线记录)的GB/T28181设备列表。",
+        "operationId" : "ListTodayNewOnlineDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "5",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "66",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTodayNewOnlineDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/todayNewOnlineDeviceList"
+    },
+    "/ListDevices" : {
+      "get" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "获取设备列表",
+        "description" : "此接口用于获取已经注册成功的GB/T28181设备列表。",
+        "operationId" : "ListDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetDeviceListResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "22",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "33",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤,支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤,支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤,可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤,可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "UNREGISTERED",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/devices"
+    },
+    "/ListNotSendDataDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取在线未推流设备列表",
+        "description" : "获取当前project下,从来没有视频数据发送的设备列表。",
+        "operationId" : "ListNotSendDataDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "8",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "33",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNotSendDataDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/notSendDataDeviceList"
+    },
+    "/ListStreams" : {
+      "get" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "获取视频流列表",
+        "description" : "此接口用于获取所有视频流的详细信息。",
+        "operationId" : "ListStreams",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamResponseList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为0~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "查询的开始位置,取值范围为0~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "23",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "选择按一个字段排序,可选值如下。",
+          "required" : false,
+          "schema" : {
+            "example" : "encode_type",
+            "description" : "选择按一个字段排序,可选值如下。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "按照视频流名称过滤,支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "String**",
+            "description" : "按照视频流名称过滤,支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "stream_state",
+          "in" : "query",
+          "description" : "按视频流状态过滤,可选值如下。",
+          "required" : false,
+          "schema" : {
+            "example" : "ACTIVE",
+            "description" : "按视频流状态过滤,可选值如下。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "retention_state",
+          "in" : "query",
+          "description" : "按视频流转储状态过滤,可选值如下。",
+          "required" : false,
+          "schema" : {
+            "example" : "STOPPED",
+            "description" : "按视频流转储状态过滤,可选值如下。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStreams",
+      "x-url" : "{endpoint}/v1/{project_id}/streams"
+    },
+    "/UpdateDeviceCertificate" : {
+      "put" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "更新GB/T28181凭证",
+        "description" : "该接口用于更新GB/T28181用户名密码凭证。",
+        "operationId" : "UpdateDeviceCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "username",
+          "in" : "path",
+          "description" : "凭证用户名",
+          "required" : true,
+          "schema" : {
+            "example" : "0000",
+            "description" : "凭证用户名",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDeviceCertificate"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDeviceCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/codes/{username}"
+    },
+    "/CreateDeviceChannel" : {
+      "post" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "创建GB/T28181设备通道",
+        "description" : "此接口用于创建GB/T28181设备(摄像头、网络硬盘录像机等)通道。创建成功之后,自动为GB/T28181设备生成设备ID,以及选择关联的GB/T28181凭证。用户在设备注册时使用该设备ID与凭证,作为设备的用户名以及认证ID址。",
+        "operationId" : "CreateDeviceChannel",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateDeviceChannelResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDeviceChannelRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDeviceChannel",
+      "x-url" : "{endpoint}/v1/{project_id}/devices"
+    },
+    "/UpdateRetention" : {
+      "put" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "更新转储信息",
+        "description" : "此接口用于更新视频转储信息。创建的视频流默认没有转储信息,即视频数据不会保存。更新转储信息后可以将视频流保存到指定的存储媒介,如OBS。后续用户可以从OBS上获取到转储的视频。",
+        "operationId" : "UpdateRetention",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "视频流名称",
+          "required" : true,
+          "schema" : {
+            "example" : "strea***",
+            "description" : "视频流名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateRetentionRequestList"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateRetention",
+      "x-url" : "{endpoint}/v1/{project_id}/streams/{stream_name}/retention"
+    },
+    "/ListPastOnlineDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取曾经上线的设备列表",
+        "description" : "获取当前project下,获取曾经上线的GB/T28181设备列表,即只要上线过的设备信息都会显示。",
+        "operationId" : "ListPastOnlineDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "4",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "56",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPastOnlineDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/pastOnlineDeviceList"
+    },
+    "/ListTodayDroppedDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取新掉线设备列表",
+        "description" : "获取当前project下,最新掉线的GB/T28181设备列表。",
+        "operationId" : "ListTodayDroppedDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "6",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "23",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTodayDroppedDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/todayDroppedDeviceList"
+    },
+    "/UpdateStream" : {
+      "put" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "更新视频流",
+        "description" : "该接口用于更新视频流的详情,包括RTMP以及HTTP-FLV类型视频流。",
+        "operationId" : "UpdateStream",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "视频流名称",
+          "required" : true,
+          "schema" : {
+            "example" : "stream****",
+            "description" : "视频流名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateStreamRequestList"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateStream",
+      "x-url" : "{endpoint}/v1/{project_id}/streams/{stream_name}"
+    },
+    "/UpdateDeviceChannel" : {
+      "put" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "更新GB/T28181设备通道信息",
+        "description" : "该接口用于GB/T28181设备进行“视频邀约”和“取消邀约”,配置优先使用TCP传输的配置。",
+        "operationId" : "UpdateDeviceChannel",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "device_id",
+          "in" : "path",
+          "description" : "设备ID",
+          "required" : true,
+          "schema" : {
+            "example" : "device123123***f",
+            "description" : "设备ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "channel_id",
+          "in" : "path",
+          "description" : "通道ID",
+          "required" : true,
+          "schema" : {
+            "example" : "chanadfasdf",
+            "description" : "通道ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDeviceChannelRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDeviceChannel",
+      "x-url" : "{endpoint}/v1/{project_id}/devices/{device_id}/channels/{channel_id}"
+    },
+    "/DeleteAkskCertificate" : {
+      "delete" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "删除AK/SK凭证",
+        "description" : "该接口用于删除AKSK凭证。",
+        "operationId" : "DeleteAkskCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "access_key",
+          "in" : "path",
+          "description" : "凭证AK",
+          "required" : true,
+          "schema" : {
+            "example" : "ALKJOWLKJSDNFGO******KSJDF",
+            "description" : "凭证AK",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAkskCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/aksks/{access_key}"
+    },
+    "/ListStreamsAddresses" : {
+      "get" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "获取视频流地址",
+        "description" : "此接口用于获取指定视频流的地址。该地址用于进行视频流推流或者拉流。",
+        "operationId" : "ListStreamsAddresses",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetStreamAddressResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "视频流名称",
+          "required" : true,
+          "schema" : {
+            "example" : "RTMP******",
+            "description" : "视频流名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "expire_time",
+          "in" : "query",
+          "description" : "获取的视频流拉流地址的有效时间,设置范围为[600,604800],单位:秒。建议设置为8小时以内。",
+          "required" : false,
+          "schema" : {
+            "example" : 86400,
+            "description" : "获取的视频流拉流地址的有效时间,设置范围为[600,604800],单位:秒。建议设置为8小时以内。",
+            "type" : "integer"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListStreamsAddresses",
+      "x-url" : "{endpoint}/v1/{project_id}/streams/{stream_name}/endpoint"
+    },
+    "/DeleteStream" : {
+      "delete" : {
+        "tags" : [ "视频流管理" ],
+        "summary" : "删除视频流",
+        "description" : "此接口用于删除指定视频流。",
+        "operationId" : "DeleteStream",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "stream_name",
+          "in" : "path",
+          "description" : "视频流名称",
+          "required" : true,
+          "schema" : {
+            "example" : "streamT***",
+            "description" : "视频流名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteStream",
+      "x-url" : "{endpoint}/v1/{project_id}/streams/{stream_name}"
+    },
+    "/ListTodayPacketReceivedRateDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取视频包接收率",
+        "description" : "获取当天有视频接入的GB/T28181设备的平均视频包接受率的列表。",
+        "operationId" : "ListTodayPacketReceivedRateDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TodayPacketReceivedRateDeviceListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "23",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "12",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTodayPacketReceivedRateDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/todayPacketReceivedRateDeviceList"
+    },
+    "/ListSubscriptions" : {
+      "get" : {
+        "tags" : [ "服务开通管理" ],
+        "summary" : "获取服务开通信息",
+        "description" : "该接口用于获取服务开通信息",
+        "operationId" : "ListSubscriptions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSubscriptions",
+      "x-url" : "{endpoint}/v1/{project_id}/subscription"
+    },
+    "/ListShortTermOfflineDevices" : {
+      "get" : {
+        "tags" : [ "设备指标统计" ],
+        "summary" : "获取近期掉线的设备列表",
+        "description" : "获取当前project下,最近三天新掉线的设备列表。",
+        "operationId" : "ListShortTermOfflineDevices",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetEquipmentIndexResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : "7",
+            "description" : "查询的开始位置,取值范围为1~100000,必须与limit一起使用。与limit同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+          "required" : false,
+          "schema" : {
+            "example" : "22",
+            "description" : "返回结果的最大条目数,取值范围为1~1000,必须与offset一起使用。与offset同时缺省时,返回所有结果。该参数适用于所有查询列表的接口。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "返回结果的排序规则。",
+          "required" : false,
+          "schema" : {
+            "example" : "ASC",
+            "description" : "返回结果的排序规则。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_by",
+          "in" : "query",
+          "description" : "排序的字段,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "device_id",
+            "description" : "排序的字段,取值范围。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "按照设备ID过滤。支持模糊查询。",
+          "required" : false,
+          "schema" : {
+            "example" : "3402000000**********",
+            "description" : "按照设备ID过滤。支持模糊查询。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "按照设备类型过滤。可选参数为IPC。",
+          "required" : false,
+          "schema" : {
+            "example" : "IPC",
+            "description" : "按照设备类型过滤。可选参数为IPC。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "按照设备状态过滤,取值范围。",
+          "required" : false,
+          "schema" : {
+            "example" : "ONLINE",
+            "description" : "按照设备状态过滤,取值范围。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListShortTermOfflineDevices",
+      "x-url" : "{endpoint}/v1/{project_id}/operation/shortTermOfflineDeviceList"
+    },
+    "/CreateAkskCertificate" : {
+      "post" : {
+        "tags" : [ "凭证管理" ],
+        "summary" : "创建AK/SK凭证",
+        "description" : "该接口用于创建AK/SK凭证,AK/SK用于RTMP视频流推流时的鉴权。",
+        "operationId" : "CreateAkskCertificate",
+        "deprecated" : false,
+        "responses" : {
+          "201" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateAKSKCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateAKSKCertificate"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAkskCertificate",
+      "x-url" : "{endpoint}/v1/{project_id}/credentials/aksks"
+    },
+    "/UpdateAuthority" : {
+      "put" : {
+        "tags" : [ "obs桶策略管理" ],
+        "summary" : "更新桶授权",
+        "description" : "此接口用于用户更新桶授权:授权和取消授权。授权时,operation设置为\"ON\",取消授权时,operation设置为\"OFF\"。",
+        "operationId" : "UpdateAuthority",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常"
+          },
+          "400" : {
+            "description" : "请求错误。具体返回错误码请参考错误码说明"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          },
+          "500" : {
+            "description" : "服务内部错误"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateAuthorityRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateAuthority",
+      "x-url" : "{endpoint}/v1/{project_id}/buckets/authority"
+    },
+    "/ListNvrChannels" : {
+      "get" : {
+        "tags" : [ "设备管理" ],
+        "summary" : "获取NVR设备通道列表",
+        "description" : "此接口用于获取已经注册成功的NVR设备通道列表。",
+        "operationId" : "ListNvrChannels",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetNVRChannelResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "3266392d188c47d09948b1**********",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "device_id",
+          "in" : "path",
+          "description" : "设备ID",
+          "required" : true,
+          "schema" : {
+            "example" : "91267042471180***026",
+            "description" : "设备ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCC*****...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNvrChannels",
+      "x-url" : "{endpoint}/v1/{project_id}/devices/{device_id}"
+    },
+    "/ListBucket" : {
+      "get" : {
+        "tags" : [ "obs桶策略管理" ],
+        "summary" : "获取桶信息列表",
+        "description" : "此接口用于用户获取桶信息列表,桶信息中包含两个字段,分别是桶名称和桶授权信息。",
+        "operationId" : "ListBucket",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "正常",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PolicyResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求错误。具体返回错误码请参考错误码说明"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "没有操作权限"
+          },
+          "404" : {
+            "description" : "找不到资源或没有开通服务"
+          },
+          "500" : {
+            "description" : "服务内部错误"
+          },
+          "503" : {
+            "description" : "服务不可用"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/project_id"
+        }, {
+          "$ref" : "#/components/parameters/X-Auth-Token"
+        }, {
+          "$ref" : "#/components/parameters/Authorization"
+        }, {
+          "$ref" : "#/components/parameters/X-Sdk-Date"
+        }, {
+          "$ref" : "#/components/parameters/X-Project-Id"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "查询的开始位置,取值范围为0~100000,默认值为0。如果offset超过数据总条数,则结果返回空列表。",
+          "required" : false,
+          "schema" : {
+            "example" : 1,
+            "description" : "查询的开始位置,取值范围为0~100000,默认值为0。如果offset超过数据总条数,则结果返回空列表。",
+            "type" : "integer",
+            "default" : 0,
+            "maximum" : 100000,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果的最大条目数,取值范围为1~100,默认值为10。",
+          "required" : false,
+          "schema" : {
+            "example" : 5,
+            "description" : "返回结果的最大条目数,取值范围为1~100,默认值为10。",
+            "type" : "integer",
+            "default" : 10,
+            "maximum" : 100,
+            "minimum" : 1
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBucket",
+      "x-url" : "{endpoint}/v1/{project_id}/buckets"
+    }
+  }
+}

@@ -1,0 +1,1538 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "EDS-offer",
+    "title" : "EDS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "OfferPage" : {
+        "type" : "object",
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "分页"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10,
+            "description" : "分页大小"
+          },
+          "offer_name" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "邀约名称"
+          }
+        },
+        "description" : "查询列表"
+      },
+      "OfferListResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          },
+          "entities" : {
+            "type" : "array",
+            "description" : "合约列表",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferListResponseBodyEntities"
+            },
+            "maxItems" : 9999,
+            "minItems" : 0
+          }
+        }
+      },
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string"
+          },
+          "error_msg" : {
+            "type" : "string"
+          }
+        }
+      },
+      "OfferListResponseBodyEntities" : {
+        "type" : "object",
+        "properties" : {
+          "offer_id" : {
+            "type" : "string",
+            "description" : "合约ID"
+          },
+          "offer_code" : {
+            "type" : "string",
+            "description" : "合约编码"
+          },
+          "offer_name" : {
+            "type" : "string",
+            "description" : "合约名称"
+          },
+          "offer_description" : {
+            "type" : "string",
+            "description" : "合约描述"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "合约创建时间"
+          },
+          "offer_status" : {
+            "type" : "string",
+            "description" : "合约状态"
+          }
+        }
+      },
+      "AuditLogsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总条数"
+          },
+          "rows" : {
+            "type" : "array",
+            "description" : "返回数据记录",
+            "items" : {
+              "$ref" : "#/components/schemas/AuditLogBody"
+            }
+          }
+        }
+      },
+      "AuditLogBody" : {
+        "type" : "object",
+        "properties" : {
+          "audit_log_id" : {
+            "type" : "string",
+            "description" : "日志 ID"
+          },
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源 ID"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "资源名称"
+          },
+          "customer_user_id" : {
+            "type" : "string",
+            "description" : "消费连接器用户ID"
+          },
+          "customer_user_name" : {
+            "type" : "string",
+            "description" : "消费连接器用户名称"
+          },
+          "customer_connector_id" : {
+            "type" : "string",
+            "description" : "消费连接器ID"
+          },
+          "customer_connector_name" : {
+            "type" : "string",
+            "description" : "消费连接器名称"
+          },
+          "happend_time" : {
+            "type" : "string",
+            "description" : "发生时间"
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "限制使用的操作",
+            "enum" : [ "VIEW", "PROCESS", "MODIFY", "NOTIFY", "VERIFY", "DELETE", "FORWARD", "DOWNLOAD", "APPROVE", "TERMINATE", "NONE" ]
+          },
+          "description" : {
+            "type" : "object",
+            "description" : "扩展属性",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ConnectorResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "connector_id" : {
+            "type" : "string",
+            "description" : "连接器id"
+          },
+          "connector_name" : {
+            "type" : "string",
+            "description" : "连接器名称"
+          },
+          "connector_description" : {
+            "type" : "string",
+            "description" : "连接器描述"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "连接器创建时间"
+          },
+          "connector_url" : {
+            "type" : "string",
+            "description" : "连接器访问地址"
+          },
+          "result_code" : {
+            "type" : "string",
+            "description" : "连接器操作结果返回码"
+          },
+          "result_description" : {
+            "type" : "string",
+            "description" : "连接器操作结果描述"
+          },
+          "connector_status" : {
+            "type" : "string",
+            "description" : "连接器当前状态",
+            "enum" : [ "ACTIVE", "INACTIVE" ]
+          }
+        }
+      },
+      "ContractReq" : {
+        "type" : "object",
+        "properties" : {
+          "contract_name" : {
+            "type" : "string",
+            "description" : "合约名称"
+          },
+          "contract_description" : {
+            "type" : "string",
+            "description" : "合约描述"
+          },
+          "owner_connector_id" : {
+            "type" : "string",
+            "description" : "提供者连接器ID"
+          },
+          "owner_connector_name" : {
+            "type" : "string",
+            "description" : "提供者连接器名称"
+          },
+          "subscribe_connector_id" : {
+            "type" : "string",
+            "description" : "订阅连接器ID"
+          },
+          "subscribe_connector_name" : {
+            "type" : "string",
+            "description" : "订阅连接器名称"
+          },
+          "subscriber_name" : {
+            "type" : "string",
+            "description" : "订阅人名称"
+          },
+          "subscriber_id" : {
+            "type" : "string",
+            "description" : "订阅人id"
+          },
+          "approver_id" : {
+            "type" : "string",
+            "description" : "审批人ID"
+          },
+          "approver_name" : {
+            "type" : "string",
+            "description" : "审批人名称"
+          },
+          "offer_id" : {
+            "type" : "string",
+            "description" : "offer ID"
+          },
+          "offer_name" : {
+            "type" : "string",
+            "description" : "offer 名称"
+          },
+          "use_control_policies" : {
+            "type" : "array",
+            "description" : "合约使用控制策略列表",
+            "items" : {
+              "$ref" : "#/components/schemas/UseControlPoliciesInner"
+            }
+          }
+        },
+        "description" : "ContractReq"
+      },
+      "UseControlPoliciesInner" : {
+        "type" : "object",
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "限制使用的操作",
+            "enum" : [ "VIEW", "PROCESS", "MODIFY", "NOTIFY", "VERIFY", "DELETE", "FORWARD", "DOWNLOAD", "APPROVE", "TERMINATE", "NONE" ]
+          },
+          "when" : {
+            "type" : "object",
+            "description" : "限制使用时间",
+            "properties" : { }
+          },
+          "how_many" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "限制使用次数"
+          },
+          "where" : {
+            "type" : "array",
+            "description" : "限制地点列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "who" : {
+            "type" : "array",
+            "description" : "限制用户列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "application" : {
+            "type" : "array",
+            "description" : "限制应用列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "additional_attributes" : {
+            "type" : "object",
+            "description" : "策略的扩展属性",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "ContractResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "contract_id" : {
+            "type" : "string",
+            "description" : "合约ID"
+          },
+          "contract_name" : {
+            "type" : "string",
+            "description" : "合约名称"
+          },
+          "result_code" : {
+            "type" : "string",
+            "description" : "合约操作结果返回码"
+          },
+          "result_description" : {
+            "type" : "string",
+            "description" : "合约操作结果描述"
+          }
+        }
+      },
+      "ConnectorListResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          },
+          "entities" : {
+            "type" : "array",
+            "description" : "连接器列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectorListResponseBodyEntities"
+            },
+            "maxItems" : 9999,
+            "minItems" : 0
+          }
+        }
+      },
+      "ConnectorListResponseBodyEntities" : {
+        "type" : "object",
+        "properties" : {
+          "connector_id" : {
+            "type" : "string",
+            "description" : "连接器ID"
+          },
+          "connector_name" : {
+            "type" : "string",
+            "description" : "连接器名称"
+          }
+        }
+      },
+      "UserReq" : {
+        "type" : "object",
+        "required" : [ "role_list", "user_name" ],
+        "properties" : {
+          "user_name" : {
+            "type" : "string",
+            "description" : "用户名"
+          },
+          "role_list" : {
+            "type" : "array",
+            "description" : "角色列表",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "ROLE_DATA_VIEWER", "ROLE_DATA_OPERATOR", "ROLE_CONTRACT_APPROVER", "ROLE_OFFER_APPROVER", "ROLE_CONNECTOR_OPERATOR", "ROLE_CONNECTOR_AUDITOR", "ROLE_DATA_RECEIVER" ]
+            }
+          }
+        }
+      },
+      "UserResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "user_name" : {
+            "type" : "string",
+            "description" : "用户名"
+          },
+          "result_code" : {
+            "type" : "string",
+            "description" : "用户操作结果返回码"
+          },
+          "result_description" : {
+            "type" : "string",
+            "description" : "用户操作结果描述"
+          }
+        }
+      },
+      "OfferResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "offer_id" : {
+            "type" : "string",
+            "description" : "合约id"
+          },
+          "offer_name" : {
+            "type" : "string",
+            "description" : "合约名称"
+          },
+          "offer_resources" : {
+            "type" : "array",
+            "description" : "合约关联的资源信息",
+            "items" : {
+              "$ref" : "#/components/schemas/OfferResponseBodyOfferResources"
+            },
+            "maxItems" : 9999,
+            "minItems" : 0
+          }
+        }
+      },
+      "OfferResponseBodyOfferResources" : {
+        "type" : "object",
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源id"
+          },
+          "resource_title" : {
+            "type" : "string",
+            "description" : "资源名称"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "description" : "资源的文件类型"
+          },
+          "resource_category" : {
+            "type" : "string",
+            "description" : "资源分类",
+            "enum" : [ "FILE", "DATASET" ]
+          },
+          "use_control_policies_template" : {
+            "type" : "array",
+            "description" : "合约使用控制策略列表",
+            "items" : {
+              "$ref" : "#/components/schemas/UseControlPoliciesInner"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListOffers" : {
+      "post" : {
+        "tags" : [ "offer" ],
+        "summary" : "查询指定连接器下的offer列表",
+        "description" : "查询指定连接器下的offer列表",
+        "operationId" : "ListOffers",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OfferListResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OfferPage"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListOffers",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/offers"
+    },
+    "/ShowAuditLog" : {
+      "get" : {
+        "tags" : [ "审计日志" ],
+        "summary" : "查询数据资产的审计日志",
+        "description" : "查询数据资产的审计日志",
+        "operationId" : "ShowAuditLog",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditLogsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_keywords",
+          "in" : "query",
+          "description" : "连接器名称过滤关键字",
+          "required" : false,
+          "schema" : {
+            "description" : "连接器名称过滤关键字",
+            "type" : "string"
+          }
+        }, {
+          "name" : "user_keywords",
+          "in" : "query",
+          "description" : "用户名称过滤关键字",
+          "required" : false,
+          "schema" : {
+            "description" : "用户名称过滤关键字",
+            "type" : "string"
+          }
+        }, {
+          "name" : "action",
+          "in" : "query",
+          "description" : "执行动作过滤",
+          "required" : false,
+          "schema" : {
+            "description" : "执行动作过滤",
+            "type" : "string",
+            "enum" : [ "VIEW", "PROCESS", "MODIFY", "NOTIFY", "VERIFY", "DELETE", "FORWARD", "DOWNLOAD", "APPROVE", "TERMINATE", "NONE" ]
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "发生时间",
+          "required" : false,
+          "schema" : {
+            "description" : "发生时间",
+            "type" : "string"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "结束时间",
+          "required" : false,
+          "schema" : {
+            "description" : "结束时间",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAuditLog",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/audit-logs"
+    },
+    "/ShowConnector" : {
+      "get" : {
+        "tags" : [ "连接器" ],
+        "summary" : "查询指定租户的连接器详情",
+        "description" : "查询指定租户的连接器详情",
+        "operationId" : "ShowConnector",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowConnector",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}"
+    },
+    "/CommitContract" : {
+      "post" : {
+        "tags" : [ "合约" ],
+        "summary" : "提交合约",
+        "description" : "提交合约",
+        "operationId" : "CommitContract",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContractResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ContractReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CommitContract",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/contracts"
+    },
+    "/ListConnectorsByInstanceUser" : {
+      "get" : {
+        "tags" : [ "连接器" ],
+        "summary" : "按空间用户查询连接器列表",
+        "description" : "按空间用户查询连接器列表",
+        "operationId" : "ListConnectorsByInstanceUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorListResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListConnectorsByInstanceUser",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/user-connectors"
+    },
+    "/CancelContract" : {
+      "delete" : {
+        "tags" : [ "合约" ],
+        "summary" : "终止合约",
+        "description" : "终止合约",
+        "operationId" : "CancelContract",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContractResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "contract_id",
+          "in" : "path",
+          "description" : "合约ID,解除合约",
+          "required" : true,
+          "schema" : {
+            "description" : "合约ID,解除合约",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CancelContract",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/contracts/{contract_id}"
+    },
+    "/ListConnectorsByInstanceManger" : {
+      "get" : {
+        "tags" : [ "连接器" ],
+        "summary" : "按空间管理员查询连接器列表",
+        "description" : "按空间管理员查询连接器列表",
+        "operationId" : "ListConnectorsByInstanceManger",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ConnectorListResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,表示从此偏移量开始查询, offset大于等于0",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示条目数量,最大数量999,超过999后只返回999<br>(当前华为云规范防止单页返回过大)",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 999999,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListConnectorsByInstanceManger",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors"
+    },
+    "/AddConnectorUser" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "分配子账号",
+        "description" : "分配子账号",
+        "operationId" : "AddConnectorUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "租户(主账号)Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "租户(主账号)Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddConnectorUser",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/users"
+    },
+    "/ShowContract" : {
+      "get" : {
+        "tags" : [ "合约" ],
+        "summary" : "查询合约",
+        "description" : "查询合约",
+        "operationId" : "ShowContract",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ContractReq"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "contract_id",
+          "in" : "path",
+          "description" : "合约ID",
+          "required" : true,
+          "schema" : {
+            "description" : "合约ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowContract",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/contracts/{contract_id}"
+    },
+    "/DeleteConnectorUser" : {
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "账号回收",
+        "description" : "账号回收",
+        "operationId" : "DeleteConnectorUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "租户(主账号)Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "租户(主账号)Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "user_name",
+          "in" : "path",
+          "description" : "用户名",
+          "required" : true,
+          "schema" : {
+            "description" : "用户名",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteConnectorUser",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/users/{user_name}"
+    },
+    "/ShowOffer" : {
+      "get" : {
+        "tags" : [ "offer" ],
+        "summary" : "查询指定offer详情",
+        "description" : "查询指定offer详情",
+        "operationId" : "ShowOffer",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OfferResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)",
+            "type" : "string",
+            "maxLength" : 100000,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,租户+REGION确定唯一项目",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,租户+REGION确定唯一项目",
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "description" : "实例ID,开通的数据交换平台实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "实例ID,开通的数据交换平台实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "connector_id",
+          "in" : "path",
+          "description" : "连接器ID,指定数据交换平台下连接器的ID",
+          "required" : true,
+          "schema" : {
+            "description" : "连接器ID,指定数据交换平台下连接器的ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offer_id",
+          "in" : "path",
+          "description" : "合约ID,待查询合约的ID详情",
+          "required" : true,
+          "schema" : {
+            "description" : "合约ID,待查询合约的ID详情",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOffer",
+      "x-url" : "{endpoint}/v1/{project_id}/eds/instances/{instance_id}/connectors/{connector_id}/offers/{offer_id}"
+    }
+  }
+}

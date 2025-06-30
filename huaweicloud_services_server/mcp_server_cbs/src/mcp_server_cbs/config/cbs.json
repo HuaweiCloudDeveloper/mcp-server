@@ -1,0 +1,4361 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CBS-问答会话",
+    "title" : "CBS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "ErrorResp" : {
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。"
+          }
+        },
+        "description" : "Bad Request",
+        "type" : "object"
+      },
+      "CreateQaSessionResp" : {
+        "required" : [ "greeting", "session_id" ],
+        "properties" : {
+          "session_id" : {
+            "type" : "string",
+            "description" : "会话标识符。"
+          },
+          "greeting" : {
+            "type" : "string",
+            "description" : "机器人问候语。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostSuggestionsReq" : {
+        "required" : [ "question" ],
+        "properties" : {
+          "question" : {
+            "type" : "string",
+            "description" : "用户输入的问题,长度为1~512。",
+            "minLength" : 1,
+            "maxLength" : 512
+          },
+          "top" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "最多提示条数,默认为5,取值范围[1,10]。",
+            "minimum" : 1,
+            "maximum" : 10,
+            "default" : 5
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostSuggestionsResp" : {
+        "required" : [ "questions" ],
+        "properties" : {
+          "questions" : {
+            "type" : "array",
+            "description" : "推荐问列表。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ReplyRatesResp" : {
+        "required" : [ "interval", "startutc", "time_zone" ],
+        "properties" : {
+          "interval" : {
+            "type" : "string",
+            "description" : "统计周期目前支持year、month、week、day。"
+          },
+          "time_zone" : {
+            "type" : "string",
+            "description" : "所在时区,例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\";默认为\"UTC\"。"
+          },
+          "total" : {
+            "description" : "会话总计统计数据。",
+            "$ref" : "#/components/schemas/ReplyRatesTotal"
+          },
+          "intervals" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ReplyRatesIntervals"
+            },
+            "description" : "会话间隔统计数据。",
+            "type" : "array"
+          },
+          "startutc" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "统计开始的utc时间。"
+          },
+          "endutc" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "统计结束的utc时间。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ReplyRatesIntervals" : {
+        "required" : [ "chat_count", "chat_rate", "dialog_count", "dialog_rate", "direct_count", "direct_rate", "invalid_count", "invalid_rate", "notmatch_count", "notmatch_rate", "question_count", "recommend_count", "recommend_rate", "start" ],
+        "properties" : {
+          "start" : {
+            "type" : "string",
+            "description" : "间隔周期开始时间。"
+          },
+          "question_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期用户提问总数。"
+          },
+          "direct_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期直接回答个数。"
+          },
+          "recommend_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期推荐回答个数。"
+          },
+          "notmatch_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期未匹配个数。"
+          },
+          "invalid_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期无效问题个数。"
+          },
+          "chat_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期闲聊匹配个数。"
+          },
+          "direct_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期直接回答比率,保留小数点后三位。"
+          },
+          "recommend_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期推荐回答比率,保留小数点后三位。"
+          },
+          "notmatch_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期未匹配比率,保留小数点后三位。"
+          },
+          "chat_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期闲聊匹配比率,保留小数点后三位。"
+          },
+          "invalid_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期无效问题比率,保留小数点后三位。"
+          },
+          "dialog_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "多轮会话次数。"
+          },
+          "dialog_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "多轮会话比例。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ReplyRatesTotal" : {
+        "required" : [ "chat_count", "chat_rate", "dialog_count", "dialog_rate", "direct_count", "direct_rate", "invalid_count", "invalid_rate", "notmatch_count", "notmatch_rate", "question_count", "recommend_count", "recommend_rate" ],
+        "properties" : {
+          "question_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "用户提问总数。"
+          },
+          "direct_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "直接回答个数。"
+          },
+          "recommend_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "推荐回答个数。"
+          },
+          "notmatch_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "未匹配个数。"
+          },
+          "direct_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "直接回答比率,保留小数点后三位。"
+          },
+          "recommend_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "推荐回答比率,保留小数点后三位。"
+          },
+          "notmatch_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "未匹配比率,保留小数点后三位。"
+          },
+          "dialog_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "多轮对话次数。"
+          },
+          "dialog_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "多轮对话比例。"
+          },
+          "invalid_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "无效问题次数。"
+          },
+          "invalid_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "无效问题比例。"
+          },
+          "chat_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "闲聊匹配次数。"
+          },
+          "chat_rate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "闲聊比例。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "updateReq" : {
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "视频名,长度3~63位。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "CreateRes" : {
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "视频id"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "createVideoReq" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "视频名,长度3~63位。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "PostRequestsResp" : {
+        "required" : [ "question", "request_id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "description" : "请求ID。"
+          },
+          "question" : {
+            "type" : "string",
+            "description" : "问题。"
+          },
+          "answers" : {
+            "type" : "array",
+            "description" : "最相似的问题集。",
+            "items" : {
+              "$ref" : "#/components/schemas/Answers"
+            }
+          },
+          "extends" : {
+            "description" : "扩展参数项。",
+            "$ref" : "#/components/schemas/OldExtends"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "OldExtends" : {
+        "properties" : {
+          "domains" : {
+            "type" : "array",
+            "description" : "领域列表,多个领域用分号隔开。如果设置了领域且领域不为空,就从这些领域中匹配答案,否则就从该用户的全部知识库匹配答案。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "maxItems" : 10
+          },
+          "top" : {
+            "type" : "integer",
+            "description" : "返回答案数量,默认为5,取值范围1~10。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Answers" : {
+        "properties" : {
+          "qa_pair_id" : {
+            "type" : "string",
+            "description" : "Answers."
+          },
+          "st_question" : {
+            "type" : "string",
+            "description" : "标准问题。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "相似度得分,精确到小数点后3位。"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "Domain."
+          },
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "ex_questions" : {
+            "type" : "array",
+            "description" : "扩展问。",
+            "items" : {
+              "$ref" : "#/components/schemas/ExQuestions"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostOldRequestsReq" : {
+        "required" : [ "question" ],
+        "properties" : {
+          "extends" : {
+            "description" : "扩展参数。",
+            "$ref" : "#/components/schemas/OldExtends"
+          },
+          "chat_enable" : {
+            "type" : "boolean",
+            "description" : "默认false",
+            "default" : false
+          },
+          "threshold_enable" : {
+            "type" : "boolean",
+            "description" : "true:启动内部阈值 返回经过阈值处理之后的答案。",
+            "default" : false
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "用户id,在日志中用于标识不通用户,可以为任意String"
+          },
+          "question" : {
+            "type" : "string",
+            "description" : "用户输入"
+          },
+          "operate_type" : {
+            "type" : "integer",
+            "description" : "调用接口时候传入,用以标记的问答的行为,默认为0,最终会展示在问答日志里。 0 用户输入 1 单击热点问题 3 单击推荐问题 4 单击问题提示"
+          },
+          "session_id" : {
+            "type" : "string",
+            "description" : "会话标识符,UUID格式。如:c04e6f7b-61d7-4a2d-a0c8-f9ecd2f62359。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ExQuestions" : {
+        "required" : [ "content" ],
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "description" : "扩展问题。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "UrlResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CreateRes"
+        }, {
+          "required" : [ "id", "url" ],
+          "properties" : {
+            "id" : {
+              "type" : "string",
+              "description" : "图片id"
+            },
+            "name" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "访问地址"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "HotQuestionCount" : {
+        "properties" : {
+          "qa_pair_id" : {
+            "type" : "string",
+            "description" : "问答对ID。"
+          },
+          "st_question" : {
+            "type" : "string",
+            "description" : "标准问题。"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "标准问题所属领域。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "HotQuestionResp" : {
+        "required" : [ "questions" ],
+        "properties" : {
+          "questions" : {
+            "type" : "array",
+            "description" : "指定时间范围内,热点问题列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/HotQuestionCount"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Time" : {
+        "required" : [ "create_time", "update_time" ],
+        "properties" : {
+          "create_time" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "update_time" : {
+            "type" : "string",
+            "description" : "更新时间"
+          }
+        },
+        "type" : "object"
+      },
+      "Character" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Time"
+        }, {
+          "required" : [ "character_name" ],
+          "properties" : {
+            "character_name" : {
+              "type" : "string",
+              "description" : "形象的个人姓名"
+            },
+            "gender" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "id" : {
+              "type" : "string",
+              "description" : "形象id"
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "形象名"
+            },
+            "photo_url" : {
+              "type" : "string",
+              "description" : "形象obs地址"
+            },
+            "posture" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "姿态:"
+            },
+            "train_finish_time_estimate" : {
+              "type" : "string",
+              "description" : "估算的训练结束时间"
+            },
+            "train_start_time" : {
+              "type" : "string",
+              "description" : "训练开始时间"
+            },
+            "train_status" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "训练状态:"
+            },
+            "type" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "形象类型:"
+            }
+          },
+          "type" : "object"
+        } ],
+        "description" : "形象",
+        "type" : "object"
+      },
+      "CharacterList" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicListResp"
+        }, {
+          "required" : [ "characters" ],
+          "properties" : {
+            "characters" : {
+              "type" : "array",
+              "description" : "形象列表",
+              "items" : {
+                "description" : "",
+                "$ref" : "#/components/schemas/Character"
+              }
+            }
+          }
+        } ],
+        "description" : "形象列表",
+        "type" : "object"
+      },
+      "BasicListResp" : {
+        "required" : [ "count", "offset", "quota", "total" ],
+        "properties" : {
+          "quota" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "配额"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "偏移"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "返回数量"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CharacterInfo" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Character"
+        }, {
+          "required" : [ "center_photo_url", "have_segment_data" ],
+          "properties" : {
+            "center_photo_url" : {
+              "type" : "string",
+              "description" : "形象在中心时的图片obs 地址"
+            },
+            "error_msg" : {
+              "type" : "string",
+              "description" : "合成错误信息"
+            },
+            "left_photo_url" : {
+              "type" : "string",
+              "description" : "形象在左时的图片obs 地址"
+            },
+            "preview_video_url" : {
+              "type" : "string",
+              "description" : "预览视频"
+            },
+            "right_photo_url" : {
+              "type" : "string",
+              "description" : "形象在右时的图片obs 地址"
+            },
+            "best_img_quality_preview_url" : {
+              "type" : "string",
+              "description" : "显示效果最佳预览"
+            },
+            "best_lip_sync_preview_url" : {
+              "type" : "string",
+              "description" : "音唇同步最佳预览"
+            },
+            "best_mouth_rec_preview_url" : {
+              "type" : "string",
+              "description" : "嘴巴部分效果最佳"
+            },
+            "have_segment_data" : {
+              "type" : "boolean",
+              "description" : "是否有人像分割数据"
+            },
+            "initial_video_url" : {
+              "type" : "string",
+              "description" : "合成原始视频地址"
+            },
+            "background_url" : {
+              "type" : "string",
+              "description" : "抠图背景地址"
+            },
+            "model" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "0: best img quality"
+            },
+            "charater_position" : {
+              "description" : "形象位于背景的坐标{x:500, y:500}",
+              "$ref" : "#/components/schemas/CharacterPosition"
+            },
+            "charater_dimension" : {
+              "description" : "形象的高度和宽度{height:xxx, width:500}",
+              "$ref" : "#/components/schemas/CharacterDimension"
+            }
+          },
+          "type" : "object"
+        } ],
+        "description" : "形象",
+        "type" : "object"
+      },
+      "CharacterPosition" : {
+        "type" : "object",
+        "properties" : {
+          "x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "从左上为0点出发的横坐标"
+          },
+          "y" : {
+            "type" : "string",
+            "description" : "从左上为0点出发的纵坐标"
+          }
+        }
+      },
+      "CharacterDimension" : {
+        "type" : "object",
+        "description" : "角色的尺寸",
+        "properties" : {
+          "height" : {
+            "type" : "string",
+            "description" : "角色的高度"
+          },
+          "width" : {
+            "type" : "string",
+            "description" : "角色的宽度"
+          }
+        }
+      },
+      "CharacterConfig" : {
+        "required" : [ "character_id" ],
+        "properties" : {
+          "character_id" : {
+            "type" : "string",
+            "description" : "形象id"
+          },
+          "position" : {
+            "description" : "位置坐标",
+            "$ref" : "#/components/schemas/Position"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "VideoConfigResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/VideoConfig"
+        }, {
+          "required" : [ "background_url", "image_frame_url" ],
+          "properties" : {
+            "background_url" : {
+              "type" : "string",
+              "description" : "背景图片地址,取默认背景的第一张"
+            },
+            "image_frame_url" : {
+              "type" : "string",
+              "description" : "播报框地址"
+            },
+            "logo_url" : {
+              "type" : "string",
+              "description" : "logo地址"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "Video" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Time"
+        }, {
+          "required" : [ "id", "name", "status", "subtitle_url" ],
+          "properties" : {
+            "error_msg" : {
+              "type" : "string",
+              "description" : "错误信息 如:"
+            },
+            "id" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "视频名称"
+            },
+            "progress" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "视频生成进度"
+            },
+            "status" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "0:未初始化"
+            },
+            "subtitle_url" : {
+              "type" : "string",
+              "description" : "字幕地址"
+            },
+            "video_url" : {
+              "type" : "string",
+              "description" : "视频的obs地址,当视频生成成功时返回"
+            },
+            "video_shot" : {
+              "type" : "string",
+              "description" : "视频截图地址,jpg格式"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageReadConfig" : {
+        "required" : [ "image_id", "read_content", "resolution" ],
+        "properties" : {
+          "read_content" : {
+            "type" : "string",
+            "description" : "播报内容,长度为1~2500"
+          },
+          "image_id" : {
+            "type" : "string",
+            "description" : "图片id"
+          },
+          "resolution" : {
+            "description" : "图片显示像素,(748*420)",
+            "$ref" : "#/components/schemas/Resolution"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Resolution" : {
+        "required" : [ "y" ],
+        "properties" : {
+          "x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "像素x"
+          },
+          "y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "像素y"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Position" : {
+        "required" : [ "x", "y" ],
+        "properties" : {
+          "x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "像素坐标x"
+          },
+          "y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "像素坐标x"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PPTReadConfig" : {
+        "required" : [ "image_id", "read_content", "resolution" ],
+        "properties" : {
+          "read_content" : {
+            "type" : "string",
+            "description" : "播报内容,长度为3~2500"
+          },
+          "image_id" : {
+            "type" : "string",
+            "description" : "PPT转化有的图片id"
+          },
+          "resolution" : {
+            "description" : "图片显示像素,(748*420)",
+            "$ref" : "#/components/schemas/Resolution"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "VideoConfig" : {
+        "required" : [ "background_id" ],
+        "properties" : {
+          "background_id" : {
+            "type" : "string",
+            "description" : "背景id"
+          },
+          "logo_id" : {
+            "type" : "string",
+            "description" : "图标id"
+          },
+          "show_subtitles" : {
+            "type" : "boolean",
+            "description" : "是否显示字幕"
+          },
+          "resolution_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "画面分辨率:"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PPTReadConfigResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/PPTReadConfig"
+        }, {
+          "required" : [ "image_url", "name" ],
+          "properties" : {
+            "image_url" : {
+              "type" : "string",
+              "description" : "图片地址"
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "图片名"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageReadConfigResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ImageReadConfig"
+        }, {
+          "required" : [ "image_url", "name" ],
+          "properties" : {
+            "image_url" : {
+              "type" : "string",
+              "description" : "图片地址"
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "图片名"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "GetVideoInfo" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Video"
+        }, {
+          "required" : [ "character_config", "read_config", "tts_config", "video_config" ],
+          "properties" : {
+            "character_config" : {
+              "description" : "形象设置",
+              "$ref" : "#/components/schemas/CharacterConfig"
+            },
+            "compose_actions" : {
+              "type" : "array",
+              "description" : "合成动作,如果不为空,则表示可以进行合成操作",
+              "items" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : ""
+              }
+            },
+            "read_config" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/ReadConfigResp"
+            },
+            "tts_config" : {
+              "description" : "语音合成配置",
+              "$ref" : "#/components/schemas/TtsConfig"
+            },
+            "video_config" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/VideoConfigResp"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "ReadConfigResp" : {
+        "required" : [ "character_position", "read_type" ],
+        "properties" : {
+          "image_read_configs" : {
+            "type" : "array",
+            "description" : "图片播报配置",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/ImageReadConfigResp"
+            }
+          },
+          "ppt_read_configs" : {
+            "type" : "array",
+            "description" : "ppt播报配置",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/PPTReadConfigResp"
+            }
+          },
+          "read_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "播报选项:"
+          },
+          "read_content" : {
+            "type" : "string",
+            "description" : "纯文本播报内容。"
+          },
+          "character_position" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "0:左"
+          },
+          "read_content_paragragh_times" : {
+            "type" : "array",
+            "description" : "read_content 每段播报时间",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TtsConfig" : {
+        "required" : [ "delay", "property", "speed", "volume" ],
+        "properties" : {
+          "property" : {
+            "type" : "string",
+            "description" : "用于设置音色"
+          },
+          "speed" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "用户设置音速"
+          },
+          "volume" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "用于设置音量"
+          },
+          "delay" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "段首停顿时间。"
+          },
+          "pitch" : {
+            "type" : "string",
+            "description" : "音高。"
+          },
+          "audio_format" : {
+            "type" : "string",
+            "description" : "语音格式头:wav、mp3、pcm"
+          },
+          "sample_rate" : {
+            "type" : "string",
+            "description" : "采样率:16000、8000"
+          },
+          "tts_source" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "tts来源:"
+          }
+        },
+        "description" : "语音合成配置 - 目前可用tts资源尚未确定,校验待定,测试可以先不测后端接口校验",
+        "type" : "object"
+      },
+      "SessionStatsResp" : {
+        "required" : [ "endutc", "interval", "intervals", "startutc", "time_zone", "total" ],
+        "properties" : {
+          "interval" : {
+            "type" : "string",
+            "description" : "统计周期目前支持year、month、week、day。"
+          },
+          "time_zone" : {
+            "type" : "string",
+            "description" : "所在时区,默认为\"utc\"。例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\"。"
+          },
+          "total" : {
+            "description" : "会话总计统计数据。",
+            "$ref" : "#/components/schemas/SessionStatsTotal"
+          },
+          "intervals" : {
+            "type" : "array",
+            "description" : "会话间隔统计数据。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/SessionStatsIntervals"
+            }
+          },
+          "startutc" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "统计开始的utc时间。"
+          },
+          "endutc" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "统计结束的utc时间。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "SessionStatsTotal" : {
+        "required" : [ "avg_request_count", "avg_session_time", "session_count", "user_count" ],
+        "properties" : {
+          "session_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "会话总数。"
+          },
+          "user_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "独立用户个数。"
+          },
+          "avg_request_count" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "平均会话轮数,保留小数点后三位。"
+          },
+          "avg_session_time" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "平均会话时长,保留小数点后三位。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "SessionStatsIntervals" : {
+        "required" : [ "avg_request_count", "avg_session_time", "session_count", "start", "user_count" ],
+        "properties" : {
+          "start" : {
+            "type" : "string",
+            "description" : "间隔周期开始时间。"
+          },
+          "session_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期会话总数。"
+          },
+          "user_count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "间隔周期独立用户个数。"
+          },
+          "avg_request_count" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期平均会话轮数,保留小数点后三位。"
+          },
+          "avg_session_time" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "间隔周期平均会话时长,保留小数点后三位。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageFrameList" : {
+        "required" : [ "image_frames" ],
+        "properties" : {
+          "image_frames" : {
+            "type" : "array",
+            "description" : "播报框",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/ImageFrame"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "播报框总数"
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "起始偏移量"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "本次查询数量"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageFrame" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Time"
+        }, {
+          "required" : [ "frame_resolution_type", "id", "image_frame_position", "image_position", "resolution_type", "url" ],
+          "properties" : {
+            "frame_resolution_type" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "0: 16/9"
+            },
+            "id" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "image_frame_position" : {
+              "description" : "框的默认地址",
+              "$ref" : "#/components/schemas/LeftRightPosition"
+            },
+            "image_position" : {
+              "description" : "插图的默认地址",
+              "$ref" : "#/components/schemas/LeftRightPosition"
+            },
+            "resolution_type" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "横版:0"
+            },
+            "url" : {
+              "type" : "string",
+              "description" : ""
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "LeftRightPosition" : {
+        "required" : [ "left", "right" ],
+        "properties" : {
+          "left" : {
+            "description" : "",
+            "$ref" : "#/components/schemas/Position"
+          },
+          "right" : {
+            "description" : "",
+            "$ref" : "#/components/schemas/Position"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PutVideoInfo" : {
+        "required" : [ "tts_config", "video_config", "character_config", "read_config" ],
+        "properties" : {
+          "tts_config" : {
+            "description" : "语音合成配置",
+            "$ref" : "#/components/schemas/TtsConfig"
+          },
+          "video_config" : {
+            "description" : "背景配置。",
+            "$ref" : "#/components/schemas/VideoConfig"
+          },
+          "character_config" : {
+            "description" : "形象设置",
+            "$ref" : "#/components/schemas/CharacterConfig"
+          },
+          "read_config" : {
+            "description" : "播报配置",
+            "$ref" : "#/components/schemas/ReadConfig"
+          }
+        },
+        "type" : "object"
+      },
+      "ReadConfig" : {
+        "required" : [ "read_type" ],
+        "properties" : {
+          "image_read_configs" : {
+            "type" : "array",
+            "description" : "插图播报配置",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageReadConfig"
+            }
+          },
+          "read_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "播报选项:"
+          },
+          "read_content" : {
+            "type" : "string",
+            "description" : "纯文本播报内容"
+          },
+          "character_position" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "0:左"
+          },
+          "read_content_paragraph_interval" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "段落播报间隔"
+          },
+          "image_frame_id" : {
+            "type" : "string",
+            "description" : "播报框id"
+          },
+          "audio_url" : {
+            "type" : "string",
+            "description" : "用户的音频文件obs地址,为https格式(如:https://cbs-digital-human-cn-north-4.obs.myhuaweicloud.com:443/audio.wav),当字段不为空时,表示将使用用户自己的音频文件。 "
+          }
+        },
+        "type" : "object"
+      },
+      "ImageUrlResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UrlResp"
+        }, {
+          "required" : [ "resolution" ],
+          "properties" : {
+            "resolution" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Resolution"
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageUrlList" : {
+        "required" : [ "list" ],
+        "properties" : {
+          "list" : {
+            "type" : "array",
+            "description" : "图片链接列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/ImageUrlResp"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "KeyWordsResp" : {
+        "required" : [ "keywords" ],
+        "properties" : {
+          "keywords" : {
+            "type" : "array",
+            "description" : "指定时间范围内,用户问关键词列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/KeyWordsStat"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "KeyWordsStat" : {
+        "required" : [ "freq", "keyword" ],
+        "properties" : {
+          "keyword" : {
+            "type" : "string",
+            "description" : "关键词。"
+          },
+          "freq" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "关键词频次。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Tag" : {
+        "properties" : {
+          "should" : {
+            "type" : "array",
+            "description" : "必须要包含其中之一的答案标签id列表",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CurrentSlot" : {
+        "required" : [ "slot_id", "slot_name", "slot_values" ],
+        "properties" : {
+          "slot_id" : {
+            "type" : "string",
+            "description" : "槽位ID。"
+          },
+          "slot_name" : {
+            "type" : "string",
+            "description" : "槽位名称。"
+          },
+          "slot_values" : {
+            "type" : "array",
+            "description" : "槽位值。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/SlotValue"
+            }
+          },
+          "slot_identification" : {
+            "type" : "string",
+            "description" : "槽位标识。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostQaChatResp" : {
+        "required" : [ "reply_type", "request_id", "session_id" ],
+        "properties" : {
+          "reply_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "回复类型:"
+          },
+          "qabot_answers" : {
+            "description" : "问答型机器人回复。",
+            "$ref" : "#/components/schemas/QaBotAnswersNew"
+          },
+          "chat_answers" : {
+            "description" : "闲聊型机器人回复。",
+            "$ref" : "#/components/schemas/ChatAnswers"
+          },
+          "taskbot_answers" : {
+            "description" : "任务型机器人回复。",
+            "$ref" : "#/components/schemas/TaskBotAnswers"
+          },
+          "docqa_answers" : {
+            "description" : "文档问答返回结果。",
+            "$ref" : "#/components/schemas/DocBotAnswers"
+          },
+          "tableqa_answers" : {
+            "description" : "表格问答返回结果。",
+            "$ref" : "#/components/schemas/TableQaAnswers"
+          },
+          "session_id" : {
+            "type" : "string",
+            "description" : "会话ID,在下一次请求中传入改id表示继续会话。"
+          },
+          "kbqa_answers" : {
+            "description" : "图谱问答的回复结果。当机器人回复类型是3的时候,该字段必填。",
+            "$ref" : "#/components/schemas/KbqaAnswers"
+          },
+          "request_id" : {
+            "type" : "string",
+            "description" : "请求ID。用来标记调用失败时,用来标记本次问答。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "KbqaAnswers" : {
+        "required" : [ "answer", "score" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "答案评分。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "QaBotAnswer" : {
+        "properties" : {
+          "qa_pair_id" : {
+            "type" : "string",
+            "description" : "问答对ID。"
+          },
+          "st_question" : {
+            "type" : "string",
+            "description" : "标准问题。"
+          },
+          "answer" : {
+            "type" : "string",
+            "description" : "知识库答案,包含该字段的回答为直接回答,未包含该字段的是推荐回答。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "相似度得分,精确到小数点后3位。"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "所属领域。"
+          },
+          "top_score_question" : {
+            "type" : "string",
+            "description" : "最高评分的扩展问或标准问,当关闭内部阈值处理时返回。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "HistorySlot" : {
+        "required" : [ "slot_identification", "slot_name" ],
+        "properties" : {
+          "slot_name" : {
+            "type" : "string",
+            "description" : "槽位名称。"
+          },
+          "slot_values" : {
+            "type" : "array",
+            "description" : "槽信息。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/HistorySlotWord"
+            }
+          },
+          "slot_identification" : {
+            "type" : "string",
+            "description" : "用户设置的槽位标识。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "QaBotAnswersNew" : {
+        "properties" : {
+          "answers" : {
+            "type" : "array",
+            "description" : "问答机器人回复。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/QaBotAnswer"
+            }
+          },
+          "recommend_answers" : {
+            "type" : "array",
+            "description" : "问答机器人推荐问题",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/RecomendAnswer"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "HistorySlotWord" : {
+        "required" : [ "norm_word", "word" ],
+        "properties" : {
+          "word" : {
+            "type" : "string",
+            "description" : "词"
+          },
+          "norm_word" : {
+            "type" : "string",
+            "description" : "归一化后的词"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostRequestsReq" : {
+        "required" : [ "question" ],
+        "properties" : {
+          "extends" : {
+            "description" : "扩展参数。",
+            "$ref" : "#/components/schemas/Extends"
+          },
+          "chat_enable" : {
+            "type" : "boolean",
+            "description" : "默认false",
+            "default" : false
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "用户id,在日志中用于标识不通用户,可以为任意String"
+          },
+          "question" : {
+            "type" : "string",
+            "description" : "用户输入"
+          },
+          "session_id" : {
+            "type" : "string",
+            "description" : "会话标识符,UUID格式。如:c04e6f7b-61d7-4a2d-a0c8-f9ecd2f62359。"
+          },
+          "query_types" : {
+            "type" : "array",
+            "description" : "指定发送的机器人类型集合。",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TaskBotAnswers" : {
+        "required" : [ "answer", "skill_id", "skill_responses" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "skill_id" : {
+            "type" : "string",
+            "description" : "技能ID。"
+          },
+          "skill_responses" : {
+            "type" : "array",
+            "description" : "技能回复信息。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/SkillResponse"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "SlotValue" : {
+        "required" : [ "begin_position", "end_position", "norm_word", "word" ],
+        "properties" : {
+          "word" : {
+            "type" : "string",
+            "description" : "词。"
+          },
+          "norm_word" : {
+            "type" : "string",
+            "description" : "归一化后的标准词。"
+          },
+          "begin_position" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "词的起始位置。"
+          },
+          "end_position" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "词的结束位置。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "RecomendAnswer" : {
+        "properties" : {
+          "qa_pair_id" : {
+            "type" : "string",
+            "description" : "问答对ID。"
+          },
+          "st_question" : {
+            "type" : "string",
+            "description" : "标准问题。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "相似度得分,精确到小数点后3位。"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "所属领域。"
+          },
+          "top_score_question" : {
+            "type" : "string",
+            "description" : "最高评分的扩展问或标准问。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Extends" : {
+        "properties" : {
+          "tag_ids" : {
+            "description" : "待匹配的答案标签id列表",
+            "$ref" : "#/components/schemas/Tag"
+          },
+          "domain_ids" : {
+            "type" : "array",
+            "description" : "领域列表,多个领域用分号隔开。如果设置了领域且领域不为空,就从这些领域中匹配答案,否则就从该用户的全部知识库匹配答案。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "maxItems" : 10
+          },
+          "source" : {
+            "type" : "string",
+            "description" : "问题来源"
+          },
+          "return_all_answers" : {
+            "type" : "boolean",
+            "description" : "是否返回所有类型的回答"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Frame" : {
+        "required" : [ "confidence", "current_slots", "flow_complete", "history_slots", "intention", "intention_alias", "reply", "task_complete" ],
+        "properties" : {
+          "intention" : {
+            "type" : "string",
+            "description" : "意图"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "命中意图置信度。"
+          },
+          "current_slots" : {
+            "type" : "array",
+            "description" : "当前槽位列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/CurrentSlot"
+            }
+          },
+          "history_slots" : {
+            "type" : "array",
+            "description" : "历史槽位列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/HistorySlot"
+            }
+          },
+          "reply" : {
+            "type" : "string",
+            "description" : "机器人回复。"
+          },
+          "task_complete" : {
+            "type" : "boolean",
+            "description" : "任务是否完成。"
+          },
+          "flow_complete" : {
+            "type" : "boolean",
+            "description" : "对话流程是否完成。"
+          },
+          "candidate_words" : {
+            "type" : "array",
+            "description" : "候选词。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "intention_alias" : {
+            "type" : "string",
+            "description" : "意图名称"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ChatAnswers" : {
+        "required" : [ "answer" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "闲聊的置信度,范围:0.0~1.0  0.0表示兜底回复"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TableQaAnswers" : {
+        "required" : [ "answer", "score", "table_id" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "表格问答答案。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "评分。"
+          },
+          "table_id" : {
+            "type" : "string",
+            "description" : "表格ID。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "DocQueryAnswerDetail" : {
+        "required" : [ "answer", "doc_id", "end_index", "paragraph_number", "paragraph_score", "paragraph_text", "phrase_score", "start_index", "total_score" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "doc_id" : {
+            "type" : "string",
+            "description" : "文档ID。"
+          },
+          "end_index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "答案结束下标。"
+          },
+          "paragraph_score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "段落评分。"
+          },
+          "paragraph_text" : {
+            "type" : "string",
+            "description" : "段落文字。"
+          },
+          "phrase_score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "文档问答阅读理解评分。"
+          },
+          "start_index" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "答案开始下标。"
+          },
+          "total_score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "文档问答总评分。"
+          },
+          "paragraph_number" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "段落在文档中的编号。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CandidateIntention" : {
+        "required" : [ "candidate_confidence", "candidate_intention" ],
+        "properties" : {
+          "candidate_intention" : {
+            "type" : "string",
+            "description" : "候选意图。"
+          },
+          "candidate_confidence" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "候选意图置信度。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "SkillResponse" : {
+        "required" : [ "candidate", "frame", "locked", "related_intenions", "skill_id", "skill_version" ],
+        "properties" : {
+          "skill_id" : {
+            "type" : "string",
+            "description" : "技能ID。"
+          },
+          "skill_version" : {
+            "type" : "string",
+            "description" : "技能模型版本。"
+          },
+          "frame" : {
+            "description" : "命中意图回复",
+            "$ref" : "#/components/schemas/Frame"
+          },
+          "candidate" : {
+            "description" : "候选意图。",
+            "$ref" : "#/components/schemas/CandidateIntention"
+          },
+          "locked" : {
+            "type" : "boolean",
+            "description" : "技能是否锁定。"
+          },
+          "related_intenions" : {
+            "type" : "array",
+            "description" : "相关意图信息。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/RelatedIntention"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "RelatedIntention" : {
+        "required" : [ "intention" ],
+        "properties" : {
+          "intention" : {
+            "type" : "string",
+            "description" : "意图名称。"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "意图置信度。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "DocBotAnswers" : {
+        "required" : [ "answer", "question", "score" ],
+        "properties" : {
+          "answer" : {
+            "type" : "string",
+            "description" : "答案。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "置信度。"
+          },
+          "question" : {
+            "type" : "string",
+            "description" : "问题。"
+          },
+          "answer_detail" : {
+            "description" : "答案详情",
+            "$ref" : "#/components/schemas/DocQueryAnswerDetail"
+          },
+          "details" : {
+            "type" : "array",
+            "description" : "候选答案列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/DocQueryAnswerDetail"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "postImagesReq" : {
+        "required" : [ "type", "name", "file" ],
+        "properties" : {
+          "type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "图片类型:"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "file" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "图片文件"
+          },
+          "resolution_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "横竖屏模式"
+          }
+        },
+        "description" : "上传图片请求",
+        "type" : "object"
+      },
+      "VideoList" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicListResp"
+        }, {
+          "required" : [ "videos" ],
+          "properties" : {
+            "videos" : {
+              "type" : "array",
+              "description" : "视频列表",
+              "items" : {
+                "description" : "",
+                "$ref" : "#/components/schemas/Video"
+              }
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "PostLaborResp" : {
+        "required" : [ "request_id", "updated_time" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "description" : "调用成功时的返回请求ID。"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "转人工的时间。格式为“yyyy-MM-dd THH:mm:ssZ”。其中,T指某个时间的开始;Z指UTC时间。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostQaSessionReq" : {
+        "required" : [ "question" ],
+        "properties" : {
+          "extends" : {
+            "description" : "扩展参数。",
+            "$ref" : "#/components/schemas/SessionExtends"
+          },
+          "chat_enable" : {
+            "type" : "boolean",
+            "description" : "默认true",
+            "default" : true
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "用户id,在日志中用于标识不通用户,可以为任意String。"
+          },
+          "question" : {
+            "type" : "string",
+            "description" : "用户输入。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "SessionExtends" : {
+        "properties" : {
+          "tag_ids" : {
+            "description" : "待匹配的答案标签id列表",
+            "$ref" : "#/components/schemas/Tag"
+          },
+          "domain_ids" : {
+            "type" : "array",
+            "description" : "领域列表,多个领域用分号隔开。如果设置了领域且领域不为空,就从这些领域中匹配答案,否则就从该用户的全部知识库匹配答案。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            },
+            "maxItems" : 10
+          },
+          "source" : {
+            "type" : "string",
+            "description" : "问题来源"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostQaSessionResp" : {
+        "required" : [ "reply_type" ],
+        "properties" : {
+          "reply_type" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "回复类型:"
+          },
+          "qabot_answers" : {
+            "description" : "问答型机器人回复。",
+            "$ref" : "#/components/schemas/QaBotAnswers"
+          },
+          "chat_answers" : {
+            "description" : "闲聊型机器人回复。",
+            "$ref" : "#/components/schemas/ChatAnswers"
+          },
+          "taskbot_answers" : {
+            "description" : "任务型机器人回复。",
+            "$ref" : "#/components/schemas/TaskBotAnswers"
+          },
+          "request_id" : {
+            "type" : "string",
+            "description" : "请求ID。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "QaBotAnswers" : {
+        "required" : [ "request_id" ],
+        "properties" : {
+          "answers" : {
+            "type" : "array",
+            "description" : "问答机器人回复。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/QaBotAnswer"
+            }
+          },
+          "request_id" : {
+            "type" : "string",
+            "description" : "请求ID。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageList" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicListResp"
+        }, {
+          "required" : [ "images" ],
+          "properties" : {
+            "images" : {
+              "type" : "array",
+              "description" : "图片列表",
+              "items" : {
+                "description" : "",
+                "$ref" : "#/components/schemas/Image"
+              }
+            }
+          }
+        } ],
+        "description" : "",
+        "type" : "object"
+      },
+      "Image" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Time"
+        }, {
+          "required" : [ "id", "image_url", "name", "type" ],
+          "properties" : {
+            "id" : {
+              "type" : "string"
+            },
+            "image_frame" : {
+              "$ref" : "#/components/schemas/ImageFrame"
+            },
+            "image_url" : {
+              "type" : "string",
+              "description" : "图片的obs路径"
+            },
+            "name" : {
+              "type" : "string"
+            },
+            "type" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "0:背景图"
+            },
+            "resolution_type" : {
+              "type" : "integer",
+              "format" : "int32",
+              "description" : "横竖屏模式。0:横版1:竖版"
+            }
+          },
+          "type" : "object"
+        } ],
+        "type" : "object"
+      },
+      "updateImageNameReq" : {
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "视频名,长度3~63位。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "PostSatisfactionResp" : {
+        "required" : [ "request_id", "updated_time" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "description" : "调用成功时的返回请求ID。"
+          },
+          "updated_time" : {
+            "type" : "string",
+            "description" : "反馈满意度的时间。格式为“yyyy-MM-dd THH:mm:ssZ”。其中,T指某个时间的开始;Z指UTC时间。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostSatisfactionReq" : {
+        "required" : [ "degree" ],
+        "properties" : {
+          "degree" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "满意度评分,当前仅支持二级评分,1表示满意,-1表示不满意。",
+            "minimum" : -1,
+            "maximum" : 1
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateSession" : {
+      "post" : {
+        "tags" : [ "问答会话" ],
+        "summary" : "开启会话",
+        "description" : "问答会话API由开启会话、处理会话、关闭会话三个接口组成。用户可通过调用该接口创建会话。该接口仅支持老用户,新用户请优先使用问答机器人API接口进行调用。",
+        "operationId" : "CreateSession",
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateQaSessionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "机器人标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "机器人标识符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSession",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/sessions"
+    },
+    "/ListSuggestions" : {
+      "post" : {
+        "tags" : [ "其他问答" ],
+        "summary" : "获取问题提示",
+        "description" : "获取用户输入问题的提示问题列表。",
+        "operationId" : "ListSuggestions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostSuggestionsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostSuggestionsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSuggestions",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/suggestions"
+    },
+    "/CollectReplyRates" : {
+      "get" : {
+        "tags" : [ "问答统计" ],
+        "summary" : "问答统计",
+        "description" : "指定领域获取指定时间范围内的问题答复率,支持按周期统计。",
+        "operationId" : "CollectReplyRates",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReplyRatesResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "interval",
+          "in" : "query",
+          "description" : "统计周期目前支持month,week,day。",
+          "required" : false,
+          "schema" : {
+            "description" : "统计周期目前支持month,week,day。",
+            "type" : "string",
+            "enum" : [ "month", "week", "day" ]
+          }
+        }, {
+          "name" : "time_zone",
+          "in" : "query",
+          "description" : "请求所在时区,例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\";默认为\"UTC\"。",
+          "required" : false,
+          "schema" : {
+            "description" : "请求所在时区,例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\";默认为\"UTC\"。",
+            "type" : "string",
+            "default" : "UTC"
+          }
+        }, {
+          "name" : "domain",
+          "in" : "query",
+          "description" : "所属领域。",
+          "required" : false,
+          "schema" : {
+            "description" : "所属领域。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CollectReplyRates",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests/reply-rates"
+    },
+    "/ExecuteComposeVideoOndemand" : {
+      "post" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "合成视频(按需收费)",
+        "operationId" : "ExecuteComposeVideoOndemand",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteComposeVideoOndemand",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/compose/on-demand"
+    },
+    "/ExecuteUpdateVideoById" : {
+      "put" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "更新视频名",
+        "operationId" : "ExecuteUpdateVideoById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/updateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteUpdateVideoById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}"
+    },
+    "/ExecuteCreateVideo" : {
+      "post" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "创建视频",
+        "operationId" : "ExecuteCreateVideo",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateRes"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/createVideoReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteCreateVideo",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video"
+    },
+    "/PostRequests" : {
+      "post" : {
+        "tags" : [ "其他问答API" ],
+        "summary" : "PostRequests",
+        "description" : "问答服务的输入为用户提问,输出是与输入最匹配的Top N(默认为top5)个知识点,知识点按得分从高到低排序。",
+        "operationId" : "PostRequests",
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostRequestsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式,如:303a0a00-c88a-43e3-aa2f-d5b8b9832b02。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式,如:303a0a00-c88a-43e3-aa2f-d5b8b9832b02。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostOldRequestsReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "PostRequests",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests"
+    },
+    "/ExecuteUploadImage" : {
+      "post" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "上传播报插图",
+        "description" : "上传图片并生成图片链接,图片需小于10m;",
+        "operationId" : "ExecuteUploadImage",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UrlResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "图片名",
+          "required" : true,
+          "schema" : {
+            "description" : "图片名",
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "图片",
+          "required" : true,
+          "schema" : {
+            "description" : "图片",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteUploadImage",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/upload/image"
+    },
+    "/CollectHotQuestions" : {
+      "get" : {
+        "tags" : [ "问答统计" ],
+        "summary" : "热点问题统计",
+        "description" : "获取完全匹配的热点标准问题列表。",
+        "operationId" : "CollectHotQuestions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HotQuestionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "top",
+          "in" : "query",
+          "description" : "热点问题最多显示的个数,默认值为10,取值范围1-20。",
+          "required" : false,
+          "schema" : {
+            "description" : "热点问题最多显示的个数,默认值为10,取值范围1-20。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        }, {
+          "name" : "domain",
+          "in" : "query",
+          "description" : "热点问题所属的领域。如果指定领域为非空字符串则从指定领域中查询热点问题,否则从所有标准问题中查询热点问题。",
+          "required" : false,
+          "schema" : {
+            "description" : "热点问题所属的领域。如果指定领域为非空字符串则从指定领域中查询热点问题,否则从所有标准问题中查询热点问题。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "query",
+          "description" : "统计的目标问题类别id。",
+          "required" : false,
+          "schema" : {
+            "description" : "统计的目标问题类别id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "exclude",
+          "in" : "query",
+          "description" : "true:根据问答对信息展示热点问题(如:热点问题对应的问答对“你好”发生了修改,变成了 “你好啊”,此时热点问题也将返回 “你好啊”;但是如果这个问题对被删除,则“你好”不会被展示在热点问中)",
+          "required" : false,
+          "schema" : {
+            "description" : "true:根据问答对信息展示热点问题(如:热点问题对应的问答对“你好”发生了修改,变成了 “你好啊”,此时热点问题也将返回 “你好啊”;但是如果这个问题对被删除,则“你好”不会被展示在热点问中)",
+            "type" : "boolean"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CollectHotQuestions",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/qa-pairs/hots"
+    },
+    "/ExecuteDeleteVideoById" : {
+      "delete" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "删除视频",
+        "operationId" : "ExecuteDeleteVideoById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteDeleteVideoById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}"
+    },
+    "/DeleteSession" : {
+      "delete" : {
+        "tags" : [ "问答会话" ],
+        "summary" : "关闭会话",
+        "description" : "问答会话API由开启会话、处理会话、关闭会话三个接口组成。用户可通过调用该接口关闭会话。该接口即将下线,请优先使用问答机器人API接口进行调用。",
+        "operationId" : "DeleteSession",
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "机器人标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "机器人标识符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "session_id",
+          "in" : "path",
+          "description" : "会话标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "会话标识符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSession",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/sessions/{session_id}"
+    },
+    "/ExecuteDeleteimageById" : {
+      "delete" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "删除图片",
+        "operationId" : "ExecuteDeleteimageById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "image_id",
+          "in" : "path",
+          "description" : "图片id",
+          "required" : true,
+          "schema" : {
+            "description" : "图片id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteDeleteimageById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/images/{image_id}"
+    },
+    "/ExecuteGetCharacters" : {
+      "get" : {
+        "tags" : [ "形象管理" ],
+        "summary" : "获取形象列表",
+        "description" : "TODO:",
+        "operationId" : "ExecuteGetCharacters",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CharacterList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "形象类型:",
+          "required" : false,
+          "schema" : {
+            "description" : "形象类型:",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "train_status",
+          "in" : "query",
+          "description" : "训练状态:",
+          "required" : false,
+          "schema" : {
+            "description" : "训练状态:",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "character_name",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "support_interact",
+          "in" : "query",
+          "description" : "是否只获取支持交互式的数字人;默认:false 获取全部",
+          "required" : false,
+          "schema" : {
+            "description" : "是否只获取支持交互式的数字人;默认:false 获取全部",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "gender",
+          "in" : "query",
+          "description" : "性别",
+          "required" : false,
+          "schema" : {
+            "description" : "性别",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetCharacters",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/characters"
+    },
+    "/ExecuteGetCharacterInfoById" : {
+      "get" : {
+        "tags" : [ "形象管理" ],
+        "summary" : "获取形象详情",
+        "operationId" : "ExecuteGetCharacterInfoById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CharacterInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "character_id",
+          "in" : "path",
+          "description" : "形象id",
+          "required" : true,
+          "schema" : {
+            "description" : "形象id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetCharacterInfoById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/characters/{character_id}"
+    },
+    "/ExecuteGetVideoInfoById" : {
+      "get" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "获取视频详情",
+        "operationId" : "ExecuteGetVideoInfoById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetVideoInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetVideoInfoById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/info"
+    },
+    "/CollectSessionStats" : {
+      "get" : {
+        "tags" : [ "问答统计" ],
+        "summary" : "访问统计",
+        "description" : "获取用户会话统计信息。",
+        "operationId" : "CollectSessionStats",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SessionStatsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "interval",
+          "in" : "query",
+          "description" : "统计周期目前支持month,week,day。",
+          "required" : false,
+          "schema" : {
+            "description" : "统计周期目前支持month,week,day。",
+            "type" : "string",
+            "enum" : [ "month", "week", "day" ]
+          }
+        }, {
+          "name" : "time_zone",
+          "in" : "query",
+          "description" : "请求所在时区,例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\";默认为\"UTC\"。",
+          "required" : false,
+          "schema" : {
+            "description" : "请求所在时区,例如:中国东八区为\"+08:00\";美国西五区为\"-05:00\";默认为\"UTC\"。",
+            "type" : "string",
+            "default" : "UTC"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CollectSessionStats",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests/session-stats"
+    },
+    "/ExecuteGetFramsListByImagesId" : {
+      "get" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "获取播报框",
+        "description" : "获取指定图片可用的播报框列表",
+        "operationId" : "ExecuteGetFramsListByImagesId",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageFrameList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "image_id",
+          "in" : "query",
+          "description" : "图片id",
+          "required" : true,
+          "schema" : {
+            "description" : "图片id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,默认为零",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,默认为零",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页限制数",
+          "required" : false,
+          "schema" : {
+            "description" : "分页限制数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetFramsListByImagesId",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/image-frames"
+    },
+    "/ExecuteUpdateVideoInfoById" : {
+      "put" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "配置视频",
+        "description" : "通过该接口配置视频",
+        "operationId" : "ExecuteUpdateVideoInfoById",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetVideoInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PutVideoInfo"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteUpdateVideoInfoById",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/info"
+    },
+    "/ExecuteUploadPpt" : {
+      "post" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "通过pdf上传多张插图",
+        "description" : "当前仅支持上传PDF,如有PPT请将PPT转化为PDF再进行上传,文件需小于10m;",
+        "operationId" : "ExecuteUploadPpt",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageUrlList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "formData",
+          "description" : "ppt文件",
+          "required" : true,
+          "schema" : {
+            "description" : "ppt文件",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteUploadPpt",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/upload/ppt"
+    },
+    "/CollectKeyWords" : {
+      "get" : {
+        "tags" : [ "问答统计" ],
+        "summary" : "关键词统计",
+        "description" : "用户问关键词统计。",
+        "operationId" : "CollectKeyWords",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/KeyWordsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的起始时间,long,UTC时间,默认值为0。",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+          "required" : false,
+          "schema" : {
+            "description" : "查询的结束时间,long,UTC时间,默认值为当前时间的毫秒数。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "top",
+          "in" : "query",
+          "description" : "关键词最多显示的个数,默认值为10,取值范围0-50。",
+          "required" : false,
+          "schema" : {
+            "description" : "关键词最多显示的个数,默认值为10,取值范围0-50。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 50,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CollectKeyWords",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests/keywords"
+    },
+    "/ExecuteQaChat" : {
+      "post" : {
+        "tags" : [ "问答机器人" ],
+        "summary" : "问答机器人会话",
+        "description" : "用户调用该接口和机器人进行聊天。",
+        "operationId" : "ExecuteQaChat",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostQaChatResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "机器人标识符,qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "机器人标识符,qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostRequestsReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteQaChat",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/chat"
+    },
+    "/ExecutePostCreateImages" : {
+      "post" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "创建图片",
+        "operationId" : "ExecutePostCreateImages",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UrlResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/postImagesReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecutePostCreateImages",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/images"
+    },
+    "/ExecuteGetVideosList" : {
+      "get" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "获取视频列表",
+        "description" : "该接口用于获取视频列表。",
+        "operationId" : "ExecuteGetVideosList",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "范围:大于等于1",
+          "required" : true,
+          "schema" : {
+            "description" : "范围:大于等于1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "长度小于63",
+          "required" : true,
+          "schema" : {
+            "description" : "长度小于63",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "范围:大于等于0",
+          "required" : true,
+          "schema" : {
+            "description" : "范围:大于等于0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetVideosList",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video"
+    },
+    "/TagLabor" : {
+      "post" : {
+        "tags" : [ "其他问答" ],
+        "summary" : "标记为转人工",
+        "description" : "智能问答返回的结果后,用户是否转人工。",
+        "operationId" : "TagLabor",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostLaborResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "request_id",
+          "in" : "path",
+          "description" : "请求ID,由问答机器人会话生成。",
+          "required" : true,
+          "schema" : {
+            "description" : "请求ID,由问答机器人会话生成。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "TagLabor",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests/{request_id}/labor"
+    },
+    "/ExecuteSession" : {
+      "post" : {
+        "tags" : [ "问答会话" ],
+        "summary" : "处理会话",
+        "description" : "问答会话API由开启会话、处理会话、关闭会话三个接口组成。用户可通过调用该接口与机器人进行会话。该接口即将下线,请优先使用问答机器人API接口进行调用。",
+        "operationId" : "ExecuteSession",
+        "deprecated" : true,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostQaSessionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。获取方式请参见获取项目编码。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "机器人标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "机器人标识符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "session_id",
+          "in" : "path",
+          "description" : "会话标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "会话标识符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostQaSessionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteSession",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/sessions/{session_id}"
+    },
+    "/ExecuteComposeVideo" : {
+      "post" : {
+        "tags" : [ "视频管理" ],
+        "summary" : "合成视频(按包周期收费)",
+        "operationId" : "ExecuteComposeVideo",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "video_id",
+          "in" : "path",
+          "description" : "视频id",
+          "required" : true,
+          "schema" : {
+            "description" : "视频id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteComposeVideo",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/video/{video_id}/compose"
+    },
+    "/ExecuteGetImagesList" : {
+      "get" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "获取图片列表",
+        "operationId" : "ExecuteGetImagesList",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "范围:大于等于1",
+          "required" : true,
+          "schema" : {
+            "description" : "范围:大于等于1",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "范围:大于等于0",
+          "required" : true,
+          "schema" : {
+            "description" : "范围:大于等于0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resolution_type",
+          "in" : "query",
+          "description" : "横竖屏模式",
+          "required" : true,
+          "schema" : {
+            "description" : "横竖屏模式",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "默认0",
+          "required" : true,
+          "schema" : {
+            "description" : "默认0",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteGetImagesList",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/images"
+    },
+    "/ExecuteUpdateImageName" : {
+      "put" : {
+        "tags" : [ "素材管理" ],
+        "summary" : "修改图片名",
+        "operationId" : "ExecuteUpdateImageName",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "image_id",
+          "in" : "path",
+          "description" : "图片id",
+          "required" : true,
+          "schema" : {
+            "description" : "图片id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID,用于资源隔离。请参见[获取项目ID](cbs_03_0069.html)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/updateImageNameReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExecuteUpdateImageName",
+      "x-url" : "{endpoint}/v1/{project_id}/digital-human/images/{image_id}"
+    },
+    "/TagSatisfaction" : {
+      "post" : {
+        "tags" : [ "其他问答" ],
+        "summary" : "问答满意评价",
+        "description" : "用户提出问题后,对智能问答返回的结果是否满意。",
+        "operationId" : "TagSatisfaction",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostSatisfactionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "qabot_id",
+          "in" : "path",
+          "description" : "qabot编号,UUID格式。",
+          "required" : true,
+          "schema" : {
+            "description" : "qabot编号,UUID格式。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "request_id",
+          "in" : "path",
+          "description" : "请求ID,由问答机器人会话生成。",
+          "required" : true,
+          "schema" : {
+            "description" : "请求ID,由问答机器人会话生成。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostSatisfactionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "TagSatisfaction",
+      "x-url" : "{endpoint}/v1/{project_id}/qabots/{qabot_id}/requests/{request_id}/satisfaction"
+    }
+  }
+}

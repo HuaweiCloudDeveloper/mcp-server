@@ -1,0 +1,6285 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "SFSTurbo-文件系统管理",
+    "title" : "SFSTurbo",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "OneFsTaskResp" : {
+        "description" : "查询任务详情",
+        "required" : [ "task_id", "status", "begin_time", "end_time" ],
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "任务状态, SUCCESS表示成功,DOING表示正在执行,FAIL表示失败",
+            "type" : "string",
+            "enum" : [ "SUCCESS", "DOING", "FAIL" ]
+          },
+          "dir_usage" : {
+            "description" : "目录资源使用情况(包含子目录)",
+            "type" : "object",
+            "$ref" : "#/components/schemas/FsDuInfo"
+          },
+          "begin_time" : {
+            "description" : "任务开始时间,UTC时间,例如:2006-01-02 15:04:05'",
+            "pattern" : "2006-01-02 15:04:05",
+            "type" : "string"
+          },
+          "end_time" : {
+            "description" : "任务结束时间,UTC时间,例如:2006-01-02 15:04:06'",
+            "pattern" : "2006-01-02 15:04:06",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ErrorResp" : {
+        "description" : "失败时返回的错误对象",
+        "required" : [ "errCode", "errMsg" ],
+        "properties" : {
+          "errCode" : {
+            "description" : "错误码",
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "errMsg" : {
+            "description" : "错误描述",
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "FsFileCount" : {
+        "description" : "所有文件数目",
+        "properties" : {
+          "dir" : {
+            "description" : "目录数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "regular" : {
+            "description" : "普通文件数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "pipe" : {
+            "description" : "管道文件数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "char" : {
+            "description" : "字符设备数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "block" : {
+            "description" : "块设备数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "socket" : {
+            "description" : "套接字数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "symlink" : {
+            "description" : "符号链接数目",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "FsDuInfo" : {
+        "description" : "目录资源使用情况(包含子目录)",
+        "properties" : {
+          "path" : {
+            "description" : "文件系统内合法的目录全路径",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096
+          },
+          "used_capacity" : {
+            "description" : "占用容量,单位:byte",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "file_count" : {
+            "type" : "object",
+            "description" : "该目录下所有文件数目",
+            "$ref" : "#/components/schemas/FsFileCount"
+          },
+          "message" : {
+            "description" : "错误信息",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "OneHpcCacheTaskInfoResp" : {
+        "description" : "每个任务信息",
+        "required" : [ "task_id", "type", "status", "src_target", "src_prefix", "dest_target", "dest_prefix", "message", "start_time", "end_time" ],
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "任务类型",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "任务状态",
+            "type" : "string",
+            "enum" : [ "SUCCESS", "DOING", "FAIL" ]
+          },
+          "src_target" : {
+            "description" : "联动目录名称",
+            "type" : "string"
+          },
+          "src_prefix" : {
+            "description" : "导入导出任务的源端路径前缀",
+            "type" : "string"
+          },
+          "dest_target" : {
+            "description" : "和src_target保持一致",
+            "type" : "string"
+          },
+          "dest_prefix" : {
+            "description" : "和src_prefix保持一致",
+            "type" : "string"
+          },
+          "start_time" : {
+            "description" : "任务开始时间",
+            "type" : "string"
+          },
+          "end_time" : {
+            "description" : "任务结束时间",
+            "type" : "string"
+          },
+          "message" : {
+            "description" : "任务执行结果信息",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ListHpcCacheTasksResp" : {
+        "description" : "hpc cache 联动任务列表",
+        "required" : [ "tasks", "count" ],
+        "properties" : {
+          "tasks" : {
+            "description" : "任务详情",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/OneHpcCacheTaskInfoResp"
+            }
+          },
+          "count" : {
+            "description" : "任务数量",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateObsTargetAttributesRequestBody" : {
+        "description" : "更新后端存储属性请求体",
+        "required" : [ "attributes" ],
+        "properties" : {
+          "attributes" : {
+            "type" : "object",
+            "description" : "后端存储属性",
+            "$ref" : "#/components/schemas/ObsTargetAttributes"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateObsTargetAttributesResponseBody" : {
+        "description" : "更新后端存储属性响应体",
+        "properties" : {
+          "target_id" : {
+            "type" : "string",
+            "description" : "绑定关系Id"
+          },
+          "attributes" : {
+            "type" : "object",
+            "description" : "后端存储属性",
+            "$ref" : "#/components/schemas/ObsTargetAttributes"
+          }
+        },
+        "type" : "object"
+      },
+      "ObsTargetAttributes" : {
+        "description" : "后端存储属性",
+        "properties" : {
+          "file_mode" : {
+            "type" : "integer",
+            "description" : "导入的文件权限。取值范围是0到777。"
+          },
+          "dir_mode" : {
+            "type" : "integer",
+            "description" : "导入的目录权限。取值范围是0到777。"
+          },
+          "uid" : {
+            "type" : "integer",
+            "description" : "导入对象所有者的用户id,默认值是0,取值范围是0到4,294,967,294(即2^32-2)。"
+          },
+          "gid" : {
+            "type" : "integer",
+            "description" : "导入对象所属用户组id,默认值是0,取值范围是0到4,294,967,294(即2^32-2)。"
+          }
+        },
+        "type" : "object"
+      },
+      "TaskResp" : {
+        "description" : "创建异步任务响应体",
+        "required" : [ "task_id" ],
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "FsDirReq" : {
+        "description" : "文件系统内合法的目录全路径",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "文件系统内合法的目录全路径。单层目录长度不允许超过255,全路径长度不允许超过4096。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateFsDirQuotaRequestBody" : {
+        "description" : "目录配额信息",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          },
+          "capacity" : {
+            "description" : "目录的容量大小,单位:MB; 设置为0会导致数据无法写入目录; capacity和quota至少二选一",
+            "type" : "integer"
+          },
+          "inode" : {
+            "description" : "目录的inode数量限制; 设置为0会导致数据无法写入目录; capacity和quota至少二选一",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "FsDirQuotaRespInfo" : {
+        "description" : "目录配额信息",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          },
+          "capacity" : {
+            "description" : "目录的容量大小,单位:MB",
+            "type" : "integer"
+          },
+          "inode" : {
+            "description" : "目录的inode数量限制",
+            "type" : "integer"
+          },
+          "used_capacity" : {
+            "description" : "目录已使用的容量大小,单位:MB。仅SFSTurbo 20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB返回该字段",
+            "type" : "integer"
+          },
+          "used_inode" : {
+            "description" : "目录的已使用的inode数量。仅SFSTurbo 20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB返回该字段",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "BssInfoExtend" : {
+        "type" : "object",
+        "description" : "扩容计费参数详情",
+        "properties" : {
+          "is_auto_pay" : {
+            "description" : "是否自动付款",
+            "type" : "integer",
+            "format" : "int64",
+            "enum" : [ 0, 1 ]
+          }
+        }
+      },
+      "ExpandShareRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "extend" : {
+            "$ref" : "#/components/schemas/Extend",
+            "description" : "extend对象。"
+          }
+        },
+        "required" : [ "extend" ]
+      },
+      "Extend" : {
+        "type" : "object",
+        "description" : "extend对象",
+        "properties" : {
+          "new_size" : {
+            "description" : "扩容后文件系统的新容量,以GiB为单位。",
+            "maximum" : 1048576,
+            "minimum" : 500,
+            "type" : "integer"
+          },
+          "new_bandwidth" : {
+            "description" : "带宽的目标值,单位:GB。仅HPC缓存型支持带宽扩缩。",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "bss_param" : {
+            "type" : "object",
+            "description" : "包周期扩容计费详情",
+            "$ref" : "#/components/schemas/BssInfoExtend"
+          }
+        },
+        "required" : [ "new_size" ]
+      },
+      "ExpandShareResponseBody" : {
+        "type" : "object",
+        "description" : "扩容请求返回body",
+        "properties" : {
+          "id" : {
+            "description" : "SFS Turbo文件系统ID。",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "SFS Turbo文件系统名称。",
+            "type" : "string"
+          }
+        }
+      },
+      "CreateFsDirRequestBody" : {
+        "description" : "创建目录请求",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的的目录全路径",
+            "type" : "string"
+          },
+          "mode" : {
+            "description" : "目录权限,默认值是755,取值范围是0到777。第一位表示目录所有者的权限,取值范围是0到7;第二位表示目录所属用户组的权限,取值范围是0到7;第三位表示其他用户的权限,取值范围是0到7。目录所有者由uid指定,目录所属用户组由gid指定,不是目录所有者且不在目录所属用户组的用户为其他用户。例如:755中第一位7代表该目录所有者对该目录具有读、写、执行权限;第二位5代表该目录所属用户组对该目录具有读、执行权限;第三位5代表其他用户对该目录具有读、执行权限。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "uid" : {
+            "description" : "目录所有者的用户id,默认值是0,取值范围是0到4,294,967,294(即2^32-2)。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "gid" : {
+            "description" : "目录所属用户组id,默认值是0,取值范围是0到4,294,967,294(即2^32-2)。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "Tag" : {
+        "type" : "object",
+        "description" : "tag字段说明",
+        "properties" : {
+          "key" : {
+            "description" : "标签的键。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "values" : {
+            "description" : "值列表。每个值最大长度255个字符,如果values为空列表,则表示匹配任意值value。value之间为或的关系。",
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 255,
+              "minLength" : 0
+            },
+            "maxItems" : 10
+          }
+        },
+        "required" : [ "key", "values" ]
+      },
+      "ShowAllSharedTagsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "description" : "tag标签的列表",
+            "items" : {
+              "type" : "object",
+              "description" : "resource_tag字段说明",
+              "$ref" : "#/components/schemas/Tag"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "tags" ]
+      },
+      "ShowSharedTagsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "description" : "tag标签的列表。",
+            "items" : {
+              "type" : "object",
+              "description" : "",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          },
+          "sys_tags" : {
+            "description" : "仅op_service权限才可以获取此字段。",
+            "items" : {
+              "type" : "object",
+              "description" : "",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          }
+        }
+      },
+      "ResourceTag" : {
+        "type" : "object",
+        "description" : "resource_tag字段说明",
+        "properties" : {
+          "key" : {
+            "description" : "标签的键。",
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128
+          },
+          "value" : {
+            "description" : "标签的值。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255
+          }
+        },
+        "required" : [ "key", "value" ]
+      },
+      "CreateLdapConfigRequestBody" : {
+        "required" : [ "url", "base_dn" ],
+        "description" : "ldap配置信息",
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "description" : "ldap服务器的url,固定格式为 ldap://{ip_address}:{port_number} 或 ldaps://{ip_address}:{port_number},例如ldap://192.168.xx.xx:60000",
+            "example" : "ldap://192.168.xx.xx:60000"
+          },
+          "base_dn" : {
+            "type" : "string",
+            "description" : "数据库中的域",
+            "example" : "dc=example,dc=com"
+          },
+          "user_dn" : {
+            "type" : "string",
+            "description" : "用户区别名",
+            "example" : "cn=admin,dc=example,dc=com"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "ldap认证密码",
+            "example" : "pwdxxxxxx"
+          },
+          "vpc_id" : {
+            "type" : "string",
+            "description" : "一般不涉及。仅在SFSTurbo支持多VPC的场景下,需要指定LDAP服务器可连通的VPC的id。",
+            "example" : "26f6b565-xxxx-XXXX-xxxx-03f0bd975433"
+          },
+          "filter_condition" : {
+            "type" : "string",
+            "description" : "过滤条件。保留字段,暂不支持"
+          },
+          "backup_url" : {
+            "type" : "string",
+            "description" : "ldap备节点的url,固定格式为 ldap://{ip_address}:{port_number} 或 ldaps://{ip_address}:{port_number},例如ldap://192.168.xx.xx:60000",
+            "example" : "ldap://192.168.xx.xx:60000"
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "ldap的schema,不填写则默认为RFC2307"
+          },
+          "search_timeout" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ldap搜索的超时时间,单位为秒。不填写则默认为3秒",
+            "example" : 10
+          },
+          "allow_local_user" : {
+            "type" : "string",
+            "description" : "访问ldap服务器失败后是否允许使用本地用户鉴权",
+            "example" : "Yes",
+            "enum" : [ "Yes", "No" ]
+          }
+        },
+        "type" : "object"
+      },
+      "LdapJobResponseBody" : {
+        "description" : "ldap配置响应体",
+        "required" : [ "jobId" ],
+        "properties" : {
+          "jobId" : {
+            "type" : "string",
+            "description" : "ldap异步任务的id。可通过查询job的状态详情接口查询job的执行状态。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetLdapConfigResponseBody" : {
+        "description" : "ldap配置信息",
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "description" : "ldap服务器的url"
+          },
+          "base_dn" : {
+            "type" : "string",
+            "description" : "数据库中的域"
+          },
+          "user_dn" : {
+            "type" : "string",
+            "description" : "用户区别名"
+          },
+          "filter_condition" : {
+            "type" : "string",
+            "description" : "过滤条件。保留字段,暂不支持"
+          },
+          "backup_url" : {
+            "type" : "string",
+            "description" : "ldap备节点的url"
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "ldap的schema,不填写则默认为RFC2307"
+          },
+          "search_timeout" : {
+            "type" : "integer",
+            "description" : "ldap搜索的超时时间,单位为秒。不填写则默认为3秒"
+          },
+          "allow_local_user" : {
+            "type" : "string",
+            "description" : "访问ldap服务器失败后是否允许使用本地用户鉴权"
+          }
+        },
+        "type" : "object"
+      },
+      "OnePermRuleResponseInfo" : {
+        "required" : [ "id", "ip_cidr", "rw_type", "user_type" ],
+        "description" : "权限规格信息",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "权限规格的id"
+          },
+          "ip_cidr" : {
+            "type" : "string",
+            "description" : "授权对象的IP地址或网段"
+          },
+          "rw_type" : {
+            "type" : "string",
+            "description" : "授权对象的读写权限 "
+          },
+          "user_type" : {
+            "type" : "string",
+            "description" : "授权对象的系统用户对文件系统的访问权限。取值如下:"
+          }
+        },
+        "type" : "object"
+      },
+      "OnePermRuleRequestInfo" : {
+        "description" : "权限规格信息",
+        "properties" : {
+          "ip_cidr" : {
+            "type" : "string",
+            "description" : "授权对象的IP地址或网段,设置后不支持修改"
+          },
+          "rw_type" : {
+            "type" : "string",
+            "description" : "授权对象的读写权限 "
+          },
+          "user_type" : {
+            "type" : "string",
+            "description" : "授权对象的系统用户对文件系统的访问权限。取值如下:"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateShareResponseBody" : {
+        "type" : "object",
+        "description" : "创建文件系统返回body",
+        "properties" : {
+          "id" : {
+            "description" : "创建的SFS Turbo文件系统ID。",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "创建的SFS Turbo文件系统名称。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "SFS Turbo文件系统的状态",
+            "type" : "string"
+          }
+        }
+      },
+      "CreateShareRequestBody" : {
+        "type" : "object",
+        "description" : "创建文件系统参数body",
+        "properties" : {
+          "share" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/Share",
+            "description" : "创建文件系统参数body"
+          },
+          "bss_param" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/BssInfo",
+            "description" : "包周期付费模式,需要填写该参数"
+          }
+        },
+        "required" : [ "share" ]
+      },
+      "BssInfo" : {
+        "type" : "object",
+        "description" : "计费参数详情",
+        "properties" : {
+          "is_auto_renew" : {
+            "description" : "是否自动续费",
+            "type" : "integer",
+            "format" : "int64",
+            "enum" : [ 0, 1 ]
+          },
+          "period_num" : {
+            "description" : "包周期订购的周期数",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 11,
+            "minimum" : 1
+          },
+          "period_type" : {
+            "description" : "包周期的类型,可选包年或包月,2 表示包月,3 表示包年",
+            "type" : "integer",
+            "format" : "int64",
+            "enum" : [ 2, 3 ]
+          },
+          "is_auto_pay" : {
+            "description" : "是否生成订单后自动扣款",
+            "type" : "integer",
+            "format" : "int64",
+            "enum" : [ 0, 1 ]
+          }
+        },
+        "required" : [ "period_num", "period_type" ]
+      },
+      "Share" : {
+        "type" : "object",
+        "description" : "创建文件系统参数body",
+        "properties" : {
+          "availability_zone" : {
+            "description" : "文件系统所在可用区(az)的编码",
+            "type" : "string"
+          },
+          "description" : {
+            "description" : "文件系统描述信息,长度为0~255。当前不支持。",
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "enterprise_project_id" : {
+            "description" : "创建文件系统时,给文件系统绑定的企业项目ID。",
+            "type" : "string"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "创建文件系统的metadata信息,一到多个字典形式组织的键值对组成。",
+            "$ref" : "#/components/schemas/Metadata"
+          },
+          "name" : {
+            "description" : "SFS Turbo文件系统的名称。长度为4~64位,必须以字母开头,可以包含字母、数字、中划线、下划线,不能包含其他的特殊字符,不区分大小写。",
+            "type" : "string",
+            "minLength" : 4,
+            "maxLength" : 64
+          },
+          "security_group_id" : {
+            "description" : "用户在某一区域下的安全组ID。",
+            "type" : "string"
+          },
+          "share_proto" : {
+            "description" : "文件系统共享协议,有效值为NFS。NFS(Network File System),即网络文件系统。一种使用于分散式文件系统的协议,通过网络让不同的机器、不同的操作系统能够彼此分享数据。",
+            "type" : "string"
+          },
+          "share_type" : {
+            "description" : "文件系统类型,有效值为STANDARD或者PERFORMANCE。当文件系统正在创建时,该字段不返回。",
+            "type" : "string"
+          },
+          "size" : {
+            "description" : "- SFS Turbo上一代文件系统规格类型-文件系统容量:取值范围为500~32768,单位为GiB。",
+            "exclusiveMaximum" : true,
+            "exclusiveMinimum" : true,
+            "type" : "integer"
+          },
+          "subnet_id" : {
+            "description" : "用户在VPC下面的子网的网络ID。",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "用户在某一区域下的VPC ID。",
+            "type" : "string"
+          },
+          "backup_id" : {
+            "description" : "备份ID,从备份创建文件系统时为必选。",
+            "type" : "string"
+          },
+          "tags" : {
+            "description" : "tag标签的列表。",
+            "items" : {
+              "type" : "object",
+              "description" : "",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "name", "share_proto", "share_type", "size", "availability_zone", "vpc_id", "subnet_id", "security_group_id" ]
+      },
+      "Metadata" : {
+        "type" : "object",
+        "description" : "metadata参数详情",
+        "properties" : {
+          "crypt_key_id" : {
+            "description" : "要创加密文件系统,该字段传KMS服务专业版密钥的ID。",
+            "type" : "string"
+          },
+          "dedicated_flavor" : {
+            "description" : "创专属文件系统,要创建的虚拟机的规格。",
+            "type" : "string"
+          },
+          "dedicated_storage_id" : {
+            "description" : "创专属文件系统,要指定一个专属分布式存储的ID。",
+            "type" : "string"
+          },
+          "expand_type" : {
+            "description" : "扩展类型;当文件系统正在创建时,该字段不返回。",
+            "type" : "string"
+          },
+          "hpc_bw" : {
+            "description" : "文件系统的带宽规格。",
+            "type" : "string"
+          }
+        }
+      },
+      "CreatePermRuleResponseBody" : {
+        "description" : "权限规格信息",
+        "type" : "object",
+        "required" : [ "rules" ],
+        "properties" : {
+          "rules" : {
+            "type" : "array",
+            "description" : "权限规格信息",
+            "items" : {
+              "$ref" : "#/components/schemas/OnePermRuleResponseInfo"
+            }
+          }
+        }
+      },
+      "CreatePermRulesRequestBody" : {
+        "description" : "创建权限请求体",
+        "required" : [ "rules" ],
+        "properties" : {
+          "rules" : {
+            "type" : "array",
+            "description" : "权限信息,一次最多允许添加5条规则",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/OnePermRuleRequestInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowFsDirUsageResponseBody" : {
+        "type" : "object",
+        "description" : "目录资源使用情况",
+        "required" : [ "dir_usage" ],
+        "properties" : {
+          "dir_usage" : {
+            "type" : "object",
+            "description" : "消息描述",
+            "$ref" : "#/components/schemas/FsDirUasge"
+          }
+        }
+      },
+      "FsDirUasge" : {
+        "type" : "object",
+        "description" : "目录资源使用情况(包含子目录)",
+        "required" : [ "used_capacity" ],
+        "properties" : {
+          "used_capacity" : {
+            "description" : "占用容量,单位:byte",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        }
+      },
+      "ReqUpdateHpcCacheData" : {
+        "description" : "后端挂载地址信息",
+        "required" : [ "gc_time", "ck_time" ],
+        "properties" : {
+          "gc_time" : {
+            "description" : "冷数据淘汰时间。单位:小时。指定时间内线上缓存的数据如果没有被访问则会自动从缓存中删除。0表示数据不会因为时间原因自动从缓存中删除。",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "ck_time" : {
+            "description" : "后端校验时间。单位:秒。指定时间间隔进行线上缓存文件与后端存储文件比较,存在变化则自动更新。0表示文件进行实时校验。",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "nas" : {
+            "description" : "配置 nas 后端的信息",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/ConfigNasTarget"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ReqConfigHpcCacheBackend" : {
+        "description" : "hpc缓存型配置信息请求",
+        "required" : [ "update_hpc_cache" ],
+        "properties" : {
+          "update_hpc_cache" : {
+            "description" : "后端挂载信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/ReqUpdateHpcCacheInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "ConfigNasTarget" : {
+        "type" : "object",
+        "description" : "配置 nas 后端信息",
+        "properties" : {
+          "name" : {
+            "description" : "nas 配置名",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "nas 配置协议类型",
+            "type" : "string"
+          },
+          "url" : {
+            "description" : "nas 配置 ip",
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "type", "url" ]
+      },
+      "ReqUpdateHpcCacheInfo" : {
+        "description" : "后端挂载信息",
+        "required" : [ "action", "data" ],
+        "properties" : {
+          "action" : {
+            "description" : "配置hpc缓存型的动作,如initialize_overlay",
+            "type" : "string"
+          },
+          "data" : {
+            "description" : "hpc 缓存型后端配置信息",
+            "type" : "object",
+            "$ref" : "#/components/schemas/ReqUpdateHpcCacheData"
+          }
+        },
+        "type" : "object"
+      },
+      "ChangeSecurityGroupResponseBody" : {
+        "type" : "object",
+        "description" : "修改安全组返回body",
+        "properties" : {
+          "id" : {
+            "description" : "SFS Turbo文件系统ID。",
+            "type" : "string"
+          }
+        }
+      },
+      "ChangeSecurityGroupRequestBody" : {
+        "type" : "object",
+        "description" : "change_security_group对象",
+        "required" : [ "change_security_group" ],
+        "properties" : {
+          "change_security_group" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ChangeSecurityGroup",
+            "description" : "change_security_group对象"
+          }
+        }
+      },
+      "ChangeSecurityGroup" : {
+        "type" : "object",
+        "description" : "需要修改的目标安全组ID",
+        "required" : [ "security_group_id" ],
+        "properties" : {
+          "security_group_id" : {
+            "description" : "需要修改的目标安全组ID。",
+            "type" : "string"
+          }
+        }
+      },
+      "DeleteBackendTargetResponseBody" : {
+        "description" : "删除后端存储返回体",
+        "properties" : {
+          "target_id" : {
+            "type" : "string",
+            "description" : "绑定关系id"
+          },
+          "delete_data_in_file_system" : {
+            "type" : "boolean",
+            "description" : "删除后端存储时是否同时删除文件系统内的联动目录及其数据文件"
+          },
+          "lifecycle" : {
+            "type" : "string",
+            "description" : "绑定状态。只支持DELETING和FAILED",
+            "enum" : [ "DELETING", "AVAILABLE", "MISCONFIGURED", "CREATING", "FAILED" ]
+          }
+        },
+        "type" : "object"
+      },
+      "CreateFsDirQuotaRequestBody" : {
+        "description" : "目录配额信息",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          },
+          "capacity" : {
+            "description" : "目录的容量大小,单位:MB; 设置为0会导致数据无法写入目录; capacity和quota至少二选一",
+            "type" : "integer"
+          },
+          "inode" : {
+            "description" : "目录的inode数量限制; 设置为0会导致数据无法写入目录; capacity和quota至少二选一",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateSharedTagRequestBody" : {
+        "type" : "object",
+        "description" : "标签",
+        "properties" : {
+          "tag" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ResourceTag",
+            "description" : "resource_tag字段说明"
+          }
+        },
+        "required" : [ "tag" ]
+      },
+      "ShareName" : {
+        "type" : "object",
+        "description" : "需要修改的SFS Turbo文件系统",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "description" : "需要修改的SFS Turbo文件系统的名字",
+            "type" : "string"
+          }
+        }
+      },
+      "ChangeShareNameReq" : {
+        "type" : "object",
+        "description" : "change_name对象",
+        "required" : [ "change_name" ],
+        "properties" : {
+          "change_name" : {
+            "$ref" : "#/components/schemas/ShareName"
+          }
+        }
+      },
+      "UpdateLdapConfigRequestBody" : {
+        "description" : "ldap配置信息",
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "description" : "ldap服务器的url,固定格式为 ldap://{ip_address}:{port_number} 或 ldaps://{ip_address}:{port_number},例如ldap://192.168.xx.xx:60000",
+            "example" : "ldap://192.168.xx.xx:60000"
+          },
+          "base_dn" : {
+            "type" : "string",
+            "description" : "数据库中的域",
+            "example" : "dc=example,dc=com"
+          },
+          "user_dn" : {
+            "type" : "string",
+            "description" : "用户区别名",
+            "example" : "cn=admin,dc=example,dc=com"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "ldap认证密码",
+            "example" : "pwdxxxxxx"
+          },
+          "vpc_id" : {
+            "type" : "string",
+            "description" : "vpc的id",
+            "example" : "26f6b565-xxxx-XXXX-xxxx-03f0bd975433"
+          },
+          "filter_condition" : {
+            "type" : "string",
+            "description" : "过滤条件。保留字段,暂不支持"
+          },
+          "backup_url" : {
+            "type" : "string",
+            "description" : "ldap备节点的url,固定格式为 ldap://{ip_address}:{port_number} 或 ldaps://{ip_address}:{port_number},例如ldap://192.168.xx.xx:60000",
+            "example" : "ldap://192.168.xx.xx:60000"
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "ldap的schema,不填写则默认为RFC2307"
+          },
+          "search_timeout" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ldap搜索的超时时间,单位为秒。不填写则默认为3秒",
+            "example" : 10
+          },
+          "allow_local_user" : {
+            "type" : "string",
+            "description" : "访问ldap服务器失败后是否允许使用本地用户鉴权",
+            "example" : "Yes",
+            "enum" : [ "Yes", "No" ]
+          }
+        },
+        "type" : "object"
+      },
+      "DeleteFsDirRequestBody" : {
+        "description" : "删除目录请求",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的目录全路径",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowFsDirResp" : {
+        "description" : "查询目录是否存在响应体",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "目录全路径",
+            "type" : "string"
+          },
+          "mode" : {
+            "description" : "目录权限,仅20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB、HPC缓存型文件系统返回该字段。第三位表示目录所有者的权限,第四位表示目录所属用户组的权限,第五位表示其他用户的权限。目录所有者由uid指定,目录所属用户组由gid指定,不是目录所有者且不在目录所属用户组的用户为其他用户。例如:40755中第三位7代表目录所有者对该目录具有读、写、执行权限;第四位5代表目录所属用户组对该目录具有读、执行权限;第五位5代表其他用户对该目录具有读、执行权限。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "uid" : {
+            "description" : "目录所有者的用户id,仅20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB、HPC缓存型文件系统返回该字段。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          },
+          "gid" : {
+            "description" : "目录所属用户组id,仅20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB、HPC缓存型文件系统返回该字段。",
+            "type" : "integer",
+            "format" : "int64",
+            "minimum" : 0
+          }
+        },
+        "type" : "object"
+      },
+      "CreateHpcCacheTaskReq" : {
+        "description" : "hpc cache 联动任务请求",
+        "properties" : {
+          "type" : {
+            "description" : "任务类型,当前支持import(附加元数据导入),import_metadata(快速导入),preload(数据预热),export(导出)。",
+            "type" : "string",
+            "enum" : [ "import", "export", "import_metadata", "preload" ]
+          },
+          "src_target" : {
+            "description" : "联动目录名称",
+            "type" : "string"
+          },
+          "src_prefix" : {
+            "description" : "导入导出任务的源端路径前缀,导入时不需要包含OBS桶名,导出时不需要包含联动目录名称。",
+            "type" : "string"
+          },
+          "dest_target" : {
+            "description" : "目前只支持和src_target保持一致",
+            "type" : "string"
+          },
+          "dest_prefix" : {
+            "description" : "目前只支持和src_prefix保持一致",
+            "type" : "string"
+          },
+          "attributes" : {
+            "description" : "后端存储属性。2024年6月30日及之前创建,且未升级的文件系统版本不支持该参数,请提工单处理。",
+            "type" : "object",
+            "$ref" : "#/components/schemas/ObsTargetAttributes"
+          }
+        },
+        "required" : [ "type", "src_target", "dest_target" ],
+        "type" : "object"
+      },
+      "CreateHpcCacheTaskResp" : {
+        "description" : "响应",
+        "required" : [ "task_id" ],
+        "properties" : {
+          "task_id" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "BatchAddSharedTagsRequestBody" : {
+        "type" : "object",
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "description" : "操作标识,取值范围为:create。 为指定共享批量添加标签时使用create。",
+            "type" : "string",
+            "enum" : [ "create" ]
+          },
+          "tags" : {
+            "description" : "标签列表。",
+            "items" : {
+              "type" : "object",
+              "description" : "resource_tag字段说明",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          },
+          "sys_tags" : {
+            "description" : "系统标签列表。",
+            "items" : {
+              "type" : "object",
+              "description" : "resource_tag字段说明",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          }
+        }
+      },
+      "AutoExportPolicy" : {
+        "description" : "后端存储自动导出策略,SFS Turbo会以异步方式导出到OBS。",
+        "properties" : {
+          "events" : {
+            "type" : "array",
+            "description" : "后端存储自动导出到OBS桶的数据更新类型。",
+            "items" : {
+              "type" : "string",
+              "description" : "后端存储自动导出到OBS桶的数据更新类型。",
+              "enum" : [ "NEW", "CHANGED", "DELETED" ]
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ObsDataRepositoryPolicy" : {
+        "description" : "后端存储自动同步策略",
+        "properties" : {
+          "auto_export_policy" : {
+            "type" : "object",
+            "description" : "后端存储自动导出策略。当文件系统发生数据更新时,将自动导出到OBS桶。",
+            "$ref" : "#/components/schemas/AutoExportPolicy"
+          }
+        },
+        "type" : "object"
+      },
+      "ObsDataRepository" : {
+        "description" : "OBS类型后端存储",
+        "required" : [ "bucket", "endpoint" ],
+        "properties" : {
+          "bucket" : {
+            "type" : "string",
+            "description" : "OBS桶名称"
+          },
+          "endpoint" : {
+            "type" : "string",
+            "description" : "OBS桶所在的区域域名"
+          },
+          "policy" : {
+            "type" : "object",
+            "description" : "后端存储自动同步策略",
+            "$ref" : "#/components/schemas/ObsDataRepositoryPolicy"
+          },
+          "attributes" : {
+            "type" : "object",
+            "description" : "后端存储属性。2024年6月30日及之前创建,且未升级的文件系统版本不支持该参数,请提工单处理。",
+            "$ref" : "#/components/schemas/ObsTargetAttributes"
+          }
+        },
+        "type" : "object"
+      },
+      "FailureDetailsMessage" : {
+        "description" : "数据存储库生命周期中出现的错误信息",
+        "required" : [ "message" ],
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "description" : "错误信息"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowBackendTargetInfoResponseBody" : {
+        "description" : "查询文件系统后端存储详情返回体",
+        "properties" : {
+          "target_id" : {
+            "type" : "string",
+            "description" : "绑定关系id"
+          },
+          "creation_time" : {
+            "type" : "string",
+            "description" : "绑定关系创建时间"
+          },
+          "file_system_path" : {
+            "type" : "string",
+            "description" : "联动目录名称"
+          },
+          "failure_details" : {
+            "type" : "object",
+            "description" : "绑定错误信息",
+            "$ref" : "#/components/schemas/FailureDetailsMessage"
+          },
+          "lifecycle" : {
+            "type" : "string",
+            "description" : "绑定状态",
+            "enum" : [ "CREATING", "AVAILABLE", "MISCONFIGURED", "DELETING", "FAILED" ]
+          },
+          "obs" : {
+            "type" : "object",
+            "description" : "OBS类型后端存储",
+            "$ref" : "#/components/schemas/ObsDataRepository"
+          }
+        },
+        "type" : "object"
+      },
+      "GetSubJobDetail" : {
+        "description" : "子任务详情",
+        "required" : [ "share", "perm" ],
+        "properties" : {
+          "status" : {
+            "description" : "子job的状态。success:成功。running:运行中。failed:失败。waiting:等待执行。",
+            "type" : "string",
+            "example" : "FAIL"
+          },
+          "job_id" : {
+            "description" : "job的ID。",
+            "type" : "string",
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7"
+          },
+          "job_type" : {
+            "description" : "子job的类型。",
+            "type" : "string"
+          },
+          "begin_time" : {
+            "description" : "job开始时间。UTC时间,格式:'2016-01-02 15:04:05'",
+            "type" : "string",
+            "example" : "2016-01-02 15:04:05"
+          },
+          "end_time" : {
+            "description" : "job结束时间。UTC时间,格式:'2016-01-02 15:04:05'",
+            "type" : "string",
+            "example" : "2016-01-02 15:04:05"
+          },
+          "error_code" : {
+            "description" : "job执行失败时的错误码",
+            "type" : "string",
+            "example" : "xxxxx"
+          },
+          "fail_reason" : {
+            "description" : "job执行失败时的错误原因",
+            "type" : "string",
+            "example" : "xxxxx"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowJobDetail" : {
+        "type" : "object",
+        "description" : "任务详情",
+        "required" : [ "status", "job_id", "job_type", "begin_time", "end_time", "error_code", "fail_reason", "sub_jobs" ],
+        "properties" : {
+          "status" : {
+            "description" : "job的状态。success:成功。running:运行中。failed:失败。waiting:等待执行",
+            "type" : "string",
+            "enum" : [ "success", "failed", "waiting", "running" ]
+          },
+          "job_id" : {
+            "description" : "job的ID。",
+            "type" : "string",
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7"
+          },
+          "job_type" : {
+            "description" : "job的类型。",
+            "type" : "string",
+            "example" : "bind_ldap"
+          },
+          "begin_time" : {
+            "description" : "job开始时间。UTC时间,格式:'2016-01-02 15:04:05'",
+            "type" : "string",
+            "example" : "2016-01-02 15:04:05"
+          },
+          "end_time" : {
+            "description" : "job结束时间。UTC时间,格式:'2016-01-02 15:04:05'",
+            "type" : "string",
+            "example" : "2016-01-02 15:04:05"
+          },
+          "error_code" : {
+            "description" : "job执行失败时的错误码",
+            "type" : "string",
+            "example" : "SFS.TURBO.0005"
+          },
+          "fail_reason" : {
+            "description" : "job执行失败时的错误原因",
+            "type" : "string",
+            "example" : "server error"
+          },
+          "sub_jobs" : {
+            "description" : "子任务列表",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/GetSubJobDetail"
+            }
+          }
+        }
+      },
+      "UpdateHpcShareRequestBody" : {
+        "description" : "更新文件系统请求体",
+        "required" : [ "action", "gc_time" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "更新文件系统的操作类型。当前仅支持取值 config_gc_time"
+          },
+          "gc_time" : {
+            "type" : "integer",
+            "description" : "文件系统冷数据淘汰时间,单位为小时,取值范围 [1, 100000000]。系统默认为 60 小时"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateHpcShareResponseBody" : {
+        "description" : "更新文件系统返回体",
+        "properties" : {
+          "gc_time" : {
+            "type" : "integer",
+            "description" : "文件系统冷数据淘汰时间"
+          }
+        },
+        "type" : "object"
+      },
+      "ListPermRulesResponseBody" : {
+        "description" : "查询权限响应体",
+        "required" : [ "rules" ],
+        "properties" : {
+          "rules" : {
+            "type" : "array",
+            "description" : "权限信息",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/OnePermRuleResponseInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowFsDirQuotaResp" : {
+        "description" : "目录配额信息",
+        "required" : [ "path", "capacity", "inode" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          },
+          "capacity" : {
+            "description" : "目录的容量大小,单位:MB",
+            "type" : "integer"
+          },
+          "inode" : {
+            "description" : "目录的inode数量限制",
+            "type" : "integer"
+          },
+          "used_capacity" : {
+            "description" : "目录已使用的容量大小,单位:MB。仅SFSTurbo 20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB返回该字段。数据可能有延迟。",
+            "type" : "integer"
+          },
+          "used_inode" : {
+            "description" : "目录的已使用的inode数量。仅SFSTurbo 20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB返回该字段。数据可能有延迟。",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "ActionProgress" : {
+        "type" : "object",
+        "properties" : {
+          "CREATING" : {
+            "description" : "创建文件系统的进度。",
+            "type" : "string"
+          }
+        }
+      },
+      "ShareInfoFeatures" : {
+        "type" : "object",
+        "description" : "文件系统的特性支持情况。",
+        "properties" : {
+          "backup" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ShareInfoFeature",
+            "description" : "SFS Turbo文件系统是否支持备份。"
+          }
+        }
+      },
+      "ShareInfoFeature" : {
+        "type" : "object",
+        "description" : "文件系统的特性支持情况。",
+        "properties" : {
+          "is_support" : {
+            "type" : "boolean",
+            "description" : "文件系统是否支持该特性"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "文件系统是否支持该特性的详细信息"
+          },
+          "msg_code" : {
+            "type" : "string",
+            "description" : "文件系统是否支持该特性的详细信息"
+          }
+        }
+      },
+      "ShareInfo" : {
+        "type" : "object",
+        "description" : "文件系统详情",
+        "properties" : {
+          "action_progress" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/ActionProgress",
+            "description" : "SFS Turbo文件系统的创建任务进度。文件系统正在创建时,返回该字段;否则不返回。"
+          },
+          "version" : {
+            "description" : "SFS Turbo文件系统的版本号。",
+            "type" : "string"
+          },
+          "avail_capacity" : {
+            "description" : "SFS Turbo文件系统剩余容量,单位GB。",
+            "type" : "string"
+          },
+          "availability_zone" : {
+            "description" : "SFS Turbo文件系统所在可用区编码。",
+            "type" : "string"
+          },
+          "az_name" : {
+            "description" : "SFS Turbo文件系统所在可用区名称。",
+            "type" : "string"
+          },
+          "created_at" : {
+            "description" : "创建时间。UTC时间,例如:2018-11-19T04:02:03",
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "crypt_key_id" : {
+            "description" : "用户指定的加密密钥ID,非加密盘时不返回。",
+            "type" : "string"
+          },
+          "expand_type" : {
+            "description" : "如果是增强版文件系统,该字段返回bandwidth;如果是20MB/s/TiB、40MB/s/TiB、125MB/s/TiB、250MB/s/TiB、500MB/s/TiB、1000MB/s/TiB,该字段返回hpc;否则不返回。",
+            "type" : "string"
+          },
+          "export_location" : {
+            "description" : "SFS Turbo文件系统的挂载端点。例如\"192.168.0.90:/\"。如果文件系统正在创建,该字段不返回。",
+            "type" : "string"
+          },
+          "id" : {
+            "description" : "SFS Turbo的文件系统ID。",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "创建时指定的SFS Turbo文件系统名称。",
+            "type" : "string"
+          },
+          "pay_model" : {
+            "description" : "SFS Turbo文件系统的计费模式。'0'代表按需付费,'1'代表包周期计费。如果文件系统正在创建,该字段不返回。",
+            "type" : "string",
+            "enum" : [ "0", "1" ]
+          },
+          "region" : {
+            "description" : "SFS Turbo文件系统所在区域。",
+            "type" : "string"
+          },
+          "security_group_id" : {
+            "description" : "用户指定的安全组ID。",
+            "type" : "string"
+          },
+          "share_proto" : {
+            "description" : "SFS Turbo文件系统的协议类型,当前为NFS",
+            "type" : "string"
+          },
+          "share_type" : {
+            "description" : "SFS Turbo文件系统性能类型,包括“STANDARD”标准型和“PERFORMANCE”性能型。",
+            "type" : "string"
+          },
+          "size" : {
+            "description" : "SFS Turbo文件系统总容量,单位GB。",
+            "type" : "string"
+          },
+          "status" : {
+            "description" : "SFS Turbo文件系统的状态。'100'表示创建中,'200'表示可用,'303'表示创建失败,'800'表示实例被冻结。",
+            "type" : "string"
+          },
+          "sub_status" : {
+            "description" : "SFS Turbo文件系统的子状态。当用户未对文件系统有修改类操作时,该字段不返回。",
+            "type" : "string"
+          },
+          "subnet_id" : {
+            "description" : "用户指定的子网的网络ID。",
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "description" : "用户指定的VPC ID。",
+            "type" : "string"
+          },
+          "enterprise_project_id" : {
+            "description" : "SFS Turbo文件系统绑定的企业项目ID。",
+            "type" : "string"
+          },
+          "tags" : {
+            "description" : "tag标签的列表。",
+            "items" : {
+              "type" : "object",
+              "description" : "",
+              "$ref" : "#/components/schemas/ResourceTag"
+            },
+            "type" : "array"
+          },
+          "optional_endpoint" : {
+            "description" : "可选的挂载IP地址。上一代文件系统规格类型不返回该字段。",
+            "type" : "string"
+          },
+          "hpc_bw" : {
+            "description" : "文件系统的带宽规格。",
+            "type" : "string"
+          },
+          "instanceId" : {
+            "description" : "文件系统规格的节点id,为预留字段,不具备实际含义。",
+            "type" : "string"
+          },
+          "instanceType" : {
+            "description" : "文件系统规格的节点类型,为预留字段,不具备实际含义。",
+            "type" : "string"
+          },
+          "statusDetail" : {
+            "description" : "文件系统的请求ID,为预留字段,不具备实际含义。",
+            "type" : "string"
+          },
+          "features" : {
+            "description" : "文件系统的特性支持情况。",
+            "type" : "object",
+            "$ref" : "#/components/schemas/ShareInfoFeatures"
+          }
+        }
+      },
+      "UpdateObsTargetPolicyResponseBody" : {
+        "description" : "更新后端存储自动同步策略响应体",
+        "properties" : {
+          "target_id" : {
+            "type" : "string",
+            "description" : "绑定关系id"
+          },
+          "policy" : {
+            "type" : "object",
+            "description" : "后端存储自动同步策略",
+            "$ref" : "#/components/schemas/ObsDataRepositoryPolicy"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateObsTargetPolicyRequestBody" : {
+        "description" : "更新后端存储自动同步策略请求体",
+        "required" : [ "policy" ],
+        "properties" : {
+          "policy" : {
+            "type" : "object",
+            "description" : "后端存储自动同步策略",
+            "$ref" : "#/components/schemas/ObsDataRepositoryPolicy"
+          }
+        },
+        "type" : "object"
+      },
+      "ListBackendTargetsResponseBody" : {
+        "description" : "查询后端存储列表返回体",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "后端存储列表个数"
+          },
+          "targets" : {
+            "type" : "array",
+            "description" : "后端存储列表",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/ShowBackendTargetInfoResponseBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CreateBackendTargetResponseBody" : {
+        "description" : "绑定后端存储的返回体",
+        "properties" : {
+          "target_id" : {
+            "type" : "string",
+            "description" : "绑定关系id"
+          },
+          "creation_time" : {
+            "type" : "string",
+            "description" : "绑定关系创建时间"
+          },
+          "failure_details" : {
+            "type" : "object",
+            "description" : "绑定错误信息",
+            "$ref" : "#/components/schemas/FailureDetailsMessage"
+          },
+          "file_system_path" : {
+            "type" : "string",
+            "description" : "联动目录名称"
+          },
+          "lifecycle" : {
+            "type" : "string",
+            "description" : "绑定状态。",
+            "enum" : [ "CREATING", "AVAILABLE", "MISCONFIGURED", "DELETING" ]
+          },
+          "obs" : {
+            "type" : "object",
+            "description" : "OBS类型后端存储",
+            "$ref" : "#/components/schemas/ObsDataRepository"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateBackendTargetRequestBody" : {
+        "description" : "创建文件系统后端存储请求体",
+        "required" : [ "file_system_path", "obs" ],
+        "properties" : {
+          "file_system_path" : {
+            "type" : "string",
+            "description" : "联动目录名称,SFS Turbo会在文件系统根目录下以该名称创建一个子目录,该目录用于绑定后端存储。"
+          },
+          "obs" : {
+            "type" : "object",
+            "description" : "OBS类型后端存储",
+            "$ref" : "#/components/schemas/ObsDataRepository"
+          }
+        },
+        "type" : "object"
+      },
+      "ListFsTasksResp" : {
+        "type" : "object",
+        "description" : "异步任务列表",
+        "required" : [ "tasks" ],
+        "properties" : {
+          "tasks" : {
+            "description" : "任务列表",
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/OneFsTaskResp"
+            }
+          }
+        }
+      },
+      "ListSharesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "shares" : {
+            "description" : "SFS Turbo文件系统的列表。",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/ShareInfo"
+            },
+            "type" : "array"
+          },
+          "count" : {
+            "description" : "SFS Turbo文件系统的数量。",
+            "type" : "integer"
+          }
+        }
+      },
+      "ListSharesByTagResponseBody" : {
+        "type" : "object",
+        "description" : "通过标签查询文件系统列表的响应体",
+        "properties" : {
+          "resources" : {
+            "description" : "通过标签查询文件系统的资源列表",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "description" : "资源列表",
+              "$ref" : "#/components/schemas/ListSharesByTagResource"
+            }
+          },
+          "total_count" : {
+            "description" : "设置返回的文件系统的偏移量",
+            "type" : "integer"
+          }
+        }
+      },
+      "ListSharesByTagRequestBody" : {
+        "type" : "object",
+        "description" : "通过标签查询文件系统列表的请求体",
+        "properties" : {
+          "action" : {
+            "description" : "通过标签查询文件系统列表的操作类型。仅支持取值为\"filter\" 或 \"count\"。",
+            "type" : "string",
+            "enum" : [ "filter", "count" ],
+            "example" : "filter"
+          },
+          "limit" : {
+            "description" : "设置返回的文件系统个数的最大值。",
+            "type" : "string",
+            "example" : 10
+          },
+          "offset" : {
+            "description" : "设置返回的文件系统的偏移量",
+            "type" : "string",
+            "example" : 0
+          },
+          "without_any_tag" : {
+            "description" : "不包含任意一个标签,该字段为true时查询所有不带标签的资源,此时忽略 “tags”字段。该字段为false或者未提供该参数时,该条件不生效,即返回所有资源或按\"tags\",\"matches\"等条件过滤。",
+            "type" : "boolean",
+            "example" : true
+          },
+          "tags" : {
+            "description" : "包含标签,最多包含20个key,每个key下面的value最多20个,每个key对应的value可以为空数组但结构体不能缺失。key不能重复,同一个key中values不能重复。结果返回包含所有标签的资源列表,key之间是与的关系,key-value结构中value是或的关系。无tag过滤条件时返回全量数据。",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "description" : "包含标签",
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "matches" : {
+            "description" : "搜索字段,key为要匹配的字段,仅支持取值“resource_name”。value为匹配的值,当value以“\\*”结尾时,为前缀搜索。例如:value值为“sfsturbo\\*”时,返回名称为“sfsturbo”开头的所有资源列表。",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "description" : "包含标签",
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          }
+        }
+      },
+      "ListSharesByTagResource" : {
+        "type" : "object",
+        "description" : "资源详情",
+        "properties" : {
+          "resource_id" : {
+            "description" : "资源ID",
+            "type" : "string"
+          },
+          "resource_name" : {
+            "description" : "资源名称",
+            "type" : "string"
+          },
+          "resource_detail" : {
+            "description" : "资源详情",
+            "type" : "string"
+          },
+          "tags" : {
+            "description" : "资源的标签列表",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "description" : "标签详情",
+              "$ref" : "#/components/schemas/ResourceTag"
+            }
+          }
+        }
+      },
+      "DeleteFsDirQuotaRequestBody" : {
+        "description" : "需要删除quota的目录",
+        "required" : [ "path" ],
+        "properties" : {
+          "path" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowFsTask" : {
+      "get" : {
+        "tags" : [ "文件系统管理" ],
+        "summary" : "获取文件系统异步任务详情",
+        "description" : "获取文件系统异步任务详情。仅支持查询目录资源使用情况的任务,API请求路径的feature取值为dir-usage,以下简称为DU任务。",
+        "operationId" : "ShowFsTask",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OneFsTaskResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型, application/json",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型, application/json",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "feature",
+          "in" : "path",
+          "description" : "任务类型。例,DU任务取值为dir-usage",
+          "required" : true,
+          "schema" : {
+            "example" : "dir-usage",
+            "description" : "任务类型。例,DU任务取值为dir-usage",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "d651ea2b-xxxx-xxxx-xxxx-2adcec18dac9",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFsTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/{feature}/tasks/{task_id}"
+    },
+    "/ListHpcCacheTasks" : {
+      "get" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "查询数据导入导出任务列表",
+        "description" : "查询数据导入导出任务列表",
+        "operationId" : "ListHpcCacheTasks",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListHpcCacheTasksResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "任务类型",
+          "required" : false,
+          "schema" : {
+            "description" : "任务类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "任务状态",
+          "required" : false,
+          "schema" : {
+            "description" : "任务状态",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "offset,默认值为 0",
+          "required" : false,
+          "schema" : {
+            "description" : "offset,默认值为 0",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit,默认值为 20",
+          "required" : false,
+          "schema" : {
+            "description" : "limit,默认值为 20",
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "start_time",
+          "in" : "query",
+          "description" : "start_time",
+          "required" : false,
+          "schema" : {
+            "example" : "2024-03-18T23:00:00",
+            "description" : "start_time",
+            "type" : "string"
+          }
+        }, {
+          "name" : "end_time",
+          "in" : "query",
+          "description" : "end_time",
+          "required" : false,
+          "schema" : {
+            "example" : "2024-03-18T24:00:00",
+            "description" : "end_time",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListHpcCacheTasks",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/hpc-cache/tasks"
+    },
+    "/UpdateObsTargetAttributes" : {
+      "put" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "更新后端存储属性",
+        "description" : "更新后端存储属性",
+        "operationId" : "UpdateObsTargetAttributes",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateObsTargetAttributesResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "target_id",
+          "in" : "path",
+          "description" : "绑定关系id",
+          "required" : true,
+          "schema" : {
+            "example" : "00000334-xxxx-402d-a5d4-bxxxxx87b939",
+            "description" : "绑定关系id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateObsTargetAttributesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateObsTargetAttributes",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets/{target_id}/attributes"
+    },
+    "/CreateFsTask" : {
+      "post" : {
+        "tags" : [ "文件系统管理" ],
+        "summary" : "创建文件系统异步任务",
+        "description" : "创建文件系统异步任务,仅支持异步查询目录资源使用情况,API请求路径的feature取值为dir-usage,以下简称为DU任务。",
+        "operationId" : "CreateFsTask",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TaskResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型, application/json",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型, application/json",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "feature",
+          "in" : "path",
+          "description" : "任务类型。当前仅支持取值\"dir-usage\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "dir-usage",
+            "description" : "任务类型。当前仅支持取值\"dir-usage\"。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FsDirReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFsTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/{feature}/tasks"
+    },
+    "/UpdateFsDirQuota" : {
+      "put" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "更新目标文件夹quota",
+        "description" : "更新目标文件夹quota",
+        "operationId" : "UpdateFsDirQuota",
+        "responses" : {
+          "200" : {
+            "description" : "更新quota成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FsDirQuotaRespInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateFsDirQuotaRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateFsDirQuota",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir-quota"
+    },
+    "/ExpandShare" : {
+      "post" : {
+        "tags" : [ "生命周期管理" ],
+        "summary" : "扩容文件系统",
+        "description" : "扩容文件系统。",
+        "operationId" : "ExpandShare",
+        "responses" : {
+          "202" : {
+            "description" : "扩容文件系统请求下发成功返回body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpandShareResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExpandShareRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExpandShare",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/action"
+    },
+    "/CreateFsDir" : {
+      "post" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "创建目录",
+        "description" : "创建目录",
+        "operationId" : "CreateFsDir",
+        "responses" : {
+          "204" : {
+            "description" : "创建目录成功"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "错误响应,目录冲突",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateFsDirRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFsDir",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir"
+    },
+    "/ListSharedTags" : {
+      "get" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "查询租户所有共享的标签",
+        "description" : "查询租户所有共享的标签集合。",
+        "operationId" : "ListSharedTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询文件系统返回body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowAllSharedTagsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回的标签个数",
+          "schema" : {
+            "example" : 10,
+            "description" : "返回的标签个数",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1000,
+            "maximum" : 1000,
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "标签查询个数的偏移量",
+          "schema" : {
+            "example" : 10,
+            "description" : "标签查询个数的偏移量",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSharedTags",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/tags"
+    },
+    "/ShowSharedTags" : {
+      "get" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "查询共享标签",
+        "description" : "查询指定共享的所有标签信息。",
+        "operationId" : "ShowSharedTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询指定共享的所有标签的返回信息",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowSharedTagsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "操作用户的项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "操作用户的项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "共享ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "共享ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSharedTags",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/tags"
+    },
+    "/CreateLdapConfig" : {
+      "post" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "创建并绑定ldap配置",
+        "description" : "创建并绑定ldap配置。LDAP(Lightweight Directory Access Protocol),中文名称轻量级目录访问协议,是对目录服务器(Directory Server)进行访问、控制的一种标准协议。LDAP服务器可以集中式地管理用户和群组的归属关系,通过绑定LDAP服务器,当一个用户访问您的文件系统的文件时,SFS Turbo将会访问您的LDAP服务器以进行用户身份验证,并且获取用户和群组的归属关系,从而进行Linux标准的文件UGO权限的检查。要使用此功能,首先您需要搭建好LDAP服务器(当前SFS Turbo仅支持LDAP v3协议),常见提供LDAP协议访问的目录服务器实现有OpenLdap(Linux),Active Directory(Windows)等,不同目录服务器的实现细节有所差别,绑定时需要指定对应的Schema(Schema配置错误将会导致SFS Turbo无法正确获取用户以及群组信息,可能导致无权限访问文件系统内文件),当前SFS Turbo支持的Schema有:",
+        "operationId" : "CreateLdapConfig",
+        "responses" : {
+          "200" : {
+            "description" : "请求已被接受",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LdapJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateLdapConfigRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateLdapConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/ldap"
+    },
+    "/ShowLdapConfig" : {
+      "get" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "查询Ldap的配置",
+        "description" : "查询Ldap的配置。LDAP(Lightweight Directory Access Protocol),中文名称轻量级目录访问协议,是对目录服务器(Directory Server)进行访问、控制的一种标准协议。LDAP服务器可以集中式地管理用户和群组的归属关系,通过绑定LDAP服务器,当一个用户访问您的文件系统的文件时,SFS Turbo将会访问您的LDAP服务器以进行用户身份验证,并且获取用户和群组的归属关系,从而进行Linux标准的文件UGO权限的检查。要使用此功能,首先您需要搭建好LDAP服务器(当前SFS Turbo仅支持LDAP v3协议),常见提供LDAP协议访问的目录服务器实现有OpenLdap(Linux),Active Directory(Windows)等,不同目录服务器的实现细节有所差别,绑定时需要指定对应的Schema(Schema配置错误将会导致SFS Turbo无法正确获取用户以及群组信息,可能导致无权限访问文件系统内文件),当前SFS Turbo支持的Schema有:",
+        "operationId" : "ShowLdapConfig",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetLdapConfigResponseBody"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowLdapConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/ldap"
+    },
+    "/UpdatePermRule" : {
+      "put" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "修改权限规则",
+        "description" : "修改权限规则",
+        "operationId" : "UpdatePermRule",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OnePermRuleResponseInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "description" : "权限规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "权限规则id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OnePermRuleRequestInfo"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdatePermRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/perm-rules/{rule_id}"
+    },
+    "/DeleteShare" : {
+      "delete" : {
+        "tags" : [ "生命周期管理" ],
+        "summary" : "删除文件系统",
+        "description" : "删除文件系统。",
+        "operationId" : "DeleteShare",
+        "responses" : {
+          "202" : {
+            "description" : "删除文件系统请求下发成功"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteShare",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}"
+    },
+    "/CreateShare" : {
+      "post" : {
+        "tags" : [ "生命周期管理" ],
+        "summary" : "创建文件系统",
+        "description" : "创建文件系统。",
+        "operationId" : "CreateShare",
+        "responses" : {
+          "202" : {
+            "description" : "创建请求下发成功返回body。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateShareResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateShareRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateShare",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares"
+    },
+    "/CreatePermRule" : {
+      "post" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "创建权限规则",
+        "description" : "创建权限规则",
+        "operationId" : "CreatePermRule",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePermRuleResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePermRulesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreatePermRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/perm-rules"
+    },
+    "/ShowFsDirUsage" : {
+      "get" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "查询目录资源使用情况",
+        "description" : "查询目录资源使用情况(包括子目录的资源)。后端有5min的缓存时间,查询的数据可能有延迟。",
+        "operationId" : "ShowFsDirUsage",
+        "responses" : {
+          "200" : {
+            "description" : "目录资源使用情况",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFsDirUsageResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型, application/json",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型, application/json",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "path",
+          "in" : "query",
+          "description" : "文件系统内合法的目录全路径",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统内合法的目录全路径",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFsDirUsage",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir-usage"
+    },
+    "/DeleteHpcCacheTask" : {
+      "delete" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "删除数据导入导出任务",
+        "description" : "删除数据导入导出任务",
+        "operationId" : "DeleteHpcCacheTask",
+        "responses" : {
+          "202" : {
+            "description" : "成功",
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteHpcCacheTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/hpc-cache/task/{task_id}"
+    },
+    "/SetHpcCacheBackend" : {
+      "post" : {
+        "tags" : [ "文件系统管理" ],
+        "summary" : "配置hpc缓存型后端信息",
+        "description" : "配置hpc缓存型后端信息",
+        "operationId" : "SetHpcCacheBackend",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReqConfigHpcCacheBackend"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetHpcCacheBackend",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/action"
+    },
+    "/ChangeSecurityGroup" : {
+      "post" : {
+        "tags" : [ "连接管理" ],
+        "summary" : "修改文件系统绑定的安全组",
+        "description" : "修改SFS Turbo文件系统绑定的安全组。修改安全组为异步任务,可以通过“查询单个文件系统”返回的子状态字段“sub_status”来判断是否修改安全组状态,子状态为“232”即为修改安全组成功。",
+        "operationId" : "ChangeSecurityGroup",
+        "responses" : {
+          "202" : {
+            "description" : "SFS Turbo文件系统ID。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ChangeSecurityGroupResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ChangeSecurityGroupRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ChangeSecurityGroup",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/action"
+    },
+    "/DeleteBackendTarget" : {
+      "delete" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "删除后端存储",
+        "description" : "删除后端存储",
+        "operationId" : "DeleteBackendTarget",
+        "responses" : {
+          "202" : {
+            "description" : "任务下发成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteBackendTargetResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "target_id",
+          "in" : "path",
+          "description" : "绑定关系id",
+          "required" : true,
+          "schema" : {
+            "example" : "00000334-xxxx-402d-a5d4-bxxxxx87b939",
+            "description" : "绑定关系id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "delete_data_in_file_system",
+          "in" : "query",
+          "description" : "删除后端存储时是否同时删除文件系统内的联动目录及其数据文件,默认为 false。数据删除后无法恢复,请谨慎操作。",
+          "schema" : {
+            "example" : false,
+            "description" : "删除后端存储时是否同时删除文件系统内的联动目录及其数据文件,默认为 false。数据删除后无法恢复,请谨慎操作。",
+            "type" : "boolean"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteBackendTarget",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets/{target_id}"
+    },
+    "/CreateFsDirQuota" : {
+      "post" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "创建目标文件夹quota",
+        "description" : "创建目标文件夹quota。",
+        "operationId" : "CreateFsDirQuota",
+        "responses" : {
+          "200" : {
+            "description" : "创建配额成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FsDirQuotaRespInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateFsDirQuotaRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateFsDirQuota",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir-quota"
+    },
+    "/DeletePermRule" : {
+      "delete" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "删除权限规则",
+        "description" : "删除权限规则",
+        "operationId" : "DeletePermRule",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "description" : "权限规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "权限规则id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeletePermRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/perm-rules/{rule_id}"
+    },
+    "/ShowPermRule" : {
+      "get" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "查询文件系统的某一个权限规则",
+        "description" : "查询文件系统的某一个权限规则",
+        "operationId" : "ShowPermRule",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OnePermRuleResponseInfo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "rule_id",
+          "in" : "path",
+          "description" : "权限规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "权限规则id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPermRule",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/perm-rules/{rule_id}"
+    },
+    "/CreateSharedTag" : {
+      "post" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "创建共享标签",
+        "description" : "指定共享添加一个标签。",
+        "operationId" : "CreateSharedTag",
+        "responses" : {
+          "204" : {
+            "description" : "创建共享标签请求下发成功"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "操作用户的项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "操作用户的项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "共享ID",
+          "required" : true,
+          "schema" : {
+            "description" : "共享ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateSharedTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSharedTag",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/tags"
+    },
+    "/ChangeShareName" : {
+      "post" : {
+        "tags" : [ "名称管理" ],
+        "summary" : "修改文件系统名称",
+        "description" : "修改文件系统名称",
+        "operationId" : "ChangeShareName",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功"
+          },
+          "400" : {
+            "description" : "参数错误"
+          },
+          "409" : {
+            "description" : "文件系统名称已经存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ChangeShareNameReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ChangeShareName",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/action"
+    },
+    "/UpdateLdapConfig" : {
+      "put" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "修改ldap配置",
+        "description" : "修改ldap配置。LDAP(Lightweight Directory Access Protocol),中文名称轻量级目录访问协议,是对目录服务器(Directory Server)进行访问、控制的一种标准协议。LDAP服务器可以集中式地管理用户和群组的归属关系,通过绑定LDAP服务器,当一个用户访问您的文件系统的文件时,SFS Turbo将会访问您的LDAP服务器以进行用户身份验证,并且获取用户和群组的归属关系,从而进行Linux标准的文件UGO权限的检查。要使用此功能,首先您需要搭建好LDAP服务器(当前SFS Turbo仅支持LDAP v3协议),常见提供LDAP协议访问的目录服务器实现有OpenLdap(Linux),Active Directory(Windows)等,不同目录服务器的实现细节有所差别,绑定时需要指定对应的Schema(Schema配置错误将会导致SFS Turbo无法正确获取用户以及群组信息,可能导致无权限访问文件系统内文件),当前SFS Turbo支持的Schema有:",
+        "operationId" : "UpdateLdapConfig",
+        "responses" : {
+          "200" : {
+            "description" : "更新中",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LdapJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateLdapConfigRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateLdapConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/ldap"
+    },
+    "/DeleteFsDir" : {
+      "delete" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "删除文件系统目录",
+        "description" : "删除文件系统目录",
+        "operationId" : "DeleteFsDir",
+        "responses" : {
+          "202" : {
+            "description" : "删除目录请求已接收"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteFsDirRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFsDir",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir"
+    },
+    "/ShowFsDir" : {
+      "get" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "查询目录是否存在",
+        "description" : "查询目录是否存在",
+        "operationId" : "ShowFsDir",
+        "responses" : {
+          "200" : {
+            "description" : "查询目录结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFsDirResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应,目录不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "path",
+          "in" : "query",
+          "description" : "需要查询的目录的全路径",
+          "required" : true,
+          "schema" : {
+            "description" : "需要查询的目录的全路径",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFsDir",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir"
+    },
+    "/CreateHpcCacheTask" : {
+      "post" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "创建数据导入导出任务",
+        "description" : "创建数据导入导出任务",
+        "operationId" : "CreateHpcCacheTask",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateHpcCacheTaskResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateHpcCacheTaskReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateHpcCacheTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/hpc-cache/task"
+    },
+    "/BatchAddSharedTags" : {
+      "post" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "批量添加共享标签",
+        "description" : "指定共享批量添加标签。",
+        "operationId" : "BatchAddSharedTags",
+        "responses" : {
+          "204" : {
+            "description" : "批量添加共享标签成功"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "共享ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "共享ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchAddSharedTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAddSharedTags",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/tags/action"
+    },
+    "/ShowBackendTargetInfo" : {
+      "get" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "获取后端存储详细信息",
+        "description" : "获取后端存储详细信息",
+        "operationId" : "ShowBackendTargetInfo",
+        "responses" : {
+          "200" : {
+            "description" : "任务下发成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowBackendTargetInfoResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "target_id",
+          "in" : "path",
+          "description" : "绑定关系id",
+          "required" : true,
+          "schema" : {
+            "example" : "00000334-xxxx-402d-a5d4-bxxxxx87b939",
+            "description" : "绑定关系id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowBackendTargetInfo",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets/{target_id}"
+    },
+    "/ShowJobDetail" : {
+      "get" : {
+        "tags" : [ "任务管理" ],
+        "summary" : "查询job的状态详情",
+        "description" : "查询job的执行状态。 可用于查询SFS Turbo异步API的执行状态。例如:可使用调用创建并绑定ldap配置接口时返回的jobId,通过该接口查询job的执行状态。",
+        "operationId" : "ShowJobDetail",
+        "responses" : {
+          "200" : {
+            "description" : "响应Body参数",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowJobDetail"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "客户端错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "资源不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "job ID",
+          "required" : true,
+          "schema" : {
+            "description" : "job ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobDetail",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/jobs/{job_id}"
+    },
+    "/UpdateHpcShare" : {
+      "put" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "更新文件系统",
+        "description" : "更新文件系统冷数据淘汰时间",
+        "operationId" : "UpdateHpcShare",
+        "responses" : {
+          "200" : {
+            "description" : "任务下发成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateHpcShareResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的 token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的 token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateHpcShareRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateHpcShare",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}"
+    },
+    "/ListPermRules" : {
+      "get" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "查询文件系统的权限规则列表",
+        "description" : "查询文件系统的权限规则列表",
+        "operationId" : "ListPermRules",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListPermRulesResponseBody"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回的权限规则个数",
+          "schema" : {
+            "example" : 10,
+            "description" : "返回的权限规则个数",
+            "type" : "integer",
+            "format" : "int64",
+            "maximum" : 64,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "返回的权限规则的偏移量",
+          "schema" : {
+            "description" : "返回的权限规则的偏移量",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 0,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPermRules",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/perm-rules"
+    },
+    "/ShowFsDirQuota" : {
+      "get" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "查询目标文件夹quota",
+        "description" : "查询目标文件夹quota。查询的used_capacity、used_inode数据可能有延迟。",
+        "operationId" : "ShowFsDirQuota",
+        "responses" : {
+          "200" : {
+            "description" : "查询目录的配额信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowFsDirQuotaResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "path",
+          "in" : "query",
+          "description" : "合法的已存在的目录的全路径",
+          "required" : true,
+          "schema" : {
+            "description" : "合法的已存在的目录的全路径",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowFsDirQuota",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir-quota"
+    },
+    "/ShowShare" : {
+      "get" : {
+        "tags" : [ "生命周期管理" ],
+        "summary" : "查询文件系统详细信息",
+        "description" : "查询SFS Turbo文件系统详细信息。",
+        "operationId" : "ShowShare",
+        "responses" : {
+          "200" : {
+            "description" : "查询文件系统返回body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShareInfo"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowShare",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}"
+    },
+    "/DeleteSharedTag" : {
+      "delete" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "删除共享标签",
+        "description" : "指定共享删除一个标签。当共享中不存在指定要删除的key时,接口调用将会返回404错误。",
+        "operationId" : "DeleteSharedTag",
+        "responses" : {
+          "204" : {
+            "description" : "删除共享标签成功"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "操作用户的项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "操作用户的项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "共享ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "共享ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "key",
+          "in" : "path",
+          "description" : "标签的键,最大长度128个字符。 ",
+          "required" : true,
+          "schema" : {
+            "description" : "标签的键,最大长度128个字符。 ",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSharedTag",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/tags/{key}"
+    },
+    "/UpdateObsTargetPolicy" : {
+      "put" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "更新后端存储自动同步策略",
+        "description" : "更新后端存储自动同步策略",
+        "operationId" : "UpdateObsTargetPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateObsTargetPolicyResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "target_id",
+          "in" : "path",
+          "description" : "绑定关系id",
+          "required" : true,
+          "schema" : {
+            "example" : "00000334-xxxx-402d-a5d4-bxxxxx87b939",
+            "description" : "绑定关系id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateObsTargetPolicyRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateObsTargetPolicy",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets/{target_id}/policy"
+    },
+    "/ListBackendTargets" : {
+      "get" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "查询后端存储列表",
+        "description" : "查询后端存储列表",
+        "operationId" : "ListBackendTargets",
+        "responses" : {
+          "200" : {
+            "description" : "任务下发成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListBackendTargetsResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "查询列表返回元素个数",
+          "schema" : {
+            "example" : 10,
+            "description" : "查询列表返回元素个数",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "查询列表偏移量",
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "查询列表偏移量",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBackendTargets",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets"
+    },
+    "/ShowHpcCacheTask" : {
+      "get" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "查询数据导入导出任务详情",
+        "description" : "查询数据导入导出任务详情",
+        "operationId" : "ShowHpcCacheTask",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OneHpcCacheTaskInfoResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统ID",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowHpcCacheTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/{share_id}/hpc-cache/task/{task_id}"
+    },
+    "/CreateBackendTarget" : {
+      "post" : {
+        "tags" : [ "存储联动管理" ],
+        "summary" : "绑定后端存储",
+        "description" : "为SFS Turbo 文件系统绑定后端存储",
+        "operationId" : "CreateBackendTarget",
+        "responses" : {
+          "202" : {
+            "description" : "任务下发成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateBackendTargetResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求ID"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateBackendTargetRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateBackendTarget",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/targets"
+    },
+    "/ListFsTasks" : {
+      "get" : {
+        "tags" : [ "文件系统管理" ],
+        "summary" : "获取文件系统异步任务列表",
+        "description" : "获取文件系统异步任务列表。仅支持查询目录资源使用情况的任务,API请求路径的feature取值为dir-usage,以下简称为DU任务。",
+        "operationId" : "ListFsTasks",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListFsTasksResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型, application/json",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型, application/json",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "feature",
+          "in" : "path",
+          "description" : "任务类型。例,DU任务取值为dir-usage",
+          "required" : true,
+          "schema" : {
+            "example" : "dir-usage",
+            "description" : "任务类型。例,DU任务取值为dir-usage",
+            "type" : "string"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "marker,取值为task_id",
+          "required" : false,
+          "schema" : {
+            "example" : "d651ea2b-2b20-4c6d-8bbf-2adcec18dac9",
+            "description" : "marker,取值为task_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit, 取值为正整数. 默认为20,最大值为100",
+          "required" : false,
+          "schema" : {
+            "description" : "limit, 取值为正整数. 默认为20,最大值为100",
+            "type" : "integer"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFsTasks",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/{feature}/tasks"
+    },
+    "/DeleteFsTask" : {
+      "delete" : {
+        "tags" : [ "文件系统管理" ],
+        "summary" : "取消/删除文件系统异步任务",
+        "description" : "如果异步任务正在执行,则取消并删除任务;否则,删除任务。仅支持删除目录资源使用情况的任务,API请求路径的feature取值为dir-usage,以下简称为DU任务。",
+        "operationId" : "DeleteFsTask",
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型, application/json",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型, application/json",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "example" : "b959dfbb-xxxx-XXXX-xxxx-8930ec3a87b7",
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "feature",
+          "in" : "path",
+          "description" : "任务类型。例,DU任务取值为dir-usage",
+          "required" : true,
+          "schema" : {
+            "example" : "dir-usage",
+            "description" : "任务类型。例,DU任务取值为dir-usage",
+            "type" : "string"
+          }
+        }, {
+          "name" : "task_id",
+          "in" : "path",
+          "description" : "任务ID",
+          "required" : true,
+          "schema" : {
+            "example" : "d651ea2b-xxxx-xxxx-xxxx-2adcec18dac9",
+            "description" : "任务ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFsTask",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/{feature}/tasks/{task_id}"
+    },
+    "/ListShares" : {
+      "get" : {
+        "tags" : [ "生命周期管理" ],
+        "summary" : "获取文件系统列表",
+        "description" : "获取文件系统列表",
+        "operationId" : "ListShares",
+        "responses" : {
+          "200" : {
+            "description" : "查询列表成功,返回body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSharesResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "操作用户的项目ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "操作用户的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "设置返回的文件系统个数的最大值,不填默认为1000个",
+          "schema" : {
+            "example" : 10,
+            "description" : "设置返回的文件系统个数的最大值,不填默认为1000个",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 1000,
+            "maximum" : 200,
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "设置返回的文件系统的偏移量。",
+          "schema" : {
+            "example" : 10,
+            "description" : "设置返回的文件系统的偏移量。",
+            "type" : "integer",
+            "format" : "int64",
+            "default" : 0,
+            "exclusiveMaximum" : true,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListShares",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/detail"
+    },
+    "/ListSharesByTag" : {
+      "post" : {
+        "tags" : [ "共享标签" ],
+        "summary" : "通过标签查询文件系统列表",
+        "description" : "通过标签查询文件系统列表",
+        "operationId" : "ListSharesByTag",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSharesByTagResponseBody"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "成功"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-request-id" : {
+                "type" : "string",
+                "description" : "请求参数错误"
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListSharesByTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSharesByTag",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/resource_instances/action"
+    },
+    "/DeleteFsDirQuota" : {
+      "delete" : {
+        "tags" : [ "目录管理" ],
+        "summary" : "删除目标文件夹quota",
+        "description" : "删除目标文件夹quota。",
+        "operationId" : "DeleteFsDirQuota",
+        "responses" : {
+          "204" : {
+            "description" : "删除目录quota成功"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteFsDirQuotaRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteFsDirQuota",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/dir-quota"
+    },
+    "/DeleteLdapConfig" : {
+      "delete" : {
+        "tags" : [ "权限管理" ],
+        "summary" : "删除ldap配置",
+        "description" : "删除ldap配置。LDAP(Lightweight Directory Access Protocol),中文名称轻量级目录访问协议,是对目录服务器(Directory Server)进行访问、控制的一种标准协议。LDAP服务器可以集中式地管理用户和群组的归属关系,通过绑定LDAP服务器,当一个用户访问您的文件系统的文件时,SFS Turbo将会访问您的LDAP服务器以进行用户身份验证,并且获取用户和群组的归属关系,从而进行Linux标准的文件UGO权限的检查。要使用此功能,首先您需要搭建好LDAP服务器(当前SFS Turbo仅支持LDAP v3协议),常见提供LDAP协议访问的目录服务器实现有OpenLdap(Linux),Active Directory(Windows)等,不同目录服务器的实现细节有所差别,绑定时需要指定对应的Schema(Schema配置错误将会导致SFS Turbo无法正确获取用户以及群组信息,可能导致无权限访问文件系统内文件),当前SFS Turbo支持的Schema有:",
+        "operationId" : "DeleteLdapConfig",
+        "responses" : {
+          "200" : {
+            "description" : "删除中",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LdapJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "账号的token",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "账号的token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "MIME类型",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "MIME类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "2b31ed520xxxxxxebedb6e57xxxxxxxx",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "share_id",
+          "in" : "path",
+          "description" : "文件系统id",
+          "required" : true,
+          "schema" : {
+            "description" : "文件系统id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteLdapConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/sfs-turbo/shares/{share_id}/fs/ldap"
+    }
+  }
+}

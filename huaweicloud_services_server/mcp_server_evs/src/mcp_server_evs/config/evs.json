@@ -1,0 +1,4565 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "EVS-云硬盘过户",
+    "title" : "EVS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "Error" : {
+        "required" : [ "code", "message" ],
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "出现错误时,返回的错误码。"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "错误提示信息。"
+          }
+        },
+        "description" : "出现错误时,返回的错误信息。",
+        "type" : "object"
+      },
+      "ErrorResponseBody" : {
+        "required" : [ "error" ],
+        "properties" : {
+          "error" : {
+            "description" : "出现错误时,返回的错误信息",
+            "$ref" : "#/components/schemas/Error"
+          }
+        },
+        "description" : "错误信息。",
+        "type" : "object"
+      },
+      "RollbackSnapshotRequestBody" : {
+        "required" : [ "rollback" ],
+        "properties" : {
+          "rollback" : {
+            "description" : "快照回滚信息。",
+            "$ref" : "#/components/schemas/RollbackSnapshotOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "RollbackSnapshotResponseBody" : {
+        "required" : [ "rollback" ],
+        "properties" : {
+          "rollback" : {
+            "description" : "快照回滚信息。",
+            "$ref" : "#/components/schemas/RollbackInfo"
+          }
+        },
+        "type" : "object"
+      },
+      "RollbackInfo" : {
+        "required" : [ "volume_id" ],
+        "properties" : {
+          "volume_id" : {
+            "type" : "string",
+            "description" : "回滚的目标云硬盘UUID。"
+          }
+        },
+        "type" : "object"
+      },
+      "RollbackSnapshotOption" : {
+        "required" : [ "volume_id" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "回滚的目标云硬盘名称。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "回滚的目标云硬盘UUID。"
+          }
+        },
+        "type" : "object"
+      },
+      "Tag" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "标签键。同一资源的key值不能重复。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "标签值。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ListTagsResponseBody" : {
+        "required" : [ "tags" ],
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "BssParamForRetypeVolume" : {
+        "properties" : {
+          "isAutoPay" : {
+            "type" : "string",
+            "description" : "功能说明:是否立即支付。该参数只有在云硬盘为包周期的情况下有意义。默认值为false",
+            "enum" : [ "false", "true" ],
+            "default" : "false"
+          }
+        },
+        "description" : "包周期retype计费策略参数。",
+        "type" : "object"
+      },
+      "RetypeVolumeResponseBody" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID,云硬盘为按需计费时返回该参数。"
+          },
+          "order_id" : {
+            "type" : "string",
+            "description" : "订单ID,云硬盘为包周期计费时返回该参数。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "RetypeVolume" : {
+        "type" : "object",
+        "required" : [ "new_type" ],
+        "properties" : {
+          "new_type" : {
+            "type" : "string",
+            "example" : "SATA",
+            "description" : "变更至指定的云硬盘类型"
+          },
+          "iops" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘iops大小。"
+          },
+          "throughput" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘的吞吐量大小。"
+          }
+        },
+        "description" : "变更云硬盘类型"
+      },
+      "RetypeVolumeRequestBody" : {
+        "required" : [ "os-retype" ],
+        "properties" : {
+          "bssParam" : {
+            "description" : "包周期retype传入字段",
+            "$ref" : "#/components/schemas/BssParamForRetypeVolume"
+          },
+          "os-retype" : {
+            "description" : "变更磁盘类型的请求体。",
+            "$ref" : "#/components/schemas/RetypeVolume"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ListVolumeTagsResponseBody" : {
+        "required" : [ "tags" ],
+        "properties" : {
+          "tags" : {
+            "type" : "object",
+            "description" : "所有云硬盘的标签信息",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "description" : "获取所有云硬盘资源的标签信息。",
+        "type" : "object"
+      },
+      "ListVolumesResponseBody" : {
+        "required" : [ "count", "volumes", "volumes_links" ],
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询到的云硬盘总数量,不受分页影响。"
+          },
+          "volumes_links" : {
+            "type" : "array",
+            "description" : "云硬盘列表查询位置标记。如果本次查询只返回部分列表信息时,会返回查询到的当前磁盘mark标记的url,可以继续使用这个url查询剩余列表信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "volumes" : {
+            "type" : "array",
+            "description" : "查询请求返回的云硬盘列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/VolumeDetail"
+            }
+          }
+        },
+        "description" : "查询所有磁盘详情列表",
+        "type" : "object"
+      },
+      "VolumeDetail" : {
+        "required" : [ "attachments", "availability_zone", "bootable", "created_at", "description", "id", "links", "metadata", "multiattach", "name", "os-vol-host-attr:host", "os-vol-mig-status-attr:migstat", "os-vol-mig-status-attr:name_id", "os-vol-tenant-attr:tenant_id", "os-volume-replication:extended_status", "replication_status", "service_type", "shareable", "size", "snapshot_id", "status", "tags", "updated_at", "user_id", "volume_image_metadata", "volume_type" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘的ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘URI自描述信息。请参见 [links参数说明](https://support.huaweicloud.com/api-evs/evs_04_2006.html#evs_04_2006__evs_04_2010_li1077125119136)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘名称。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "云硬盘状态,请参见[云硬盘状态](https://support.huaweicloud.com/api-evs/evs_04_0040.html)。"
+          },
+          "attachments" : {
+            "type" : "array",
+            "description" : "云硬盘的挂载信息,请参见•[attachments参数说明](https://support.huaweicloud.com/api-evs/evs_04_2006.html#evs_04_2006__evs_04_2010_li12430153610291)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Attachment"
+            }
+          },
+          "availability_zone" : {
+            "type" : "string",
+            "description" : "云硬盘所属的AZ信息。"
+          },
+          "os-vol-host-attr:host" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "source_volid" : {
+            "type" : "string",
+            "description" : "源云硬盘ID,如果是从源云硬盘创建,则有值。"
+          },
+          "snapshot_id" : {
+            "type" : "string",
+            "description" : "快照ID,如果是从快照创建,则有值。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘描述。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘创建时间。"
+          },
+          "os-vol-tenant-attr:tenant_id" : {
+            "type" : "string",
+            "description" : "云硬盘所属的租户ID。租户ID就是项目ID。"
+          },
+          "volume_image_metadata" : {
+            "type" : "object",
+            "description" : "云硬盘镜像的元数据。",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : ""
+            }
+          },
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘类型。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘大小,单位为GB。"
+          },
+          "consistencygroup_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "bootable" : {
+            "type" : "string",
+            "description" : "是否为启动云硬盘。"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "云硬盘的元数据。",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : ""
+            }
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "云硬盘更新时间。"
+          },
+          "encrypted" : {
+            "type" : "boolean",
+            "description" : "当前云硬盘服务不支持该字段。"
+          },
+          "replication_status" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-volume-replication:extended_status" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vol-mig-status-attr:migstat" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vol-mig-status-attr:name_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "shareable" : {
+            "type" : "string",
+            "description" : "是否为共享云硬盘。true为共享盘,false为普通云硬盘。"
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "service_type" : {
+            "type" : "string",
+            "description" : "服务类型,结果为EVS、DSS、DESS。"
+          },
+          "multiattach" : {
+            "type" : "boolean",
+            "description" : "是否为共享云硬盘。"
+          },
+          "dedicated_storage_id" : {
+            "type" : "string",
+            "description" : "云硬盘所属的专属存储池ID。"
+          },
+          "dedicated_storage_name" : {
+            "type" : "string",
+            "description" : "云硬盘所属的专属存储池的名称。"
+          },
+          "tags" : {
+            "type" : "object",
+            "description" : "云硬盘的标签。",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "wwn" : {
+            "type" : "string",
+            "description" : "云硬盘挂载时的唯一标识。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "云硬盘上绑定的企业项目ID。"
+          },
+          "serial_number" : {
+            "type" : "string",
+            "example" : "dswfa16c849565639393393",
+            "description" : "云硬盘序列号。"
+          },
+          "iops" : {
+            "description" : "云硬盘的iops信息,云硬盘类型是ESSD2、GPSSD2才存在。",
+            "$ref" : "#/components/schemas/iops"
+          },
+          "throughput" : {
+            "description" : "云硬盘的吞吐量信息,云硬盘类型是GPSSD2才存在。",
+            "$ref" : "#/components/schemas/throughput"
+          }
+        },
+        "description" : "云硬盘详情。",
+        "type" : "object"
+      },
+      "Link" : {
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "description" : "对应的快捷链接。"
+          },
+          "rel" : {
+            "type" : "string",
+            "description" : "快捷链接标记名称。"
+          }
+        },
+        "description" : "云硬盘uri自描述信息。",
+        "type" : "object"
+      },
+      "iops" : {
+        "required" : [ "frozened", "id", "total_val" ],
+        "properties" : {
+          "frozened" : {
+            "type" : "boolean",
+            "description" : "冻结标签。",
+            "default" : false
+          },
+          "id" : {
+            "type" : "string",
+            "example" : "IOPS-0e312.731a9981-da80-4d3d-87af-92ecdb678e8b",
+            "description" : "云硬盘iops标识。"
+          },
+          "total_val" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 3000,
+            "description" : "iops大小。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Attachment" : {
+        "required" : [ "attached_at", "attachment_id", "device", "host_name", "id", "server_id", "volume_id" ],
+        "properties" : {
+          "attached_at" : {
+            "type" : "string",
+            "description" : "挂载的时间信息。"
+          },
+          "attachment_id" : {
+            "type" : "string",
+            "description" : "挂载信息对应的ID。"
+          },
+          "device" : {
+            "type" : "string",
+            "description" : "挂载点。"
+          },
+          "host_name" : {
+            "type" : "string",
+            "description" : "云硬盘挂载到的云服务器对应的物理主机的名称。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "挂载的资源ID。"
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "云硬盘挂载到的云服务器的 ID。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          }
+        },
+        "description" : "云硬盘挂载信息。",
+        "type" : "object"
+      },
+      "throughput" : {
+        "required" : [ "frozened", "id", "total_val" ],
+        "properties" : {
+          "frozened" : {
+            "type" : "boolean",
+            "description" : "冻结标签。",
+            "default" : false
+          },
+          "id" : {
+            "type" : "string",
+            "example" : "MiBps-7151.731a9981-da80-4d3d-87af-92ecdb678e8b",
+            "description" : "云硬盘吞吐量标识。"
+          },
+          "total_val" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 300,
+            "description" : "吞吐量大小。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "MediaTypes" : {
+        "required" : [ "base", "type" ],
+        "properties" : {
+          "base" : {
+            "type" : "string",
+            "description" : "文本类型"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "返回类型"
+          }
+        },
+        "description" : "接口版本的请求消息类型信息",
+        "type" : "object"
+      },
+      "Versions" : {
+        "required" : [ "id", "links", "media-types", "status", "updated", "version" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "接口版本的ID"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "接口版本信息的URI描述信息",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "media-types" : {
+            "type" : "array",
+            "description" : "接口版本的请求消息类型信息",
+            "items" : {
+              "$ref" : "#/components/schemas/MediaTypes"
+            }
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "接口版本的最小版本号"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "接口版本的状态"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "接口版本更新时间"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "接口版本的版本号信息"
+          }
+        },
+        "description" : "版本信息结构体",
+        "type" : "object"
+      },
+      "ShowVersionResponseBody" : {
+        "required" : [ "versions" ],
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "版本信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/Versions"
+            }
+          }
+        },
+        "description" : "版本号信息。",
+        "type" : "object"
+      },
+      "VolumeTransferSummary" : {
+        "required" : [ "id", "links", "name", "volume_id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘过户记录的链接",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的名称"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          }
+        },
+        "type" : "object"
+      },
+      "CinderListVolumeTransfersResponseBody" : {
+        "required" : [ "transfers" ],
+        "properties" : {
+          "transfers" : {
+            "type" : "array",
+            "description" : "云硬盘过户记录列表概要,请参见•[transfers参数说明](https://support.huaweicloud.com/api-evs/evs_04_2110.html#evs_04_2110__li6113282511345)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/VolumeTransferSummary"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CreateVolumeTransferOption" : {
+        "required" : [ "name", "volume_id" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的名称。最大支持255个字节。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          }
+        },
+        "type" : "object"
+      },
+      "CinderCreateVolumeTransferResponseBody" : {
+        "required" : [ "transfer" ],
+        "properties" : {
+          "transfer" : {
+            "description" : "云硬盘过户信息,请参见•[transfer参数说明](https://support.huaweicloud.com/api-evs/evs_04_3069.html#evs_04_3069__evs_04_2106_li32419762111447)。",
+            "$ref" : "#/components/schemas/CreateVolumeTransferDetail"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CinderCreateVolumeTransferRequestBody" : {
+        "required" : [ "transfer" ],
+        "properties" : {
+          "transfer" : {
+            "example" : "{ \"transfer\": { \"volume_id\": \"c86b9af4-151d-4ead-b62c-5fb967af0e37\", \"name\": \"first volume\" } }",
+            "description" : "标记创建云硬盘过户操作",
+            "$ref" : "#/components/schemas/CreateVolumeTransferOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "CreateVolumeTransferDetail" : {
+        "required" : [ "auth_key", "created_at", "id", "links", "name", "volume_id" ],
+        "properties" : {
+          "auth_key" : {
+            "type" : "string",
+            "description" : "云硬盘过户的身份认证密钥。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的创建时间。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘过户记录的链接。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的名称。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          }
+        },
+        "type" : "object"
+      },
+      "ZoneState" : {
+        "properties" : {
+          "available" : {
+            "type" : "boolean",
+            "description" : "可用分区是否可用。"
+          }
+        },
+        "description" : "可用分区的状态。",
+        "type" : "object"
+      },
+      "CinderListAvailabilityZonesResponseBody" : {
+        "required" : [ "availabilityZoneInfo" ],
+        "properties" : {
+          "availabilityZoneInfo" : {
+            "type" : "array",
+            "description" : "查询请求返回的可用分区列表,请参见• [availabilityZoneInfo参数说明](https://support.huaweicloud.com/api-evs/evs_04_2081.html#evs_04_2081__li19751007201910)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/AzInfo"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "AzInfo" : {
+        "required" : [ "zoneName", "zoneState" ],
+        "properties" : {
+          "zoneName" : {
+            "type" : "string",
+            "description" : "可用分区的名字。"
+          },
+          "zoneState" : {
+            "description" : "可用分区的状态,请参见•[zoneState参数说明](https://support.huaweicloud.com/api-evs/evs_04_2081.html#evs_04_2081__li11149334112511)。",
+            "$ref" : "#/components/schemas/ZoneState"
+          }
+        },
+        "description" : "一个az对象",
+        "type" : "object"
+      },
+      "VolumeTransfer" : {
+        "required" : [ "created_at", "id", "links", "name", "volume_id" ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的创建时间。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘过户记录的链接。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘过户记录的名称。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          }
+        },
+        "type" : "object"
+      },
+      "CinderShowVolumeTransferResponseBody" : {
+        "required" : [ "transfer" ],
+        "properties" : {
+          "transfer" : {
+            "description" : "云硬盘过户记录详情,请参见•[transfer参数说明](https://support.huaweicloud.com/api-evs/evs_04_3072.html#evs_04_3072__evs_04_2109_li61468331112723)。",
+            "$ref" : "#/components/schemas/VolumeTransfer"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ListSnapshotsResponseBody" : {
+        "required" : [ "count" ],
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "快照的总数量,不受limi参数的影响。"
+          },
+          "snapshots" : {
+            "type" : "array",
+            "description" : "快照信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/SnapshotList"
+            }
+          },
+          "snapshots_links" : {
+            "type" : "array",
+            "description" : "云硬盘快照列表查询位置标记。当查询时指定limit时会返回该字段,返回该字段表示本次查询只查出了部分云硬盘快照信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          }
+        },
+        "description" : "快照列表信息。",
+        "type" : "object"
+      },
+      "SnapshotList" : {
+        "required" : [ "created_at", "id", "os-extended-snapshot-attributes:progress", "os-extended-snapshot-attributes:project_id", "service_type", "size", "status", "volume_id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘快照ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "云硬盘快照的状态。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘快照名称。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘快照描述信息。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘快照创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "云硬盘快照更新时间。"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "云硬盘快照的元数据信息。",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "快照所属的云硬盘。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘快照大小。"
+          },
+          "os-extended-snapshot-attributes:project_id" : {
+            "type" : "string",
+            "description" : "项目ID。"
+          },
+          "os-extended-snapshot-attributes:progress" : {
+            "type" : "string",
+            "description" : "快照进度。"
+          },
+          "dedicated_storage_id" : {
+            "type" : "string",
+            "description" : "专属存储ID。"
+          },
+          "dedicated_storage_name" : {
+            "type" : "string",
+            "description" : "专属存储名称。"
+          },
+          "service_type" : {
+            "type" : "string",
+            "description" : "服务类型。"
+          }
+        },
+        "description" : "快照列表信息。",
+        "type" : "object"
+      },
+      "BssParamForResizeVolume" : {
+        "properties" : {
+          "isAutoPay" : {
+            "type" : "string",
+            "description" : "功能说明:是否立即支付。该参数只有在云硬盘为包周期的情况下有意义。默认值为false",
+            "enum" : [ "false", "true" ],
+            "default" : "false"
+          }
+        },
+        "description" : "包周期扩容计费策略参数。",
+        "type" : "object"
+      },
+      "OsExtend" : {
+        "required" : [ "new_size" ],
+        "properties" : {
+          "new_size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "扩容后的云硬盘大小,单位为GB。扩容的大小必须大于原有云硬盘容量且小于云硬盘最大容量。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ResizeVolumeRequestBody" : {
+        "required" : [ "os-extend" ],
+        "properties" : {
+          "bssParam" : {
+            "example" : "{         \"chargingMode\": \"prePaid\",          \"isAutoPay\": \"true\"     }",
+            "description" : "按需和包周期的扩展参数。",
+            "$ref" : "#/components/schemas/BssParamForResizeVolume"
+          },
+          "os-extend" : {
+            "example" : "{        \"new_size\": 100    }",
+            "description" : "标记扩容云硬盘操作。",
+            "$ref" : "#/components/schemas/OsExtend"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ResizeVolumeResponseBody" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID,云硬盘为按需计费时返回该参数。"
+          },
+          "order_id" : {
+            "type" : "string",
+            "description" : "订单ID,云硬盘为包周期计费时返回该参数。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "TagsForListVolumes" : {
+        "required" : [ "key", "values" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "标签键。"
+          },
+          "values" : {
+            "type" : "array",
+            "description" : "标签值。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "VolumeDetailForTag" : {
+        "required" : [ "attachments", "availability_zone", "bootable", "created_at", "description", "id", "links", "metadata", "multiattach", "name", "os-vol-host-attr:host", "os-vol-mig-status-attr:migstat", "os-vol-mig-status-attr:name_id", "os-vol-tenant-attr:tenant_id", "os-volume-replication:extended_status", "replication_status", "service_type", "shareable", "size", "snapshot_id", "status", "tags", "updated_at", "user_id", "volume_image_metadata", "volume_type" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘的ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘URI自描述信息。请参见 [links参数说明](https://support.huaweicloud.com/api-evs/evs_04_2006.html#evs_04_2006__evs_04_2010_li1077125119136)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘名称。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "云硬盘状态,请参见[云硬盘状态](https://support.huaweicloud.com/api-evs/evs_04_0040.html)。"
+          },
+          "attachments" : {
+            "type" : "array",
+            "description" : "云硬盘的挂载信息,请参见•[attachments参数说明](https://support.huaweicloud.com/api-evs/evs_04_2006.html#evs_04_2006__evs_04_2010_li12430153610291)。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Attachment"
+            }
+          },
+          "availability_zone" : {
+            "type" : "string",
+            "description" : "云硬盘所属的AZ信息。"
+          },
+          "os-vol-host-attr:host" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "source_volid" : {
+            "type" : "string",
+            "description" : "源云硬盘ID,如果是从源云硬盘创建,则有值。"
+          },
+          "snapshot_id" : {
+            "type" : "string",
+            "description" : "快照ID,如果是从快照创建,则有值。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘描述。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘创建时间。"
+          },
+          "os-vol-tenant-attr:tenant_id" : {
+            "type" : "string",
+            "description" : "云硬盘所属的租户ID。租户ID就是项目ID。"
+          },
+          "volume_image_metadata" : {
+            "type" : "object",
+            "description" : "云硬盘镜像的元数据。",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : ""
+            }
+          },
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘类型。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘大小,单位为GB。"
+          },
+          "consistencygroup_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "bootable" : {
+            "type" : "string",
+            "description" : "是否为启动云硬盘。"
+          },
+          "metadata" : {
+            "description" : "云硬盘的元数据。请参见•[metadata参数说明](https://support.huaweicloud.com/api-evs/evs_04_2006.html#evs_04_2006__evs_04_2010_li29114110314)。",
+            "$ref" : "#/components/schemas/VolumeMetadata"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "云硬盘更新时间。"
+          },
+          "encrypted" : {
+            "type" : "boolean",
+            "description" : "当前云硬盘服务不支持该字段。"
+          },
+          "replication_status" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-volume-replication:extended_status" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vol-mig-status-attr:migstat" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vol-mig-status-attr:name_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "shareable" : {
+            "type" : "boolean",
+            "description" : "是否为共享云硬盘。true为共享盘,false为普通云硬盘。"
+          },
+          "user_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "service_type" : {
+            "type" : "string",
+            "description" : "服务类型,结果为EVS、DSS、DESS。"
+          },
+          "multiattach" : {
+            "type" : "boolean",
+            "description" : "是否为共享云硬盘。"
+          },
+          "dedicated_storage_id" : {
+            "type" : "string",
+            "description" : "云硬盘所属的专属存储池ID。"
+          },
+          "dedicated_storage_name" : {
+            "type" : "string",
+            "description" : "云硬盘所属的专属存储池的名称。"
+          },
+          "tags" : {
+            "type" : "object",
+            "description" : "云硬盘的标签。",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "wwn" : {
+            "type" : "string",
+            "description" : "云硬盘挂载时的唯一标识。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "云硬盘上绑定的企业项目ID。"
+          }
+        },
+        "description" : "云硬盘详情。",
+        "type" : "object"
+      },
+      "VolumeMetadata" : {
+        "properties" : {
+          "__system__cmkid" : {
+            "type" : "string",
+            "description" : "metadata中的加密cmkid字段,与__system__encrypted配合表示需要加密,cmkid长度固定为36个字节。"
+          },
+          "__system__encrypted" : {
+            "type" : "string",
+            "description" : "metadata中的表示加密功能的字段,0代表不加密,1代表加密。"
+          },
+          "full_clone" : {
+            "type" : "string",
+            "description" : "从快照创建云硬盘时的创建方式。"
+          },
+          "hw:passthrough" : {
+            "type" : "string",
+            "description" : "* true表示云硬盘的设备类型为SCSI类型,即允许ECS操作系统直接访问底层存储介质。支持SCSI锁命令。"
+          },
+          "orderID" : {
+            "type" : "string",
+            "description" : "metadata中的表示云硬盘计费类型的字段。"
+          }
+        },
+        "description" : "云硬盘的元数据。",
+        "type" : "object"
+      },
+      "ListVolumesByTagsResponseBody" : {
+        "properties" : {
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "符合查询条件的云硬盘资源个数"
+          },
+          "resources" : {
+            "type" : "array",
+            "description" : "符合查询条件的资源列表",
+            "items" : {
+              "$ref" : "#/components/schemas/Resource"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Resource" : {
+        "required" : [ "resource_detail", "resource_id", "tags" ],
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "description" : "资源ID。"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "description" : "资源名称。"
+          },
+          "resource_detail" : {
+            "description" : "资源详情。",
+            "$ref" : "#/components/schemas/VolumeDetailForTag"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "标签列表。",
+            "items" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Match" : {
+        "required" : [ "key", "value" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "键。取值范围如下:",
+            "enum" : [ "resource_name", "service_type" ]
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "值。最大长度255个字符。"
+          }
+        },
+        "type" : "object"
+      },
+      "ListVolumesByTagsRequestBody" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "example" : "filter",
+            "description" : "操作标识。",
+            "enum" : [ "filter" ],
+            "default" : "filter"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "查询记录数。最小值1,最大值1000,默认为1000。返回的结果中记录数不超过limit值",
+            "minimum" : 1,
+            "maximum" : 1000,
+            "default" : 1000
+          },
+          "matches" : {
+            "type" : "array",
+            "example" : "\"[ { \\\"key\\\": \\\"resource_name\\\", \\\"value\\\": \\\"resource1\\\" }, { \\\"key\\\": \\\"service_type\\\", \\\"value\\\": \\\"EVS\\\" } ]\"",
+            "description" : "资源本身支持的查询条件。标签列表中的标签key值不允许重复。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Match"
+            }
+          },
+          "offset" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "索引位置。最小值0,默认为0。返回的结果中第一条记录为符合查询条件的第“offset值+1”条记录",
+            "default" : 0
+          },
+          "tags" : {
+            "type" : "array",
+            "example" : "\"[ { \\\"key\\\": \\\"key1\\\", \\\"values\\\": [ \\\"value1\\\", \\\"value2\\\" ] } ]\"",
+            "description" : "标签的键值对。标签列表中最多包含10个key 。标签列表中的标签key值不允许重复。标签列表中多个key之间是“与”的关系,云硬盘必须满足请求中所有key才会匹配出来。",
+            "items" : {
+              "$ref" : "#/components/schemas/TagsForListVolumes"
+            }
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "DeleteVolumeResponseBody" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "正常返回时返回的任务ID。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "UpdateVolumeResponseBody" : {
+        "required" : [ "availability_zone", "created_at", "id", "metadata", "multiattach", "name", "os-vol-host-attr:host", "os-vol-tenant-attr:tenant_id", "shareable", "size", "status", "volume_type" ],
+        "properties" : {
+          "attachments" : {
+            "type" : "array",
+            "description" : "是否挂载信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/Attachment"
+            }
+          },
+          "availability_zone" : {
+            "type" : "string",
+            "description" : "云硬盘所属AZ。"
+          },
+          "bootable" : {
+            "type" : "string",
+            "description" : "是否为可启动云硬盘。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建云硬盘的时间。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘ID。"
+          },
+          "links" : {
+            "type" : "array",
+            "description" : "云硬盘uri自描述信息",
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
+            }
+          },
+          "metadata" : {
+            "description" : "云硬盘的元数据。",
+            "$ref" : "#/components/schemas/VolumeMetadata"
+          },
+          "multiattach" : {
+            "type" : "boolean",
+            "description" : "是否为可共享云硬盘。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘名称"
+          },
+          "os-vol-host-attr:host" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vol-tenant-attr:tenant_id" : {
+            "type" : "string",
+            "description" : "云硬盘所属的项目ID。"
+          },
+          "shareable" : {
+            "type" : "string",
+            "description" : "是否为共享云硬盘。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘大小。"
+          },
+          "snapshot_id" : {
+            "type" : "string",
+            "description" : "快照ID。"
+          },
+          "source_volid" : {
+            "type" : "string",
+            "description" : "预留字段。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "云硬盘状态。"
+          },
+          "volume_image_metadata" : {
+            "type" : "object",
+            "description" : "云硬盘镜像的元数据。"
+          },
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘类型。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘描述。"
+          },
+          "os-volume-replication:extended_status" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          }
+        },
+        "description" : "云硬盘响应详情",
+        "type" : "object"
+      },
+      "UpdateVolumeOption" : {
+        "properties" : {
+          "description" : {
+            "type" : "string",
+            "description" : "新的云硬盘的描述,name和description不能同时为null。最大支持255个字节。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "新的云硬盘的名字,name和description不能同时为null。最大支持255个字节。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "UpdateVolumeRequestBody" : {
+        "required" : [ "volume" ],
+        "properties" : {
+          "volume" : {
+            "example" : "{        \"name\": \"test_volume\",         \"description\": \"test\"    }",
+            "description" : "待修改的云硬盘信息",
+            "$ref" : "#/components/schemas/UpdateVolumeOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "UnsubscribeVolumeResponseBody" : {
+        "type" : "object",
+        "required" : [ "results" ],
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "description" : "退订包周期云硬盘的结果。",
+            "items" : {
+              "$ref" : "#/components/schemas/UnsubscribeVolume"
+            }
+          }
+        },
+        "description" : "退订包周期云硬盘的响应body体"
+      },
+      "UnsubscribeVolume" : {
+        "type" : "object",
+        "required" : [ "result", "volume_id" ],
+        "properties" : {
+          "volume_id" : {
+            "type" : "string",
+            "example" : "8739ca48-1b86-46aa-9059-38623ee1346c",
+            "description" : "卷id对应的结果"
+          },
+          "order_id" : {
+            "type" : "string",
+            "example" : "CS23021116385NAOR",
+            "description" : "卷id对应的退订订单id,如果是已到期的云硬盘退订,则不显示此字段。"
+          },
+          "result" : {
+            "type" : "string",
+            "example" : "SUCCESS",
+            "description" : "volume_id对应的退订结果,只有SUCCESS 和 FAIL两种结果。"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "example" : "INTERNAL ERROR",
+            "description" : "当result为FAIL时,此字段显示具体的失败原因。 result为SUCCESS时,不显示此字段。"
+          }
+        },
+        "description" : "包周期云硬盘退订的结果"
+      },
+      "UnsubscribeVolumeRequestBody" : {
+        "type" : "object",
+        "required" : [ "volume_ids" ],
+        "properties" : {
+          "volume_ids" : {
+            "type" : "array",
+            "description" : "退订包周期云硬盘的结果。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "description" : "退订包周期云硬盘的请求body体"
+      },
+      "BatchCreateVolumeTagsRequestBody" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "example" : "create",
+            "description" : "操作标识,当前支持的取值如下:",
+            "enum" : [ "create" ],
+            "default" : "create"
+          },
+          "tags" : {
+            "type" : "array",
+            "example" : "\"[{ \\\"key\\\": \\\"key1\\\", \\\"value\\\": \\\"value1\\\"},{\\\"key\\\": \\\"key2\\\",\\\"value\\\": \\\"value3\\\"}]\"",
+            "description" : "标签列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Tag"
+            }
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "SubJob" : {
+        "required" : [ "begin_time", "end_time", "entities", "error_code", "fail_reason", "job_id", "job_type", "status" ],
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "子job的状态。SUCCESS:成功。RUNNING:运行中。FAIL:失败。INIT:正在初始化。",
+            "enum" : [ "SUCCESS", "RUNNING", "FAIL", "INIT" ]
+          },
+          "entities" : {
+            "description" : "子job的响应信息。",
+            "$ref" : "#/components/schemas/SubJobEntities"
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "子job的ID。"
+          },
+          "job_type" : {
+            "type" : "string",
+            "description" : "子job的类型。createVolume:创建单个云硬盘。batchCreateVolume:批量创建云硬盘。deleteVolume:删除单个云硬盘。extendVolume:扩容云硬盘。bulkDeleteVolume:批量删除云硬盘。deleteSingleVolume:批量删除时逐个删除单个云硬盘。retypeVolume:对云硬盘做硬盘类型变更。"
+          },
+          "begin_time" : {
+            "type" : "string",
+            "description" : "开始时间。"
+          },
+          "end_time" : {
+            "type" : "string",
+            "description" : "结束时间。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "子job执行失败时的错误码。"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "description" : "子job执行失败时的错误原因。"
+          }
+        },
+        "description" : "子Job的详细信息。",
+        "type" : "object"
+      },
+      "ShowJobResponseBody" : {
+        "required" : [ "begin_time", "end_time", "entities", "error_code", "fail_reason", "job_id", "job_type", "status" ],
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "job的状态。SUCCESS:成功。RUNNING:运行中。FAIL:失败。INIT:正在初始化。",
+            "enum" : [ "SUCCESS", "RUNNING", "FAIL", "INIT" ]
+          },
+          "entities" : {
+            "description" : "job的响应信息。",
+            "$ref" : "#/components/schemas/JobEntities"
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "job的ID。"
+          },
+          "job_type" : {
+            "type" : "string",
+            "description" : "job的类型。createVolume:创建单个云硬盘。batchCreateVolume:批量创建云硬盘。deleteVolume:删除单个云硬盘。extendVolume:扩容云硬盘。bulkDeleteVolume:批量删除云硬盘。deleteSingleVolume:批量删除时逐个删除单个云硬盘。retypeVolume:对云硬盘做硬盘类型变更。"
+          },
+          "begin_time" : {
+            "type" : "string",
+            "description" : "开始时间。"
+          },
+          "end_time" : {
+            "type" : "string",
+            "description" : "结束时间。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "job执行失败时的错误码。"
+          },
+          "fail_reason" : {
+            "type" : "string",
+            "description" : "job执行失败时的错误原因。"
+          }
+        },
+        "description" : "Job信息。",
+        "type" : "object"
+      },
+      "JobEntities" : {
+        "properties" : {
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘的类型。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘的容量,单位为GB。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘的名称。"
+          },
+          "sub_jobs" : {
+            "type" : "array",
+            "description" : "子Job的信息。当存在子Job信息时,entities中的其他字段将不会返回。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/SubJob"
+            }
+          }
+        },
+        "description" : "Job的响应信息。",
+        "type" : "object"
+      },
+      "SubJobEntities" : {
+        "properties" : {
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘的类型。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘的容量,单位为GB。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "云硬盘的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘的名称。"
+          }
+        },
+        "description" : "子Job的响应信息。",
+        "type" : "object"
+      },
+      "ModifyVolumeQoSOption" : {
+        "required" : [ "iops" ],
+        "properties" : {
+          "iops" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "修改后的云硬盘iops,只支持GPSSD2、ESSD2类型的云硬盘。"
+          },
+          "throughput" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "修改后的云硬盘吞吐量,单位是MiB/s,GPSSD2类型云盘必须填写,其他类型不能填写。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "JobResponseBody" : {
+        "required" : [ "job_id" ],
+        "properties" : {
+          "job_id" : {
+            "type" : "string"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ModifyVolumeQoSRequestBody" : {
+        "required" : [ "qos_modify" ],
+        "properties" : {
+          "qos_modify" : {
+            "description" : "标记修改云硬盘QoS操作。",
+            "$ref" : "#/components/schemas/ModifyVolumeQoSOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "CreateVolumeOption" : {
+        "required" : [ "availability_zone", "volume_type", "size" ],
+        "properties" : {
+          "availability_zone" : {
+            "type" : "string",
+            "description" : "指定要创建云硬盘的可用区。"
+          },
+          "backup_id" : {
+            "type" : "string",
+            "description" : "备份ID,从备份创建云硬盘时为必选。"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "批量创云硬盘的个数。如果无该参数,表明只创建1个云硬盘,目前最多支持批量创建100个。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘的描述。最大支持255个字节。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID。创建云硬盘时,给云硬盘绑定企业项目ID。"
+          },
+          "imageRef" : {
+            "type" : "string",
+            "description" : "镜像ID,指定该参数表示创建云硬盘方式为从镜像创建云硬盘。"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "创建云硬盘的metadata信息  ",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "multiattach" : {
+            "type" : "boolean",
+            "description" : "是否为共享云硬盘。true为共享盘,false为普通云硬盘。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘名称。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘大小,单位为GB,其限制如下:"
+          },
+          "snapshot_id" : {
+            "type" : "string",
+            "description" : "快照ID,指定该参数表示创建云硬盘方式为从快照创建云硬盘"
+          },
+          "volume_type" : {
+            "type" : "string",
+            "description" : "云硬盘类型。",
+            "enum" : [ "SSD", "GPSSD", "SAS", "SATA", "ESSD", "GPSSD2", "ESSD2" ]
+          },
+          "tags" : {
+            "type" : "object",
+            "description" : "云硬盘标签信息。",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : ""
+            }
+          },
+          "iops" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "给云硬盘配置iops,购买GPSSD2、ESSD2类型的云硬盘时必填,其他类型不能设置。"
+          },
+          "throughput" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "给云硬盘配置吞吐量,单位是MiB/s,购买GPSSD2类型云盘时必填,其他类型不能设置。"
+          }
+        },
+        "description" : "创建云硬盘的信息。",
+        "type" : "object"
+      },
+      "BssParamForCreateVolume" : {
+        "properties" : {
+          "chargingMode" : {
+            "type" : "string",
+            "description" : "功能说明:计费模式。默认值为postPaid。",
+            "enum" : [ "postPaid", "prePaid" ],
+            "default" : "postPaid"
+          },
+          "isAutoPay" : {
+            "type" : "string",
+            "description" : "功能说明:是否立即支付。chargingMode为PrePaid时该参数会生效。默认值为false。",
+            "enum" : [ "true", "false" ],
+            "default" : "false"
+          },
+          "isAutoRenew" : {
+            "type" : "string",
+            "description" : "功能说明:是否自动续订。chargingMode为prePaid时该参数会生效。默认值为false。",
+            "enum" : [ "true", "false" ],
+            "default" : "false"
+          },
+          "periodNum" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "功能说明:订购周期数,chargingMode为prePaid时该参数会生效,并且该参数为为必选。"
+          },
+          "periodType" : {
+            "type" : "string",
+            "description" : "功能说明:订购周期单位。chargingMode为prePaid时该参数会生效,并且该参数为必选。",
+            "enum" : [ "month", "year" ]
+          }
+        },
+        "description" : "包周期创卷的计费策略参数。",
+        "type" : "object"
+      },
+      "CreateVolumeSchedulerHints" : {
+        "properties" : {
+          "dedicated_storage_id" : {
+            "type" : "string",
+            "description" : "指定专属存储池ID,表示将云硬盘创建在该ID对应的存储池中。"
+          }
+        },
+        "description" : "创建云硬盘的调度参数。",
+        "type" : "object"
+      },
+      "CreateVolumeResponseBody" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "任务ID,云硬盘为按需计费时返回该参数。"
+          },
+          "order_id" : {
+            "type" : "string",
+            "description" : "订单ID,云硬盘为包周期计费时返回该参数。"
+          },
+          "volume_ids" : {
+            "type" : "array",
+            "description" : "待创建的云硬盘ID列表。",
+            "items" : {
+              "type" : "string",
+              "description" : ""
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CreateVolumeRequestBody" : {
+        "required" : [ "volume" ],
+        "properties" : {
+          "bssParam" : {
+            "example" : "{        \"chargingMode\": \"prePaid\",         \"periodType\": \"year\",         \"periodNum\": 1,         \"isAutoPay\": \"true\",         \"isAutoRenew\": \"true\"    }",
+            "description" : "按需和包周期的扩展参数",
+            "$ref" : "#/components/schemas/BssParamForCreateVolume"
+          },
+          "volume" : {
+            "example" : "{        \"name\": \"test_volume_3\",         \"availability_zone\": \"az1.dc1\",         \"volume_type\": \"SATA\",         \"size\": 120,         \"description\": \"hehehe\",         \"multiattach\": true,         \"count\": 1    }",
+            "description" : "待创建的云硬盘信息",
+            "$ref" : "#/components/schemas/CreateVolumeOption"
+          },
+          "server_id" : {
+            "type" : "string",
+            "description" : "创建云硬盘并挂载到目标虚拟机。"
+          },
+          "OS-SCH-HNT:scheduler_hints" : {
+            "description" : "云硬盘调度参数,可用于指定云硬盘创建到某个专属存储池中",
+            "$ref" : "#/components/schemas/CreateVolumeSchedulerHints"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshotsGPSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "GPSSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumesSATA" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SATA云硬盘类型预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshotsSAS" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SAS类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetail" : {
+        "required" : [ "in_use", "limit", "reserved" ],
+        "properties" : {
+          "in_use" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已使用的数量。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "最大的数量。"
+          },
+          "reserved" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "预留属性。"
+          }
+        },
+        "description" : "配额详细信息。",
+        "type" : "object"
+      },
+      "QuotaList" : {
+        "required" : [ "backup_gigabytes", "backups", "gigabytes", "id", "snapshots", "volumes" ],
+        "properties" : {
+          "backup_gigabytes" : {
+            "description" : "备份容量,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailBackupGigabytes"
+          },
+          "backups" : {
+            "description" : "备份个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailBackups"
+          },
+          "gigabytes" : {
+            "description" : "总容量,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytes"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "项目ID。"
+          },
+          "snapshots" : {
+            "description" : "快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshots"
+          },
+          "volumes" : {
+            "description" : "云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumes"
+          },
+          "gigabytes_SATA" : {
+            "description" : "SATA云硬盘类型预留的容量大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytesSATA"
+          },
+          "snapshots_SATA" : {
+            "description" : "SATA云硬盘类型预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshotsSATA"
+          },
+          "volumes_SATA" : {
+            "description" : "SATA云硬盘类型预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumesSATA"
+          },
+          "gigabytes_SAS" : {
+            "description" : "SAS类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytesSAS"
+          },
+          "snapshots_SAS" : {
+            "description" : "SAS类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshotsSAS"
+          },
+          "volumes_SAS" : {
+            "description" : "SAS类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumesSAS"
+          },
+          "gigabytes_SSD" : {
+            "description" : "SSD类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytesSSD"
+          },
+          "snapshots_SSD" : {
+            "description" : "SSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshotsSSD"
+          },
+          "volumes_SSD" : {
+            "description" : "SSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumesSSD"
+          },
+          "gigabytes_ESSD" : {
+            "description" : "ESSD类型云硬盘预留的size大小,单位为GiB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytesESSD"
+          },
+          "snapshots_ESSD" : {
+            "description" : "ESSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshotsESSD"
+          },
+          "volumes_ESSD" : {
+            "description" : "ESSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumesESSD"
+          },
+          "gigabytes_GPSSD" : {
+            "description" : "GPSSD类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailGigabytesGPSSD"
+          },
+          "snapshots_GPSSD" : {
+            "description" : "GPSSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailSnapshotsGPSSD"
+          },
+          "volumes_GPSSD" : {
+            "description" : "GPSSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailVolumesGPSSD"
+          },
+          "per_volume_gigabytes" : {
+            "description" : "每个云硬盘的容量配额限制。键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+            "$ref" : "#/components/schemas/QuotaDetailPerVolumeGigabytes"
+          }
+        },
+        "description" : "配额信息。",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshotsESSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "ESSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytesESSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "ESSD类型云硬盘预留的size大小,单位为GiB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumesSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "CinderListQuotasResponseBody" : {
+        "required" : [ "quota_set" ],
+        "properties" : {
+          "quota_set" : {
+            "description" : "查询请求返回的配额信息,请参见• [quota_set参数说明](https://support.huaweicloud.com/api-evs/evs_04_2073.html#evs_04_2073__li4741865201620)。",
+            "$ref" : "#/components/schemas/QuotaList"
+          }
+        },
+        "description" : "配额信息。",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshots" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytesSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SSD类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytesGPSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "GPSSD类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytes" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "总容量,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshotsSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SSD类型云硬盘预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailPerVolumeGigabytes" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "每个云硬盘的容量配额限制。键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailSnapshotsSATA" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SATA云硬盘类型预留快照个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytesSATA" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SATA云硬盘类型预留的容量大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumesESSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "ESSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumes" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumesSAS" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SAS类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailBackupGigabytes" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "备份容量,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailBackups" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "备份个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailVolumesGPSSD" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "GPSSD类型云硬盘预留的云硬盘个数,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "QuotaDetailGigabytesSAS" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/QuotaDetail"
+        } ],
+        "description" : "SAS类型云硬盘预留的size大小,单位为GB,键值对,包含:reserved(预留)、limit(最大)和in_use(已使用)。",
+        "type" : "object"
+      },
+      "VolumeTypeExtraSpecs" : {
+        "properties" : {
+          "RESKEY:availability_zones" : {
+            "type" : "string",
+            "description" : "支持当前云硬盘类型的可用区列表,列表的元素以逗号分隔。"
+          },
+          "availability-zone" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-vendor-extended:sold_out_availability_zones" : {
+            "type" : "string",
+            "description" : "当前云硬盘类型已售罄的可用区列表,列表的元素以逗号分隔。"
+          },
+          "volume_backend_name" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "HW:availability_zone" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          }
+        },
+        "description" : "云硬盘类型的规格",
+        "type" : "object"
+      },
+      "CinderListVolumeTypesResponseBody" : {
+        "required" : [ "volume_types" ],
+        "properties" : {
+          "volume_types" : {
+            "type" : "array",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/VolumeType"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "VolumeType" : {
+        "required" : [ "id", "name" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘类型的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘类型名称。"
+          },
+          "extra_specs" : {
+            "description" : "云硬盘类型的规格,请参见•[extra_specs参数说明](https://support.huaweicloud.com/api-evs/evs_04_2072.html#evs_04_2072__li1957456185414)。",
+            "$ref" : "#/components/schemas/VolumeTypeExtraSpecs"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘类型的描述信息。"
+          },
+          "qos_specs_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "is_public" : {
+            "type" : "boolean",
+            "description" : "预留属性。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateSnapshotResponseBody" : {
+        "required" : [ "snapshot" ],
+        "properties" : {
+          "snapshot" : {
+            "description" : "快照信息",
+            "$ref" : "#/components/schemas/SnapshotDetails"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CreateSnapshotOption" : {
+        "required" : [ "volume_id" ],
+        "properties" : {
+          "volume_id" : {
+            "type" : "string",
+            "description" : "源云硬盘的ID。"
+          },
+          "force" : {
+            "type" : "boolean",
+            "description" : "强制创快照标示,默认为false。"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "云硬盘快照的元数据信息。",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘快照描述,最大支持255个字节。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘快照名称。最大支持255个字节。",
+            "minLength" : 0,
+            "maxLength" : 255
+          }
+        },
+        "description" : "快照信息。",
+        "type" : "object"
+      },
+      "CreateSnapshotRequestBody" : {
+        "required" : [ "snapshot" ],
+        "properties" : {
+          "snapshot" : {
+            "description" : "快照信息。",
+            "$ref" : "#/components/schemas/CreateSnapshotOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "SnapshotDetails" : {
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "云硬盘快照ID。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "云硬盘快照状态。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "云硬盘快照名称。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "云硬盘快照描述信息。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "云硬盘快照创建时间。"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "快照更新时间。"
+          },
+          "metadata" : {
+            "type" : "object",
+            "description" : "云硬盘快照的元数据信息。"
+          },
+          "volume_id" : {
+            "type" : "string",
+            "description" : "快照所属的云硬盘ID。"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "云硬盘快照大小,单位为GB。"
+          },
+          "os-extended-snapshot-attributes:project_id" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          },
+          "os-extended-snapshot-attributes:progress" : {
+            "type" : "string",
+            "description" : "预留属性。"
+          }
+        },
+        "description" : "快照详情。",
+        "type" : "object"
+      },
+      "CinderAcceptVolumeTransferOption" : {
+        "required" : [ "auth_key" ],
+        "properties" : {
+          "auth_key" : {
+            "type" : "string",
+            "description" : "云硬盘过户的身份认证密钥。"
+          }
+        },
+        "description" : "标记接受云硬盘过户操作。",
+        "type" : "object"
+      },
+      "CinderAcceptVolumeTransferResponseBody" : {
+        "properties" : {
+          "transfer" : {
+            "description" : "云硬盘过户信息,请参见•[transfer参数说明](https://support.huaweicloud.com/api-evs/evs_04_2107.html#evs_04_2107__li12496189111714)。",
+            "$ref" : "#/components/schemas/VolumeTransferSummary"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "CinderAcceptVolumeTransferRequestBody" : {
+        "required" : [ "accept" ],
+        "properties" : {
+          "accept" : {
+            "example" : "{ \"accept\": { \"auth_key\": \"9266c59563c84664\" } }",
+            "description" : "标记接受云硬盘过户操作",
+            "$ref" : "#/components/schemas/CinderAcceptVolumeTransferOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ShowVolumeResponseBody" : {
+        "required" : [ "volume" ],
+        "properties" : {
+          "volume" : {
+            "description" : "云硬盘详情。",
+            "$ref" : "#/components/schemas/VolumeDetail"
+          }
+        },
+        "description" : "单个云硬盘的信息。",
+        "type" : "object"
+      },
+      "ShowSnapshotResponseBody" : {
+        "required" : [ "snapshot" ],
+        "properties" : {
+          "snapshot" : {
+            "description" : "快照信息",
+            "$ref" : "#/components/schemas/SnapshotDetails"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "UpdateSnapshotOption" : {
+        "properties" : {
+          "description" : {
+            "type" : "string",
+            "example" : "121",
+            "description" : "云硬盘快照描述。最大支持255个字节。"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "test_volume_1",
+            "description" : "云硬盘快照名称。最大支持255个字节。"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateSnapshotRequestBody" : {
+        "required" : [ "snapshot" ],
+        "properties" : {
+          "snapshot" : {
+            "description" : "快照信息。",
+            "$ref" : "#/components/schemas/UpdateSnapshotOption"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "UpdateSnapshotResponseBody" : {
+        "required" : [ "snapshot" ],
+        "properties" : {
+          "snapshot" : {
+            "description" : "快照信息",
+            "$ref" : "#/components/schemas/SnapshotDetails"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "BatchDeleteVolumeTagsRequestBody" : {
+        "required" : [ "action", "tags" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "example" : "delete",
+            "description" : "操作标识,当前支持的取值如下:",
+            "enum" : [ "delete" ],
+            "default" : "delete"
+          },
+          "tags" : {
+            "type" : "array",
+            "example" : "\"[ { \\\"key\\\": \\\"key1\\\" }, { \\\"key\\\": \\\"key2\\\" } ]\"",
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/DeleteTagsOption"
+            }
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "DeleteTagsOption" : {
+        "required" : [ "key" ],
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "标签键。"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CinderDeleteVolumeTransfer" : {
+      "delete" : {
+        "tags" : [ "云硬盘过户" ],
+        "summary" : "删除云硬盘过户",
+        "description" : "当云硬盘过户未被接受时,您可以删除云硬盘过户记录,接受后则无法执行删除操作。",
+        "operationId" : "CinderDeleteVolumeTransfer",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "transfer_id",
+          "in" : "path",
+          "description" : "云硬盘过户记录ID",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘过户记录ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderDeleteVolumeTransfer",
+      "x-url" : "{endpoint}/v2/{project_id}/os-volume-transfer/{transfer_id}"
+    },
+    "/RollbackSnapshot" : {
+      "post" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "回滚快照到云硬盘",
+        "description" : "将快照数据回滚到云硬盘。支持企业项目授权功能。",
+        "operationId" : "RollbackSnapshot",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RollbackSnapshotResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "snapshot_id",
+          "in" : "path",
+          "description" : "快照ID",
+          "required" : true,
+          "schema" : {
+            "description" : "快照ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RollbackSnapshotRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RollbackSnapshot",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots/{snapshot_id}/rollback"
+    },
+    "/ShowVolumeTags" : {
+      "get" : {
+        "tags" : [ "云硬盘标签" ],
+        "summary" : "查询云硬盘标签",
+        "description" : "查询指定云硬盘的标签信息。",
+        "operationId" : "ShowVolumeTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "标签列表。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVolumeTags",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}/tags"
+    },
+    "/RetypeVolume" : {
+      "post" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "磁盘类型变更",
+        "description" : "对按需或者包周期云硬盘进行磁盘类型变更。",
+        "operationId" : "RetypeVolume",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RetypeVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "磁盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "磁盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RetypeVolumeRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RetypeVolume",
+      "x-url" : "{endpoint}/v2/{project_id}/volumes/{volume_id}/retype"
+    },
+    "/ListVolumeTags" : {
+      "get" : {
+        "tags" : [ "云硬盘标签" ],
+        "summary" : "获取云硬盘资源的所有标签",
+        "description" : "获取某个租户的所有云硬盘资源的标签信息。",
+        "operationId" : "ListVolumeTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "标签列表。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListVolumeTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVolumeTags",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/tags"
+    },
+    "/ListVolumes" : {
+      "get" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "查询所有云硬盘详情",
+        "description" : "查询所有云硬盘的详细信息。",
+        "operationId" : "ListVolumes",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListVolumesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "通过云硬盘ID进行分页查询。默认为查询第一页数据。",
+          "required" : false,
+          "schema" : {
+            "description" : "通过云硬盘ID进行分页查询。默认为查询第一页数据。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "磁盘名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "磁盘名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果个数限制。默认值为1000。",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果个数限制。默认值为1000。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1000,
+            "maximum" : 1000,
+            "minimum" : 1
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "返回结果按该关键字排序,支持id,status,size,created_at等关键字,默认为“created_at”。",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果按该关键字排序,支持id,status,size,created_at等关键字,默认为“created_at”。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量(偏移量为一个大于0小于磁盘总个数的整数,表示查询该偏移量后面的所有的磁盘)。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量(偏移量为一个大于0小于磁盘总个数的整数,表示查询该偏移量后面的所有的磁盘)。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "返回结果按照降序或升序排列,默认为“desc”。",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果按照降序或升序排列,默认为“desc”。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "云硬盘状态,取值可参考:\"[云硬盘状态](https://support.huaweicloud.com/api-evs/evs_04_0040.html)\"。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘状态,取值可参考:\"[云硬盘状态](https://support.huaweicloud.com/api-evs/evs_04_0040.html)\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "metadata",
+          "in" : "query",
+          "description" : "云硬盘元数据。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘元数据。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "availability_zone",
+          "in" : "query",
+          "description" : "可用区信息。",
+          "required" : false,
+          "schema" : {
+            "description" : "可用区信息。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "multiattach",
+          "in" : "query",
+          "description" : "是否为共享云硬盘。",
+          "required" : false,
+          "schema" : {
+            "description" : "是否为共享云硬盘。",
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "service_type",
+          "in" : "query",
+          "description" : "服务类型,仅支持EVS、DSS、DESS。",
+          "required" : false,
+          "schema" : {
+            "description" : "服务类型,仅支持EVS、DSS、DESS。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "dedicated_storage_id",
+          "in" : "query",
+          "description" : "专属存储池ID,可过滤出该专属存储池下的所有云硬盘,必须精确匹配。",
+          "required" : false,
+          "schema" : {
+            "description" : "专属存储池ID,可过滤出该专属存储池下的所有云硬盘,必须精确匹配。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "dedicated_storage_name",
+          "in" : "query",
+          "description" : "专属存储池的名字,可过滤出该专属存储池下的所有云硬盘,支持模糊匹配。",
+          "required" : false,
+          "schema" : {
+            "description" : "专属存储池的名字,可过滤出该专属存储池下的所有云硬盘,支持模糊匹配。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_type_id",
+          "in" : "query",
+          "description" : "云硬盘类型id。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘类型id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "云硬盘ID。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "ids",
+          "in" : "query",
+          "description" : "云硬盘id列表,格式为ids=['id1','id2',...,'idx'],返回“ids”中有效id的云硬盘详情,无效的id会被忽略。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘id列表,格式为ids=['id1','id2',...,'idx'],返回“ids”中有效id的云硬盘详情,无效的id会被忽略。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "指定企业项目id进行过滤。",
+          "required" : false,
+          "schema" : {
+            "description" : "指定企业项目id进行过滤。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "server_id",
+          "in" : "query",
+          "description" : "云服务器id。",
+          "required" : false,
+          "schema" : {
+            "description" : "云服务器id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "not_metadata",
+          "in" : "query",
+          "description" : "查询不包含所选元数据的云硬盘",
+          "required" : false,
+          "schema" : {
+            "description" : "查询不包含所选元数据的云硬盘",
+            "type" : "string",
+            "enum" : [ "{\"hw:passthrough\":true}", "{\"hw:passthrough\":false}", "{\"__system__encrypted\":1}", "{\"__system__encrypted\":0}" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVolumes",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/detail"
+    },
+    "/ShowVersion" : {
+      "get" : {
+        "tags" : [ "API版本信息查询" ],
+        "summary" : "查询API接口的版本信息",
+        "description" : "查询接口的指定版本信息。",
+        "operationId" : "ShowVersion",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "版本号详情列表。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowVersionResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "version",
+          "in" : "path",
+          "description" : "查询的目标版本号。",
+          "required" : true,
+          "schema" : {
+            "description" : "查询的目标版本号。",
+            "type" : "string",
+            "enum" : [ "v1", "v2", "v3" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVersion",
+      "x-url" : "{endpoint}/{version}"
+    },
+    "/CinderListVolumeTransfers" : {
+      "get" : {
+        "tags" : [ "云硬盘过户" ],
+        "summary" : "查询云硬盘过户记录列表概要",
+        "description" : "查询当前租户下所有云硬盘的过户记录列表",
+        "operationId" : "CinderListVolumeTransfers",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderListVolumeTransfersResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果个数限制,取值为大 于0的整数",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果个数限制,取值为大 于0的整数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量,偏移量为一个大于0小 于云硬盘过户记录总个数的整 数,表示查询该偏移量后面的 所有的云硬盘过户记录",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量,偏移量为一个大于0小 于云硬盘过户记录总个数的整 数,表示查询该偏移量后面的 所有的云硬盘过户记录",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderListVolumeTransfers",
+      "x-url" : "{endpoint}/v2/{project_id}/os-volume-transfer"
+    },
+    "/CinderCreateVolumeTransfer" : {
+      "post" : {
+        "tags" : [ "云硬盘过户" ],
+        "summary" : "创建云硬盘过户",
+        "description" : "指定云硬盘来创建云硬盘过户记录,创建成功后,会返回过户记录ID以及身份认证密钥。",
+        "operationId" : "CinderCreateVolumeTransfer",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderCreateVolumeTransferResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CinderCreateVolumeTransferRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderCreateVolumeTransfer",
+      "x-url" : "{endpoint}/v2/{project_id}/os-volume-transfer"
+    },
+    "/CinderListAvailabilityZones" : {
+      "get" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "查询所有的可用分区信息",
+        "description" : "查询所有的可用分区信息。",
+        "operationId" : "CinderListAvailabilityZones",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "可用分区的信息。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderListAvailabilityZonesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderListAvailabilityZones",
+      "x-url" : "{endpoint}/v2/{project_id}/os-availability-zone"
+    },
+    "/CinderShowVolumeTransfer" : {
+      "get" : {
+        "tags" : [ "云硬盘过户" ],
+        "summary" : "查询单个云硬盘过户记录详情",
+        "description" : "查询单个云硬盘的过户记录详情,比如过户记录创建时间、ID以及名称等信息。",
+        "operationId" : "CinderShowVolumeTransfer",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderShowVolumeTransferResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "transfer_id",
+          "in" : "path",
+          "description" : "云硬盘过户记录ID",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘过户记录ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderShowVolumeTransfer",
+      "x-url" : "{endpoint}/v2/{project_id}/os-volume-transfer/{transfer_id}"
+    },
+    "/ListSnapshots" : {
+      "get" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "查询云硬盘快照详情列表",
+        "description" : "查询云硬盘快照详细列表信息。",
+        "operationId" : "ListSnapshots",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListSnapshotsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。 说明:分页查询快照时使用,与limit配合使用。假如共有30个快照,设置offset为11,limit为10,即为从第12个快照开始查询,一次最多可读取10个快照。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。 说明:分页查询快照时使用,与limit配合使用。假如共有30个快照,设置offset为11,limit为10,即为从第12个快照开始查询,一次最多可读取10个快照。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果个数限制,值为大于0的整数。默认值为1000。",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果个数限制,值为大于0的整数。默认值为1000。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "云硬盘快照名称。最大支持255个字节。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘快照名称。最大支持255个字节。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "云硬盘快照状态,具体请参见A.3 云硬盘快照状态。",
+          "required" : false,
+          "schema" : {
+            "description" : "云硬盘快照状态,具体请参见A.3 云硬盘快照状态。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "query",
+          "description" : "快照所属云硬盘的ID。",
+          "required" : false,
+          "schema" : {
+            "description" : "快照所属云硬盘的ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "availability_zone",
+          "in" : "query",
+          "description" : "快照所属云硬盘的可用区。",
+          "required" : false,
+          "schema" : {
+            "description" : "快照所属云硬盘的可用区。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "指定快照id进行过滤。可以传入多个id过滤查询,格式:id=id1&id=id2&id=id3",
+          "required" : false,
+          "schema" : {
+            "description" : "指定快照id进行过滤。可以传入多个id过滤查询,格式:id=id1&id=id2&id=id3",
+            "type" : "string"
+          }
+        }, {
+          "name" : "dedicated_storage_name",
+          "in" : "query",
+          "description" : "专属存储的名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "专属存储的名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "dedicated_storage_id",
+          "in" : "query",
+          "description" : "专属存储ID。",
+          "required" : false,
+          "schema" : {
+            "description" : "专属存储ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_type",
+          "in" : "query",
+          "description" : "服务类型。仅支持EVS、DSS、DESS。",
+          "required" : false,
+          "schema" : {
+            "description" : "服务类型。仅支持EVS、DSS、DESS。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "指定企业项目id进行过滤。",
+          "required" : false,
+          "schema" : {
+            "description" : "指定企业项目id进行过滤。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSnapshots",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots/detail"
+    },
+    "/ResizeVolume" : {
+      "post" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "扩容云硬盘",
+        "description" : "对按需或者包周期云硬盘进行扩容。",
+        "operationId" : "ResizeVolume",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResizeVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResizeVolumeRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResizeVolume",
+      "x-url" : "{endpoint}/v2.1/{project_id}/cloudvolumes/{volume_id}/action"
+    },
+    "/ListVolumesByTags" : {
+      "post" : {
+        "tags" : [ "云硬盘标签" ],
+        "summary" : "通过标签查询云硬盘资源实例详情",
+        "description" : "通过标签查询云硬盘资源实例详情。",
+        "operationId" : "ListVolumesByTags",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "云硬盘信息。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListVolumesByTagsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListVolumesByTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVolumesByTags",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/resource_instances/action"
+    },
+    "/DeleteVolume" : {
+      "delete" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "删除云硬盘",
+        "description" : "删除一个云硬盘。",
+        "operationId" : "DeleteVolume",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVolume",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}"
+    },
+    "/UpdateVolume" : {
+      "put" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "更新云硬盘",
+        "description" : "更新一个云硬盘的名称和描述。",
+        "operationId" : "UpdateVolume",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateVolumeRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVolume",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}"
+    },
+    "/DeleteSnapshot" : {
+      "delete" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "删除云硬盘快照",
+        "description" : "删除云硬盘快照。",
+        "operationId" : "DeleteSnapshot",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "snapshot_id",
+          "in" : "path",
+          "description" : "快照ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "快照ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSnapshot",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots/{snapshot_id}"
+    },
+    "/UnsubscribePostpaidVolume" : {
+      "post" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "退订包周期计费模式的云硬盘",
+        "description" : "退订包周期计费模式的云硬盘,有如下约束:",
+        "operationId" : "UnsubscribePostpaidVolume",
+        "responses" : {
+          "202" : {
+            "description" : "请求响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/UnsubscribeVolumeResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。 获取方法请参见\"[获取项目ID](https://support.huaweicloud.com/api-evs/evs_04_0046.html)\"。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。 获取方法请参见\"[获取项目ID](https://support.huaweicloud.com/api-evs/evs_04_0046.html)\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UnsubscribeVolumeRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UnsubscribePostpaidVolume",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/unsubscribe"
+    },
+    "/BatchCreateVolumeTags" : {
+      "post" : {
+        "tags" : [ "云硬盘标签" ],
+        "summary" : "为指定云硬盘批量添加标签",
+        "description" : "为指定云硬盘批量添加标签。",
+        "operationId" : "BatchCreateVolumeTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateVolumeTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateVolumeTags",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}/tags/action"
+    },
+    "/ShowJob" : {
+      "get" : {
+        "tags" : [ "其他" ],
+        "summary" : "查询job的状态",
+        "description" : "查询Job的执行状态。",
+        "operationId" : "ShowJob",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowJobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "job ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "job ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJob",
+      "x-url" : "{endpoint}/v1/{project_id}/jobs/{job_id}"
+    },
+    "/ModifyVolumeQoS" : {
+      "put" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "修改云硬盘QoS",
+        "description" : "调整云硬盘的iops或者吞吐量。",
+        "operationId" : "ModifyVolumeQoS",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ModifyVolumeQoSRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ModifyVolumeQoS",
+      "x-url" : "{endpoint}/v5/{project_id}/cloudvolumes/{volume_id}/qos"
+    },
+    "/CreateVolume" : {
+      "post" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "创建云硬盘",
+        "description" : "创建按需或包周期云硬盘。",
+        "operationId" : "CreateVolume",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Client-Token",
+          "in" : "header",
+          "description" : "请求的幂等标识。",
+          "required" : false,
+          "schema" : {
+            "example" : "7a1bb31b-ccad-4beb-9340-3a0de70cadb4",
+            "description" : "请求的幂等标识。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateVolumeRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVolume",
+      "x-url" : "{endpoint}/v2.1/{project_id}/cloudvolumes"
+    },
+    "/CinderListQuotas" : {
+      "get" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "查询租户的详细配额",
+        "description" : "查询租户的详细配额。",
+        "operationId" : "CinderListQuotas",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderListQuotasResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "target_project_id",
+          "in" : "path",
+          "description" : "目标的项目ID。与project_id保持一致即可。",
+          "required" : true,
+          "schema" : {
+            "description" : "目标的项目ID。与project_id保持一致即可。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "usage",
+          "in" : "query",
+          "description" : "是否查询配额详细信息。当前只支持传true。",
+          "required" : true,
+          "schema" : {
+            "description" : "是否查询配额详细信息。当前只支持传true。",
+            "type" : "string",
+            "enum" : [ "True" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderListQuotas",
+      "x-url" : "{endpoint}/v2/{project_id}/os-quota-sets/{target_project_id}"
+    },
+    "/ListVersions" : {
+      "get" : {
+        "tags" : [ "API版本信息查询" ],
+        "summary" : "查询接口版本信息列表",
+        "description" : "查询接口版本信息列表。",
+        "operationId" : "ListVersions",
+        "deprecated" : false,
+        "responses" : {
+          "300" : {
+            "description" : "版本号详情列表。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowVersionResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVersions",
+      "x-url" : "{endpoint}/"
+    },
+    "/CinderListVolumeTypes" : {
+      "get" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "查询云硬盘类型列表",
+        "description" : "查询云硬盘类型列表。",
+        "operationId" : "CinderListVolumeTypes",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderListVolumeTypesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : false,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderListVolumeTypes",
+      "x-url" : "{endpoint}/v2/{project_id}/types"
+    },
+    "/CreateSnapshot" : {
+      "post" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "创建云硬盘快照",
+        "description" : "创建云硬盘快照。",
+        "operationId" : "CreateSnapshot",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateSnapshotResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateSnapshotRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSnapshot",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots"
+    },
+    "/CinderAcceptVolumeTransfer" : {
+      "post" : {
+        "tags" : [ "云硬盘过户" ],
+        "summary" : "接受云硬盘过户",
+        "description" : "通过云硬盘过户记录ID以及身份认证密钥来接受云硬盘过户。",
+        "operationId" : "CinderAcceptVolumeTransfer",
+        "deprecated" : false,
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CinderAcceptVolumeTransferResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "transfer_id",
+          "in" : "path",
+          "description" : "云硬盘ID",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CinderAcceptVolumeTransferRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CinderAcceptVolumeTransfer",
+      "x-url" : "{endpoint}/v2/{project_id}/os-volume-transfer/{transfer_id}/accept"
+    },
+    "/ShowVolume" : {
+      "get" : {
+        "tags" : [ "云硬盘" ],
+        "summary" : "查询单个云硬盘详情",
+        "description" : "查询单个云硬盘的详细信息。支持企业项目授权功能。",
+        "operationId" : "ShowVolume",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "云硬盘的信息。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowVolumeResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "云硬盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "云硬盘ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVolume",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}"
+    },
+    "/ShowSnapshot" : {
+      "get" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "查询单个云硬盘快照详情",
+        "description" : "查询单个云硬盘快照信息。支持企业项目授权功能。",
+        "operationId" : "ShowSnapshot",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowSnapshotResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "snapshot_id",
+          "in" : "path",
+          "description" : "快照ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "快照ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSnapshot",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots/{snapshot_id}"
+    },
+    "/UpdateSnapshot" : {
+      "put" : {
+        "tags" : [ "云硬盘快照" ],
+        "summary" : "更新云硬盘快照",
+        "description" : "更新云硬盘快照。支持企业项目授权功能。",
+        "operationId" : "UpdateSnapshot",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateSnapshotResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "snapshot_id",
+          "in" : "path",
+          "description" : "快照ID",
+          "required" : true,
+          "schema" : {
+            "description" : "快照ID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateSnapshotRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateSnapshot",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudsnapshots/{snapshot_id}"
+    },
+    "/BatchDeleteVolumeTags" : {
+      "post" : {
+        "tags" : [ "云硬盘标签" ],
+        "summary" : "为指定云硬盘批量删除标签",
+        "description" : "为指定云硬盘批量删除标签。",
+        "operationId" : "BatchDeleteVolumeTags",
+        "deprecated" : false,
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "volume_id",
+          "in" : "path",
+          "description" : "磁盘ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "磁盘ID。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchDeleteVolumeTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteVolumeTags",
+      "x-url" : "{endpoint}/v2/{project_id}/cloudvolumes/{volume_id}/tags/action"
+    }
+  }
+}

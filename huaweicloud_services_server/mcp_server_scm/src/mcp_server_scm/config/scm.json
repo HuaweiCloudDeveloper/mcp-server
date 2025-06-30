@@ -1,0 +1,4095 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "SCM-证书申请管理",
+    "title" : "SCM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 36,
+            "description" : "错误请求返回的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 1024,
+            "description" : "错误请求返回的错误信息。"
+          }
+        },
+        "title" : "Error"
+      },
+      "CancelCertificateApplyResponseBody" : {
+        "type" : "object",
+        "required" : [ "cert_id", "message" ],
+        "properties" : {
+          "cert_id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书ID。"
+          },
+          "message" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 16,
+            "description" : "执行结果。取值如下:"
+          }
+        },
+        "title" : "CancelCertificateApplyResponseBody"
+      },
+      "ImportCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "certificate_id" ],
+        "properties" : {
+          "certificate_id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书id。"
+          }
+        },
+        "title" : "ImportCertificateResponseBody"
+      },
+      "ImportCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "name", "certificate", "private_key" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "description" : "证书名称。字符长度为3~63位, 请输入英文字符,数字,下划线,中划线,英文句点。"
+          },
+          "certificate" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "证书内容,可包含中间证书及根证书。若certificate_chain字段传入证书链,则该字段只取证书本身。回车换行需要使用转义字符\\n或者\\r\\n替换。"
+          },
+          "certificate_chain" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 8192,
+            "description" : "证书链,非必填,可通过certificate字段传入。回车换行需要使用转义字符\\n或者\\r\\n替换。"
+          },
+          "private_key" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "证书私钥。"
+          },
+          "duplicate_check" : {
+            "type" : "boolean",
+            "description" : "是否允许上传相同证书。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件。"
+          },
+          "enc_certificate" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "可选参数,国密证书的加密证书内容。回车换行需要使用转义字符\\n或者\\r\\n替换。"
+          },
+          "enc_private_key" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "可选参数,国密证书的加密私钥。"
+          }
+        },
+        "title" : "ImportCertificateRequestBody"
+      },
+      "ListCertificatesResponseBody" : {
+        "type" : "object",
+        "required" : [ "certificates", "total_count" ],
+        "properties" : {
+          "certificates" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "证书列表,详情请参见CertificateDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/CertificateDetail"
+            }
+          },
+          "total_count" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "description" : "证书数量。",
+            "format" : "int32"
+          }
+        },
+        "title" : "ListCertificatesResponseBody"
+      },
+      "CertificateDetail" : {
+        "type" : "object",
+        "required" : [ "id", "name", "domain", "sans", "type", "brand", "expire_time", "domain_type", "signature_algorithm", "deploy_support", "validity_period", "status", "domain_count", "wildcard_count", "description", "enterprise_project_id" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书id。"
+          },
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[a-z0-9-]+$",
+            "minLength" : 3,
+            "maximum" : 63,
+            "description" : "证书名称。"
+          },
+          "domain" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "证书绑定的域名。"
+          },
+          "sans" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "多域名证书绑定的附加域名。"
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "签名算法。"
+          },
+          "deploy_support" : {
+            "type" : "boolean",
+            "description" : "是否支持部署。"
+          },
+          "type" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "证书类型。取值如下:"
+          },
+          "brand" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "证书品牌。取值如下:GLOBALSIGN、SYMANTEC、GEOTRUST、CFCA"
+          },
+          "expire_time" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "description" : "证书过期时间。"
+          },
+          "domain_type" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "域名类型。取值如下:"
+          },
+          "validity_period" : {
+            "type" : "integer",
+            "minimum" : 12,
+            "maximum" : 12,
+            "description" : "证书有效期,按月为单位。云证书管理服务提供了一种购买多年有效期证书的解决方案,这种多年有效期证书生效方式为多张有效期为1年的SSL证书叠加生效,例如:有效期为“3年”的证书实际包含3张有效期为1年且规格相同的SSL证书,在第一张证书到期前30天,系统自动以第一张证书的信息申请第二张证书,在第二张证书到期前30天,系统自动以第一张证书的信息申请第三张证书。",
+            "format" : "int8"
+          },
+          "status" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "证书状态,取值如下:"
+          },
+          "domain_count" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "description" : "证书可绑定域名个数。"
+          },
+          "wildcard_count" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 100,
+            "description" : "证书可绑定泛域名个数。"
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "证书描述。"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 100,
+            "description" : "账号ID。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 36,
+            "description" : "企业项目ID,默认为“0”。"
+          }
+        },
+        "title" : "CertificateDetail"
+      },
+      "ApplyCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "request_info" ],
+        "properties" : {
+          "request_info" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "请求结果。"
+          }
+        },
+        "title" : "ApplyCertificateResponseBody"
+      },
+      "ApplyCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "domain", "applicant_name", "applicant_phone", "applicant_email", "agree_privacy_protection", "domain_method" ],
+        "properties" : {
+          "domain" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "该证书绑定的域名。"
+          },
+          "sans" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 4096,
+            "description" : "绑定多域名类型证书的附加域名。"
+          },
+          "csr" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 5120,
+            "description" : "证书CSR串,与域名必须匹配。"
+          },
+          "company_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "公司名称,OV和EV型证书必填。字符长度为0~63位。"
+          },
+          "company_unit" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "部门名称。字符长度为0~63位。"
+          },
+          "company_province" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "公司所在省份,OV和EV型证书必填。字符长度为0~63位。"
+          },
+          "company_city" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "公司所在市区,OV和EV型证书必填。字符长度为0~63位。"
+          },
+          "country" : {
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 2,
+            "description" : "OV和EV型证书必填,国家编码,需符合正则\"**[A-Za-z]{2}**\"。"
+          },
+          "applicant_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "申请人的姓名。请输入中文、英文字符,下划线,中划线,英文逗号,英文句点,且长度为4到100字节。"
+          },
+          "applicant_phone" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "申请人的电话号码。示例:13212345678"
+          },
+          "applicant_email" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "description" : "申请人的邮箱。示例:example@huawei.com"
+          },
+          "contact_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "技术联系人的姓名。字符长度为0~63位。"
+          },
+          "contact_phone" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "技术联系人的电话号码。示例:13212345678"
+          },
+          "contact_email" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 256,
+            "description" : "技术联系人的邮箱。示例:example@huawei.com"
+          },
+          "auto_dns_auth" : {
+            "type" : "boolean",
+            "description" : "是否将DNS验证信息推送到华为云解析服务。"
+          },
+          "agree_privacy_protection" : {
+            "type" : "boolean",
+            "description" : "是否同意授权隐私协议。此处仅能设置为true才能成功申请证书。"
+          },
+          "domain_method" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "域名验证方式。"
+          },
+          "key_algorithm" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "密钥算法。默认RSA_2048"
+          },
+          "ca_hash_algorithm" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "签名算法。Geo OV证书必填。"
+          }
+        },
+        "title" : "ApplyCertificateRequestBody"
+      },
+      "ShowCsrPrivateKeyResponseBody" : {
+        "type" : "object",
+        "required" : [ "private_key" ],
+        "properties" : {
+          "private_key" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 2555,
+            "description" : "私钥。"
+          }
+        },
+        "title" : "ShowCsrPrivateKeyResponseBody"
+      },
+      "DeployedResourceDetail" : {
+        "type" : "object",
+        "required" : [ "service", "resource_num", "resource_location", "region_resources" ],
+        "properties" : {
+          "service" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 5,
+            "description" : "证书已部署资源服务名称。"
+          },
+          "resource_num" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "description" : "证书在当前服务已部署资源数量。"
+          },
+          "resource_location" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "全局服务或Region级服务。"
+          },
+          "region_resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "局点资源列表,详情请参见RegionResourceDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/RegionResourceDetail"
+            }
+          }
+        },
+        "title" : "DeployedResourceDetail"
+      },
+      "ListDeployedResourcesRequestBody" : {
+        "type" : "object",
+        "required" : [ "certificate_ids", "service_names" ],
+        "properties" : {
+          "certificate_ids" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 50,
+            "description" : "证书ID列表。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 16,
+              "maxLength" : 16
+            }
+          },
+          "service_names" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 50,
+            "description" : "服务名称列表。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 5
+            }
+          }
+        },
+        "title" : "ListDeployedResourcesRequestBody"
+      },
+      "RegionResourceDetail" : {
+        "type" : "object",
+        "required" : [ "region_id", "is_error", "resources" ],
+        "properties" : {
+          "region_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "局点ID。当服务为全局服务时,region_id为global,其余按照IAM的标准命名。"
+          },
+          "is_error" : {
+            "type" : "boolean",
+            "description" : "请求当前region资源信息过程中,响应是否存在异常的标志。"
+          },
+          "resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "资源集合,每个资源的标识:资源ID + “:” + 资源名称,详情请参见ResourceDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResourceDetail"
+            }
+          }
+        },
+        "title" : "RegionResourceDetail"
+      },
+      "ResourceDetail" : {
+        "type" : "object",
+        "required" : [ "resource_id", "resource_name" ],
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源ID。"
+          },
+          "resource_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源名称。"
+          }
+        },
+        "title" : "ResourceDetail"
+      },
+      "ListDeployedResourcesResponseBody" : {
+        "type" : "object",
+        "required" : [ "results" ],
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 50,
+            "description" : "请求结果列表,详情请参见ResultDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/ResultDetail"
+            }
+          }
+        },
+        "title" : "ListDeployedResourcesResponseBody"
+      },
+      "ResultDetail" : {
+        "type" : "object",
+        "required" : [ "certificate_id", "total_num", "deployed_resources" ],
+        "properties" : {
+          "certificate_id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书ID。"
+          },
+          "total_num" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 1000,
+            "description" : "当前证书在所查询服务中已部署资源总数。"
+          },
+          "deployed_resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "当前证书已部署资源列表,详情请参见DeployedResourceDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/DeployedResourceDetail"
+            }
+          }
+        },
+        "title" : "ResultDetail"
+      },
+      "DeployedResource" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源Id,部署WAF与ELB时,必传此字段。"
+          },
+          "type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源类型,当前仅部署WAF资源时需传入,即独享模式(premium)与云模式(cloud)。"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "需部署的域名,当前仅部署CDN时需传入,即需加速的域名,域名与证书必须可匹配。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "需部署的资源所属的企业项目ID,当前仅部署WAF资源时,需传入。"
+          }
+        },
+        "title" : "DeployedResource"
+      },
+      "DeployCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "failure_list" ],
+        "properties" : {
+          "failure_list" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "部署失败的资源列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/FaiureResource"
+            }
+          }
+        },
+        "title" : "DeployCertificateResponseBody"
+      },
+      "DeployCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "service_name", "resources" ],
+        "properties" : {
+          "project_name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "部署的资源所在的项目名称,若在主项目下,则该值为region id。"
+          },
+          "service_name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "证书推送的目标服务,当前仅支持:CDN、WAF、ELB。"
+          },
+          "resources" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "所要部署的资源列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/DeployedResource"
+            }
+          }
+        },
+        "title" : "DeployCertificateRequestBody"
+      },
+      "FaiureResource" : {
+        "type" : "object",
+        "properties" : {
+          "resource" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "部署失败的资源信息,部署WAF与ELB时,此字段为资源ID,部署CDN时,本字段为加速域名。"
+          },
+          "failure_info" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "失败原因,一般为目标服务返回的错误码信息。"
+          }
+        },
+        "title" : "FaiureResource"
+      },
+      "CSRResponseBody" : {
+        "type" : "object",
+        "required" : [ "id", "name", "csr", "domain_name", "sans", "private_key_algo", "usage", "company_country", "company_province", "company_city", "company_name", "create_time", "update_time" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "CSR的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "description" : "CSR名称。"
+          },
+          "csr" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 255,
+            "description" : "CSR内容。"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "CSR绑定的域名。"
+          },
+          "sans" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "CSR绑定的附加域名。"
+          },
+          "private_key_algo" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "密钥算法。"
+          },
+          "usage" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "CSR用途。"
+          },
+          "company_country" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "国家。"
+          },
+          "company_province" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "省份。"
+          },
+          "company_city" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 32,
+            "description" : "城市。"
+          },
+          "company_name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "公司名称。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "minimum" : 13,
+            "maximum" : 20,
+            "format" : "int64",
+            "description" : "CSR创建时间。"
+          },
+          "update_time" : {
+            "type" : "integer",
+            "minimum" : 13,
+            "maximum" : 20,
+            "format" : "int64",
+            "description" : "CSR更新时间。"
+          }
+        },
+        "title" : "CSRResponseBody"
+      },
+      "ListCSRResponseBody" : {
+        "type" : "object",
+        "required" : [ "csr_list", "total_count" ],
+        "properties" : {
+          "csr_list" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "CSR列表,详情请参见CSRResponseBody字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/CSRResponseBody"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 10000,
+            "description" : "CSR数量。",
+            "format" : "int32"
+          }
+        },
+        "title" : "ListCSRResponseBody"
+      },
+      "UploadCsrRequestBody" : {
+        "type" : "object",
+        "required" : [ "name", "csr" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "自定义CSR名称。"
+          },
+          "csr" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 2555,
+            "description" : "证书CSR文件。"
+          },
+          "private_key" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "证书私钥文件。"
+          }
+        },
+        "title" : "UploadCsrRequestBody"
+      },
+      "UploadCsrResponseBody" : {
+        "type" : "object",
+        "required" : [ "id", "name", "csr" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 32,
+            "maxLength" : 32,
+            "description" : "CSR的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 63,
+            "description" : "自定义CSR名称。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "minLength" : 13,
+            "maxLength" : 20,
+            "format" : "int64",
+            "description" : "CSR创建时间。"
+          }
+        },
+        "title" : "UploadCsrResponseBody"
+      },
+      "BatchCreateOrDeleteTagsRequestBody" : {
+        "type" : "object",
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "minLength" : 6,
+            "maxLength" : 6,
+            "description" : "标签操作标识。"
+          },
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表,key和value键值对的集合。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsResourceTag"
+            }
+          }
+        },
+        "title" : "BatchCreateOrDeleteTagsRequestBody"
+      },
+      "ScsResourceTag" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 128,
+            "description" : "标签键。"
+          },
+          "value" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "标签值。"
+          }
+        }
+      },
+      "OperateTagResponseBody" : {
+        "type" : "object",
+        "required" : [ "desc" ],
+        "properties" : {
+          "desc" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "请求结果。"
+          }
+        },
+        "title" : "OperateTagResponseBody"
+      },
+      "ListTagsByCertificateResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表,key和value键值对的集合。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsResourceTag"
+            }
+          }
+        },
+        "title" : "ListTagsByCertificateResponseBody"
+      },
+      "CreateCertificateTagRequestBody" : {
+        "type" : "object",
+        "required" : [ "tag" ],
+        "properties" : {
+          "tag" : {
+            "description" : "标签。",
+            "$ref" : "#/components/schemas/ScsResourceTag"
+          }
+        },
+        "title" : "CreateCertificateTagRequestBody"
+      },
+      "PurchaseCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "cert_brand", "cert_type", "domain_type", "effective_time", "domain_numbers", "order_number", "agree_privacy_protection" ],
+        "properties" : {
+          "cert_brand" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书品牌,取值如下:"
+          },
+          "cert_type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书类型,取值如下:"
+          },
+          "domain_type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "域名类型,取值如下:"
+          },
+          "effective_time" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 3,
+            "format" : "int8",
+            "description" : "证书有效期(年)。"
+          },
+          "domain_numbers" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "format" : "int8",
+            "description" : "域名数量。"
+          },
+          "order_number" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "format" : "int32",
+            "description" : "购买的证书数量。取值范围为1~100。"
+          },
+          "agree_privacy_protection" : {
+            "type" : "boolean",
+            "description" : "是否同意隐私协议,此处仅能设置为true才能成功购买证书。"
+          },
+          "primary_domain_type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "多域名中的主域名类型。"
+          },
+          "single_domain_number" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "format" : "int8",
+            "description" : "附加单域名数量。"
+          },
+          "wildcard_domain_number" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "format" : "int8",
+            "description" : "附加泛域名数量。"
+          },
+          "is_auto_pay" : {
+            "type" : "boolean",
+            "description" : "是否开启自动支付。"
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 36,
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件。"
+          },
+          "order_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "订单号。仅组合购买场景使用。"
+          },
+          "tags" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsResourceTag"
+            }
+          }
+        },
+        "title" : "PurchaseCertificateRequestBody"
+      },
+      "PurchaseCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "order_id", "cert" ],
+        "properties" : {
+          "order_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "订单号。"
+          },
+          "cert" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 1000,
+            "description" : "证书列表,详情请参见CertDetail字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/CertDetail"
+            }
+          }
+        },
+        "title" : "PurchaseCertificateResponseBody"
+      },
+      "CertDetail" : {
+        "type" : "object",
+        "required" : [ "cert_id" ],
+        "properties" : {
+          "cert_id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书ID。"
+          }
+        },
+        "title" : "CertDetail"
+      },
+      "UpdateCSRRequestBody" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "CSR名称。"
+          }
+        },
+        "title" : "UpdateCSRRequestBody"
+      },
+      "ExportCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "certificate", "certificate_chain", "entire_certificate", "private_key" ],
+        "properties" : {
+          "entire_certificate" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 12288,
+            "description" : "证书及证书链。"
+          },
+          "certificate" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "证书内容,不包含证书链。"
+          },
+          "certificate_chain" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 8192,
+            "description" : "证书链。"
+          },
+          "private_key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "证书私钥。"
+          },
+          "enc_certificate" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "国密证书返回,加密证书内容。"
+          },
+          "enc_private_key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "description" : "国密证书返回,加密证书私钥。"
+          }
+        },
+        "title" : "ExportCertificateResponseBody"
+      },
+      "ListAllTagsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表,key和value键值对的集合。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsTag"
+            }
+          }
+        },
+        "title" : "ListAllTagsResponseBody"
+      },
+      "ScsTag" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "标签键。"
+          },
+          "values" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签值列表。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 0,
+              "maxLength" : 255
+            }
+          }
+        },
+        "title" : "ScsTag"
+      },
+      "BatchPushCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "target_projects", "target_service" ],
+        "properties" : {
+          "target_projects" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10,
+            "description" : "推送到的目标服务所在的区域,CDN、ELB、WAF。",
+            "items" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 32
+            }
+          },
+          "target_service" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "证书推送的目标服务,当前仅支持:CDN、WAF、ELB。"
+          }
+        },
+        "title" : "BatchPushCertificateRequestBody"
+      },
+      "BatchPushCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "results" ],
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 10,
+            "description" : "部署结果。",
+            "items" : {
+              "properties" : {
+                "project_name" : {
+                  "type" : "string",
+                  "minLength" : 0,
+                  "maxLength" : 63,
+                  "description" : "推送区域名称,如cn-north-7。"
+                },
+                "cert_id" : {
+                  "type" : "string",
+                  "minLength" : 0,
+                  "maxLength" : 255,
+                  "description" : "目标证书ID。"
+                },
+                "message" : {
+                  "type" : "string",
+                  "minLength" : 0,
+                  "maxLength" : 255,
+                  "description" : "推送结果。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ScsMatch" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 128,
+            "description" : "标签键。"
+          },
+          "value" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "标签值。"
+          }
+        },
+        "title" : "ScsMatch"
+      },
+      "ListCertificatesByTagResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "total_count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0,
+            "maximum" : 100,
+            "description" : "总记录数。"
+          },
+          "resources" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "资源实例列表,详情请参见TagResource字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/TagResource"
+            }
+          }
+        },
+        "title" : "ListCertificatesByTagResponseBody"
+      },
+      "ListCertificatesByTagRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "without_any_tag" : {
+            "type" : "boolean",
+            "description" : "不包含任意一个标签,该字段为true时查询所有不带标签的资源,此时忽略 “tags”、“tags_any”、“not_tags”、“not_tags_any”字段。"
+          },
+          "tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsTag"
+            }
+          },
+          "tags_any" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsTag"
+            }
+          },
+          "not_tags" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsTag"
+            }
+          },
+          "not_tags_any" : {
+            "type" : "array",
+            "minItems" : 1,
+            "maxItems" : 20,
+            "description" : "标签列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsTag"
+            }
+          },
+          "limit" : {
+            "type" : "integer",
+            "default" : 10,
+            "format" : "int32",
+            "minimum" : 10,
+            "maximum" : 50,
+            "description" : "每页条目数量,取值如下:"
+          },
+          "offset" : {
+            "type" : "integer",
+            "default" : 0,
+            "format" : "int32",
+            "minimum" : 0,
+            "description" : "索引位置,偏移量,从offset指定的下一条数据开始查询。"
+          },
+          "action" : {
+            "type" : "string",
+            "minLength" : 5,
+            "maxLength" : 6,
+            "description" : "操作标识(可设置为“filter”或者“count”)。"
+          },
+          "matches" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 10,
+            "description" : "搜索字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsMatch"
+            }
+          }
+        },
+        "title" : "ListCertificatesByTagRequestBody"
+      },
+      "TagResource" : {
+        "type" : "object",
+        "properties" : {
+          "resource_id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "证书的资源ID。"
+          },
+          "tags" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "标签列表,没有标签默认为空数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/ScsResourceTag"
+            }
+          },
+          "resource_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "资源名称,默认为空字符串。"
+          },
+          "resource_detail" : {
+            "type" : "object",
+            "description" : "证书资源详情。",
+            "properties" : {
+              "cert_id" : {
+                "type" : "string",
+                "minLength" : 16,
+                "maxLength" : 16,
+                "description" : "证书ID。"
+              },
+              "cert_name" : {
+                "type" : "string",
+                "minLength" : 3,
+                "maxLength" : 63,
+                "description" : "证书名称。字符长度为3~63位。"
+              },
+              "domain" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "该证书绑定的域名。"
+              },
+              "cert_type" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "证书类型。"
+              },
+              "cert_brand" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "证书品牌。GLOBALSIGN:GlobalSign品牌。"
+              },
+              "domain_type" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "域名类型。"
+              },
+              "purchase_period" : {
+                "type" : "integer",
+                "minimum" : 0,
+                "maximum" : 1000,
+                "description" : "证书有效期(年)。"
+              },
+              "expired_time" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "证书到期时间,毫秒级时间戳。"
+              },
+              "order_status" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "订单状态。"
+              },
+              "domain_num" : {
+                "type" : "integer",
+                "minimum" : 1,
+                "maximum" : 250,
+                "format" : "int8",
+                "description" : "域名数量。"
+              },
+              "wildcard_number" : {
+                "type" : "integer",
+                "minimum" : 1,
+                "maximum" : 100,
+                "format" : "int8",
+                "description" : "泛域名数量。"
+              },
+              "sans" : {
+                "type" : "string",
+                "description" : "证书绑定的附加域名信息。",
+                "minLength" : 0,
+                "maxLength" : 4096
+              },
+              "cert_des" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "证书描述。"
+              },
+              "signature_algorithm" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "签名算法。"
+              },
+              "fail_reason" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "失败原因。"
+              },
+              "partner_order_id" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 63,
+                "description" : "订单流水号。"
+              },
+              "push_support" : {
+                "type" : "boolean",
+                "description" : "证书是否支持推送。"
+              },
+              "cert_issued_time" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 32,
+                "description" : "证书签发时间,毫秒级时间戳。"
+              },
+              "resource_id" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 63,
+                "description" : "资源id。"
+              },
+              "unsubscribe_support" : {
+                "type" : "boolean",
+                "description" : "证书是否支持退订。"
+              },
+              "enterprise_project_id" : {
+                "type" : "string",
+                "description" : "企业项目ID,默认为“0”。",
+                "minLength" : 0,
+                "maxLength" : 36
+              },
+              "origin_cert_id" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 63,
+                "description" : "初始证书id。"
+              },
+              "renewal_cert_id" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 63,
+                "description" : "续费购买证书id。"
+              },
+              "auto_renew_status" : {
+                "type" : "integer",
+                "minimum" : 0,
+                "maximum" : 100,
+                "description" : "自动续费状态。"
+              },
+              "remain_cert_number" : {
+                "type" : "integer",
+                "minimum" : 0,
+                "maximum" : 100,
+                "description" : "剩余证书有效个数。"
+              },
+              "auto_deploy_support" : {
+                "type" : "boolean",
+                "description" : "证书是否支持自动部署。"
+              }
+            }
+          }
+        },
+        "title" : "TagResource"
+      },
+      "CreateCsrRequestBody" : {
+        "type" : "object",
+        "required" : [ "name", "domain_name", "private_key_algo", "usage" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "自定义CSR名称。"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "CSR绑定的域名。如果您想在提交证书申请时使用该CSR,必须确保证书绑定域名包含此处设置的域名。"
+          },
+          "sans" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "CSR绑定的附加域名。"
+          },
+          "private_key_algo" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "私钥算法。取值如下:"
+          },
+          "usage" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "CSR用途。取值如下:"
+          },
+          "company_country" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "国家,当“usage”取值为“ENTERPRISE”时,本参数必填。取值示例:CN。"
+          },
+          "company_province" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "省份,当“usage”取值为“ENTERPRISE”时,本参数必填。取值示例:北京市。"
+          },
+          "company_city" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "城市。当“usage”取值为“ENTERPRISE”时,本参数必填。取值示例:北京市。"
+          },
+          "company_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "公司名称。当“usage”取值为“ENTERPRISE”时,本参数必填。"
+          }
+        },
+        "title" : "CreateCsrRequestBody"
+      },
+      "CreateCsrResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "CSR的ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "自定义CSR名称。"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "域名。"
+          },
+          "sans" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "CSR绑定的附加域名。"
+          },
+          "private_key_algo" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "密钥算法的类型。取值如下"
+          },
+          "usage" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "CSR用途。取值如下:"
+          },
+          "company_country" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "国家,当“usage”取值为“ENTERPRISE”时,本参数必填。"
+          },
+          "company_province" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "省份,当“usage”取值为“ENTERPRISE”时,本参数必填。"
+          },
+          "company_city" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "城市,当“usage”取值为“ENTERPRISE”时,本参数必填。"
+          },
+          "company_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "公司名称,当“usage”取值为“ENTERPRISE”时,本参数必填。"
+          },
+          "create_time" : {
+            "type" : "integer",
+            "minimum" : 13,
+            "maximum" : 20,
+            "format" : "int64",
+            "description" : "CSR创建时间。"
+          },
+          "update_time" : {
+            "type" : "integer",
+            "minimum" : 13,
+            "maximum" : 20,
+            "format" : "int64",
+            "description" : "CSR更新时间。"
+          }
+        },
+        "title" : "CreateCsrResponseBody"
+      },
+      "PushCertificateRequestBody" : {
+        "type" : "object",
+        "required" : [ "target_project", "target_service" ],
+        "properties" : {
+          "target_project" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "description" : "推送到的目标服务所在的区域。"
+          },
+          "target_service" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "证书推送的目标服务,当前仅支持:CDN、WAF、ELB。"
+          }
+        },
+        "title" : "PushCertificateRequestBody"
+      },
+      "UnsubscribeCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "unsubscribe_results" ],
+        "properties" : {
+          "unsubscribe_results" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 63,
+            "description" : "退订结果。"
+          }
+        },
+        "title" : "UnsubscribeCertificateResponseBody"
+      },
+      "Authentification" : {
+        "type" : "object",
+        "properties" : {
+          "record_name" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "域名校验值名字。"
+          },
+          "record_type" : {
+            "type" : "string",
+            "description" : "域名校验值类型。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "record_value" : {
+            "type" : "string",
+            "description" : "域名校验值。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "domain" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 255,
+            "description" : "校验值对应的域名。"
+          }
+        },
+        "title" : "Authentification"
+      },
+      "ShowCertificateResponseBody" : {
+        "type" : "object",
+        "required" : [ "id", "status", "order_id", "name", "type", "brand", "push_support", "revoke_reason", "signature_algorithm", "issue_time", "not_before", "not_after", "validity_period", "validation_method", "domain_type", "domain", "sans", "domain_count", "wildcard_count", "authentification", "fingerprint", "multi_domain_type" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "minLength" : 16,
+            "maxLength" : 16,
+            "description" : "证书id。"
+          },
+          "status" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书状态。取值如下:"
+          },
+          "order_id" : {
+            "type" : "string",
+            "description" : "订单id。",
+            "minLength" : 0,
+            "maxLength" : 63
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 63,
+            "description" : "证书名称。"
+          },
+          "type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书类型。取值如下:"
+          },
+          "brand" : {
+            "type" : "string",
+            "description" : "证书品牌。取值如下:",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "push_support" : {
+            "type" : "string",
+            "description" : "证书是否支持推送。",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "revoke_reason" : {
+            "type" : "string",
+            "description" : "证书吊销原因。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "signature_algorithm" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 64,
+            "description" : "签名算法。"
+          },
+          "issue_time" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书签发时间,没有获取到有效值时为空。"
+          },
+          "not_before" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "证书生效时间,没有获取到有效值时为空。"
+          },
+          "not_after" : {
+            "type" : "string",
+            "description" : "证书失效时间,没有获取到有效值时为空。",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "validity_period" : {
+            "type" : "integer",
+            "description" : "证书有效期,按月为单位。云证书管理服务提供了一种购买多年有效期证书的解决方案,这种多年有效期证书生效方式为多张有效期为1年的SSL证书叠加生效,例如:有效期为“3年”的证书实际包含3张有效期为1年且规格相同的SSL证书,在第一张证书到期前30天,系统自动以第一张证书的信息申请第二张证书,在第二张证书到期前30天,系统自动以第一张证书的信息申请第三张证书。",
+            "minimum" : 12,
+            "maximum" : 12,
+            "format" : "int8"
+          },
+          "validation_method" : {
+            "type" : "string",
+            "description" : "域名认证方式,取值如下:DNS、FILE、EMAIL。",
+            "minLength" : 0,
+            "maxLength" : 32
+          },
+          "domain_type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "域名类型,取值如下:"
+          },
+          "multi_domain_type" : {
+            "type" : "string",
+            "minLength" : 0,
+            "maxLength" : 32,
+            "description" : "多域名类型,取值如下:"
+          },
+          "domain" : {
+            "type" : "string",
+            "description" : "证书绑定域名。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "sans" : {
+            "type" : "string",
+            "description" : "证书绑定的附加域名信息。",
+            "minLength" : 0,
+            "maxLength" : 4096
+          },
+          "domain_count" : {
+            "type" : "integer",
+            "description" : "证书可绑定域名个数。",
+            "minimum" : 1,
+            "maximum" : 100
+          },
+          "wildcard_count" : {
+            "type" : "integer",
+            "description" : "证书可绑定附加域名个数。",
+            "minimum" : 0,
+            "maximum" : 99
+          },
+          "fingerprint" : {
+            "type" : "string",
+            "description" : "证书的SHA-1指纹。",
+            "minLength" : 40,
+            "maxLength" : 40
+          },
+          "shared" : {
+            "type" : "boolean",
+            "description" : "是否是共享资源。"
+          },
+          "application_info" : {
+            "type" : "object",
+            "description" : "证书申请信息。",
+            "properties" : {
+              "country" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "国家。"
+              },
+              "company_name" : {
+                "type" : "string",
+                "description" : "公司名称。",
+                "minLength" : 0,
+                "maxLength" : 255
+              },
+              "company_province" : {
+                "type" : "string",
+                "description" : "公司省份。",
+                "minLength" : 0,
+                "maxLength" : 255
+              },
+              "company_city" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "公司所在城市。"
+              },
+              "applicant_name" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "申请人名称。"
+              },
+              "applicant_phone" : {
+                "type" : "string",
+                "description" : "申请人电话。",
+                "minLength" : 0,
+                "maxLength" : 255
+              },
+              "applicant_email" : {
+                "type" : "string",
+                "description" : "申请人邮箱。",
+                "minLength" : 0,
+                "maxLength" : 255
+              },
+              "contact_name" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "技术联系人名称。"
+              },
+              "contact_phone" : {
+                "type" : "string",
+                "description" : "技术联系人电话。",
+                "minLength" : 0,
+                "maxLength" : 255
+              },
+              "contact_email" : {
+                "type" : "string",
+                "minLength" : 0,
+                "maxLength" : 255,
+                "description" : "技术联系人邮箱。"
+              }
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "证书的描述。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "enterprise_project_id" : {
+            "type" : "string",
+            "description" : "企业项目ID,默认为“0”。",
+            "minLength" : 0,
+            "maxLength" : 36
+          },
+          "authentification" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "description" : "域名所有权认证信息,详情请参见Authentification字段数据结构说明。",
+            "items" : {
+              "$ref" : "#/components/schemas/Authentification"
+            }
+          }
+        },
+        "title" : "ShowCertificateResponseBody"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CancelCertificateRequest" : {
+      "post" : {
+        "tags" : [ "证书申请管理" ],
+        "summary" : "撤回证书申请",
+        "description" : "撤回证书申请。",
+        "operationId" : "CancelCertificateRequest",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CancelCertificateApplyResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书ID。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CancelCertificateRequest",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/cancel-cert"
+    },
+    "/ImportCertificate" : {
+      "post" : {
+        "tags" : [ "证书生命周期管理" ],
+        "summary" : "导入证书",
+        "description" : "导入证书到CCM服务管理。",
+        "operationId" : "ImportCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImportCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImportCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/import"
+    },
+    "/ListCertificates" : {
+      "get" : {
+        "tags" : [ "证书生命周期管理" ],
+        "summary" : "查询证书列表",
+        "description" : "根据证书名称或绑定域名查询证书列表。",
+        "operationId" : "ListCertificates",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCertificatesResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条目数量,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "每页条目数量,取值如下:",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 50,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 100,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序方式。根据排序参数sort_key进行排序,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "排序方式。根据排序参数sort_key进行排序,取值如下:",
+            "type" : "string",
+            "default" : "DESC",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "排序依据参数,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "排序依据参数,取值如下:",
+            "type" : "string",
+            "default" : "certUpdateTime",
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "证书状态,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "证书状态,取值如下:",
+            "type" : "string",
+            "default" : "ALL",
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业多项目ID。用户未开通企业多项目时,不需要输入该字段。 用户开通企业多项目时,查询资源可以输入该字段。 若用户不输入该字段,默认查询租户所有有权限的企业多项目下的资源。 此时“enterprise_project_id”取值为“all”。 若用户输入该字段,取值满足以下任一条件。",
+            "type" : "string",
+            "default" : "all",
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "deploy_support",
+          "in" : "query",
+          "description" : "是否仅筛选支持部署的证书。",
+          "required" : false,
+          "schema" : {
+            "description" : "是否仅筛选支持部署的证书。",
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "owned_by_self",
+          "in" : "query",
+          "description" : "过滤资源是否属于当前租户,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "过滤资源是否属于当前租户,取值如下:",
+            "type" : "boolean",
+            "default" : true,
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "expired_days_since",
+          "in" : "query",
+          "description" : "证书在有效期内及最多过期xx天。",
+          "required" : false,
+          "schema" : {
+            "description" : "证书在有效期内及最多过期xx天。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 1095,
+            "minimum" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificates",
+      "x-url" : "{endpoint}/v3/scm/certificates"
+    },
+    "/ApplyCertificate" : {
+      "post" : {
+        "tags" : [ "证书申请管理" ],
+        "summary" : "申请证书",
+        "description" : "申请证书。",
+        "operationId" : "ApplyCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApplyCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ApplyCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ApplyCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/apply"
+    },
+    "/ShowCsrPrivateKey" : {
+      "get" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "查询私钥",
+        "description" : "查询私钥。",
+        "operationId" : "ShowCsrPrivateKey",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowCsrPrivateKeyResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CSR的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "CSR的ID。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCsrPrivateKey",
+      "x-url" : "{endpoint}/v3/scm/csr/{id}/private-key"
+    },
+    "/DeleteCertificate" : {
+      "delete" : {
+        "tags" : [ "证书生命周期管理" ],
+        "summary" : "删除证书",
+        "description" : "删除证书实例,即将证书资源从系统中删除。",
+        "operationId" : "DeleteCertificate",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回。"
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}"
+    },
+    "/ListDeployedResources" : {
+      "post" : {
+        "tags" : [ "证书部署管理" ],
+        "summary" : "查询已部署资源",
+        "description" : "查询证书已部署的具体资源。针对已签发和上传的非国密证书。",
+        "operationId" : "ListDeployedResources",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListDeployedResourcesResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListDeployedResourcesRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListDeployedResources",
+      "x-url" : "{endpoint}/v3/scm/deployed-resources"
+    },
+    "/DeployCertificate" : {
+      "post" : {
+        "tags" : [ "证书部署管理" ],
+        "summary" : "部署证书",
+        "description" : "部署SSL证书到弹性负载均衡(Elastic Load Balance,简称ELB)、Web应用防火墙(Web Application Firewall,WAF)、CDN(Content Delivery Network,内容分发网络)等其它华为云产品中。",
+        "operationId" : "DeployCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeployCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeployCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeployCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/deploy"
+    },
+    "/ListCsr" : {
+      "get" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "查询CSR列表",
+        "description" : "查询CSR列表。",
+        "operationId" : "ListCsr",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCSRResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条目数量,取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "每页条目数量,取值如下:",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10,
+            "maximum" : 50,
+            "minimum" : 10
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0,
+            "maximum" : 100,
+            "minimum" : 0
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "csr名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "csr名称。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 0
+          }
+        }, {
+          "name" : "private_key_algo",
+          "in" : "query",
+          "description" : "密钥算法的类型。取值如下:",
+          "required" : false,
+          "schema" : {
+            "description" : "密钥算法的类型。取值如下:",
+            "type" : "string",
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCsr",
+      "x-url" : "{endpoint}/v3/scm/csr"
+    },
+    "/UploadCsr" : {
+      "post" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "上传CSR",
+        "description" : "上传CSR。",
+        "operationId" : "UploadCsr",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UploadCsrResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UploadCsrRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UploadCsr",
+      "x-url" : "{endpoint}/v3/scm/csr/upload"
+    },
+    "/BatchCreateOrDeleteTags" : {
+      "post" : {
+        "tags" : [ "证书标签管理" ],
+        "summary" : "批量创建或删除标签",
+        "description" : "批量创建或删除标签。",
+        "operationId" : "BatchCreateOrDeleteTags",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateTagResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchCreateOrDeleteTagsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateOrDeleteTags",
+      "x-url" : "{endpoint}/v3/scm/{resource_id}/tags/action"
+    },
+    "/ListTagsByCertificate" : {
+      "get" : {
+        "tags" : [ "证书标签管理" ],
+        "summary" : "根据证书ID查询标签列表",
+        "description" : "根据证书ID查询标签列表。",
+        "operationId" : "ListTagsByCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListTagsByCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTagsByCertificate",
+      "x-url" : "{endpoint}/v3/scm/{resource_id}/tags"
+    },
+    "/ShowCsr" : {
+      "get" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "查询CSR",
+        "description" : "查询CSR。",
+        "operationId" : "ShowCsr",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CSRResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CSR的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "CSR的ID。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCsr",
+      "x-url" : "{endpoint}/v3/scm/csr/{id}"
+    },
+    "/CreateCertificateTag" : {
+      "post" : {
+        "tags" : [ "证书标签管理" ],
+        "summary" : "创建标签",
+        "description" : "创建标签。",
+        "operationId" : "CreateCertificateTag",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperateTagResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCertificateTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCertificateTag",
+      "x-url" : "{endpoint}/v3/scm/{resource_id}/tags"
+    },
+    "/DeleteCsr" : {
+      "delete" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "删除CSR",
+        "description" : "删除CSR。",
+        "operationId" : "DeleteCsr",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回。"
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CSR的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "CSR的ID。",
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCsr",
+      "x-url" : "{endpoint}/v3/scm/csr/{id}"
+    },
+    "/SubscribeCertificate" : {
+      "post" : {
+        "tags" : [ "证书订单管理" ],
+        "summary" : "购买SSL证书",
+        "description" : "购买SSL证书。",
+        "operationId" : "SubscribeCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PurchaseCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PurchaseCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SubscribeCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/buy"
+    },
+    "/UpdateCsr" : {
+      "put" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "更新CSR",
+        "description" : "更新CSR。",
+        "operationId" : "UpdateCsr",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CSRResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "CSR的ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "CSR的ID。",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCSRRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateCsr",
+      "x-url" : "{endpoint}/v3/scm/csr/{id}"
+    },
+    "/ExportCertificate" : {
+      "post" : {
+        "tags" : [ "证书生命周期管理" ],
+        "summary" : "导出证书",
+        "description" : "导出证书。",
+        "operationId" : "ExportCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/export"
+    },
+    "/ListAllTags" : {
+      "get" : {
+        "tags" : [ "证书标签管理" ],
+        "summary" : "查询所有标签列表",
+        "description" : "查询所有标签列表。",
+        "operationId" : "ListAllTags",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListAllTagsResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAllTags",
+      "x-url" : "{endpoint}/v3/scm/tags"
+    },
+    "/BatchPushCertificate" : {
+      "post" : {
+        "tags" : [ "证书部署管理" ],
+        "summary" : "批量推送证书",
+        "description" : "批量推送SSL证书到弹性负载均衡(Elastic Load Balance,简称ELB)、Web应用防火墙(Web Application Firewall,WAF)、CDN(Content Delivery Network,内容分发网络)等其它华为云产品中。",
+        "operationId" : "BatchPushCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchPushCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchPushCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchPushCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/batch-push"
+    },
+    "/ListCertificatesByTag" : {
+      "post" : {
+        "tags" : [ "证书标签管理" ],
+        "summary" : "根据标签查询证书列表",
+        "description" : "根据标签查询证书列表。",
+        "operationId" : "ListCertificatesByTag",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListCertificatesByTagResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "resource_instances",
+          "in" : "path",
+          "description" : "定值为resource_instances。",
+          "required" : true,
+          "schema" : {
+            "example" : "resource_instances",
+            "description" : "定值为resource_instances。",
+            "type" : "string",
+            "maxLength" : 18,
+            "minLength" : 18
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListCertificatesByTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCertificatesByTag",
+      "x-url" : "{endpoint}/v3/scm/{resource_instances}/action"
+    },
+    "/CreateCsr" : {
+      "post" : {
+        "tags" : [ "CSR管理" ],
+        "summary" : "创建CSR",
+        "description" : "创建CSR。",
+        "operationId" : "CreateCsr",
+        "responses" : {
+          "201" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateCsrResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCsrRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCsr",
+      "x-url" : "{endpoint}/v3/scm/csr"
+    },
+    "/PushCertificate" : {
+      "post" : {
+        "tags" : [ "证书部署管理" ],
+        "summary" : "推送证书",
+        "description" : "推送SSL证书到弹性负载均衡(Elastic Load Balance,简称ELB)、Web应用防火墙(Web Application Firewall,WAF)、CDN(Content Delivery Network,内容分发网络)等其它华为云产品中。",
+        "operationId" : "PushCertificate",
+        "responses" : {
+          "204" : {
+            "description" : "正常返回。"
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PushCertificateRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "PushCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}/push"
+    },
+    "/UnsubscribeCertificate" : {
+      "delete" : {
+        "tags" : [ "证书订单管理" ],
+        "summary" : "退订证书",
+        "description" : "退订证书。",
+        "operationId" : "UnsubscribeCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnsubscribeCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "访问页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "cert_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UnsubscribeCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{cert_id}/unsubscribe"
+    },
+    "/ShowCertificate" : {
+      "get" : {
+        "tags" : [ "证书生命周期管理" ],
+        "summary" : "获取证书详情",
+        "description" : "查询某张证书的详细信息。",
+        "operationId" : "ShowCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "正常返回。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowCertificateResponseBody"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "认证失败。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "禁止访问。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "请求页面未找到。"
+          },
+          "500" : {
+            "description" : "请求未完成,服务器内部异常。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string",
+            "maxLength" : 2097152,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "证书id。",
+          "required" : true,
+          "schema" : {
+            "description" : "证书id。",
+            "type" : "string",
+            "maxLength" : 16,
+            "minLength" : 16
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCertificate",
+      "x-url" : "{endpoint}/v3/scm/certificates/{certificate_id}"
+    }
+  }
+}

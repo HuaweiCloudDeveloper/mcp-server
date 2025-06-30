@@ -1,0 +1,401 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "DSS-DSS管理",
+    "title" : "DSS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "VersionBody" : {
+        "required" : [ "id", "links", "min_version", "status", "updated", "version" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "版本id"
+          },
+          "links" : {
+            "description" : "版本链接",
+            "$ref" : "#/components/schemas/VersionLinks"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "版本状态"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "版本上线时间"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "微版本最大值,如果没有微版本则为空"
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "微版本最小值,如果没有微版本则为空"
+          }
+        },
+        "description" : "版本号详情",
+        "type" : "object"
+      },
+      "VersionsList" : {
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "描述version 相关对象的列表。",
+            "items" : {
+              "$ref" : "#/components/schemas/VersionBody"
+            }
+          }
+        },
+        "description" : "版本号列表",
+        "type" : "object"
+      },
+      "VersionLinks" : {
+        "required" : [ "href", "rel" ],
+        "properties" : {
+          "rel" : {
+            "type" : "string",
+            "description" : "链接的描述。",
+            "default" : "self"
+          },
+          "href" : {
+            "type" : "string",
+            "description" : "版本号查询链接。"
+          }
+        },
+        "description" : "版本详情的links对象",
+        "type" : "object"
+      },
+      "PoolDetails" : {
+        "required" : [ "availability_zone", "capacity", "created_at", "id", "name", "project_id", "status", "type" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "专属分布式存储池名称。"
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "专属分布式存储池ID。"
+          },
+          "project_id" : {
+            "type" : "string",
+            "description" : "所属的项目ID。"
+          },
+          "capacity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "申请的专属分布式存储池容量,单位GB。"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "专属分布式存储池的存储类型。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "专属分布式存储池的状态,详细信息请参考\"[专属分布式存储池状态](https://support.huaweicloud.com/api-dss/dss_02_0023.html)\"。"
+          },
+          "availability_zone" : {
+            "type" : "string",
+            "description" : "专属分布式存储池所在AZ。"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间。"
+          },
+          "total_capacity_gb" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总容量。"
+          },
+          "used_capacity_gb" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已使用容量。"
+          },
+          "provisioned_capacity_gb" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已分配容量。"
+          },
+          "max_over_subscription_ratio" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "超分比。"
+          }
+        },
+        "description" : "单个存储池详情。",
+        "type" : "object"
+      },
+      "ListPoolsResponseBody" : {
+        "required" : [ "count" ],
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "专属分布式存储池个数。"
+          },
+          "pools" : {
+            "type" : "array",
+            "description" : "专属分布式存储池详情列表。",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/PoolDetails"
+            }
+          }
+        },
+        "description" : "存储池详情列表",
+        "type" : "object"
+      },
+      "ShowVersionResponseBody" : {
+        "properties" : {
+          "version" : {
+            "description" : "",
+            "$ref" : "#/components/schemas/VersionBody"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ListVersion" : {
+      "get" : {
+        "tags" : [ "DSS管理" ],
+        "summary" : "查询版本号列表",
+        "description" : "获取版本号列表",
+        "operationId" : "ListVersion",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "版本号详情列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VersionsList"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVersion",
+      "x-url" : "{endpoint}/"
+    },
+    "/ShowPool" : {
+      "get" : {
+        "tags" : [ "DSS管理" ],
+        "summary" : "获取单个专属存储池详情",
+        "description" : "获取单个专属存储池详情。",
+        "operationId" : "ShowPool",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "存储池详情",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PoolDetails"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "dss_id",
+          "in" : "path",
+          "description" : "专属分布式存储池ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "专属分布式存储池ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "usage",
+          "in" : "query",
+          "description" : "当usage=true时,返回值带有专属分布式存储池容量信息,默认为false。",
+          "required" : false,
+          "schema" : {
+            "description" : "当usage=true时,返回值带有专属分布式存储池容量信息,默认为false。",
+            "type" : "boolean"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPool",
+      "x-url" : "{endpoint}/v1/{project_id}/pools/{dss_id}"
+    },
+    "/ListPools" : {
+      "get" : {
+        "tags" : [ "DSS管理" ],
+        "summary" : "获取专属存储详情列表",
+        "description" : "获取租户申请的专属分布式存储池详情列表,支持过滤查询和分页查询。",
+        "operationId" : "ListPools",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "存储池详情列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListPoolsResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回结果个数限制。",
+          "required" : false,
+          "schema" : {
+            "description" : "返回结果个数限制。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页查询起始地址,必须是正整数或0(页查询偏移量,表示查询该偏移量后面所有的存储池)。",
+          "required" : false,
+          "schema" : {
+            "description" : "分页查询起始地址,必须是正整数或0(页查询偏移量,表示查询该偏移量后面所有的存储池)。",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "存储池的状态,例如available, deploying和extending。",
+          "required" : false,
+          "schema" : {
+            "description" : "存储池的状态,例如available, deploying和extending。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "专属分布式存储池的名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "专属分布式存储池的名称。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "usage",
+          "in" : "query",
+          "description" : "当usage=true时,返回值带有专属分布式存储池容量信息,默认为false。",
+          "required" : false,
+          "schema" : {
+            "description" : "当usage=true时,返回值带有专属分布式存储池容量信息,默认为false。",
+            "type" : "boolean"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPools",
+      "x-url" : "{endpoint}/v1/{project_id}/pools/detail"
+    },
+    "/ShowVersions" : {
+      "get" : {
+        "tags" : [ "DSS管理" ],
+        "summary" : "查询指定版本号详情",
+        "description" : "查询指定版本号详情",
+        "operationId" : "ShowVersions",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "版本号详情",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowVersionResponseBody"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "api_version",
+          "in" : "path",
+          "description" : "查询的目标版本号。",
+          "required" : true,
+          "schema" : {
+            "description" : "查询的目标版本号。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVersions",
+      "x-url" : "{endpoint}/{api_version}"
+    }
+  }
+}

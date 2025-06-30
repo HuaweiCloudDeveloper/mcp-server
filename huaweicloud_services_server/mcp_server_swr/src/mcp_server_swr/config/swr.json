@@ -1,0 +1,5638 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "SWR-其他",
+    "title" : "SWR",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "GetFeatureGatesResp" : {
+        "required" : [ "enable_experience", "enable_hss_service", "enable_image_scan", "enable_sm3", "enable_image_sync", "enable_cci_service", "enable_image_label", "enable_pipeline" ],
+        "properties" : {
+          "enable_experience" : {
+            "type" : "boolean",
+            "description" : "是否支持体验馆"
+          },
+          "enable_hss_service" : {
+            "type" : "boolean",
+            "description" : "是否支持对接hss服务"
+          },
+          "enable_image_scan" : {
+            "type" : "boolean",
+            "description" : "是否支持镜像扫描"
+          },
+          "enable_sm3" : {
+            "type" : "boolean",
+            "description" : "是否支持国密场景"
+          },
+          "enable_image_sync" : {
+            "type" : "boolean",
+            "description" : "是否支持镜像同步"
+          },
+          "enable_cci_service" : {
+            "type" : "boolean",
+            "description" : "是否支持对接cci服务"
+          },
+          "enable_image_label" : {
+            "type" : "boolean",
+            "description" : "是否支持镜像标签"
+          },
+          "enable_pipeline" : {
+            "type" : "boolean",
+            "description" : "是否支持流水线服务"
+          }
+        },
+        "type" : "object"
+      },
+      "SyncRepos" : {
+        "type" : "object",
+        "description" : "镜像自动同步规则",
+        "items" : {
+          "$ref" : "#/components/schemas/SyncRepo"
+        }
+      },
+      "SyncRepo" : {
+        "required" : [ "createdAt", "domainID", "domainName", "id", "namespace", "override", "remoteNamespace", "remoteRegionId", "repoName", "syncAuto", "updatedAt" ],
+        "properties" : {
+          "createdAt" : {
+            "type" : "string",
+            "description" : "创建时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "domainID" : {
+            "type" : "string",
+            "description" : "租户ID"
+          },
+          "domainName" : {
+            "type" : "string",
+            "description" : "租户名"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ID"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "组织名"
+          },
+          "override" : {
+            "type" : "boolean",
+            "description" : "是否覆盖"
+          },
+          "remoteNamespace" : {
+            "type" : "string",
+            "description" : "目的组织"
+          },
+          "remoteRegionId" : {
+            "type" : "string",
+            "description" : "目的region"
+          },
+          "repoName" : {
+            "type" : "string",
+            "description" : "仓库名"
+          },
+          "syncAuto" : {
+            "type" : "boolean",
+            "description" : "自动同步"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "description" : "更新时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          }
+        },
+        "type" : "object"
+      },
+      "UserAuth" : {
+        "required" : [ "user_id", "user_name", "auth" ],
+        "properties" : {
+          "user_id" : {
+            "type" : "string",
+            "description" : "用户id,需要从IAM服务获取",
+            "example" : "fb3f175c1fd146ab8cdae3272be6107b"
+          },
+          "user_name" : {
+            "type" : "string",
+            "description" : "用户名,需要从IAM服务获取",
+            "example" : "user01"
+          },
+          "auth" : {
+            "type" : "integer",
+            "format" : "int64",
+            "enum" : [ 7, 3, 1 ],
+            "description" : "用户权限,7表示管理权限,3表示编辑权限,1表示读取权限",
+            "example" : 1
+          }
+        },
+        "type" : "object"
+      },
+      "ShowNamespaceAuthResp" : {
+        "required" : [ "id", "name", "creator_name", "self_auth", "others_auths" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "id"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "组织创建者"
+          },
+          "self_auth" : {
+            "description" : "本用户权限",
+            "$ref" : "#/components/schemas/UserAuth"
+          },
+          "others_auths" : {
+            "type" : "array",
+            "description" : "其他用户的权限",
+            "items" : {
+              "$ref" : "#/components/schemas/UserAuth"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Rule" : {
+        "required" : [ "params", "tag_selectors", "template" ],
+        "properties" : {
+          "template" : {
+            "type" : "string",
+            "enum" : [ "date_rule", "tag_rule" ],
+            "description" : "回收类型,date_rule、tag_rule"
+          },
+          "params" : {
+            "type" : "object",
+            "description" : "template是date_rule时,设置params为{\"days\": \"xxx\"}"
+          },
+          "tag_selectors" : {
+            "type" : "array",
+            "description" : "例外镜像",
+            "items" : {
+              "$ref" : "#/components/schemas/TagSelector"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Retention" : {
+        "required" : [ "algorithm", "id", "rules", "scope" ],
+        "properties" : {
+          "algorithm" : {
+            "type" : "string",
+            "description" : "回收规则匹配策略,or"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ID"
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "镜像老化规则",
+            "items" : {
+              "$ref" : "#/components/schemas/Rule"
+            }
+          },
+          "scope" : {
+            "type" : "string",
+            "description" : "保留字段"
+          }
+        },
+        "description" : "镜像老化规则",
+        "type" : "object"
+      },
+      "TagSelector" : {
+        "required" : [ "kind", "pattern" ],
+        "properties" : {
+          "kind" : {
+            "type" : "string",
+            "description" : "匹配规则,label、regexp"
+          },
+          "pattern" : {
+            "type" : "string",
+            "description" : "kind是label时,设置为镜像版本,kind是regexp时,设置为正则表达式"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateRetentionRequestBody" : {
+        "required" : [ "rules", "algorithm" ],
+        "properties" : {
+          "algorithm" : {
+            "type" : "string",
+            "description" : "老化规则匹配策略,固定为\"or\""
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "镜像老化规则",
+            "items" : {
+              "$ref" : "#/components/schemas/Rule"
+            }
+          }
+        },
+        "example" : {
+          "algorithm" : "or",
+          "rules" : [ {
+            "params" : {
+              "days" : "30"
+            },
+            "tag_selectors" : [ {
+              "kind" : "label",
+              "pattern" : "v5"
+            }, {
+              "kind" : "label",
+              "pattern" : "1.0.1"
+            }, {
+              "kind" : "regexp",
+              "pattern" : "^123$"
+            } ],
+            "template" : "date_rule"
+          } ]
+        },
+        "type" : "object"
+      },
+      "CreateImageSyncRepoRequestBody" : {
+        "required" : [ "remoteRegionId", "remoteNamespace" ],
+        "properties" : {
+          "remoteRegionId" : {
+            "type" : "string",
+            "description" : "目标region ID。"
+          },
+          "remoteNamespace" : {
+            "type" : "string",
+            "description" : "目标组织"
+          },
+          "syncAuto" : {
+            "type" : "boolean",
+            "description" : "自动同步,默认为false"
+          },
+          "override" : {
+            "type" : "boolean",
+            "description" : "是否覆盖,默认为false"
+          }
+        },
+        "example" : {
+          "remoteRegionId" : "cn-north-208",
+          "remoteNamespace" : "sdsad",
+          "syncAuto" : true,
+          "override" : true
+        },
+        "type" : "object"
+      },
+      "DeleteImageSyncRepoRequestBody" : {
+        "required" : [ "remoteRegionId", "remoteNamespace" ],
+        "properties" : {
+          "remoteRegionId" : {
+            "type" : "string",
+            "description" : "目标region ID。"
+          },
+          "remoteNamespace" : {
+            "type" : "string",
+            "description" : "目标组织"
+          }
+        },
+        "description" : "需要删除镜像自动同步任务的信息",
+        "example" : {
+          "remoteRegionId" : "cn-north-208",
+          "remoteNamespace" : "sdsad"
+        },
+        "type" : "object"
+      },
+      "RetentionLog" : {
+        "required" : [ "created_at", "id", "namespace", "repo", "retention_id", "rule_type", "tag" ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ID"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "组织名"
+          },
+          "repo" : {
+            "type" : "string",
+            "description" : "镜像仓库名"
+          },
+          "retention_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "老化规则ID"
+          },
+          "rule_type" : {
+            "type" : "string",
+            "description" : "规则"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "镜像版本"
+          }
+        },
+        "type" : "object"
+      },
+      "RetentionHistory" : {
+        "required" : [ "retention_log", "total" ],
+        "properties" : {
+          "retention_log" : {
+            "type" : "array",
+            "description" : "镜像老化日志",
+            "items" : {
+              "$ref" : "#/components/schemas/RetentionLog"
+            }
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "总个数"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateRepoDomainsRequestBody" : {
+        "required" : [ "permit", "deadline" ],
+        "properties" : {
+          "permit" : {
+            "type" : "string",
+            "description" : "当前只支持read权限",
+            "example" : "read"
+          },
+          "deadline" : {
+            "type" : "string",
+            "description" : "截止时间,UTC时间格式。永久有效为forever",
+            "example" : "2018-10-01T16:00:00.000Z"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述。默认值为空字符串",
+            "example" : "description"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateRetentionResp" : {
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "镜像老化规则id"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateRetentionRequestBody" : {
+        "required" : [ "algorithm", "rules" ],
+        "properties" : {
+          "algorithm" : {
+            "type" : "string",
+            "description" : "回收规则匹配策略,固定为\"or\""
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "镜像老化规则",
+            "items" : {
+              "$ref" : "#/components/schemas/Rule"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TriggerHistories" : {
+        "required" : [ "action", "app_type", "application", "cluster_id", "cluster_name", "cluster_ns", "condition", "container", "created_at", "creator_name", "detail", "result", "tag" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "触发动作,update"
+          },
+          "app_type" : {
+            "type" : "string",
+            "description" : "应用类型,deployments、statefulsets"
+          },
+          "application" : {
+            "type" : "string",
+            "description" : "应用名"
+          },
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "集群ID(cci时为空)"
+          },
+          "cluster_name" : {
+            "type" : "string",
+            "description" : "集群名(cci时为空)"
+          },
+          "cluster_ns" : {
+            "type" : "string",
+            "description" : "应用名所在的namespace"
+          },
+          "condition" : {
+            "type" : "string",
+            "description" : "触发条件,type为all时为.*,type为tag时为tag名,type为regular时为正则表达式"
+          },
+          "container" : {
+            "type" : "string",
+            "description" : "需更新的container名,默认为所有container"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "创建人"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "详情"
+          },
+          "result" : {
+            "type" : "string",
+            "description" : "更新结果,success、failed"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "触发的版本号"
+          }
+        },
+        "type" : "object"
+      },
+      "Triggers" : {
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/Trigger"
+        },
+        "description" : "触发器列表"
+      },
+      "Trigger" : {
+        "required" : [ "action", "app_type", "application", "cluster_id", "cluster_name", "cluster_ns", "condition", "container", "created_at", "creator_name", "enable", "name", "trigger_history", "trigger_mode", "trigger_type" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "触发动作,update"
+          },
+          "app_type" : {
+            "type" : "string",
+            "description" : "应用类型,deployments、statefulsets"
+          },
+          "application" : {
+            "type" : "string",
+            "description" : "应用名"
+          },
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "集群ID(cci时为空)"
+          },
+          "cluster_name" : {
+            "type" : "string",
+            "description" : "集群名(cci时为空)"
+          },
+          "cluster_ns" : {
+            "type" : "string",
+            "description" : "应用名所在的namespace"
+          },
+          "condition" : {
+            "type" : "string",
+            "description" : "触发条件,type为all时为.*,type为tag时为tag名,type为regular时为正则表达式"
+          },
+          "container" : {
+            "type" : "string",
+            "description" : "需更新的container名,默认为所有container"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "创建人"
+          },
+          "enable" : {
+            "type" : "string",
+            "description" : "是否生效"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "触发器名"
+          },
+          "trigger_history" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TriggerHistories"
+            },
+            "description" : "触发器历史"
+          },
+          "trigger_mode" : {
+            "type" : "string",
+            "description" : "触发器类型,cce、cci"
+          },
+          "trigger_type" : {
+            "type" : "string",
+            "description" : "触发条件,all、tag、regular"
+          }
+        },
+        "type" : "object"
+      },
+      "FailSyncImages" : {
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/ImageTag"
+        },
+        "description" : "失败的版本"
+      },
+      "ImageTag" : {
+        "type" : "object",
+        "description" : "版本"
+      },
+      "CreateManualImageSyncRepoRequestBody" : {
+        "required" : [ "imageTag", "remoteNamespace", "remoteRegionId" ],
+        "properties" : {
+          "imageTag" : {
+            "type" : "array",
+            "description" : "版本列表",
+            "items" : {
+              "type" : "string",
+              "description" : "版本"
+            }
+          },
+          "override" : {
+            "type" : "boolean",
+            "description" : "是否覆盖,默认为false"
+          },
+          "remoteNamespace" : {
+            "type" : "string",
+            "description" : "目标组织"
+          },
+          "remoteRegionId" : {
+            "type" : "string",
+            "description" : "目标region ID。"
+          }
+        },
+        "description" : "手动同步镜像需要的参数",
+        "example" : {
+          "imageTag" : [ "V1" ],
+          "override" : true,
+          "remoteNamespace" : "sdsad",
+          "remoteRegionId" : "cn-north-208"
+        },
+        "type" : "object"
+      },
+      "Overview" : {
+        "properties" : {
+          "domain_id" : {
+            "type" : "string",
+            "description" : "租户ID"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "description" : "租户名称"
+          },
+          "namspace_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "当前租户的命名空间个数",
+            "example" : 36
+          },
+          "repo_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "当前租户的仓库个数",
+            "example" : 36
+          },
+          "image_num" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "当前租户的镜像个数",
+            "example" : 36
+          },
+          "store_space" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "当前租户存储大小",
+            "example" : 36
+          },
+          "downflow_size" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "当前租户下载流量大小",
+            "example" : 36
+          }
+        },
+        "type" : "object"
+      },
+      "ListRepoDomainsResp" : {
+        "type" : "object",
+        "description" : "共享租户列表",
+        "items" : {
+          "$ref" : "#/components/schemas/ShowRepoDomainsResponse"
+        }
+      },
+      "ShowRepoDomainsResponse" : {
+        "required" : [ "namespace", "repository", "access_domain", "permit", "deadline", "description", "creator_id", "creator_name", "created", "updated", "status" ],
+        "properties" : {
+          "namespace" : {
+            "type" : "string",
+            "description" : "组织"
+          },
+          "repository" : {
+            "type" : "string",
+            "description" : "镜像仓库"
+          },
+          "access_domain" : {
+            "type" : "string",
+            "description" : "共享租户名"
+          },
+          "permit" : {
+            "type" : "string",
+            "description" : "权限"
+          },
+          "deadline" : {
+            "type" : "string",
+            "description" : "截止时间"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "description" : "创建者ID"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "创建者名称"
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "镜像创建时间,UTC时间格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "镜像更新时间,UTC时间格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "status" : {
+            "type" : "boolean",
+            "description" : "是否过期:true:有效;false:过期"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateTriggerRequestBody" : {
+        "required" : [ "action", "app_type", "application", "cluster_ns", "condition", "enable", "name", "trigger_type" ],
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "description" : "触发动作,update"
+          },
+          "app_type" : {
+            "type" : "string",
+            "description" : "应用类型,deployments、statefulsets"
+          },
+          "application" : {
+            "type" : "string",
+            "description" : "应用名"
+          },
+          "cluster_id" : {
+            "type" : "string",
+            "description" : "集群ID(trigger_mode设置为cci时为空)"
+          },
+          "cluster_name" : {
+            "type" : "string",
+            "description" : "集群名(trigger_mode设置为cci时为空)"
+          },
+          "cluster_ns" : {
+            "type" : "string",
+            "description" : "应用名所在的namespace"
+          },
+          "condition" : {
+            "type" : "string",
+            "description" : "触发条件,type为all时为.*,type为tag时为tag名,type为regular时为正则表达式"
+          },
+          "container" : {
+            "type" : "string",
+            "description" : "需更新的container名,默认为所有container"
+          },
+          "enable" : {
+            "type" : "string",
+            "description" : "是否生效"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "触发器名"
+          },
+          "trigger_mode" : {
+            "type" : "string",
+            "description" : "触发器类型,cce、cci,默认为cce"
+          },
+          "trigger_type" : {
+            "type" : "string",
+            "description" : "触发条件,all、tag、regular"
+          }
+        },
+        "description" : "需要创建触发器的信息",
+        "example" : {
+          "action" : "update",
+          "app_type" : "deployments",
+          "application" : "adsfa",
+          "cluster_id" : "5b28c12f-dc10-11e9-97b3-0255ac1001b5",
+          "cluster_name" : "test",
+          "cluster_ns" : "default",
+          "condition" : ".*",
+          "container" : "",
+          "enable" : "true",
+          "name" : "test",
+          "trigger_mode" : "cce",
+          "trigger_type" : "all"
+        },
+        "type" : "object"
+      },
+      "ShowQuota" : {
+        "required" : [ "quota_limit", "quota_key", "unit", "used" ],
+        "properties" : {
+          "quota_limit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 15,
+            "description" : "配额限制"
+          },
+          "quota_key" : {
+            "type" : "string",
+            "example" : "namespace",
+            "description" : "配额类型"
+          },
+          "unit" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "单位"
+          },
+          "used" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "description" : "已用配额"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowQuotas" : {
+        "required" : [ "quotas" ],
+        "properties" : {
+          "quotas" : {
+            "type" : "array",
+            "description" : "配额列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ShowQuota"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowRepositoryAuthResp" : {
+        "required" : [ "id", "name", "self_auth", "others_auths" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "id"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。"
+          },
+          "self_auth" : {
+            "description" : "本用户权限",
+            "$ref" : "#/components/schemas/UserAuth"
+          },
+          "others_auths" : {
+            "type" : "array",
+            "description" : "其他用户的权限",
+            "items" : {
+              "$ref" : "#/components/schemas/UserAuth"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateTriggerRequestBody" : {
+        "required" : [ "enable" ],
+        "properties" : {
+          "enable" : {
+            "type" : "string",
+            "description" : "是否生效,true启用,false不启用"
+          }
+        },
+        "example" : {
+          "enable" : "true"
+        },
+        "type" : "object"
+      },
+      "ShowReposResp" : {
+        "required" : [ "name", "category", "description", "size", "is_public", "num_images", "num_download", "created_at", "updated_at", "logo", "url", "path", "internal_path", "domain_name", "namespace", "tags", "status", "total_range" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "仓库名称"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "仓库类型(计划改造,每个镜像会有多个lable标示)"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "仓库描述信息"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库大小"
+          },
+          "is_public" : {
+            "type" : "boolean",
+            "description" : "仓库是否为公共仓库,值为true或false"
+          },
+          "num_images" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库中镜像个数,0 ~ 9223372036854775807"
+          },
+          "num_download" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库下载次数"
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "仓库创建时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "仓库更新时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "logo" : {
+            "type" : "string",
+            "description" : "仓库logo地址(暂时未用)"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "仓库logo图片的URL,URL格式。(暂时未用)"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "镜像pull路径,格式为 swr.cn-north-1.myhuaweicloud.com/namespace/repository"
+          },
+          "internal_path" : {
+            "type" : "string",
+            "description" : "镜像pull路径,格式为 10.125.0.198:20202/namespace/repository"
+          },
+          "domain_name" : {
+            "type" : "string",
+            "description" : "租户名"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "租户的组织名称"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "镜像版本列表",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "boolean",
+            "description" : "查询他人共享镜像:共享是否过期 查询我共享的镜像:默认为false,无意义"
+          },
+          "total_range" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "总记录条数"
+          }
+        },
+        "type" : "object"
+      },
+      "SyncJob" : {
+        "required" : [ "createdAt", "domainID", "domainName", "id", "namespace", "override", "remoteNamespace", "remoteRegionId", "repoName", "status", "syncOperatorId", "syncOperatorName", "tag", "updatedAt" ],
+        "properties" : {
+          "createdAt" : {
+            "type" : "string",
+            "description" : "创建时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "domainID" : {
+            "type" : "string",
+            "description" : "租户ID"
+          },
+          "domainName" : {
+            "type" : "string",
+            "description" : "租户名"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "ID"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "组织名"
+          },
+          "override" : {
+            "type" : "boolean",
+            "description" : "是否覆盖"
+          },
+          "remoteNamespace" : {
+            "type" : "string",
+            "description" : "目的组织"
+          },
+          "remoteRegionId" : {
+            "type" : "string",
+            "description" : "目的region"
+          },
+          "repoName" : {
+            "type" : "string",
+            "description" : "仓库名"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "同步状态,waiting、running、success、failed、timeout、cancel、existed"
+          },
+          "syncOperatorId" : {
+            "type" : "string",
+            "description" : "操作用户ID"
+          },
+          "syncOperatorName" : {
+            "type" : "string",
+            "description" : "操作用户名"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "镜像版本"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "description" : "updatedAt"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateNamespaceRequestBody" : {
+        "required" : [ "namespace" ],
+        "properties" : {
+          "namespace" : {
+            "type" : "string",
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateRepoTagRequestBody" : {
+        "required" : [ "source_tag", "destination_tag" ],
+        "properties" : {
+          "source_tag" : {
+            "type" : "string",
+            "description" : "源镜像版本名称",
+            "example" : "v1.0"
+          },
+          "destination_tag" : {
+            "type" : "string",
+            "description" : "目标镜像版本名称",
+            "example" : "v2.0"
+          },
+          "override" : {
+            "type" : "boolean",
+            "description" : "是否覆盖",
+            "example" : false
+          }
+        },
+        "type" : "object"
+      },
+      "GetAccessDomainResp" : {
+        "required" : [ "exist", "namespace", "repository", "access_domain", "permit", "deadline", "description", "creator_id", "creator_name", "created", "updated", "status" ],
+        "properties" : {
+          "exist" : {
+            "type" : "boolean",
+            "description" : "true:存在;false:不存在"
+          },
+          "namespace" : {
+            "type" : "string",
+            "description" : "组织名称"
+          },
+          "repository" : {
+            "type" : "string",
+            "description" : "镜像仓库名称"
+          },
+          "access_domain" : {
+            "type" : "string",
+            "description" : "共享帐号名"
+          },
+          "permit" : {
+            "type" : "string",
+            "description" : "权限"
+          },
+          "deadline" : {
+            "type" : "string",
+            "description" : "截止时间"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "description" : "创建者ID"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "创建者名称"
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "镜像创建时间,UTC时间格式,时间为UTC标准时间"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "镜像更新时间,UTC时间格式,时间为UTC标准时间"
+          },
+          "status" : {
+            "type" : "boolean",
+            "description" : "是否过期,true:有效;false:过期"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateRepoRequestBody" : {
+        "required" : [ "repository", "is_public" ],
+        "properties" : {
+          "repository" : {
+            "type" : "string",
+            "description" : "镜像仓库名称。小写字母或数字开头,后面跟小写字母、数字、小数点、斜杠、下划线或中划线(其中下划线最多允许连续两个,小数点、斜杠、下划线、中划线不能直接相连),小写字母或数字结尾,1-128个字符。",
+            "example" : "test_repo"
+          },
+          "is_public" : {
+            "type" : "boolean",
+            "description" : "是否为公共仓库,可选值为true或false。",
+            "example" : true
+          },
+          "category" : {
+            "type" : "string",
+            "enum" : [ "app_server", "linux", "framework_app", "database", "lang", "windows", "arms", "other" ],
+            "description" : "仓库类型,可设置为app_server, linux, framework_app, database, lang, other, windows, arm。",
+            "example" : "linux"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "镜像仓库的描述信息。",
+            "example" : "test_description"
+          }
+        },
+        "type" : "object"
+      },
+      "AuthInfo" : {
+        "required" : [ "auth" ],
+        "properties" : {
+          "auth" : {
+            "type" : "string",
+            "description" : "Base64加密的认证信息"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateAuthorizationTokenResp" : {
+        "required" : [ "auths" ],
+        "properties" : {
+          "auths" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/AuthInfo"
+            },
+            "description" : "认证信息"
+          }
+        },
+        "type" : "object"
+      },
+      "UpdateRepoRequestBody" : {
+        "required" : [ "is_public" ],
+        "properties" : {
+          "is_public" : {
+            "type" : "boolean",
+            "description" : "是否为公共仓库,可选值为true或false。",
+            "example" : true
+          },
+          "category" : {
+            "type" : "string",
+            "enum" : [ "app_server", "linux", "framework_app", "database", "lang", "windows", "arms", "other" ],
+            "description" : "仓库类型,可设置为app_server, linux, framework_app, database, lang, other, windows, arm。",
+            "example" : "linux"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "镜像仓库的描述信息。",
+            "example" : "test_description"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateSecretResp" : {
+        "required" : [ "auths" ],
+        "properties" : {
+          "auths" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/AuthInfo"
+            },
+            "description" : "认证信息"
+          }
+        },
+        "type" : "object"
+      },
+      "CreateRepoDomainsRequestBody" : {
+        "required" : [ "access_domain", "permit", "deadline" ],
+        "properties" : {
+          "access_domain" : {
+            "type" : "string",
+            "description" : "共享租户名称",
+            "example" : "huawei"
+          },
+          "permit" : {
+            "type" : "string",
+            "description" : "当前只支持read权限",
+            "example" : "read"
+          },
+          "deadline" : {
+            "type" : "string",
+            "description" : "截止时间,UTC时间格式。永久有效为forever",
+            "example" : "2018-10-01T16:00:00.000Z"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述",
+            "example" : "description"
+          }
+        },
+        "type" : "object"
+      },
+      "Link" : {
+        "required" : [ "href", "rel" ],
+        "properties" : {
+          "href" : {
+            "type" : "string",
+            "description" : "链接"
+          },
+          "rel" : {
+            "type" : "string",
+            "description" : "描述"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowApiVersionResp" : {
+        "required" : [ "version" ],
+        "properties" : {
+          "version" : {
+            "type" : "object",
+            "description" : "描述version相关对象的列表",
+            "$ref" : "#/components/schemas/VersionDetail"
+          }
+        },
+        "type" : "object"
+      },
+      "VersionDetail" : {
+        "required" : [ "id", "links", "version", "status", "updated", "min_version" ],
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "版本ID(版本号)。",
+            "example" : "v2"
+          },
+          "links" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/Link",
+            "description" : "API的URL地址"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "若该版本API支持微版本,则填支持的最大微版本号,如果不支持微版本,则填空。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "版本状态,为如下3种:"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "版本发布时间,要求用UTC时间表示。如v1发布的时间2014-06-28T12:20:21Z。"
+          },
+          "min_version" : {
+            "type" : "string",
+            "description" : "若该版本API 支持微版本,则填支持的最小微版本号, 如果不支持微版本,则填空。"
+          }
+        },
+        "type" : "object"
+      },
+      "ShowNamespaces" : {
+        "required" : [ "namespaces" ],
+        "properties" : {
+          "namespaces" : {
+            "type" : "array",
+            "description" : "组织列表",
+            "items" : {
+              "$ref" : "#/components/schemas/ShowNamespace"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ShowNamespace" : {
+        "required" : [ "id", "name", "creator_name", "auth" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1422,
+            "description" : "id"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "group",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "example" : "username",
+            "description" : "IAM用户名"
+          },
+          "auth" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ 7, 3, 1 ],
+            "example" : 7,
+            "description" : "用户权限。7表示管理权限,3表示编辑权限,1表示读取权限。"
+          }
+        },
+        "type" : "object"
+      },
+      "ListRepositoryTagsDetailsResp" : {
+        "type" : "object",
+        "description" : "镜像tag列表",
+        "items" : {
+          "$ref" : "#/components/schemas/ShowReposTagResp"
+        }
+      },
+      "ShowReposTagResp" : {
+        "required" : [ "id", "repo_id", "Tag", "image_id", "manifest", "digest", "schema", "path", "internal_path", "size", "is_trusted", "created", "updated", "deleted", "domain_id", "scanned", "tag_type" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "tag编号"
+          },
+          "repo_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库编号"
+          },
+          "Tag" : {
+            "type" : "string",
+            "description" : "Tag版本名称"
+          },
+          "image_id" : {
+            "type" : "string",
+            "description" : "镜像id"
+          },
+          "manifest" : {
+            "type" : "string",
+            "description" : "镜像manifest"
+          },
+          "digest" : {
+            "type" : "string",
+            "description" : "镜像hash值"
+          },
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "docker协议版本,值为1或2"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "镜像pull地址,格式为swr.cn-north-1.myhuaweicloud.com/namespace/repository:tag"
+          },
+          "internal_path" : {
+            "type" : "string",
+            "description" : "cce集群内镜像pull路径,格式为 10.125.0.198:20202/namespace/repository:tag"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "镜像大小,0 ~ 9223372036854775807"
+          },
+          "is_trusted" : {
+            "type" : "boolean",
+            "description" : "默认值为false",
+            "default" : false
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "镜像创建时间,UTC时间格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "镜像更新时间,UTC时间格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "deleted" : {
+            "type" : "string",
+            "description" : "镜像删除时间,UTC时间格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "帐号ID"
+          },
+          "scanned" : {
+            "type" : "boolean",
+            "description" : "镜像是否被扫描过"
+          },
+          "tag_type" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "0:manifest类型;1:manifest list类型"
+          }
+        },
+        "type" : "object"
+      },
+      "Report" : {
+        "type" : "object",
+        "description" : "统计数据",
+        "items" : {
+          "$ref" : "#/components/schemas/ReportData"
+        }
+      },
+      "ReportData" : {
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "description" : "时间点",
+            "example" : "2024-09-01"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "统计值",
+            "example" : 36
+          }
+        },
+        "type" : "object"
+      },
+      "ShowRepositoryResp" : {
+        "required" : [ "id", "ns_id", "name", "category", "description", "creator_id", "creator_name", "size", "is_public", "num_images", "num_download", "url", "path", "internal_path", "created", "updated", "domain_id", "priority" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库编号"
+          },
+          "ns_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "组织编号"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "仓库名称"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "仓库类型(计划改造,每个镜像会有多个lable标示)"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "仓库描述信息"
+          },
+          "creator_id" : {
+            "type" : "string",
+            "description" : "仓库创建者id"
+          },
+          "creator_name" : {
+            "type" : "string",
+            "description" : "仓库创建者"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库大小"
+          },
+          "is_public" : {
+            "type" : "boolean",
+            "description" : "仓库是否为公共仓库,值为true或false"
+          },
+          "num_images" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库中镜像个数,0 ~ 9223372036854775807"
+          },
+          "num_download" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "仓库下载次数"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "仓库logo图片的URL,URL格式。(暂时未用)"
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "镜像pull路径,格式为 swr.cn-north-1.myhuaweicloud.com/namespace/repository"
+          },
+          "internal_path" : {
+            "type" : "string",
+            "description" : "镜像pull路径,格式为 10.125.0.198:20202/namespace/repository"
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "仓库创建时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "仓库更新时间,UTC日期格式,时间为UTC标准时间,用户需要根据本地时间计算偏移量;如东8区需要+8:00"
+          },
+          "domain_id" : {
+            "type" : "string",
+            "description" : "帐号ID"
+          },
+          "priority" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "镜像排序优先级"
+          }
+        },
+        "type" : "object"
+      },
+      "ListApiVersionsResp" : {
+        "required" : [ "versions" ],
+        "properties" : {
+          "versions" : {
+            "type" : "array",
+            "description" : "描述version相关对象的列表",
+            "items" : {
+              "$ref" : "#/components/schemas/VersionDetail"
+            }
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowShareFeatureGates" : {
+      "get" : {
+        "tags" : [ "其他" ],
+        "summary" : "查询服务特性开关信息",
+        "description" : "查询服务特性开关信息",
+        "operationId" : "ShowShareFeatureGates",
+        "responses" : {
+          "200" : {
+            "description" : "查询服务开关信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetFeatureGatesResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowShareFeatureGates",
+      "x-url" : "{endpoint}/v2/manage/projects/{project_id}/feature-gates"
+    },
+    "/ListImageAutoSyncReposDetails" : {
+      "get" : {
+        "tags" : [ "镜像同步管理" ],
+        "summary" : "获取镜像自动同步任务列表",
+        "description" : "获取为当前镜像仓库所创建的所有自动同步任务。",
+        "operationId" : "ListImageAutoSyncReposDetails",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SyncRepos"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListImageAutoSyncReposDetails",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/sync_repo"
+    },
+    "/ShowNamespaceAuth" : {
+      "get" : {
+        "tags" : [ "组织权限管理" ],
+        "summary" : "查询组织权限",
+        "description" : "查询组织权限",
+        "operationId" : "ShowNamespaceAuth",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowNamespaceAuthResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowNamespaceAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/access"
+    },
+    "/DeleteRetention" : {
+      "delete" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "删除镜像老化规则",
+        "description" : "删除镜像老化规则",
+        "operationId" : "DeleteRetention",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或规则不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "retention_id",
+          "in" : "path",
+          "description" : "镜像老化规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "镜像老化规则id",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRetention",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions/{retention_id}"
+    },
+    "/ListRetentions" : {
+      "get" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "获取镜像老化规则列表",
+        "description" : "获取镜像老化规则列表",
+        "operationId" : "ListRetentions",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Retention"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRetentions",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions"
+    },
+    "/UpdateRetention" : {
+      "patch" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "修改镜像老化规则",
+        "description" : "修改镜像老化规则",
+        "operationId" : "UpdateRetention",
+        "responses" : {
+          "201" : {
+            "description" : "更新成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或规则不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "retention_id",
+          "in" : "path",
+          "description" : "镜像老化规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "镜像老化规则id",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateRetentionRequestBody"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateRetention",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions/{retention_id}"
+    },
+    "/CreateImageSyncRepo" : {
+      "post" : {
+        "tags" : [ "镜像同步管理" ],
+        "summary" : "创建镜像自动同步任务",
+        "description" : "创建镜像自动同步任务,帮助您把最新推送的镜像自动同步到其他区域镜像仓库内。 镜像自动同步帮助您把最新推送的镜像自动同步到其他区域镜像仓库内,后期镜像有更新时,目标仓库的镜像也会自动更新,但已有的镜像不会自动同步。已有镜像的同步需要手动操作,详情请参见手动同步镜像。",
+        "operationId" : "CreateImageSyncRepo",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateImageSyncRepoRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateImageSyncRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/sync_repo"
+    },
+    "/DeleteImageSyncRepo" : {
+      "delete" : {
+        "tags" : [ "镜像同步管理" ],
+        "summary" : "删除镜像自动同步任务",
+        "description" : "根据目标区域、目标组织删除指定的镜像自动同步任务。",
+        "operationId" : "DeleteImageSyncRepo",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或任务不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteImageSyncRepoRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteImageSyncRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/sync_repo"
+    },
+    "/ListRetentionHistories" : {
+      "get" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "获取镜像老化记录",
+        "description" : "获取镜像老化记录",
+        "operationId" : "ListRetentionHistories",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RetentionHistory"
+                }
+              }
+            },
+            "headers" : {
+              "Content-Range" : {
+                "type" : "string",
+                "description" : "offset(开始索引)-count(当前页记录条数)/total(总记录条数)"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "应填写 limit::{limit}|offset::{offset}, 其中{limit}为返回条数,{offset}为起始索引, 注意:offset和limit参数需要配套使用",
+          "required" : false,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "应填写 limit::{limit}|offset::{offset}, 其中{limit}为返回条数,{offset}为起始索引, 注意:offset和limit参数需要配套使用",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRetentionHistories",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions/histories"
+    },
+    "/UpdateRepoDomains" : {
+      "patch" : {
+        "tags" : [ "共享帐号管理" ],
+        "summary" : "更新共享帐号",
+        "description" : "更新共享帐号",
+        "operationId" : "UpdateRepoDomains",
+        "responses" : {
+          "201" : {
+            "description" : "修改成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "access_domain",
+          "in" : "path",
+          "description" : "共享帐号",
+          "required" : true,
+          "schema" : {
+            "description" : "共享帐号",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateRepoDomainsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateRepoDomains",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repositories/{repository}/access-domains/{access_domain}"
+    },
+    "/CreateRetention" : {
+      "post" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "创建镜像老化规则",
+        "description" : "创建镜像老化规则",
+        "operationId" : "CreateRetention",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateRetentionResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRetentionRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRetention",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions"
+    },
+    "/ListTriggersDetails" : {
+      "get" : {
+        "tags" : [ "触发器管理" ],
+        "summary" : "获取镜像仓库下的触发器列表",
+        "description" : "获取镜像仓库下的触发器列表",
+        "operationId" : "ListTriggersDetails",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Triggers"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTriggersDetails",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/triggers"
+    },
+    "/CreateManualImageSyncRepo" : {
+      "post" : {
+        "tags" : [ "镜像同步管理" ],
+        "summary" : "手动同步镜像",
+        "description" : "对于镜像仓库已有的镜像,如果想在其他区域使用,需要手动触发镜像同步。 判断是否同步成功的方法如下:响应状态码为200,无报错信息,表示同步成功。通过SWR管理控制台或调用查询镜像仓库概要信息接口,在目标区域的目标组织下,若存在所同步的镜像版本表示同步成功。",
+        "operationId" : "CreateManualImageSyncRepo",
+        "responses" : {
+          "200" : {
+            "description" : "成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          },
+          "default" : {
+            "description" : "失败的版本",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FailSyncImages"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateManualImageSyncRepoRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateManualImageSyncRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/sync_images"
+    },
+    "/ShowDomainOverview" : {
+      "get" : {
+        "tags" : [ "其他" ],
+        "summary" : "获取租户总览信息",
+        "description" : "获取租户总览信息",
+        "operationId" : "ShowDomainOverview",
+        "responses" : {
+          "200" : {
+            "description" : "获取租户总览信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Overview"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDomainOverview",
+      "x-url" : "{endpoint}/v2/manage/overview"
+    },
+    "/UpdateUserRepositoryAuth" : {
+      "patch" : {
+        "tags" : [ "镜像权限管理" ],
+        "summary" : "更新镜像权限",
+        "description" : "更新镜像权限",
+        "operationId" : "UpdateUserRepositoryAuth",
+        "responses" : {
+          "201" : {
+            "description" : "更新成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "UpdateRepositoryAuthRequestBody" : {
+                    "description" : "需要创建镜像权限的信息",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/UserAuth"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateUserRepositoryAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/access"
+    },
+    "/ListRepoDomains" : {
+      "get" : {
+        "tags" : [ "共享帐号管理" ],
+        "summary" : "获取共享帐号列表",
+        "description" : "获取共享帐号列表",
+        "operationId" : "ListRepoDomains",
+        "responses" : {
+          "200" : {
+            "description" : "成功查询共享帐号列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRepoDomainsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRepoDomains",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repositories/{repository}/access-domains"
+    },
+    "/DeleteRepoDomains" : {
+      "delete" : {
+        "tags" : [ "共享帐号管理" ],
+        "summary" : "删除共享帐号",
+        "description" : "删除共享帐号",
+        "operationId" : "DeleteRepoDomains",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "access_domain",
+          "in" : "path",
+          "description" : "共享租户名",
+          "required" : true,
+          "schema" : {
+            "example" : "group",
+            "description" : "共享租户名",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRepoDomains",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repositories/{repository}/access-domains/{access_domain}"
+    },
+    "/ShowRetention" : {
+      "get" : {
+        "tags" : [ "镜像老化规则管理" ],
+        "summary" : "获取镜像老化规则记录",
+        "description" : "获取镜像老化规则记录",
+        "operationId" : "ShowRetention",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Retention"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或规则不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "retention_id",
+          "in" : "path",
+          "description" : "镜像老化规则id",
+          "required" : true,
+          "schema" : {
+            "description" : "镜像老化规则id",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRetention",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/retentions/{retention_id}"
+    },
+    "/CreateTrigger" : {
+      "post" : {
+        "tags" : [ "触发器管理" ],
+        "summary" : "创建触发器",
+        "description" : "创建触发器",
+        "operationId" : "CreateTrigger",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库不存在"
+          },
+          "409" : {
+            "description" : "触发器已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTriggerRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateTrigger",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/triggers"
+    },
+    "/ListQuotas" : {
+      "get" : {
+        "tags" : [ "配额管理" ],
+        "summary" : "获取配额信息",
+        "description" : "获取配额信息",
+        "operationId" : "ListQuotas",
+        "responses" : {
+          "200" : {
+            "description" : "获取配额成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowQuotas"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目ID",
+          "required" : true,
+          "schema" : {
+            "example" : "08d353ac6700d23a2f4cc019546cb...",
+            "description" : "项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQuotas",
+      "x-url" : "{endpoint}/v2/manage/projects/{project_id}/quotas"
+    },
+    "/ShowUserRepositoryAuth" : {
+      "get" : {
+        "tags" : [ "镜像权限管理" ],
+        "summary" : "查询镜像权限",
+        "description" : "查询镜像权限",
+        "operationId" : "ShowUserRepositoryAuth",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowRepositoryAuthResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowUserRepositoryAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/access"
+    },
+    "/UpdateTrigger" : {
+      "patch" : {
+        "tags" : [ "触发器管理" ],
+        "summary" : "更新触发器配置",
+        "description" : "更新触发器配置",
+        "operationId" : "UpdateTrigger",
+        "responses" : {
+          "201" : {
+            "description" : "更新成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或触发器不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "trigger",
+          "in" : "path",
+          "description" : "触发器名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_trigger",
+            "description" : "触发器名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTriggerRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateTrigger",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/triggers/{trigger}"
+    },
+    "/ListReposDetails" : {
+      "get" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "查询镜像仓库列表",
+        "description" : "查询镜像仓库列表",
+        "operationId" : "ListReposDetails",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ShowReposResp"
+                  }
+                }
+              }
+            },
+            "headers" : {
+              "Content-Range" : {
+                "type" : "string",
+                "description" : "offset(开始索引)-count(当前页记录条数)/total(总记录条数)"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "query",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+          "required" : false,
+          "schema" : {
+            "example" : "huawei123113",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "镜像仓库名称。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+          "required" : false,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "镜像仓库分类,可设置为app_server, linux, framework_app, database, lang, other, windows, arm。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+          "required" : false,
+          "schema" : {
+            "example" : "linux",
+            "description" : "镜像仓库分类,可设置为app_server, linux, framework_app, database, lang, other, windows, arm。注意:和filter最好分开使用,如果同时使用,此过滤参数将失效,以filter为准。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_column",
+          "in" : "query",
+          "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "updated_time",
+            "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_type",
+          "in" : "query",
+          "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "asc",
+            "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "注意:如果使用filter至少要传递一个filter参数。应填写 namespace::{namespace}|name::{name}|limit::{limit}|offset::{offset}|order_column::{order_column}|order_type::{order_type},其中{namespace}为组织名称。",
+          "required" : false,
+          "schema" : {
+            "description" : "注意:如果使用filter至少要传递一个filter参数。应填写 namespace::{namespace}|name::{name}|limit::{limit}|offset::{offset}|order_column::{order_column}|order_type::{order_type},其中{namespace}为组织名称。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListReposDetails",
+      "x-url" : "{endpoint}/v2/manage/repos"
+    },
+    "/ListSharedReposDetails" : {
+      "get" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "查询共享镜像列表",
+        "description" : "查询共享镜像列表",
+        "operationId" : "ListSharedReposDetails",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ShowReposResp"
+                  }
+                }
+              }
+            },
+            "headers" : {
+              "Content-Range" : {
+                "type" : "string",
+                "description" : "offset(开始索引)-count(当前页记录条数)/total(总记录条数)"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "query",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : false,
+          "schema" : {
+            "example" : "huawei123113",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "镜像仓库名称",
+          "required" : false,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "center",
+          "in" : "query",
+          "description" : "self: 我共享的镜像。thirdparty: 他人共享给我的镜像",
+          "required" : true,
+          "schema" : {
+            "example" : "linux",
+            "description" : "self: 我共享的镜像。thirdparty: 他人共享给我的镜像",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_column",
+          "in" : "query",
+          "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "updated_time",
+            "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_type",
+          "in" : "query",
+          "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "asc",
+            "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "应填写 center::{center}|name::{name}|limit::{limit}|offset::{offset}|namespace::{namespace}|order_column::{order_column}|order_type::{order_type} ,其中",
+          "required" : false,
+          "schema" : {
+            "description" : "应填写 center::{center}|name::{name}|limit::{limit}|offset::{offset}|namespace::{namespace}|order_column::{order_column}|order_type::{order_type} ,其中",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSharedReposDetails",
+      "x-url" : "{endpoint}/v2/manage/shared-repositories"
+    },
+    "/DeleteNamespaces" : {
+      "delete" : {
+        "tags" : [ "组织管理" ],
+        "summary" : "删除组织",
+        "description" : "删除组织",
+        "operationId" : "DeleteNamespaces",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "406" : {
+            "description" : "组织中还存有镜像,不允许删除组织"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteNamespaces",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}"
+    },
+    "/ShowSyncJob" : {
+      "get" : {
+        "tags" : [ "镜像同步管理" ],
+        "summary" : "获取镜像自动同步任务信息",
+        "description" : "创建镜像自动同步任务后,可以通过此接口查询该任务的状态,以判断是否同步成功。",
+        "operationId" : "ShowSyncJob",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SyncJob"
+                  }
+                }
+              }
+            },
+            "headers" : {
+              "Content-Range" : {
+                "type" : "string",
+                "description" : "offset(开始索引)-count(当前页记录条数)/total(总记录条数)"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或任务不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "应填写 limit::{limit}|offset::{offset}|order::{order} ,其中{limit}为返回条数,{offset}为起始索引,注意:offset和limit参数需要配套使用,且必选。{order}为排序类型(可选),可设置为desc(降序)、asc(升序)",
+          "required" : true,
+          "schema" : {
+            "description" : "应填写 limit::{limit}|offset::{offset}|order::{order} ,其中{limit}为返回条数,{offset}为起始索引,注意:offset和limit参数需要配套使用,且必选。{order}为排序类型(可选),可设置为desc(降序)、asc(升序)",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSyncJob",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/sync_job"
+    },
+    "/CreateNamespace" : {
+      "post" : {
+        "tags" : [ "组织管理" ],
+        "summary" : "创建组织",
+        "description" : "创建组织",
+        "operationId" : "CreateNamespace",
+        "responses" : {
+          "201" : {
+            "description" : "创建组织成功"
+          },
+          "400" : {
+            "description" : "错误的请求或namespace个数超过上限"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "409" : {
+            "description" : "已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateNamespaceRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNamespace",
+      "x-url" : "{endpoint}/v2/manage/namespaces"
+    },
+    "/CreateRepoTag" : {
+      "post" : {
+        "tags" : [ "镜像版本管理" ],
+        "summary" : "创建镜像tag",
+        "description" : "创建镜像tag",
+        "operationId" : "CreateRepoTag",
+        "responses" : {
+          "201" : {
+            "description" : "创建镜像tag成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在或指定的版本不存在"
+          },
+          "409" : {
+            "description" : "目标镜像版本已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRepoTagRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRepoTag",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/tags"
+    },
+    "/CreateUserRepositoryAuth" : {
+      "post" : {
+        "tags" : [ "镜像权限管理" ],
+        "summary" : "创建镜像权限",
+        "description" : "创建镜像权限",
+        "operationId" : "CreateUserRepositoryAuth",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "CreateUserRepositoryAuthRequestBody" : {
+                    "description" : "需要创建镜像权限的信息",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/UserAuth"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateUserRepositoryAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/access"
+    },
+    "/ShowAccessDomain" : {
+      "get" : {
+        "tags" : [ "共享帐号管理" ],
+        "summary" : "判断共享帐号是否存在",
+        "description" : "判断共享租户是否存在",
+        "operationId" : "ShowAccessDomain",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetAccessDomainResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "access_domain",
+          "in" : "path",
+          "description" : "共享帐号",
+          "required" : true,
+          "schema" : {
+            "description" : "共享帐号",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowAccessDomain",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repositories/{repository}/access-domains/{access_domain}"
+    },
+    "/CreateRepo" : {
+      "post" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "在组织下创建镜像仓库",
+        "description" : "在组织下创建镜像仓库。",
+        "operationId" : "CreateRepo",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "409" : {
+            "description" : "镜像仓库已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRepoRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos"
+    },
+    "/ShowTrigger" : {
+      "get" : {
+        "tags" : [ "触发器管理" ],
+        "summary" : "获取触发器详情",
+        "description" : "获取触发器详情",
+        "operationId" : "ShowTrigger",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Trigger"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或触发器不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "trigger",
+          "in" : "path",
+          "description" : "触发器名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_trigger",
+            "description" : "触发器名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowTrigger",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/triggers/{trigger}"
+    },
+    "/CreateNamespaceAuth" : {
+      "post" : {
+        "tags" : [ "组织权限管理" ],
+        "summary" : "创建组织权限",
+        "description" : "创建组织权限",
+        "operationId" : "CreateNamespaceAuth",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "409" : {
+            "description" : "组织权限已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "CreateNamespaceAuthRequestBody" : {
+                    "description" : "创建组织权限需要的信息",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/UserAuth"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNamespaceAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/access"
+    },
+    "/CreateAuthorizationToken" : {
+      "post" : {
+        "tags" : [ "临时登录指令" ],
+        "summary" : "生成增强型登录指令(新)",
+        "description" : "调用该接口,通过获取响应消息头的X-Swr-Dockerlogin的值及响应消息体的host值,可生成增强型登录指令,注:此接口只支持IAM新平面的调用方式。",
+        "operationId" : "CreateAuthorizationToken",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateAuthorizationTokenResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Swr-Dockerlogin" : {
+                "type" : "string",
+                "description" : "docker login登录指令,例如:docker login -u bearertoken@OW******FPUKBXI -p 6f0779072******863d1ae3ccef921b7f33"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAuthorizationToken",
+      "x-url" : "{endpoint}/v2/manage/utils/authorizationtoken"
+    },
+    "/DeleteRepo" : {
+      "delete" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "删除组织下的镜像仓库",
+        "description" : "删除组织下的镜像仓库。",
+        "operationId" : "DeleteRepo",
+        "responses" : {
+          "204" : {
+            "description" : "成功删除镜像仓库的概要信息"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}"
+    },
+    "/UpdateRepo" : {
+      "patch" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "更新镜像仓库的概要信息",
+        "description" : "更新租户组织下的镜像概要信息,包括镜像类型、是否公有、描述信息",
+        "operationId" : "UpdateRepo",
+        "responses" : {
+          "201" : {
+            "description" : "成功更新镜像仓库的概要信息"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称。小写字母或数字开头,后面跟小写字母、数字、小数点、斜杠、下划线或中划线(其中下划线最多允许连续两个,小数点、斜杠、下划线、中划线不能直接相连),小写字母或数字结尾,1-128个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称。小写字母或数字开头,后面跟小写字母、数字、小数点、斜杠、下划线或中划线(其中下划线最多允许连续两个,小数点、斜杠、下划线、中划线不能直接相连),小写字母或数字结尾,1-128个字符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateRepoRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateRepo",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}"
+    },
+    "/CreateSecret" : {
+      "post" : {
+        "tags" : [ "临时登录指令" ],
+        "summary" : "生成临时登录指令",
+        "description" : "调用该接口,通过获取响应消息头的X-Swr-Dockerlogin的值及响应消息体的host值,可生成临时登录指令。",
+        "operationId" : "CreateSecret",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateSecretResp"
+                }
+              }
+            },
+            "headers" : {
+              "X-Swr-Dockerlogin" : {
+                "type" : "string",
+                "description" : "docker login登录指令,例如:docker login -u cn-north-1@OW******FPUKBXI -p 6f0779072******863d1ae3ccef921b7f33"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "projectname",
+          "in" : "query",
+          "description" : "项目名称,缺省值默认为区域名称,例如:cn-north-1。",
+          "required" : false,
+          "schema" : {
+            "description" : "项目名称,缺省值默认为区域名称,例如:cn-north-1。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateSecret",
+      "x-url" : "{endpoint}/v2/manage/utils/secret"
+    },
+    "/DeleteUserRepositoryAuth" : {
+      "delete" : {
+        "tags" : [ "镜像权限管理" ],
+        "summary" : "删除镜像权限",
+        "description" : "删除镜像权限",
+        "operationId" : "DeleteUserRepositoryAuth",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "DeleteUserRepositoryAuthRequestBody" : {
+                    "description" : "用户ID,需从华为云IAM服务获取。",
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteUserRepositoryAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/access"
+    },
+    "/CreateRepoDomains" : {
+      "post" : {
+        "tags" : [ "共享帐号管理" ],
+        "summary" : "创建共享帐号",
+        "description" : "创建共享帐号。镜像上传后,您可以共享私有镜像给其他帐号,并授予下载该镜像的权限。",
+        "operationId" : "CreateRepoDomains",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "409" : {
+            "description" : "共享帐号已存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRepoDomainsRequestBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateRepoDomains",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repositories/{repository}/access-domains"
+    },
+    "/DeleteTrigger" : {
+      "delete" : {
+        "tags" : [ "触发器管理" ],
+        "summary" : "删除触发器",
+        "description" : "删除触发器",
+        "operationId" : "DeleteTrigger",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织或镜像仓库或触发器不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "trigger",
+          "in" : "path",
+          "description" : "触发器名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_trigger",
+            "description" : "触发器名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteTrigger",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/triggers/{trigger}"
+    },
+    "/ShowApiVersion" : {
+      "get" : {
+        "tags" : [ "API版本信息" ],
+        "summary" : "查询指定API版本信息",
+        "description" : "查询指定API版本信息",
+        "operationId" : "ShowApiVersion",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowApiVersionResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "api_version",
+          "in" : "path",
+          "description" : "API版本号。",
+          "required" : true,
+          "schema" : {
+            "example" : "2.26",
+            "description" : "API版本号。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowApiVersion",
+      "x-url" : "{endpoint}/{api_version}"
+    },
+    "/UpdateNamespaceAuth" : {
+      "patch" : {
+        "tags" : [ "组织权限管理" ],
+        "summary" : "更新组织权限",
+        "description" : "更新组织权限",
+        "operationId" : "UpdateNamespaceAuth",
+        "responses" : {
+          "201" : {
+            "description" : "更新成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "UpdateNamespaceAuthRequestBody" : {
+                    "description" : "更新组织权限需要的权限",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/UserAuth"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNamespaceAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/access"
+    },
+    "/ListNamespaces" : {
+      "get" : {
+        "tags" : [ "组织管理" ],
+        "summary" : "查询组织列表",
+        "description" : "查询组织列表",
+        "operationId" : "ListNamespaces",
+        "responses" : {
+          "200" : {
+            "description" : "获取组织列表成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowNamespaces"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "query",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : false,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "应填写namespace::{namespace}|mode::{mode}。其中{namespace}是组织名称,{mode}如果不设置,查看有权限的组织列表;设置为visible,查看可见的组织列表(部分组织:仓库有权限,组织没有权限)。",
+          "required" : false,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "应填写namespace::{namespace}|mode::{mode}。其中{namespace}是组织名称,{mode}如果不设置,查看有权限的组织列表;设置为visible,查看可见的组织列表(部分组织:仓库有权限,组织没有权限)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNamespaces",
+      "x-url" : "{endpoint}/v2/manage/namespaces"
+    },
+    "/DeleteNamespaceAuth" : {
+      "delete" : {
+        "tags" : [ "组织权限管理" ],
+        "summary" : "删除组织权限",
+        "description" : "删除组织权限",
+        "operationId" : "DeleteNamespaceAuth",
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "DeleteNamespaceAuthRequestBody" : {
+                    "description" : "需要删除权限的用户id列表,需要从IAM服务获取",
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteNamespaceAuth",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/access"
+    },
+    "/DeleteRepoTag" : {
+      "delete" : {
+        "tags" : [ "镜像版本管理" ],
+        "summary" : "删除指定tag的镜像",
+        "description" : "删除镜像仓库中指定tag的镜像",
+        "operationId" : "DeleteRepoTag",
+        "responses" : {
+          "204" : {
+            "description" : "成功删除tag指定的镜像"
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在或指定的版本不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "tag",
+          "in" : "path",
+          "description" : "镜像版本名称",
+          "required" : true,
+          "schema" : {
+            "example" : "latest",
+            "description" : "镜像版本名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteRepoTag",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/tags/{tag}"
+    },
+    "/ListRepositoryTags" : {
+      "get" : {
+        "tags" : [ "镜像版本管理" ],
+        "summary" : "查询镜像tag列表",
+        "description" : "查询镜像tag列表",
+        "operationId" : "ListRepositoryTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询镜像列表tag列表成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRepositoryTagsDetailsResp"
+                }
+              }
+            },
+            "headers" : {
+              "Content-Range" : {
+                "type" : "string",
+                "description" : "offset(开始索引)-count(当前页记录条数)/total(总记录条数)"
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "返回条数。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "1",
+            "description" : "起始索引。注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_column",
+          "in" : "query",
+          "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "updated_time",
+            "description" : "按列排序,可设置为updated_at(按更新时间排序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "order_type",
+          "in" : "query",
+          "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "example" : "asc",
+            "description" : "排序类型,可设置为desc(降序)、asc(升序)。注意:order_column和order_type参数需要配套使用。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "tag",
+          "in" : "query",
+          "description" : "镜像版本名。",
+          "required" : false,
+          "schema" : {
+            "example" : "asc",
+            "description" : "镜像版本名。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "应填写 offset::{offset}|limit::{limit}|order_column::{order_column}|order_type::{order_type}|tag::{tag} ,其中{limit}为返回条数,{offset}为起始索引,注意:offset和limit参数需要配套使用。",
+          "required" : false,
+          "schema" : {
+            "description" : "应填写 offset::{offset}|limit::{limit}|order_column::{order_column}|order_type::{order_type}|tag::{tag} ,其中{limit}为返回条数,{offset}为起始索引,注意:offset和limit参数需要配套使用。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListRepositoryTags",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}/tags"
+    },
+    "/ShowDomainResourceReports" : {
+      "get" : {
+        "tags" : [ "其他" ],
+        "summary" : "获取租户资源统计信息",
+        "description" : "获取租户资源统计信息",
+        "operationId" : "ShowDomainResourceReports",
+        "responses" : {
+          "200" : {
+            "description" : "获取租户资源统计信息成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Report"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "example" : "store",
+            "description" : "资源类型",
+            "type" : "string",
+            "enum" : [ "downflow", "store" ]
+          }
+        }, {
+          "name" : "frequency",
+          "in" : "path",
+          "description" : "频率类型",
+          "required" : true,
+          "schema" : {
+            "example" : "daily",
+            "description" : "频率类型",
+            "type" : "string",
+            "enum" : [ "daily" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDomainResourceReports",
+      "x-url" : "{endpoint}/v2/manage/reports/{resource_type}/{frequency}"
+    },
+    "/ShowNamespace" : {
+      "get" : {
+        "tags" : [ "组织管理" ],
+        "summary" : "获取组织详情",
+        "description" : "获取组织详情",
+        "operationId" : "ShowNamespace",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowNamespace"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "组织不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowNamespace",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}"
+    },
+    "/ShowRepository" : {
+      "get" : {
+        "tags" : [ "镜像仓库管理" ],
+        "summary" : "查询镜像仓库概要信息",
+        "description" : "查询镜像仓库概要信息",
+        "operationId" : "ShowRepository",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowRepositoryResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "404" : {
+            "description" : "镜像仓库不存在"
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "path",
+          "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+          "required" : true,
+          "schema" : {
+            "example" : "huawei",
+            "description" : "组织名称。小写字母开头,后面跟小写字母、数字、小数点、下划线或中划线(其中下划线最多允许连续两个,小数点、下划线、中划线不能直接相连),小写字母或数字结尾,1-64个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "repository",
+          "in" : "path",
+          "description" : "镜像仓库名称",
+          "required" : true,
+          "schema" : {
+            "example" : "test_repo",
+            "description" : "镜像仓库名称",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowRepository",
+      "x-url" : "{endpoint}/v2/manage/namespaces/{namespace}/repos/{repository}"
+    },
+    "/ListApiVersions" : {
+      "get" : {
+        "tags" : [ "API版本信息" ],
+        "summary" : "查询所有API版本信息",
+        "description" : "查询所有API版本信息",
+        "operationId" : "ListApiVersions",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListApiVersionsResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json",
+            "description" : "消息体的类型(格式),下方类型可任选其一使用:",
+            "type" : "string",
+            "default" : "application/json",
+            "enum" : [ "application/json;charset=utf-8", "application/json" ]
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApiVersions",
+      "x-url" : "{endpoint}/"
+    }
+  }
+}

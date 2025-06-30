@@ -1,0 +1,5364 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "GEIP-全域弹性公网IP",
+    "title" : "GEIP",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateGlobalEip" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "创建全域弹性公网IP",
+        "description" : "创建全域弹性公网IP",
+        "operationId" : "CreateGlobalEip",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateGlobalEip",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips"
+    },
+    "/CountGlobalEips" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "查询全域弹性公网IP个数",
+        "description" : "查询全域弹性公网IP个数",
+        "operationId" : "CountGlobalEips",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "geip_pool_name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域弹性公网IP池名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "isp",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据运营商线路过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "enum" : [ 4, 6 ]
+            }
+          }
+        }, {
+          "name" : "ip_address",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据ip地址过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ipv6_address",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据ipv6地址过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "freezen",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否冻结过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "polluted",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否污染过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定全域公网带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "gcb_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定骨干带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "idle", "inuse", "pending_create", "pending_update" ]
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.region",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的局点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.public_border_group",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的边缘信息过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所在的站点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountGlobalEips",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/count"
+    },
+    "/ShowJobs" : {
+      "get" : {
+        "tags" : [ "Job相关接口" ],
+        "summary" : "查询Job详情",
+        "description" : "查询Job详情",
+        "operationId" : "ShowJobs",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "job_id",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9-]{30,64}",
+            "minLength" : 30,
+            "maxLength" : 64,
+            "type" : "string",
+            "description" : "job的id"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "action", "status", "error_task", "error_code", "error_message", "start_time", "end_time" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowJobs",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/jobs/{job_id}"
+    },
+    "/CreateGlobalEipSegment" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "创建全域弹性公网IP段",
+        "description" : "创建全域弹性公网IP段",
+        "operationId" : "CreateGlobalEipSegment",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateGlobalEipSegment",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments"
+    },
+    "/BatchDeleteGeipSegmentTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "批量删除全域弹性公网IP段标签",
+        "description" : "批量删除全域弹性公网IP段的标签",
+        "operationId" : "BatchDeleteGeipSegmentTags",
+        "responses" : {
+          "204" : {
+            "description" : "删除全域弹性公网IP标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteGeipSegmentTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/{resource_id}/tags/delete"
+    },
+    "/DisassociateGeipSegmentInstance" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "全域弹性公网IP段解绑后端实例",
+        "description" : "全域弹性公网IP段解绑后端实例",
+        "operationId" : "DisassociateGeipSegmentInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_segment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP段的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateGeipSegmentInstance",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/{global_eip_segment_id}/disassociate-instance"
+    },
+    "/CountInternetBandwidth" : {
+      "get" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "查询全域公网带宽个数",
+        "description" : "查询全域公网带宽个数",
+        "operationId" : "CountInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽大小过滤",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "freezed", "normal" ]
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths/count"
+    },
+    "/ListGlobalEipDomainTags" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "查询全域弹性公网IP项目标签",
+        "description" : "查询全域弹性公网IP的项目标签",
+        "operationId" : "ListGlobalEipDomainTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGlobalEipDomainTags",
+      "x-url" : "{endpoint}/v3/global-eip/tags"
+    },
+    "/ListInternetBandwidthCountFilterTags" : {
+      "post" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "查询资源实例列表数目",
+        "description" : "查询资源实例列表数目",
+        "operationId" : "ListInternetBandwidthCountFilterTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInternetBandwidthCountFilterTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/resource-instances/count"
+    },
+    "/BatchDeleteGlobalEipTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "批量删除全域弹性公网IP标签",
+        "description" : "批量删除全域弹性公网IP的标签",
+        "operationId" : "BatchDeleteGlobalEipTags",
+        "responses" : {
+          "204" : {
+            "description" : "删除全域弹性公网IP标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteGlobalEipTags",
+      "x-url" : "{endpoint}/v3/global-eip/{resource_id}/tags/delete"
+    },
+    "/AddGlobalEipTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "添加全域弹性公网IP标签",
+        "description" : "添加全域弹性公网IP的标签",
+        "operationId" : "AddGlobalEipTags",
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddGlobalEipTags",
+      "x-url" : "{endpoint}/v3/global-eip/{resource_id}/tags"
+    },
+    "/ListGlobalEipCountFilterTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "查询资源实例列表数目",
+        "description" : "查询资源实例列表数目",
+        "operationId" : "ListGlobalEipCountFilterTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGlobalEipCountFilterTags",
+      "x-url" : "{endpoint}/v3/global-eip/resource-instances/count"
+    },
+    "/AssociateInstance" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "绑定后端实例",
+        "description" : "绑定后端实例",
+        "operationId" : "AssociateInstance",
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "binding-instance-service",
+          "in" : "header",
+          "description" : "绑定接口可以加,标识请求是从哪个服务调过来的",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateInstance",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}/associate-instance"
+    },
+    "/CountGlobalEipSegment" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "查询全域弹性公网IP段个数",
+        "description" : "查询全域弹性公网IP段个数",
+        "operationId" : "CountGlobalEipSegment",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "description" : "domain_id",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "count" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "geip_pool_name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域弹性公网IP池名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "isp",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据运营商线路过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "enum" : [ 4, 6 ]
+            }
+          }
+        }, {
+          "name" : "cidr",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据分配的CIDR过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "cidr_v6",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据分配的IPv6 CIDR过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "freezen",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否冻结过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定全域公网带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "idle", "inuse", "pending_create", "pending_update" ]
+            }
+          }
+        }, {
+          "name" : "associate_instance.region",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的局点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.public_border_group",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:根据绑定实例所属的边缘信息过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所在的站点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountGlobalEipSegment",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/count"
+    },
+    "/DetachInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "解绑全域公网带宽",
+        "description" : "解绑全域公网带宽",
+        "operationId" : "DetachInternetBandwidth",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        }, {
+          "name" : "force_unbind",
+          "in" : "query",
+          "schema" : {
+            "type" : "boolean",
+            "description" : "是否强制解绑"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DetachInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}/detach-internet-bandwidth"
+    },
+    "/ShowInternetBandwidthTags" : {
+      "get" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "查询全域公网带宽标签",
+        "description" : "查询全域公网带宽标签",
+        "operationId" : "ShowInternetBandwidthTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowInternetBandwidthTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/{resource_id}/tags"
+    },
+    "/ListSupportRegions" : {
+      "get" : {
+        "tags" : [ "Region限制" ],
+        "summary" : "全域弹性公网IP支持绑定的Region限制",
+        "description" : "全域弹性公网IP支持绑定的Region限制",
+        "operationId" : "ListSupportRegions",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "instance_type", "access_site", "region_id", "public_border_group", "remote_endpoint", "status", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "instance_type", "access_site", "public_border_group", "region_id", "remote_endpoint", "status", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "instance_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据实例类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "public_border_group",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据边缘信息过滤,中心站点or边缘站点",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "region_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据region_id过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "remote_endpoint",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据远端的地址过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSupportRegions",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/support-regions"
+    },
+    "/CreateUserDisclaimer" : {
+      "post" : {
+        "tags" : [ "免责条款签署" ],
+        "summary" : "创建租户签署免责条款",
+        "description" : "创建租户签署免责条款",
+        "operationId" : "CreateUserDisclaimer",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateUserDisclaimer",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/user-disclaimer-records"
+    },
+    "/ShowInternetBandwidth" : {
+      "get" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "查询全域公网带宽详情",
+        "description" : "查询全域公网带宽详情",
+        "operationId" : "ShowInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "isp", "ingress_size", "access_site", "size", "description", "charge_mode", "ratio_95peak", "freezen_info", "domain_id", "status", "created_at", "updated_at", "is_pre_paid", "type", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths/{internet_bandwidth_id}"
+    },
+    "/AddInternetBandwidthTags" : {
+      "post" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "添加全域公网带宽标签",
+        "description" : "添加全域公网带宽标签",
+        "operationId" : "AddInternetBandwidthTags",
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddInternetBandwidthTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/{resource_id}/tags"
+    },
+    "/BatchDeleteInternetBandwidthTags" : {
+      "post" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "批量删除全域公网带宽标签",
+        "description" : "批量删除全域公网带宽标签",
+        "operationId" : "BatchDeleteInternetBandwidthTags",
+        "responses" : {
+          "204" : {
+            "description" : "删除全域公网带宽标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteInternetBandwidthTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/{resource_id}/tags/delete"
+    },
+    "/ListGeipPools" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP池" ],
+        "summary" : "查询全域弹性公网IP池列表",
+        "description" : "查询全域弹性公网IP池列表",
+        "operationId" : "ListGeipPools",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "isp", "access_site", "type", "ip_version", "en_name", "cn_name", "status", "created_at", "updated_at", "description" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "name", "type", "access_site", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "isp",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据运营商线路过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "4", "6" ]
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据池子状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "active", "inactive", "soldout" ]
+            }
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:根据池子里存的内容过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "GEIP", "GEIP_SEGMENT" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGeipPools",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/geip-pools"
+    },
+    "/ListGeipResourceQuotas" : {
+      "get" : {
+        "tags" : [ "配额" ],
+        "summary" : "查询租户全域弹性公网IP配额",
+        "description" : "查询租户全域弹性公网IP配额",
+        "operationId" : "ListGeipResourceQuotas",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据类型过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "geip", "geip_segment", "internetBandwidthIP", "internetBandwidth" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGeipResourceQuotas",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/quotas"
+    },
+    "/DeleteGlobalEipTag" : {
+      "delete" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "删除全域弹性公网IP标签",
+        "description" : "删除全域弹性公网IP的标签",
+        "operationId" : "DeleteGlobalEipTag",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        }, {
+          "name" : "tag_key",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "待删除标签的key"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGlobalEipTag",
+      "x-url" : "{endpoint}/v3/global-eip/{resource_id}/tags/{tag_key}"
+    },
+    "/BatchAttachInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "批量绑定全域公网带宽",
+        "description" : "批量绑定全域公网带宽",
+        "operationId" : "BatchAttachInternetBandwidth",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAttachInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/batch-attach-internet-bandwidths"
+    },
+    "/CreateInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "创建全域公网带宽",
+        "description" : "创建全域公网带宽",
+        "operationId" : "CreateInternetBandwidth",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths"
+    },
+    "/DeleteGlobalEip" : {
+      "delete" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "删除全域弹性公网IP",
+        "description" : "删除全域弹性公网IP",
+        "operationId" : "DeleteGlobalEip",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGlobalEip",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}"
+    },
+    "/ListGlobalEipSegments" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "查询全域弹性公网IP段列表",
+        "description" : "查询全域弹性公网IP段列表",
+        "operationId" : "ListGlobalEipSegments",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "description", "domain_id", "access_site", "geip_pool_name", "isp", "ip_version", "cidr", "cidr_v6", "freezen", "freezen_info", "status", "created_at", "updated_at", "internet_bandwidth", "associate_instance", "is_pre_paid", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "cidr", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "geip_pool_name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域弹性公网IP池名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "isp",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据运营商线路过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "integer",
+              "enum" : [ 4, 6 ]
+            }
+          }
+        }, {
+          "name" : "cidr",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据分配的CIDR过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "cidr_v6",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据分配的IPv6 CIDR过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "freezen",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否冻结过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定全域公网带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "idle", "inuse" ]
+            }
+          }
+        }, {
+          "name" : "associate_instance.region",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的局点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.public_border_group",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:根据绑定实例所属的边缘信息过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所在的站点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.instance_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.service_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的服务ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance.service_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的服务类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGlobalEipSegments",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments"
+    },
+    "/AddGeipSegmentTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "添加全域弹性公网IP段标签",
+        "description" : "添加全域弹性公网IP段的标签",
+        "operationId" : "AddGeipSegmentTags",
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddGeipSegmentTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/{resource_id}/tags"
+    },
+    "/ListGeipSegmentCountFilterTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "查询资源实例列表数目",
+        "description" : "查询资源实例列表的数目",
+        "operationId" : "ListGeipSegmentCountFilterTags",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGeipSegmentCountFilterTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/resource-instances/count"
+    },
+    "/ListGeipSegmentDomainTags" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "查询全域弹性公网IP段项目标签",
+        "description" : "查询全域弹性公网IP段的项目标签",
+        "operationId" : "ListGeipSegmentDomainTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGeipSegmentDomainTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/tags"
+    },
+    "/DeleteGlobalEipSegment" : {
+      "delete" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "删除全域弹性公网IP段",
+        "description" : "删除全域弹性公网IP段",
+        "operationId" : "DeleteGlobalEipSegment",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_segment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP段的ID"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGlobalEipSegment",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/{global_eip_segment_id}"
+    },
+    "/DeleteGeipSegmentTag" : {
+      "delete" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "删除全域弹性公网IP段标签",
+        "description" : "删除全域弹性公网IP段的标签",
+        "operationId" : "DeleteGeipSegmentTag",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        }, {
+          "name" : "tag_key",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "待删除标签的key"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGeipSegmentTag",
+      "x-url" : "{endpoint}/v3/global-eip-segment/{resource_id}/tags/{tag_key}"
+    },
+    "/ListGeipSegmentFilterTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "查询资源实例列表",
+        "description" : "查询资源实例的列表",
+        "operationId" : "ListGeipSegmentFilterTags",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "schema" : {
+            "type" : "array",
+            "description" : "每页条数",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "schema" : {
+            "type" : "array",
+            "description" : "分页起始点",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGeipSegmentFilterTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/resource-instances/filter"
+    },
+    "/ShowUserDisclaimer" : {
+      "get" : {
+        "tags" : [ "免责条款签署" ],
+        "summary" : "查询租户签署免责条款详情",
+        "description" : "查询租户签署免责条款详情",
+        "operationId" : "ShowUserDisclaimer",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "domain_id", "created_at", "updated_at" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowUserDisclaimer",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/user-disclaimer-records"
+    },
+    "/ListSupportMasks" : {
+      "get" : {
+        "tags" : [ "掩码限制" ],
+        "summary" : "查询全域弹性公网IP段支持的掩码列表",
+        "description" : "查询全域弹性公网IP段支持的掩码列表",
+        "operationId" : "ListSupportMasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "ip_version", "mask", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "ip_version", "mask", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "integer",
+              "enum" : [ 4, 6 ]
+            }
+          }
+        }, {
+          "name" : "mask",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据掩码过滤",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSupportMasks",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/support-masks"
+    },
+    "/BatchDetachGeipSegmentInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "全域弹性公网IP段批量解绑全域公网带宽",
+        "description" : "全域弹性公网IP段批量解绑全域公网带宽",
+        "operationId" : "BatchDetachGeipSegmentInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDetachGeipSegmentInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/batch-detach-internet-bandwidths"
+    },
+    "/ListInternetBandwidthLimits" : {
+      "get" : {
+        "tags" : [ "全域公网带宽限制" ],
+        "summary" : "全域公网带宽限制列表",
+        "description" : "查询全域公网带宽限制列表",
+        "operationId" : "ListInternetBandwidthLimits",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "charge_mode", "min_size", "ext_limit", "max_size" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "charge_mode",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据计费模式过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "bandwidth", "95peak_bidirection", "95peak_plus_1000", "95peak_guar" ]
+            }
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "schema" : {
+            "description" : "根据全域公网带宽类型过滤",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInternetBandwidthLimits",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidth-limits"
+    },
+    "/ShowGeipSegmentTags" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "查询全域弹性公网IP段标签",
+        "description" : "查询全域弹性公网IP段的标签",
+        "operationId" : "ShowGeipSegmentTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowGeipSegmentTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/{resource_id}/tags"
+    },
+    "/DeleteInternetBandwidthTag" : {
+      "delete" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "删除全域公网带宽标签",
+        "description" : "删除全域公网带宽标签",
+        "operationId" : "DeleteInternetBandwidthTag",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        }, {
+          "name" : "tag_key",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "待删除标签的key"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteInternetBandwidthTag",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/{resource_id}/tags/{tag_key}"
+    },
+    "/UpdateGlobalEipSegment" : {
+      "put" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "更新全域弹性公网IP段",
+        "description" : "更新全域弹性公网IP段",
+        "operationId" : "UpdateGlobalEipSegment",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_segment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP段的ID"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateGlobalEipSegment",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/{global_eip_segment_id}"
+    },
+    "/AssociateGeipSegmentInstance" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "全域弹性公网IP段绑定后端实例",
+        "description" : "全域弹性公网IP段绑定后端实例",
+        "operationId" : "AssociateGeipSegmentInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_segment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP段的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateGeipSegmentInstance",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/{global_eip_segment_id}/associate-instance"
+    },
+    "/AttachInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "绑定全域公网带宽",
+        "description" : "绑定全域公网带宽",
+        "operationId" : "AttachInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AttachInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}/attach-internet-bandwidth"
+    },
+    "/ListJobs" : {
+      "get" : {
+        "tags" : [ "Job相关接口" ],
+        "summary" : "查询Job列表",
+        "description" : "查询Job列表",
+        "operationId" : "ListJobs",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "action", "status", "error_task", "error_code", "error_message", "start_time", "end_time" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "start_time", "end_time" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "action",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据action过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "CreateGEIPGraph", "UpdateGEIPGraph", "BindGEIPGraph", "UnBindGEIPGraph", "BatchAttachBandwidthGraph", "BatchDetachBandwidthGraph", "CreateGeipSegmentGraph", "BindGeipSegmentGraph" ]
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据job状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "FINISH_SUCC", "FINISH_ROLLBACK_SUCC" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListJobs",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/jobs"
+    },
+    "/ListAccessSites" : {
+      "get" : {
+        "tags" : [ "接入点" ],
+        "summary" : "查询接入点列表",
+        "description" : "查询接入点列表",
+        "operationId" : "ListAccessSites",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 5,
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "proxy_region", "en_name", "cn_name", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "name", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "proxy_region",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据proxy_region过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "iec_az_code",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据iec_az_code过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAccessSites",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/access-sites"
+    },
+    "/ListGlobalEips" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "查询全域弹性公网IP列表",
+        "description" : "查询全域弹性公网IP列表",
+        "operationId" : "ListGlobalEips",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "description", "domain_id", "access_site", "geip_pool_name", "isp", "ip_version", "ip_address", "ipv6_address", "freezen", "freezen_info", "polluted", "status", "created_at", "updated_at", "internet_bandwidth_info", "global_connection_bandwidth_info", "associate_instance_info", "is_pre_paid", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "ip_address", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "geip_pool_name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域弹性公网IP池名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "isp",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据运营商线路过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ip_version",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据IP版本过滤",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32",
+              "enum" : [ 4, 6 ]
+            }
+          }
+        }, {
+          "name" : "ip_address",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据ip地址过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "ipv6_address",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据ipv6地址过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "freezen",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否冻结过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "polluted",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否污染过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "internet_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定全域公网带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "gcb_bandwidth_is_null",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据是否绑定骨干带宽过滤",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "idle", "inuse", "pending_create", "pending_update" ]
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.region",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的局点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.public_border_group",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的边缘信息过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所在的站点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.instance_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.service_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例所属的服务ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "associate_instance_info.service_type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据绑定实例的服务类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGlobalEips",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips"
+    },
+    "/ListInternetBandwidthDomainTags" : {
+      "get" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "查询全域公网带宽项目标签",
+        "description" : "查询全域公网带宽项目标签",
+        "operationId" : "ListInternetBandwidthDomainTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInternetBandwidthDomainTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/tags"
+    },
+    "/ShowGlobalEipSegment" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "查询全域弹性公网IP段详情",
+        "description" : "查询全域弹性公网IP段详情",
+        "operationId" : "ShowGlobalEipSegment",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_segment_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP段的ID"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "description", "domain_id", "access_site", "geip_pool_name", "isp", "ip_version", "cidr", "cidr_v6", "freezen", "freezen_info", "status", "created_at", "updated_at", "internet_bandwidth", "associate_instance", "is_pre_paid", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowGlobalEipSegment",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/{global_eip_segment_id}"
+    },
+    "/DeleteInternetBandwidth" : {
+      "delete" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "删除全域公网带宽",
+        "description" : "删除全域公网带宽",
+        "operationId" : "DeleteInternetBandwidth",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths/{internet_bandwidth_id}"
+    },
+    "/BatchCreateGlobalEip" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "批量创建全域弹性公网IP",
+        "description" : "批量创建全域弹性公网IP",
+        "operationId" : "BatchCreateGlobalEip",
+        "responses" : {
+          "201" : {
+            "description" : "Accepted",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateGlobalEip",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/batch-create"
+    },
+    "/ShowGlobalEip" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "查询全域弹性公网IP详情",
+        "description" : "查询全域弹性公网IP详情",
+        "operationId" : "ShowGlobalEip",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "description", "domain_id", "access_site", "geip_pool_name", "isp", "ip_version", "ip_address", "ipv6_address", "freezen", "freezen_info", "polluted", "status", "created_at", "updated_at", "internet_bandwidth_info", "global_connection_bandwidth_info", "associate_instance_info", "is_pre_paid", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowGlobalEip",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}"
+    },
+    "/ShowGlobalEipTags" : {
+      "get" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "查询全域弹性公网IP标签",
+        "description" : "查询全域弹性公网IP的标签",
+        "operationId" : "ShowGlobalEipTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowGlobalEipTags",
+      "x-url" : "{endpoint}/v3/global-eip/{resource_id}/tags"
+    },
+    "/BatchCreateGeipSegmentTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段标签" ],
+        "summary" : "批量添加全域弹性公网IP段标签",
+        "description" : "批量添加全域弹性公网IP段的标签",
+        "operationId" : "BatchCreateGeipSegmentTags",
+        "responses" : {
+          "204" : {
+            "description" : "创建全域弹性公网IP段标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateGeipSegmentTags",
+      "x-url" : "{endpoint}/v3/global-eip-segment/{resource_id}/tags/create"
+    },
+    "/ListTenantGeipSupportInstances" : {
+      "get" : {
+        "tags" : [ "Region限制" ],
+        "summary" : "查询指定站点允许绑定的Region信息",
+        "description" : "console通过此接口获取指定pop点的全域弹性公网IP允许绑定的region实例信息",
+        "operationId" : "ListTenantGeipSupportInstances",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 64,
+            "description" : "接入点信息"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "instance_type", "region_id", "public_border_group", "status", "created_at", "updated_at" ]
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListTenantGeipSupportInstances",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/support-instances/{access_site}"
+    },
+    "/BatchCreateInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "批量创建全域公网带宽",
+        "description" : "批量创建全域公网带宽",
+        "operationId" : "BatchCreateInternetBandwidth",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths/batch-create"
+    },
+    "/ListGlobalEipFilterTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "查询资源实例列表",
+        "description" : "查询资源实例列表",
+        "operationId" : "ListGlobalEipFilterTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "每页条数",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "分页起始点",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGlobalEipFilterTags",
+      "x-url" : "{endpoint}/v3/global-eip/resource-instances/filter"
+    },
+    "/BatchDetachInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "批量解绑全域公网带宽",
+        "description" : "批量解绑全域公网带宽",
+        "operationId" : "BatchDetachInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDetachInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/batch-detach-internet-bandwidths"
+    },
+    "/UpdateGlobalEip" : {
+      "put" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "更新全域弹性公网IP信息",
+        "description" : "更新全域弹性公网IP信息",
+        "operationId" : "UpdateGlobalEip",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateGlobalEip",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}"
+    },
+    "/BatchCreateInternetBandwidthTags" : {
+      "post" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "批量添加全域公网带宽标签",
+        "description" : "批量添加全域公网带宽标签",
+        "operationId" : "BatchCreateInternetBandwidthTags",
+        "responses" : {
+          "204" : {
+            "description" : "创建全域公网带宽标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateInternetBandwidthTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/{resource_id}/tags/create"
+    },
+    "/ListInternetBandwidthFilterTags" : {
+      "post" : {
+        "tags" : [ "全域公网带宽标签" ],
+        "summary" : "查询资源实例列表",
+        "description" : "查询资源实例列表",
+        "operationId" : "ListInternetBandwidthFilterTags",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "每页条数",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "分页起始点",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInternetBandwidthFilterTags",
+      "x-url" : "{endpoint}/v3/internet-bandwidth/resource-instances/filter"
+    },
+    "/DisassociateInstance" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP" ],
+        "summary" : "解绑后端实例",
+        "description" : "解绑后端实例",
+        "operationId" : "DisassociateInstance",
+        "responses" : {
+          "201" : {
+            "description" : "CREATED",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "is_reserve_gcb",
+          "in" : "header",
+          "description" : "解绑实例后是否保留GCB,false表示解绑实例后会同时删除GCB",
+          "required" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "global_eip_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateInstance",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eips/{global_eip_id}/disassociate-instance"
+    },
+    "/UpdateInternetBandwidth" : {
+      "put" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "更新全域公网带宽",
+        "description" : "更新全域公网带宽",
+        "operationId" : "UpdateInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "internet_bandwidth_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域公网带宽的ID"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths/{internet_bandwidth_id}"
+    },
+    "/BatchAttachGeipSegmentInternetBandwidth" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP段" ],
+        "summary" : "全域弹性公网IP段批量绑定全域公网带宽",
+        "description" : "全域弹性公网IP段批量绑定全域公网带宽",
+        "operationId" : "BatchAttachGeipSegmentInternetBandwidth",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchAttachGeipSegmentInternetBandwidth",
+      "x-url" : "{endpoint}/v3/{domain_id}/global-eip-segments/batch-attach-internet-bandwidths"
+    },
+    "/DeleteUserDisclaimer" : {
+      "delete" : {
+        "tags" : [ "免责条款签署" ],
+        "summary" : "删除租户撤销免责条款",
+        "description" : "删除租户撤销免责条款",
+        "operationId" : "DeleteUserDisclaimer",
+        "responses" : {
+          "204" : {
+            "description" : "NO CONTENT",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteUserDisclaimer",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/user-disclaimer-records"
+    },
+    "/ListInternetBandwidths" : {
+      "get" : {
+        "tags" : [ "全域公网带宽" ],
+        "summary" : "查询全域公网带宽列表",
+        "description" : "查询全域公网带宽列表",
+        "operationId" : "ListInternetBandwidths",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页条数",
+          "required" : false,
+          "schema" : {
+            "maximum" : 2000,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "marker",
+          "in" : "query",
+          "description" : "分页起始点",
+          "required" : false,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "page_reverse",
+          "in" : "query",
+          "description" : "翻页方向",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "domain_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-z0-9]{5,32}",
+            "minLength" : 5,
+            "maxLength" : 32,
+            "type" : "string",
+            "description" : "租户账号ID,获取租户账号ID请参见[租户账号ID](https://support.huaweicloud.com/api-iam/iam_17_0002.html)"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "- 功能说明:展示字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "id", "name", "isp", "ingress_size", "access_site", "size", "description", "charge_mode", "ratio_95peak", "freezen_info", "domain_id", "status", "created_at", "updated_at", "is_pre_paid", "type", "tags", "sys_tags", "enterprise_project_id" ]
+            }
+          }
+        }, {
+          "name" : "ext-fields",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "在默认显示字段的基础上追加指定字段",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "geip_count", "geip_segment_count" ]
+            }
+          }
+        }, {
+          "name" : "sort_key",
+          "in" : "query",
+          "description" : "按照sort_key指定的字段排序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "id", "size", "created_at", "updated_at" ]
+            }
+          }
+        }, {
+          "name" : "sort_dir",
+          "in" : "query",
+          "description" : "排序的方向,倒序或者正序",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "enum" : [ "asc", "desc" ]
+            }
+          }
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源ID过滤",
+            "items" : {
+              "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽大小过滤",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据名称过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "name_like",
+          "in" : "query",
+          "schema" : {
+            "type" : "string",
+            "description" : "根据名称模糊匹配"
+          }
+        }, {
+          "name" : "access_site",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据接入点过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据资源状态过滤",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "freezed", "normal" ]
+            }
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据企业项目ID过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "tags",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据标签过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "schema" : {
+            "type" : "array",
+            "description" : "根据全域公网带宽类型过滤",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInternetBandwidths",
+      "x-url" : "{endpoint}/v3/{domain_id}/geip/internet-bandwidths"
+    },
+    "/BatchCreateGlobalEipTags" : {
+      "post" : {
+        "tags" : [ "全域弹性公网IP标签" ],
+        "summary" : "批量添加全域弹性公网IP标签",
+        "description" : "批量添加全域弹性公网IP的标签",
+        "operationId" : "BatchCreateGlobalEipTags",
+        "responses" : {
+          "204" : {
+            "description" : "创建全域弹性公网IP标签成功",
+            "headers" : {
+              "X-Request-Id" : {
+                "description" : "本次请求编号",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户的Token,如何获取用户Token请参见[获取用户Token](https://support.huaweicloud.com/api-iam/iam_30_0001.html#iam_30_0001__li195948474711)",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}",
+            "minLength" : 36,
+            "maxLength" : 36,
+            "type" : "string",
+            "description" : "全域弹性公网IP的ID"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateGlobalEipTags",
+      "x-url" : "{endpoint}/v3/global-eip/{resource_id}/tags/create"
+    }
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "RGC-Landing Zone治理",
+    "title" : "RGC",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DisableControl" : {
+      "post" : {
+        "tags" : [ "Governance" ],
+        "summary" : "关闭控制策略",
+        "description" : "关闭组织下的某个单元的某个控制策略。",
+        "operationId" : "DisableControl",
+        "responses" : {
+          "201" : {
+            "description" : "请求成功。"
+          }
+        },
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableControl",
+      "x-url" : "{endpoint}/v1/governance/controls/disable"
+    },
+    "/ListControlsForOrganizationalUnit" : {
+      "get" : {
+        "tags" : [ "Governance" ],
+        "summary" : "列出注册OU下开启的控制策略",
+        "description" : "列出组织里某个注册OU开启的所有控制策略信息。",
+        "operationId" : "ListControlsForOrganizationalUnit",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ManagedOrganizationalUnitId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListControlsForOrganizationalUnit",
+      "x-url" : "{endpoint}/v1/governance/managed-organizational-units/{managed_organizational_unit_id}/controls"
+    },
+    "/ShowControlOperate" : {
+      "get" : {
+        "tags" : [ "Governance" ],
+        "summary" : "查询控制策略操作状态",
+        "description" : "根据操作ID查询返回指定ID的操作状态。",
+        "operationId" : "ShowControlOperate",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ControlOperateRequestIdInPath"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowControlOperate",
+      "x-url" : "{endpoint}/v1/governance/operation-control-status/{operation_control_status_id}"
+    },
+    "/RegisterOrganizationalUnit" : {
+      "post" : {
+        "tags" : [ "ManagedOrganization" ],
+        "summary" : "注册OU",
+        "description" : "将组织里的某个OU注册到RGC服务。",
+        "operationId" : "RegisterOrganizationalUnit",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/OrganizationalUnitIdInPath"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RegisterOrganizationalUnit",
+      "x-url" : "{endpoint}/v1/managed-organization/organizational-units/{organizational_unit_id}/register"
+    },
+    "/ShowOperation" : {
+      "get" : {
+        "tags" : [ "ManagedOrganization" ],
+        "summary" : "查询注册过程信息",
+        "description" : "查询在RGC服务里注册/取消注册的过程信息。",
+        "operationId" : "ShowOperation",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/OrganizationalOperationIdInPath"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOperation",
+      "x-url" : "{endpoint}/v1/managed-organization/{operation_id}"
+    },
+    "/ShowManagedAccount" : {
+      "get" : {
+        "tags" : [ "ManagedOrganization" ],
+        "summary" : "查询纳管账号信息",
+        "description" : "查询组织里某个纳管账号信息。",
+        "operationId" : "ShowManagedAccount",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ManagedAccountId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowManagedAccount",
+      "x-url" : "{endpoint}/v1/managed-organization/managed-accounts/{managed_account_id}"
+    },
+    "/CreateAccount" : {
+      "post" : {
+        "tags" : [ "ManagedOrganization" ],
+        "summary" : "创建账号",
+        "description" : "在组织里的某个注册OU下创建账号。",
+        "operationId" : "CreateAccount",
+        "responses" : {
+          "201" : {
+            "description" : "请求成功。"
+          }
+        },
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateAccount",
+      "x-url" : "{endpoint}/v1/managed-organization/managed-accounts"
+    },
+    "/EnableControl" : {
+      "post" : {
+        "tags" : [ "Governance" ],
+        "summary" : "开启控制策略",
+        "description" : "给组织下的某个单元开启某个控制策略。",
+        "operationId" : "EnableControl",
+        "responses" : {
+          "201" : {
+            "description" : "请求成功。"
+          }
+        },
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableControl",
+      "x-url" : "{endpoint}/v1/governance/controls/enable"
+    },
+    "/ListEnabledControls" : {
+      "get" : {
+        "tags" : [ "Governance" ],
+        "summary" : "列出开启的控制策略",
+        "description" : "列出组织里开启的所有控制策略信息。",
+        "operationId" : "ListEnabledControls",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEnabledControls",
+      "x-url" : "{endpoint}/v1/governance/enabled-controls"
+    }
+  }
+}

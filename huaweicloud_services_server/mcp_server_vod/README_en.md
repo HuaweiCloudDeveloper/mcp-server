@@ -1,0 +1,354 @@
+# VOD MCP Server 
+
+
+## Version
+v0.1.0
+
+## Overview
+
+VOD MCP Server is a Model Context Protocol (Model Context Protocol) server, providing the ability for MCP clients (such as Claude Desktop, Cline, Cursor) to interact with Huawei Cloud service VOD. Full-chain management of VOD resources can be carried out based on natural language.
+
+## Available Tools
+Cover all apis, use as needed, the list and status are as follows:
+
+<html>
+    <head></head>
+    <body>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tbody>
+                <tr>
+                    <th>类别</th>
+                    <th>工具名称</th>
+                    <th>功能描述</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td rowspan="1">Key query</td>
+                    <td>ShowAssetCipher</td>
+                    <td>When playing an HLS encrypted video, a user device requests a key from the tenant management system. The tenant management system checks whether the key has been cached locally. If no, the client invokes this interface to query the key from the VOD program.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Media asset category</td>
+                    <td>ListAssetCategory</td>
+                    <td>Query the information about a specified category and the list of its subcategories (lower-level categories).</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAssetCategory</td>
+                    <td>Modifies a media asset category.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAssetCategory</td>
+                    <td>Delete a media asset category.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAssetCategory</td>
+                    <td>Create a media asset category.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Media asset management</td>
+                    <td>ShowAssetDetail</td>
+                    <td>Query details about a specified media asset.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAssetMeta</td>
+                    <td>Modify media asset attributes.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAssetList</td>
+                    <td>Query the media asset list. Each record in the list contains the general information about the media asset.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAssetMeta</td>
+                    <td>Query media asset information by media asset ID, category, status, start time, and end time.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>PublishAssets</td>
+                    <td>Sets the media asset to the released state. Batch release is supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteAssets</td>
+                    <td>Delete a media asset.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UnpublishAssets</td>
+                    <td>Set the media asset to the unreleased state.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Media asset processing</td>
+                    <td>CancelExtractAudioTask</td>
+                    <td>Cancel the audio extraction task. Only the audio extraction task in the queue can be canceled.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAssetReviewTask</td>
+                    <td>Approves the uploaded media asset.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAssetProcessTask</td>
+                    <td>Transcoding, capturing, and encrypting videos. You can start multiple operations at the same time, or you can start only one operation.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateAsset</td>
+                    <td>Upload the cover, update the video file, or update the existing cover after the media asset is created.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateCoverByThumbnail</td>
+                    <td>Set a picture generated by a video screenshot as the cover.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CancelAssetTranscodeTask</td>
+                    <td>Cancel media asset transcoding tasks. Only queuing transcoding tasks can be canceled.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateExtractAudioTask</td>
+                    <td>This interface is an asynchronous interface. After the message for creating an audio extraction task is delivered successfully, asset_id and extracted audio_asset_id are returned. However, the audio extraction task is not completed immediately. The audio extraction completion event configured on the message subscription page can be used to obtain whether the audio extraction task is complete.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Media asset storage mode management</td>
+                    <td>ShowVodRetrieval</td>
+                    <td>## Typical Scenario##</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateStorageModeType</td>
+                    <td>Modifies the media asset cooling granularity.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowStorageModeType</td>
+                    <td>Query the media asset cooling configuration.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateStorageMode</td>
+                    <td>##Interface function##</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Media asset update</td>
+                    <td>ShowRefreshResult</td>
+                    <td>Query the refresh result.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>RefreshAsset</td>
+                    <td>If the media asset status is Completed, Deleted, or Published, you can specify the media asset ID or URL to update the status in the CDN. This API is used to forcibly expire resources cached on CDN nodes. When a user accesses the CDN node next time, the CDN retrieves the latest resources and sends the latest resources to the user and caches the new resources to the CDN node. A maximum of 1000 records can be updated per day for a single tenant.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Media asset warm-up</td>
+                    <td>ShowPreheatingAsset</td>
+                    <td>Query the preheating result.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreatePreheatingAsset</td>
+                    <td>After a media asset is released, the specified media asset ID or URL can be used for preheating to the CDN. When a subscriber requests the media asset for the first time, the CDN node provides the requested media asset, which shortens the download cache time and improves user experience. A maximum of 1000 pre-heating nodes can be configured for a single tenant every day.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">OBS Hosting Management</td>
+                    <td>ListTakeOverTask</td>
+                    <td>Query the OBS inventory hosting task list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTakeOverTaskDetails</td>
+                    <td>Query details about OBS inventory hosting tasks.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowTakeOverAssetDetails</td>
+                    <td>Query details about OBS-hosted media assets.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Statistical Analysis</td>
+                    <td>ShowVodStatistics</td>
+                    <td>Query statistics on the VOD origin server, including the storage space and transcoding duration.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListDomainLogs</td>
+                    <td>Query CDN logs generated in a specified VOD domain name within a specified period.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListAssetDailySummaryLog</td>
+                    <td>Query the daily playback statistics of media assets.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTopStatistics</td>
+                    <td>Query statistics on top 100 media assets with a specified domain name by playback times on a specified date.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowCdnStatistics</td>
+                    <td>Query CDN statistics, including the traffic, peak bandwidth, total number of requests, request hit ratio, and traffic hit ratio.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Subtitle management</td>
+                    <td>ModifySubtitle</td>
+                    <td>Multi-subtitle encapsulation. Only the HLS VTT and HLS SRT formats are supported.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="1">Transcoding Product Management</td>
+                    <td>DeleteTranscodeProduct</td>
+                    <td>Delete the transcoding product.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Transcoding Template Management</td>
+                    <td>DeleteTranscodeTemplate</td>
+                    <td>Delete a user-defined template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTranscodeTemplate</td>
+                    <td>Create a customized transcoding template.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateTranscodeTemplate</td>
+                    <td>Modifying a transcoding template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTranscodeTemplate</td>
+                    <td>Query the transcoding template list</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Transcoding template group management</td>
+                    <td>DeleteTemplateGroup</td>
+                    <td>Delete the customized transcoding template group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateTemplateGroup</td>
+                    <td>Modify the customized transcoding template group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTemplateGroup</td>
+                    <td>Create a customized transcoding template group.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTemplateGroup</td>
+                    <td>Query the transcoding template group list.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Transcoding template set management</td>
+                    <td>DeleteTemplateGroupCollection</td>
+                    <td>Delete a transcoding template group set</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateTemplateGroupCollection</td>
+                    <td>Modify the combination of the transcoding template group</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTemplateGroupCollection</td>
+                    <td>Create a transcoding template group set</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListTemplateGroupCollection</td>
+                    <td>Query the transcoding template group set.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="8">Upload media asset</td>
+                    <td>PublishAssetFromObs</td>
+                    <td>If you have stored audio and video files in the OBS bucket before using VOD, you can use this API to dump the audio and video files in the OBS bucket to VOD. Before calling this API, you need to call the Bucket Authorization (https://support.huaweicloud.com/api-vod/vod_04_0199.html) API to authorize the OBS bucket for storing audio and video files to VOD.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UploadMetaDataByUrl</td>
+                    <td>This API is used to pull audio and video files offline and upload them to the VOD service based on the URL of the audio and video source files.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CheckMd5Duplication</td>
+                    <td>Verifies whether the media asset file has been stored in the VOD service.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>UpdateBucketAuthorized</td>
+                    <td>You can call this API to authorize or cancel the authorization of an OBS bucket to the VOD service.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateTakeOverTask</td>
+                    <td>This API is used to synchronize audio and video files stored in OBS buckets to the VOD service in inventory hosting mode.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ShowAssetTempAuthority</td>
+                    <td>When a client requests to create a media asset, if the size of the media asset file exceeds 20 MB, the client needs to upload the file to OBS in multipart mode. Before interacting with OBS, the client needs to obtain the authorization through this API before interacting with OBS.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateAssetByFileUpload</td>
+                    <td>When this API is invoked to create media assets, the corresponding media assets must be uploaded to the OBS bucket of the VOD service.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ConfirmAssetUpload</td>
+                    <td>After a multipart media asset is uploaded, this interface needs to be invoked to notify the VOD service of the media asset upload status, indicating that the media asset is created.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td rowspan="5">Watermark Template Management</td>
+                    <td>UpdateWatermarkTemplate</td>
+                    <td>Modifying a watermark template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>CreateWatermarkTemplate</td>
+                    <td>Create a watermark template.</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>DeleteWatermarkTemplate</td>
+                    <td>Delete a watermark template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ListWatermarkTemplate</td>
+                    <td>Query the watermark template</td>
+                    <td>To be tested</td>
+                </tr>
+                <tr>
+                    <td>ConfirmImageUpload</td>
+                    <td>Confirm the watermark image upload status.</td>
+                    <td>To be tested</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

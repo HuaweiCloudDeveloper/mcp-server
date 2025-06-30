@@ -1,0 +1,36 @@
+[project]
+name = "mcp-server-huaweicloud"
+version = "0.2.1"
+description = "A Model Context Protocol server providing tools for Huawei Cloud"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "huaweicloud-dtse-team", email = "huaweicloud-dtse-team@huawei.com" },
+]
+keywords = ["huaweicloud", "mcp", "llm"]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "aiohttp>=3.11.18",
+    "fastmcp>=2.0.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.3",
+    "tzdata>=2024.2",
+    "huaweicloudsdkcore>=3.1.150",
+]
+
+[project.scripts]
+mcp-server-huaweicloud = "mcp_server_huaweicloud:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+

@@ -1,0 +1,5992 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "MAS-数据同步任务管理",
+    "title" : "MAS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "DataSyncDtoSpecDrsConfigSpeedLimit" : {
+        "type" : "object",
+        "properties" : {
+          "begin_period" : {
+            "type" : "string"
+          },
+          "end_period" : {
+            "type" : "string"
+          },
+          "is_speed_limit" : {
+            "type" : "boolean"
+          },
+          "speed_limit" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "DataSyncDto" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "source" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DataSyncDtoSpec"
+          },
+          "sync_architecture" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sync_tool" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "target" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DatasourceSpecServerInfo" : {
+        "type" : "object",
+        "properties" : {
+          "host" : {
+            "type" : "string"
+          },
+          "port" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "BaseMultiActiveZoneSpec" : {
+        "type" : "object"
+      },
+      "DataSyncDtoSpec" : {
+        "type" : "object",
+        "properties" : {
+          "drs_config" : {
+            "$ref" : "#/components/schemas/DataSyncDtoSpecDrsConfig"
+          }
+        }
+      },
+      "DatasourceSpec" : {
+        "type" : "object",
+        "properties" : {
+          "db_name" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "instance_name" : {
+            "type" : "string"
+          },
+          "instance_type" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "servers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DatasourceSpecServerInfo"
+            }
+          },
+          "username" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DataSyncDtoSpecDrsConfig" : {
+        "type" : "object",
+        "properties" : {
+          "alarm_notify" : {
+            "$ref" : "#/components/schemas/DataSyncDtoSpecDrsConfigAlarmNotify"
+          },
+          "expired_days" : {
+            "type" : "string"
+          },
+          "speed_limit" : {
+            "$ref" : "#/components/schemas/DataSyncDtoSpecDrsConfigSpeedLimit"
+          }
+        }
+      },
+      "DataSync" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "datasourceSource" : {
+            "$ref" : "#/components/schemas/Datasource"
+          },
+          "datasourceTarget" : {
+            "$ref" : "#/components/schemas/Datasource"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "detail" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "source" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DataSyncSpec"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "sync_architecture" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sync_tool" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "target" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DataSyncSpec" : {
+        "type" : "object",
+        "properties" : {
+          "child_ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "data_sync_task_spec" : {
+            "$ref" : "#/components/schemas/DataSyncDtoSpec"
+          },
+          "job_create_time" : {
+            "type" : "string"
+          },
+          "job_id" : {
+            "type" : "string"
+          },
+          "job_name" : {
+            "type" : "string"
+          },
+          "job_status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Datasource" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "deletedDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "key_hash" : {
+            "type" : "string"
+          },
+          "multiActiveZone" : {
+            "$ref" : "#/components/schemas/MultiActiveZone"
+          },
+          "multi_active_zone_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DatasourceSpec"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "MultiActiveZone" : {
+        "type" : "object",
+        "properties" : {
+          "availableZone" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "master" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespaceId" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "regionName" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/BaseMultiActiveZoneSpec"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DataSyncDtoSpecDrsConfigAlarmNotify" : {
+        "type" : "object",
+        "properties" : {
+          "delay_time" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "is_set_task_exception_notify" : {
+            "type" : "boolean"
+          },
+          "rpo_delay" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "rto_delay" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "topic_urn" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Part" : {
+        "type" : "object",
+        "properties" : {
+          "contentType" : {
+            "type" : "string"
+          },
+          "headerNames" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "inputStream" : {
+            "$ref" : "#/components/schemas/InputStream"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "submittedFileName" : {
+            "type" : "string"
+          }
+        }
+      },
+      "InputStream" : {
+        "type" : "object"
+      },
+      "ServiceModule" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "effect" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "module" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "projectId" : {
+            "type" : "string"
+          },
+          "scene" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "userId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ServiceModuleDto" : {
+        "type" : "object",
+        "properties" : {
+          "module" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ErrorMessage" : {
+        "type" : "object",
+        "properties" : {
+          "error_code" : {
+            "type" : "string"
+          },
+          "error_msg" : {
+            "type" : "string"
+          },
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DRSDataGuardMinitor" : {
+        "type" : "object",
+        "properties" : {
+          "bandwidth" : {
+            "type" : "string"
+          },
+          "child_job_id" : {
+            "type" : "string"
+          },
+          "cpuUsed_percent" : {
+            "type" : "string"
+          },
+          "dst_delay" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "dst_io" : {
+            "type" : "string"
+          },
+          "dst_normal" : {
+            "type" : "boolean"
+          },
+          "dst_offset" : {
+            "type" : "string"
+          },
+          "dst_rps" : {
+            "type" : "string"
+          },
+          "job_direction" : {
+            "type" : "string"
+          },
+          "mem_used_inMB" : {
+            "type" : "string"
+          },
+          "node_mem_inMB" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "node_offset" : {
+            "type" : "string"
+          },
+          "node_volume_inGB" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "sr_delay" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "sr_offset" : {
+            "type" : "string"
+          },
+          "src_io" : {
+            "type" : "string"
+          },
+          "src_normal" : {
+            "type" : "boolean"
+          },
+          "src_rps" : {
+            "type" : "string"
+          },
+          "trans_inMB" : {
+            "type" : "string"
+          },
+          "trans_lines" : {
+            "type" : "string"
+          },
+          "volume_used_inGB" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DataSyncVo" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "data_guard_minitor" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DRSDataGuardMinitor"
+            }
+          },
+          "deletedDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "detail" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "job_id" : {
+            "type" : "string"
+          },
+          "job_status" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "source_datasource" : {
+            "$ref" : "#/components/schemas/DatasourceVo"
+          },
+          "source_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DataSyncSpec"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "sync_architecture" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sync_tool" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "target_datasource" : {
+            "$ref" : "#/components/schemas/DatasourceVo"
+          },
+          "target_id" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DatasourceVo" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "deletedDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "multi_active_zone" : {
+            "$ref" : "#/components/schemas/MultiActiveZoneVo"
+          },
+          "multi_active_zone_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DatasourceSpecVo"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "MultiActiveZoneVo" : {
+        "type" : "object",
+        "properties" : {
+          "available_zone" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "is_master" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "region_name" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/BaseMultiActiveZoneSpec"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DatasourceSpecVo" : {
+        "type" : "object",
+        "properties" : {
+          "db_name" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "instance_name" : {
+            "type" : "string"
+          },
+          "instance_type" : {
+            "type" : "string"
+          },
+          "servers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DatasourceSpecServerInfo"
+            }
+          },
+          "username" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorSwitchReq" : {
+        "type" : "object",
+        "properties" : {
+          "action" : {
+            "type" : "string"
+          },
+          "dc" : {
+            "type" : "string"
+          },
+          "readable" : {
+            "type" : "boolean"
+          },
+          "reason" : {
+            "type" : "string"
+          },
+          "writeable" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "GlobalConfig" : {
+        "type" : "object",
+        "properties" : {
+          "connection_timeout" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "health_level" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "retry_interval" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "timeout" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "InstanceProgressDetail" : {
+        "type" : "object",
+        "properties" : {
+          "flow_error_message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Spec" : {
+        "type" : "object",
+        "properties" : {
+          "cidr" : {
+            "type" : "string"
+          },
+          "eips" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "etcd_cluster" : {
+            "type" : "string"
+          },
+          "etcd_is_https" : {
+            "type" : "boolean"
+          },
+          "etcd_ops_user" : {
+            "type" : "string"
+          },
+          "etcd_ops_user_password" : {
+            "type" : "string"
+          },
+          "etcd_password" : {
+            "type" : "string"
+          },
+          "etcd_root_password" : {
+            "type" : "string"
+          },
+          "etcd_username" : {
+            "type" : "string"
+          },
+          "ief_config_path" : {
+            "type" : "string"
+          },
+          "ief_nodes" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "ief_nodes_etcd" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "ips" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "is_client_crt_auth" : {
+            "type" : "boolean"
+          },
+          "siteId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MasInstancePatchDto" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "new_mas_instance_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "INIT", "WAIT_DOWNLOAD", "WAIT_IEF", "WAIT_DEPLOY", "CREATING", "CREATE_FAILED", "RUNNING", "DELETING", "DELETE_FAILED", "DELETED", "UPGRADING", "UPGRADE_FAILED", "ROLLING_BACK", "UNFREEZE", "FREEZE" ]
+          }
+        }
+      },
+      "MasInstanceVo" : {
+        "type" : "object",
+        "properties" : {
+          "az_info" : {
+            "$ref" : "#/components/schemas/AzInfo"
+          },
+          "created_date" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "effect" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "enterprise_project_name" : {
+            "type" : "string"
+          },
+          "flavor" : {
+            "type" : "string",
+            "enum" : [ "TINY", "SMALL", "NORMAL", "LARGE" ]
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "namespace_name" : {
+            "type" : "string"
+          },
+          "progress" : {
+            "type" : "string"
+          },
+          "progress_detail" : {
+            "$ref" : "#/components/schemas/InstanceProgressDetail"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "scene" : {
+            "type" : "string"
+          },
+          "security_group_id" : {
+            "type" : "string"
+          },
+          "site_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/Spec"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "INIT", "WAIT_DOWNLOAD", "WAIT_IEF", "WAIT_DEPLOY", "CREATING", "CREATE_FAILED", "RUNNING", "DELETING", "DELETE_FAILED", "DELETED", "UPGRADING", "UPGRADE_FAILED", "ROLLING_BACK", "UNFREEZE", "FREEZE" ]
+          },
+          "subnet_id" : {
+            "type" : "string"
+          },
+          "tenant_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "MULTI_AZ", "MULTI_AZ_PLATINUM", "MULTI_CLOUD" ]
+          },
+          "updated_date" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "string"
+          },
+          "user_name" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AzInfo" : {
+        "type" : "object",
+        "properties" : {
+          "arbiter" : {
+            "type" : "string"
+          },
+          "availableZoneId" : {
+            "type" : "string"
+          },
+          "master_cloud" : {
+            "type" : "string",
+            "enum" : [ "HUAWEICLOUD", "ALIYUN", "AWS", "OTHERS" ]
+          },
+          "monitors1" : {
+            "type" : "string"
+          },
+          "monitors2" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DrsConf" : {
+        "type" : "object",
+        "properties" : {
+          "enable" : {
+            "type" : "boolean"
+          },
+          "endpoint" : {
+            "type" : "string"
+          },
+          "job-id" : {
+            "type" : "string"
+          },
+          "multi_active_zone_id" : {
+            "type" : "string"
+          },
+          "project-id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorDcStatusInfo" : {
+        "type" : "object",
+        "properties" : {
+          "dc_health" : {
+            "type" : "string"
+          },
+          "dc_ready" : {
+            "type" : "string"
+          },
+          "readable" : {
+            "type" : "string"
+          },
+          "slaves" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DBSlaveStatusInfo"
+            }
+          },
+          "writeable" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorStatusInfo" : {
+        "type" : "object",
+        "properties" : {
+          "active" : {
+            "type" : "string"
+          },
+          "dc_status" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/MonitorDcStatusInfo"
+            }
+          },
+          "monitor_close" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorNodeInfo" : {
+        "type" : "object",
+        "properties" : {
+          "host" : {
+            "type" : "string"
+          },
+          "port" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "role" : {
+            "type" : "string"
+          },
+          "server" : {
+            "type" : "string"
+          }
+        }
+      },
+      "HealthCheck" : {
+        "type" : "object",
+        "properties" : {
+          "fail" : {
+            "$ref" : "#/components/schemas/FailStrategy"
+          },
+          "interval" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "retry" : {
+            "$ref" : "#/components/schemas/RetryStrategy"
+          }
+        }
+      },
+      "DBSlaveStatusInfo" : {
+        "type" : "object",
+        "properties" : {
+          "dc_health" : {
+            "type" : "string"
+          },
+          "dc_ready" : {
+            "type" : "string"
+          },
+          "host" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Monitor" : {
+        "type" : "object",
+        "properties" : {
+          "application_id" : {
+            "type" : "string"
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "monitor_status_info" : {
+            "$ref" : "#/components/schemas/MonitorStatusInfo"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "open" : {
+            "type" : "boolean"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/MonitorSpec"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "CommonParameters" : {
+        "type" : "object",
+        "properties" : {
+          "auth_arguments" : {
+            "type" : "object"
+          },
+          "auth_type" : {
+            "type" : "string"
+          },
+          "headers" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "method" : {
+            "type" : "string"
+          },
+          "status-code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorSpec" : {
+        "type" : "object",
+        "properties" : {
+          "connection_timeout" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "db_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "drs" : {
+            "$ref" : "#/components/schemas/DrsConf"
+          },
+          "engine" : {
+            "type" : "string"
+          },
+          "health_check" : {
+            "$ref" : "#/components/schemas/HealthCheck"
+          },
+          "monitordb" : {
+            "type" : "string"
+          },
+          "monitordbs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "notify" : {
+            "$ref" : "#/components/schemas/NotifyConf"
+          },
+          "open_switch" : {
+            "type" : "boolean"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "retry_interval" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "route_algorithm" : {
+            "type" : "string"
+          },
+          "servers" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/MonitorDcInfo"
+            }
+          },
+          "success_times" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "timeout" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "user_name" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        }
+      },
+      "NotifyConf" : {
+        "type" : "object",
+        "properties" : {
+          "enable" : {
+            "type" : "boolean"
+          },
+          "endpoint" : {
+            "type" : "string"
+          },
+          "project-id" : {
+            "type" : "string"
+          },
+          "topic-urn" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RetryStrategy" : {
+        "type" : "object",
+        "properties" : {
+          "actions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Map«string,object»"
+            }
+          },
+          "backoff_algorithm" : {
+            "type" : "string"
+          },
+          "max_delay" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "min_delay" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "MonitorDcInfo" : {
+        "type" : "object",
+        "properties" : {
+          "azs" : {
+            "type" : "string"
+          },
+          "cloud" : {
+            "type" : "string"
+          },
+          "hosts" : {
+            "type" : "string"
+          },
+          "nodes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MonitorNodeInfo"
+            }
+          },
+          "parameters" : {
+            "$ref" : "#/components/schemas/CommonParameters"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "protocol" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        }
+      },
+      "FailStrategy" : {
+        "type" : "object",
+        "properties" : {
+          "actions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Map«string,object»"
+            }
+          },
+          "max-fail-times" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "DcMonitor" : {
+        "type" : "object",
+        "properties" : {
+          "dc_monitor_infos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DcMonitorInfo"
+            }
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DcMonitorInfo" : {
+        "type" : "object",
+        "properties" : {
+          "leader_status" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "opposite_status" : {
+            "type" : "string"
+          },
+          "public_status" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ListAppSwitchJob" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AppSwitchJob"
+            }
+          }
+        }
+      },
+      "AppSwitchJob" : {
+        "type" : "object",
+        "properties" : {
+          "action" : {
+            "type" : "string"
+          },
+          "application_id" : {
+            "type" : "string"
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Secret" : {
+        "type" : "object",
+        "properties" : {
+          "ak" : {
+            "type" : "string"
+          },
+          "cloud" : {
+            "type" : "string"
+          },
+          "sk" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MasInstanceDto" : {
+        "type" : "object",
+        "properties" : {
+          "az_info" : {
+            "$ref" : "#/components/schemas/AzInfo"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "enterprise_project_name" : {
+            "type" : "string"
+          },
+          "flavor" : {
+            "type" : "string",
+            "enum" : [ "TINY", "SMALL", "NORMAL", "LARGE" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "security_group_id" : {
+            "type" : "string"
+          },
+          "site_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/Spec"
+          },
+          "subnet_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "MULTI_AZ", "MULTI_AZ_PLATINUM", "MULTI_CLOUD" ]
+          },
+          "vpc_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "TagInstance" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "resource_id" : {
+            "type" : "string"
+          },
+          "resource_type" : {
+            "type" : "string",
+            "enum" : [ "MAS_INSTANCE", "MAS_NAMESPACE" ]
+          },
+          "tag_key" : {
+            "type" : "string"
+          },
+          "tag_type" : {
+            "type" : "string",
+            "enum" : [ "TAGS", "SYS_TAGS" ]
+          },
+          "tag_value" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "ResourceTenant" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "domain_id" : {
+            "type" : "string"
+          },
+          "domain_name" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "res_domain_id" : {
+            "type" : "string"
+          },
+          "res_domain_name" : {
+            "type" : "string"
+          },
+          "res_project_id" : {
+            "type" : "string"
+          },
+          "res_user_id" : {
+            "type" : "string"
+          },
+          "res_user_name" : {
+            "type" : "string"
+          },
+          "res_user_passwd" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "MasInstance" : {
+        "type" : "object",
+        "properties" : {
+          "access_key_id" : {
+            "type" : "string"
+          },
+          "az_info" : {
+            "$ref" : "#/components/schemas/AzInfo"
+          },
+          "cesAkSkUpdateDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "effect" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "enterprise_project_name" : {
+            "type" : "string"
+          },
+          "flavor" : {
+            "type" : "string",
+            "enum" : [ "TINY", "SMALL", "NORMAL", "LARGE" ]
+          },
+          "flow_id" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "progress" : {
+            "type" : "string"
+          },
+          "progress_detail" : {
+            "$ref" : "#/components/schemas/InstanceProgressDetail"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "res_security_group_id" : {
+            "type" : "string"
+          },
+          "res_server_group_id" : {
+            "type" : "string"
+          },
+          "res_subnet_id" : {
+            "type" : "string"
+          },
+          "res_vpc_id" : {
+            "type" : "string"
+          },
+          "resource_tenant" : {
+            "$ref" : "#/components/schemas/ResourceTenant"
+          },
+          "resource_tenant_id" : {
+            "type" : "string"
+          },
+          "scene" : {
+            "type" : "string"
+          },
+          "secret_access_key" : {
+            "type" : "string"
+          },
+          "security_group_id" : {
+            "type" : "string"
+          },
+          "siteId" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/Spec"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "INIT", "WAIT_DOWNLOAD", "WAIT_IEF", "WAIT_DEPLOY", "CREATING", "CREATE_FAILED", "RUNNING", "DELETING", "DELETE_FAILED", "DELETED", "UPGRADING", "UPGRADE_FAILED", "ROLLING_BACK", "UNFREEZE", "FREEZE" ]
+          },
+          "subnet_id" : {
+            "type" : "string"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TagInstance"
+            }
+          },
+          "tenant_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "MULTI_AZ", "MULTI_AZ_PLATINUM", "MULTI_CLOUD" ]
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_id" : {
+            "type" : "string"
+          },
+          "user_name" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          },
+          "vpc_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GlobalConf" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/Spec"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "ListMasInstanceSimpleVo" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MasInstanceSimpleVo"
+            }
+          }
+        }
+      },
+      "MasInstanceSimpleVo" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "effect" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "enterprise_project_name" : {
+            "type" : "string"
+          },
+          "flavor" : {
+            "type" : "string",
+            "enum" : [ "TINY", "SMALL", "NORMAL", "LARGE" ]
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "namespace_name" : {
+            "type" : "string"
+          },
+          "progress" : {
+            "type" : "string"
+          },
+          "progress_detail" : {
+            "$ref" : "#/components/schemas/InstanceProgressDetail"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "scene" : {
+            "type" : "string"
+          },
+          "site_id" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "INIT", "WAIT_DOWNLOAD", "WAIT_IEF", "WAIT_DEPLOY", "CREATING", "CREATE_FAILED", "RUNNING", "DELETING", "DELETE_FAILED", "DELETED", "UPGRADING", "UPGRADE_FAILED", "ROLLING_BACK", "UNFREEZE", "FREEZE" ]
+          },
+          "tenant_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "MULTI_AZ", "MULTI_AZ_PLATINUM", "MULTI_CLOUD" ]
+          },
+          "updated_date" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "string"
+          },
+          "user_name" : {
+            "type" : "string"
+          },
+          "version" : {
+            "type" : "string"
+          }
+        }
+      },
+      "InstanceStatisticalDataVo" : {
+        "type" : "object",
+        "properties" : {
+          "abnormal" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "collaborative" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "creating" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "deleting" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "normal" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "standard" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "upgrading" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "MonitorSwitch" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "detail" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "job_id" : {
+            "type" : "string"
+          },
+          "monitor_id" : {
+            "type" : "string"
+          },
+          "monitor_name" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "ListMonitorSwitch" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MonitorSwitch"
+            }
+          }
+        }
+      },
+      "ListDatasource" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DatasourceVo"
+            }
+          }
+        }
+      },
+      "ListResp" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Monitor"
+            }
+          }
+        }
+      },
+      "MonitorDbRouterNode" : {
+        "type" : "object",
+        "properties" : {
+          "azs" : {
+            "type" : "string"
+          },
+          "cloud" : {
+            "type" : "string"
+          },
+          "load_balance" : {
+            "type" : "string"
+          },
+          "master" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "slaves" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "MonitorDbConnectionPool" : {
+        "type" : "object",
+        "properties" : {
+          "datasource" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/MonitorDbDatasource"
+            }
+          },
+          "router" : {
+            "$ref" : "#/components/schemas/MonitorDbRouter"
+          }
+        }
+      },
+      "MonitorDbRouter" : {
+        "type" : "object",
+        "properties" : {
+          "nodes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/MonitorDbRouterNode"
+            }
+          },
+          "retry" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          },
+          "route-algorithm" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MonitorDbDatasource" : {
+        "type" : "object",
+        "properties" : {
+          "cloud" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "schema" : {
+            "type" : "string"
+          },
+          "server" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DatasourceStatistics" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mysql_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "DataSyncStatistics" : {
+        "type" : "object",
+        "properties" : {
+          "abnormal_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "running_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type_two_way_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type_unidirectional_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "NamespaceVo" : {
+        "type" : "object",
+        "properties" : {
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "data_sync_statistics" : {
+            "$ref" : "#/components/schemas/DataSyncStatistics"
+          },
+          "datasource_statistics" : {
+            "$ref" : "#/components/schemas/DatasourceStatistics"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "is_used" : {
+            "type" : "boolean"
+          },
+          "multi_active_zone" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MultiActiveZoneVo"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "tenant_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ListDataSync" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DataSyncVo"
+            }
+          }
+        }
+      },
+      "MultiActiveZoneDto" : {
+        "type" : "object",
+        "properties" : {
+          "available_zone" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "is_master" : {
+            "type" : "boolean"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "region" : {
+            "type" : "string"
+          },
+          "region_name" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/BaseMultiActiveZoneSpec"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "NamespaceDto" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "enterprise_project_id" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "multi_active_zone" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MultiActiveZoneDto"
+            }
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "project_id" : {
+            "type" : "string"
+          },
+          "tenant_id" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "user_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Component" : {
+        "type" : "object",
+        "properties" : {
+          "application" : {
+            "$ref" : "#/components/schemas/Application"
+          },
+          "application_id" : {
+            "type" : "string"
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Application" : {
+        "type" : "object",
+        "properties" : {
+          "components" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Component"
+            }
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApplicationDto" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "user_name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApplicationVo" : {
+        "type" : "object",
+        "properties" : {
+          "component_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "created_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "instance_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "updated_date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "user_name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ListApplication" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ApplicationVo"
+            }
+          }
+        }
+      },
+      "MonitorOverall" : {
+        "type" : "object",
+        "properties" : {
+          "abnormal_application_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "abnormal_monitor_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "normal_application_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "normal_monitor_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "warning_application_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "warning_monitor_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "DatasourceDto" : {
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "multi_active_zone_id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace_id" : {
+            "type" : "string"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/DatasourceSpec"
+          },
+          "type" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/CreateDataSyncTask" : {
+      "post" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "创建数据同步任务",
+        "operationId" : "CreateDataSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DataSync"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "dataSyncDto" : {
+                    "description" : "dataSyncDto",
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/DataSyncDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDataSyncTask",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sync"
+    },
+    "/DownloadEtcdCert" : {
+      "get" : {
+        "tags" : [ "ETCD证书" ],
+        "summary" : "etcd证书下载",
+        "operationId" : "DownloadEtcdCert",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Part"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadEtcdCert",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/cert"
+    },
+    "/EnableActivateModule" : {
+      "post" : {
+        "tags" : [ "模块管理" ],
+        "summary" : "开通模块",
+        "operationId" : "EnableActivateModule",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceModule"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServiceModuleDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableActivateModule",
+      "x-url" : "{endpoint}/v1/{project_id}/modules"
+    },
+    "/DeleteDataSource" : {
+      "delete" : {
+        "tags" : [ "数据源管理" ],
+        "summary" : "删除数据源",
+        "operationId" : "DeleteDataSource",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Datasource"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "资源不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "关联资源未删除",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDataSource",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sources/{id}"
+    },
+    "/SwitchoverDataSyncTask" : {
+      "post" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "批量主备倒换",
+        "operationId" : "SwitchoverDataSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DataSyncVo"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "ids" : {
+                    "description" : "ids",
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchoverDataSyncTask",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sync/batch-switchover"
+    },
+    "/BatchSwitchMonitor" : {
+      "post" : {
+        "tags" : [ "应用一键切换" ],
+        "summary" : "应用级容灾统一切换",
+        "operationId" : "BatchSwitchMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "application_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MonitorSwitchReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchSwitchMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications/{application_id}/switch"
+    },
+    "/SetMonitorGlobalConfig" : {
+      "post" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "添加/修改监控器全局配置",
+        "operationId" : "SetMonitorGlobalConfig",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GlobalConfig"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "type",
+          "required" : false,
+          "schema" : {
+            "description" : "type",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GlobalConfig"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetMonitorGlobalConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/global_config"
+    },
+    "/UpdateInstance" : {
+      "patch" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "部分修改MAS实例",
+        "operationId" : "UpdateInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MasInstanceVo"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MasInstancePatchDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "patch",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}"
+    },
+    "/ShowModule" : {
+      "get" : {
+        "tags" : [ "模块管理" ],
+        "summary" : "查询模块",
+        "operationId" : "ShowModule",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceModule"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "enterprise_project_id",
+          "required" : false,
+          "schema" : {
+            "description" : "enterprise_project_id",
+            "type" : "string",
+            "default" : "all_granted_eps"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowModule",
+      "x-url" : "{endpoint}/v1/{project_id}/modules"
+    },
+    "/UpdateMonitor" : {
+      "put" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "更新监控器",
+        "operationId" : "UpdateMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "更新成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Monitor"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "400" : {
+            "description" : "请求格式错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Monitor"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}"
+    },
+    "/SwitchMonitor" : {
+      "post" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "监控器切换",
+        "operationId" : "SwitchMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Monitor"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MonitorSwitchReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SwitchMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}/switch"
+    },
+    "/ShowDcMonitor" : {
+      "get" : {
+        "tags" : [ "机房级监控器" ],
+        "summary" : "查询机房级监控状态",
+        "operationId" : "ShowDcMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DcMonitor"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDcMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/dcmonitors"
+    },
+    "/ListSwitchJobs" : {
+      "get" : {
+        "tags" : [ "应用一键切换" ],
+        "summary" : "查询应用级切换任务列表",
+        "operationId" : "ListSwitchJobs",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListAppSwitchJob"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "application_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListSwitchJobs",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications/{application_id}/switch"
+    },
+    "/ShowMonitorGlobalConfig" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "查询监控器全局配置",
+        "operationId" : "ShowMonitorGlobalConfig",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GlobalConfig"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "authToken",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "type",
+          "required" : false,
+          "schema" : {
+            "description" : "type",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowMonitorGlobalConfig",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/global_config"
+    },
+    "/ShowSecret" : {
+      "get" : {
+        "tags" : [ "密钥管理" ],
+        "summary" : "查询密钥配置",
+        "operationId" : "ShowSecret",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Secret"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/secrets/"
+    },
+    "/CreateInstance" : {
+      "post" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "创建MAS实例",
+        "operationId" : "CreateInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MasInstanceVo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MasInstanceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/"
+    },
+    "/DeployInstance" : {
+      "post" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "部署MAS实例",
+        "operationId" : "DeployInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MasInstance"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MasInstanceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeployInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/deploy"
+    },
+    "/SetSecret" : {
+      "post" : {
+        "tags" : [ "密钥管理" ],
+        "summary" : "添加密钥",
+        "operationId" : "SetSecret",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Secret"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/secrets"
+    },
+    "/ShowGlobalConf" : {
+      "get" : {
+        "tags" : [ "全局配置" ],
+        "summary" : "查询配置规则",
+        "operationId" : "ShowGlobalConf",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GlobalConf"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "type",
+          "required" : true,
+          "schema" : {
+            "description" : "type",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowGlobalConf",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/configuration"
+    },
+    "/ListInstances" : {
+      "get" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "列举MAS实例",
+        "operationId" : "ListInstances",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListMasInstanceSimpleVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "实例名称",
+          "required" : false,
+          "schema" : {
+            "description" : "实例名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace_id",
+          "in" : "query",
+          "description" : "命名空间ID",
+          "required" : false,
+          "schema" : {
+            "description" : "命名空间ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "企业项目ID",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListInstances",
+      "x-url" : "{endpoint}/v1/{project_id}/instances"
+    },
+    "/ShowStatisticalData" : {
+      "get" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "获取总览页面统计数据",
+        "operationId" : "ShowStatisticalData",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstanceStatisticalDataVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowStatisticalData",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/statistics"
+    },
+    "/DeleteInstance" : {
+      "delete" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "删除MAS实例",
+        "operationId" : "DeleteInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MasInstanceVo"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "delete_edge_nodes",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}"
+    },
+    "/UpdateGlobalConf" : {
+      "put" : {
+        "tags" : [ "全局配置" ],
+        "summary" : "更新配置规则",
+        "operationId" : "UpdateGlobalConf",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GlobalConf"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GlobalConf"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateGlobalConf",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/configuration/{id}"
+    },
+    "/ListBatchSwitchDetail" : {
+      "get" : {
+        "tags" : [ "应用一键切换" ],
+        "summary" : "查询详细应用级切换任务",
+        "operationId" : "ListBatchSwitchDetail",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListMonitorSwitch"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListBatchSwitchDetail",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications/{application_id}/switch/{job_id}"
+    },
+    "/ShowDataSources" : {
+      "get" : {
+        "tags" : [ "数据源管理" ],
+        "summary" : "查询数据源列表",
+        "operationId" : "ShowDataSources",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListDatasource"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDataSources",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sources"
+    },
+    "/ListMonitors" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "查询监控器列表",
+        "operationId" : "ListMonitors",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "type",
+          "required" : false,
+          "schema" : {
+            "description" : "type",
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "query",
+          "description" : "monitor_id",
+          "required" : false,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_name",
+          "in" : "query",
+          "description" : "monitor_name",
+          "required" : false,
+          "schema" : {
+            "description" : "monitor_name",
+            "type" : "string"
+          }
+        }, {
+          "name" : "application_id",
+          "in" : "query",
+          "description" : "application_id",
+          "required" : false,
+          "schema" : {
+            "description" : "application_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页参数-偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "分页参数-偏移量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页参数-每页显示条数",
+          "required" : false,
+          "schema" : {
+            "description" : "分页参数-每页显示条数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sortKey",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortDir",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListMonitors",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors"
+    },
+    "/ShowMonitor" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "查询指定监控器",
+        "operationId" : "ShowMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Monitor"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求格式错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "找不到资源对象",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}"
+    },
+    "/UpdateDbConnectionPool" : {
+      "put" : {
+        "tags" : [ "数据库连接池管理" ],
+        "summary" : "更新DB连接池",
+        "operationId" : "UpdateDbConnectionPool",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "$ref" : "#/components/schemas/MonitorDbConnectionPool"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "req" : {
+                    "description" : "req",
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "$ref" : "#/components/schemas/MonitorDbConnectionPool"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDbConnectionPool",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}/db-connection-pool"
+    },
+    "/DeleteApplications" : {
+      "delete" : {
+        "tags" : [ "应用管理" ],
+        "summary" : "批量删除应用",
+        "operationId" : "DeleteApplications",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "ids" : {
+                    "description" : "ids",
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteApplications",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications"
+    },
+    "/DeleteGlobalConf" : {
+      "delete" : {
+        "tags" : [ "全局配置" ],
+        "summary" : "删除配置规则",
+        "operationId" : "DeleteGlobalConf",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGlobalConf",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/configuration/{id}"
+    },
+    "/DeleteSecret" : {
+      "delete" : {
+        "tags" : [ "密钥管理" ],
+        "summary" : "删除密钥",
+        "operationId" : "DeleteSecret",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Secret"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteSecret",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/secrets"
+    },
+    "/ShowNamespacesById" : {
+      "get" : {
+        "tags" : [ "命名空间管理" ],
+        "summary" : "查询指定的命名空间",
+        "operationId" : "ShowNamespacesById",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NamespaceVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowNamespacesById",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{id}"
+    },
+    "/DeleteAppSwitchJopNote" : {
+      "delete" : {
+        "tags" : [ "应用一键切换" ],
+        "summary" : "删除应用级切换记录记录",
+        "operationId" : "DeleteAppSwitchJopNote",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "application_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteAppSwitchJopNote",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications/{application_id}/switch/{job_id}"
+    },
+    "/ResetDcMonitor" : {
+      "post" : {
+        "tags" : [ "机房级监控器" ],
+        "summary" : "重置机房监控状态",
+        "operationId" : "ResetDcMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DcMonitor"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResetDcMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/dcmonitors/reset"
+    },
+    "/ShowDbConnectionPool" : {
+      "get" : {
+        "tags" : [ "数据库连接池管理" ],
+        "summary" : "查询DB连接池",
+        "operationId" : "ShowDbConnectionPool",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MonitorDbConnectionPool"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "db",
+          "in" : "query",
+          "description" : "db",
+          "required" : false,
+          "schema" : {
+            "description" : "db",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDbConnectionPool",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}/db-connection-pool"
+    },
+    "/ShowDataSyncTask" : {
+      "get" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "查询单个数据同步任务",
+        "operationId" : "ShowDataSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DataSyncVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDataSyncTask",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sync/{id}"
+    },
+    "/ShowDataSyncTasks" : {
+      "get" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "查询数据同步任务列表",
+        "operationId" : "ShowDataSyncTasks",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListDataSync"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search",
+          "required" : false,
+          "schema" : {
+            "description" : "search",
+            "type" : "string"
+          }
+        }, {
+          "name" : "datasource_id",
+          "in" : "query",
+          "description" : "datasource_id",
+          "required" : false,
+          "schema" : {
+            "description" : "datasource_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页参数-偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "分页参数-偏移量",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页参数-每页显示条数",
+          "required" : false,
+          "schema" : {
+            "description" : "分页参数-每页显示条数",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sortKey",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sortDir",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDataSyncTasks",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sync"
+    },
+    "/UpdateNameSpace" : {
+      "put" : {
+        "tags" : [ "命名空间管理" ],
+        "summary" : "更新命名空间",
+        "operationId" : "UpdateNameSpace",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NamespaceVo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NamespaceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNameSpace",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{id}"
+    },
+    "/ShowNameSpaceList" : {
+      "get" : {
+        "tags" : [ "命名空间管理" ],
+        "summary" : "查询命名空间列表",
+        "operationId" : "ShowNameSpaceList",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/NamespaceVo"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量",
+          "required" : false,
+          "schema" : {
+            "description" : "偏移量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量",
+            "type" : "string"
+          }
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "命名空间名称",
+          "required" : false,
+          "schema" : {
+            "description" : "命名空间名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "多活类型,1:同城多活,2:异地多活",
+          "required" : false,
+          "schema" : {
+            "description" : "多活类型,1:同城多活,2:异地多活",
+            "type" : "string"
+          }
+        }, {
+          "name" : "is_used",
+          "in" : "query",
+          "description" : "是否已被使用   true  :是   false  :否",
+          "required" : false,
+          "schema" : {
+            "description" : "是否已被使用   true  :是   false  :否",
+            "type" : "string"
+          }
+        }, {
+          "name" : "enterprise_project_id",
+          "in" : "query",
+          "description" : "企业项目ID",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowNameSpaceList",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces"
+    },
+    "/DeleteModule" : {
+      "delete" : {
+        "tags" : [ "模块管理" ],
+        "summary" : "删除模块",
+        "operationId" : "DeleteModule",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceModule"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "type",
+          "required" : true,
+          "schema" : {
+            "description" : "type",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteModule",
+      "x-url" : "{endpoint}/v1/{project_id}/modules"
+    },
+    "/CreateApplication" : {
+      "post" : {
+        "tags" : [ "应用管理" ],
+        "summary" : "创建应用",
+        "operationId" : "CreateApplication",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Application"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ApplicationDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateApplication",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications"
+    },
+    "/CreateDbConnectionPool" : {
+      "post" : {
+        "tags" : [ "数据库连接池管理" ],
+        "summary" : "创建DB连接池",
+        "operationId" : "CreateDbConnectionPool",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "$ref" : "#/components/schemas/MonitorDbConnectionPool"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "monitor_id",
+          "in" : "path",
+          "description" : "monitor_id",
+          "required" : true,
+          "schema" : {
+            "description" : "monitor_id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "properties" : {
+                  "req" : {
+                    "description" : "req",
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "$ref" : "#/components/schemas/MonitorDbConnectionPool"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDbConnectionPool",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/{monitor_id}/db-connection-pool"
+    },
+    "/CreateNamespace" : {
+      "post" : {
+        "tags" : [ "命名空间管理" ],
+        "summary" : "创建命名空间",
+        "operationId" : "CreateNamespace",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NamespaceVo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NamespaceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNamespace",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces"
+    },
+    "/ShowInstance" : {
+      "get" : {
+        "tags" : [ "实例管理" ],
+        "summary" : "查询MAS实例",
+        "operationId" : "ShowInstance",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MasInstanceVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowInstance",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}"
+    },
+    "/SetGlobalConf" : {
+      "post" : {
+        "tags" : [ "全局配置" ],
+        "summary" : "添加配置规则",
+        "operationId" : "SetGlobalConf",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GlobalConf"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GlobalConf"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SetGlobalConf",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/configuration"
+    },
+    "/ListApplications" : {
+      "get" : {
+        "tags" : [ "应用管理" ],
+        "summary" : "查询应用列表",
+        "operationId" : "ListApplications",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListApplication"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 16384,
+            "minLength" : 1
+          }
+        }, {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 32
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListApplications",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/applications"
+    },
+    "/ShowOverallMonitors" : {
+      "get" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "监控器汇总信息",
+        "operationId" : "ShowOverallMonitors",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MonitorOverall"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOverallMonitors",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors/overall"
+    },
+    "/UpdateModule" : {
+      "put" : {
+        "tags" : [ "模块管理" ],
+        "summary" : "更新模块",
+        "operationId" : "UpdateModule",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServiceModule"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServiceModuleDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateModule",
+      "x-url" : "{endpoint}/v1/{project_id}/modules"
+    },
+    "/DeleteDataSyncTask" : {
+      "delete" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "删除数据同步任务",
+        "operationId" : "DeleteDataSyncTask",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DataSync"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No Content"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "资源不存在",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "关联资源未删除",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteDataSyncTask",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sync/{id}"
+    },
+    "/ShowDataSource" : {
+      "get" : {
+        "tags" : [ "数据同步任务管理" ],
+        "summary" : "查询单个数据数据源",
+        "operationId" : "ShowDataSource",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DatasourceVo"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowDataSource",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sources/{id}"
+    },
+    "/UpdateDataSource" : {
+      "put" : {
+        "tags" : [ "数据源管理" ],
+        "summary" : "更新数据源",
+        "operationId" : "UpdateDataSource",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DatasourceVo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "description" : "id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DatasourceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateDataSource",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sources/{id}"
+    },
+    "/CreateMonitor" : {
+      "post" : {
+        "tags" : [ "监控管理" ],
+        "summary" : "创建监控器",
+        "operationId" : "CreateMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Monitor"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Monitor"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "请求格式错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "instance_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Monitor"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateMonitor",
+      "x-url" : "{endpoint}/v1/{project_id}/instances/{instance_id}/monitors"
+    },
+    "/CreateDataSource" : {
+      "post" : {
+        "tags" : [ "数据源管理" ],
+        "summary" : "创建数据源",
+        "operationId" : "CreateDataSource",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DatasourceVo"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "parameters" : [ {
+          "name" : "namespace_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DatasourceDto"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateDataSource",
+      "x-url" : "{endpoint}/v1/{project_id}/namespaces/{namespace_id}/data-sources"
+    }
+  }
+}

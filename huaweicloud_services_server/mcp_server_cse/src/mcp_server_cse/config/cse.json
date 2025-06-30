@@ -1,0 +1,4994 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "CSE-gateway",
+    "title" : "CSE",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "DubboMethodParam" : {
+        "type" : "object",
+        "properties" : {
+          "paramKey" : {
+            "description" : "参数键。",
+            "type" : "string"
+          },
+          "paramSource" : {
+            "description" : "参数来源。",
+            "type" : "string"
+          },
+          "paramType" : {
+            "description" : "参数类型。",
+            "type" : "string"
+          }
+        }
+      },
+      "Dubbo" : {
+        "type" : "object",
+        "properties" : {
+          "service" : {
+            "description" : "服务名。",
+            "type" : "string"
+          },
+          "version" : {
+            "description" : "版本号。",
+            "type" : "string"
+          },
+          "group" : {
+            "description" : "分组。",
+            "type" : "string"
+          },
+          "methods" : {
+            "description" : "dubbo方法列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DubboMethod"
+            }
+          }
+        }
+      },
+      "DubboMethod" : {
+        "type" : "object",
+        "properties" : {
+          "serviceMethod" : {
+            "description" : "服务方法。",
+            "type" : "string"
+          },
+          "headersAttach" : {
+            "description" : "附加请求头。",
+            "type" : "string"
+          },
+          "httpMethods" : {
+            "description" : "http 方法。",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "httpPath" : {
+            "description" : "http 路径。",
+            "type" : "string"
+          },
+          "params" : {
+            "type" : "array",
+            "description" : "dubbo 方法参数。",
+            "items" : {
+              "$ref" : "#/components/schemas/DubboMethodParam"
+            }
+          }
+        }
+      },
+      "Http2Rpc" : {
+        "type" : "object",
+        "properties" : {
+          "gatewayId" : {
+            "description" : "网关的ID。",
+            "type" : "string"
+          },
+          "pluginConfig" : {
+            "description" : "传递给插件的配置。",
+            "type" : "object"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "routeName" : {
+            "description" : "路由的名称。",
+            "type" : "string"
+          },
+          "routeDestinationName" : {
+            "description" : "目标路由的名称。",
+            "type" : "string"
+          },
+          "dubbo" : {
+            "description" : "dubbo 服务的信息。",
+            "$ref" : "#/components/schemas/Dubbo"
+          }
+        }
+      },
+      "UploadKieResp" : {
+        "type" : "object",
+        "properties" : {
+          "success" : {
+            "description" : "导入成功的配置项列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GetKieConfigs"
+            }
+          },
+          "failure" : {
+            "description" : "导入失败的配置项及其错误列表。",
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "$ref" : "#/components/schemas/DocFailedOfUpload"
+            }
+          }
+        }
+      },
+      "BadRequest" : {
+        "description" : "错误的请求。",
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码。",
+            "type" : "string"
+          },
+          "error_msg" : {
+            "description" : "错误信息。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "GetKieConfigs" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "配置项的id。",
+            "type" : "string",
+            "example" : "8a9e6a5d-8d65-48fb-a40c-5150c8479da8"
+          },
+          "key" : {
+            "description" : "配置项的key。",
+            "type" : "string"
+          },
+          "labels" : {
+            "description" : "配置项的标签。",
+            "type" : "object",
+            "example" : {
+              "key" : "value"
+            }
+          },
+          "value" : {
+            "description" : "配置项的值。",
+            "type" : "string"
+          },
+          "value_type" : {
+            "description" : "配置项value的类型。",
+            "type" : "string",
+            "example" : "text"
+          },
+          "status" : {
+            "description" : "配置项的状态。",
+            "type" : "string",
+            "example" : "enabled"
+          },
+          "create_time" : {
+            "description" : "创建时间。",
+            "type" : "integer",
+            "example" : 1623139038
+          },
+          "update_time" : {
+            "description" : "更新时间。",
+            "type" : "integer",
+            "example" : 1623139038
+          },
+          "create_revision" : {
+            "description" : "创建配置的版本号",
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 13
+          },
+          "update_revision" : {
+            "description" : "修改配置的版本号",
+            "type" : "integer",
+            "example" : 13,
+            "format" : "int64"
+          }
+        }
+      },
+      "InternalServerError" : {
+        "description" : "服务内部错误",
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码。",
+            "type" : "string"
+          },
+          "error_msg" : {
+            "description" : "错误信息。",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "DocFailedOfUpload" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "配置项的key值",
+            "example" : "string"
+          },
+          "labels" : {
+            "type" : "object",
+            "description" : "配置项的labels值",
+            "example" : {
+              "key" : "value"
+            }
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "导入失败的错误码",
+            "example" : "4xxxxx"
+          },
+          "error_message" : {
+            "type" : "string",
+            "description" : "导入失败的原因",
+            "example" : "Invalid parameters"
+          }
+        }
+      },
+      "SpecClusterNode" : {
+        "description" : "微服务引擎的CCE节点列表",
+        "type" : "object",
+        "properties" : {
+          "clusterNodes" : {
+            "description" : "CCE节点信息。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterNode"
+            }
+          }
+        }
+      },
+      "ClusterNode" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "微服务引擎CCE节点ID"
+          },
+          "az" : {
+            "type" : "string",
+            "description" : "微服务引擎CCE节点所属可用区"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "微服务引擎CCE节点IP"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "微服务引擎CCE节点标签"
+          },
+          "status" : {
+            "type" : "string",
+            "default" : "Active",
+            "description" : "微服务引擎CCE节点状态"
+          }
+        }
+      },
+      "EntrypointItem" : {
+        "type" : "object",
+        "properties" : {
+          "masterEntrypoint" : {
+            "type" : "string",
+            "description" : "微服务引擎组件的ipv4主接入地址"
+          },
+          "masterEntrypointIpv6" : {
+            "type" : "string",
+            "description" : "微服务引擎组件的ipv6主接入地址"
+          },
+          "slaveEntrypoint" : {
+            "type" : "string",
+            "description" : "微服务引擎组件的ipv4备接入地址"
+          },
+          "slaveEntrypointIpv6" : {
+            "type" : "string",
+            "description" : "微服务引擎组件的ipv6备接入地址"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "微服务引擎组件类型",
+            "enum" : [ "REGISTRY", "SERVICE" ]
+          }
+        }
+      },
+      "EngineSearchResp" : {
+        "type" : "object",
+        "description" : "查询微服务引擎详情响应结构体",
+        "properties" : {
+          "id" : {
+            "description" : "微服务引擎ID",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "微服务引擎名称",
+            "type" : "string"
+          },
+          "description" : {
+            "description" : "微服务引擎描述",
+            "type" : "string"
+          },
+          "authType" : {
+            "type" : "string",
+            "enum" : [ "RBAC", "NONE" ],
+            "description" : "微服务引擎认证类型"
+          },
+          "flavor" : {
+            "type" : "string",
+            "description" : "微服务引擎规格"
+          },
+          "payment" : {
+            "description" : "微服务引擎计费方式",
+            "type" : "string"
+          },
+          "version" : {
+            "description" : "微服务引擎当前版本",
+            "type" : "string"
+          },
+          "latestVersion" : {
+            "description" : "微服务引擎最新版本",
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Creating", "Available", "Unavailable", "Deleting", "Deleted", "Upgrading", "Modifying", "CreateFailed", "DeleteFailed", "UpgradeFailed", "ModifyFailed", "Freezed" ],
+            "description" : "微服务引擎状态"
+          },
+          "beDefault" : {
+            "type" : "boolean",
+            "description" : "engine 是否是默认引擎"
+          },
+          "createUser" : {
+            "type" : "string",
+            "description" : "微服务引擎创建者"
+          },
+          "createTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "微服务引擎创建时间"
+          },
+          "cceSpec" : {
+            "description" : "微服务引擎的CSE应用规格",
+            "$ref" : "#/components/schemas/Spec"
+          },
+          "externalEntrypoint" : {
+            "description" : "微服务引擎对外暴露节点地址",
+            "$ref" : "#/components/schemas/EngineExternalEntrypoint"
+          },
+          "reference" : {
+            "$ref" : "#/components/schemas/EngineReference",
+            "description" : "微服务引擎相关参数"
+          },
+          "latestJobId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎最近的任务ID"
+          },
+          "enterpriseProjectId" : {
+            "type" : "string",
+            "description" : "微服务引擎所属企业项目ID"
+          },
+          "enterpriseProjectName" : {
+            "type" : "string",
+            "description" : "微服务引擎所属企业项目名称"
+          },
+          "engineAdditionalActions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "Noting", "ForceDelete", "Rollback", "Retry" ]
+            },
+            "description" : "微服务引擎允许的附加操作"
+          },
+          "specType" : {
+            "type" : "string",
+            "default" : "CSE",
+            "enum" : [ "CSE2", "Nacos2", "MicroGateway" ],
+            "description" : "微服务引擎应用部署类型"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "CSE", "NACOS", "MICROGATEWAY" ],
+            "description" : "微服务引擎类型,CSE表示专享版,NACOS表示注册配置中心,MICROGATEWAY表示网关"
+          },
+          "projectId" : {
+            "type" : "string",
+            "description" : "微服务引擎所属项目ID"
+          },
+          "vmIds" : {
+            "description" : "当前引擎在资源租户侧使用的虚拟机 id 列表",
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "Spec" : {
+        "type" : "object",
+        "description" : "微服务引擎的CCE规格",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "微服务引擎CCE规格ID"
+          },
+          "engineId" : {
+            "type" : "string",
+            "description" : "微服务引擎ID"
+          },
+          "specType" : {
+            "type" : "string",
+            "enum" : [ "CSE2", "Nacos2", "MicroGateway" ],
+            "description" : "微服务引擎的集群部署类型"
+          },
+          "cluster" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群信息,目前为null"
+          },
+          "clusterId" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群ID"
+          },
+          "clusterNodes" : {
+            "$ref" : "#/components/schemas/SpecClusterNode"
+          },
+          "flavor" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群规格"
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群所在region"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群版本"
+          },
+          "extendParam" : {
+            "type" : "string",
+            "description" : "微服务引擎的CCE集群附加参数"
+          }
+        }
+      },
+      "EngineReference" : {
+        "type" : "object",
+        "properties" : {
+          "vpc" : {
+            "type" : "string",
+            "description" : "vpc名称"
+          },
+          "azList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "微服务引擎部署的可用区列表"
+          },
+          "networkId" : {
+            "type" : "string",
+            "description" : "微服务引擎子网网络ID"
+          },
+          "subnetCidr" : {
+            "type" : "string",
+            "description" : "微服务引擎ipv4子网划分"
+          },
+          "subnetCidrV6" : {
+            "type" : "string",
+            "description" : "微服务引擎ipv6子网划分"
+          },
+          "subnetGateway" : {
+            "type" : "string",
+            "description" : "微服务引擎子网网关"
+          },
+          "publicIpId" : {
+            "type" : "string",
+            "description" : "微服务引擎公网地址ID"
+          },
+          "serviceLimit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎可支持的微服务总数"
+          },
+          "instanceLimit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎可支持的实例总数"
+          },
+          "inputs" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "description" : "微服务引擎附加参数"
+          }
+        }
+      },
+      "EngineExternalEntrypoint" : {
+        "type" : "object",
+        "properties" : {
+          "externalAddress" : {
+            "type" : "string",
+            "description" : "微服务引擎暴露的IP地址。"
+          },
+          "publicAddress" : {
+            "type" : "string",
+            "description" : "微服务引擎的公网地址。"
+          },
+          "serviceEndpoint" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/EntrypointItem"
+            },
+            "description" : "微服务引擎组件的访问地址。"
+          },
+          "publicServiceEndpoint" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/EntrypointItem"
+            },
+            "description" : "微服务引擎组件的公网地址。"
+          }
+        }
+      },
+      "CreateKieReq" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "配置项的id。",
+            "type" : "string",
+            "example" : "46f9ae5f0d36c438d5d70392b42a2a1072879e8f7e373af4c021d1155bb5c4ac"
+          },
+          "key" : {
+            "description" : "配置项的key。",
+            "type" : "string",
+            "default" : "$random(6)-$date(yyyy-MM-dd-HH-mm-ss)"
+          },
+          "labels" : {
+            "description" : "配置项的标签",
+            "type" : "object",
+            "example" : {
+              "key" : "value"
+            }
+          },
+          "value" : {
+            "description" : "配置项的值。",
+            "type" : "string",
+            "default" : "$random(20)"
+          },
+          "value_type" : {
+            "description" : "配置项value的类型。",
+            "type" : "string",
+            "default" : "text",
+            "example" : "text"
+          },
+          "status" : {
+            "description" : "配置项的状态。",
+            "type" : "string",
+            "default" : "enabled",
+            "example" : "enabled"
+          }
+        }
+      },
+      "DownloadKieResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "metadata" : {
+            "description" : "导出文件的描述信息",
+            "type" : "object",
+            "properties" : {
+              "version" : {
+                "type" : "string",
+                "description" : "版本号",
+                "example" : "1.0.0"
+              },
+              "annotations" : {
+                "type" : "object",
+                "description" : "导出文件的其他信息"
+              }
+            }
+          },
+          "data" : {
+            "description" : "导出的配置项列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateKieReq"
+            }
+          }
+        }
+      },
+      "DownloadKieReqBody" : {
+        "type" : "object",
+        "required" : [ "ids" ],
+        "properties" : {
+          "ids" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "配置ID的集合",
+            "example" : [ "8a9e6a5d-8d65-48fb-a40c-5150c8479da8", "ba9e6afe-8d65-48fb-a40c-5150c8479da8" ]
+          }
+        }
+      },
+      "GovSelector" : {
+        "type" : "object",
+        "description" : "治理策略下发范围",
+        "properties" : {
+          "environment" : {
+            "type" : "string",
+            "description" : "所属环境"
+          },
+          "app" : {
+            "type" : "string",
+            "description" : "所属应用"
+          },
+          "service" : {
+            "type" : "string",
+            "description" : "可选,治理下发到微服务级别"
+          }
+        }
+      },
+      "CreateGovPolicy" : {
+        "type" : "object",
+        "description" : "创建治理策略列表响应结构体",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "治理策略名称"
+          },
+          "selector" : {
+            "$ref" : "#/components/schemas/GovSelector"
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "治理策略定义内容"
+          }
+        },
+        "example" : {
+          "name" : "string",
+          "selector" : {
+            "environment" : "string",
+            "app" : "string",
+            "service" : "string"
+          },
+          "spec" : { }
+        }
+      },
+      "ResultObject" : {
+        "description" : "结果信息",
+        "type" : "object",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "结果信息"
+          }
+        }
+      },
+      "WasmPlugin" : {
+        "type" : "object",
+        "properties" : {
+          "imagePullPolicy" : {
+            "description" : "拉取OCI镜像的行为",
+            "enum" : [ "UNSPECIFIED_POLICY", "IfNotPresent", "Always" ],
+            "type" : "string"
+          },
+          "imagePullSecret" : {
+            "description" : "拉取OCI 镜像的凭据",
+            "type" : "string"
+          },
+          "phase" : {
+            "description" : "确定插件将在过滤器链中的何处注入。",
+            "enum" : [ "UNSPECIFIED_PHASE", "AUTHN", "AUTHZ", "STATS" ],
+            "type" : "string"
+          },
+          "pluginConfig" : {
+            "description" : "传递给插件的配置。",
+            "type" : "object"
+          },
+          "pluginName" : {
+            "description" : "插件名。",
+            "type" : "string"
+          },
+          "priority" : {
+            "description" : "插件的调用优先级。",
+            "type" : "integer"
+          },
+          "sha256" : {
+            "description" : "用于校验插件和容器的校验和。",
+            "type" : "string"
+          },
+          "url" : {
+            "description" : "插件或容器的下载地址。",
+            "type" : "string"
+          },
+          "verificationKey" : {
+            "description" : "校验值。",
+            "type" : "string"
+          }
+        }
+      },
+      "WasmPluginList" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "插件总数。"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WasmPlugin"
+            },
+            "description" : "插件列表。"
+          }
+        }
+      },
+      "EngineCommonResp" : {
+        "type" : "object",
+        "description" : "操作微服务引擎响应结构体",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "创建的微服务引擎ID"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "创建的微服务引擎名称"
+          },
+          "jobId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎执行的任务ID"
+          }
+        }
+      },
+      "FlavorGetListResp" : {
+        "type" : "object",
+        "description" : "查询微服务引擎规格列表响应结构体",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎规格总个数"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FlavorBrief"
+            },
+            "description" : "微服务引擎规格详情"
+          }
+        }
+      },
+      "EngineSpec" : {
+        "type" : "object",
+        "description" : "微服务引擎相关参数。",
+        "properties" : {
+          "availableCpuMemory" : {
+            "description" : "CPU及内存规格。",
+            "type" : "string"
+          },
+          "linear" : {
+            "description" : "是否为线性规格。",
+            "type" : "string"
+          },
+          "availablePrefix" : {
+            "description" : "可用节点规格类型前缀。",
+            "type" : "string"
+          }
+        }
+      },
+      "FlavorBrief" : {
+        "type" : "object",
+        "description" : "微服务引擎规格及描述",
+        "properties" : {
+          "flavor" : {
+            "type" : "string",
+            "description" : "微服务引擎规格"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "微服务引擎规格描述"
+          },
+          "spec" : {
+            "type" : "object",
+            "$ref" : "#/components/schemas/EngineSpec"
+          }
+        }
+      },
+      "EngineUpdateReq" : {
+        "type" : "object",
+        "description" : "升级微服务引擎请求体",
+        "required" : [ "version" ],
+        "properties" : {
+          "version" : {
+            "type" : "string",
+            "maxLength" : 24,
+            "description" : "版本号"
+          }
+        },
+        "example" : {
+          "version" : "2.4.0"
+        }
+      },
+      "CreateRules" : {
+        "type" : "object",
+        "description" : "灰度发布规则",
+        "properties" : {
+          "precedence" : {
+            "description" : "优先级,数字越大,优先级越高。",
+            "type" : "integer",
+            "example" : 1
+          },
+          "match" : {
+            "$ref" : "#/components/schemas/CreateMatch"
+          },
+          "route" : {
+            "description" : "路由规则列表。",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateRoute"
+            }
+          }
+        }
+      },
+      "CreateRouteRule" : {
+        "type" : "object",
+        "items" : {
+          "$ref" : "#/components/schemas/CreateRules"
+        }
+      },
+      "CreateMatch" : {
+        "type" : "object",
+        "description" : "请求匹配规则。0..N个,不配置表示匹配。",
+        "properties" : {
+          "headers" : {
+            "description" : "匹配的Headers。",
+            "type" : "object",
+            "properties" : {
+              "<header>" : {
+                "description" : "匹配Header的规则。",
+                "type" : "object",
+                "properties" : {
+                  "exact" : {
+                    "description" : "精确匹配值。",
+                    "type" : "string",
+                    "example" : "test"
+                  },
+                  "caseInsensitive" : {
+                    "description" : "是否区分大小写。",
+                    "type" : "boolean",
+                    "example" : false
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateRoute" : {
+        "type" : "object",
+        "description" : "路由规则。",
+        "properties" : {
+          "name" : {
+            "description" : "规则名称。",
+            "type" : "string",
+            "example" : "rule_1"
+          },
+          "weight" : {
+            "description" : "权重值。",
+            "type" : "integer",
+            "example" : 20
+          },
+          "tags" : {
+            "description" : "匹配的实例标记列表。",
+            "type" : "object",
+            "properties" : {
+              "<tag>" : {
+                "description" : "实例标记。满足标记条件的实例放到这一组。",
+                "type" : "string",
+                "example" : "1.0.0"
+              }
+            }
+          }
+        }
+      },
+      "EngineAdditionalActionReq" : {
+        "type" : "object",
+        "description" : "升级微服务引擎请求体",
+        "required" : [ "action" ],
+        "properties" : {
+          "action" : {
+            "description" : "操作类型",
+            "type" : "string",
+            "enum" : [ "Retry" ]
+          }
+        },
+        "example" : {
+          "action" : "Retry"
+        }
+      },
+      "TenantQuotaUsed" : {
+        "type" : "object",
+        "description" : "引擎配额详情",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "配额类型"
+          },
+          "used" : {
+            "description" : "已使用配额",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "quota" : {
+            "description" : "总配额",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "EngineQuotaV2" : {
+        "type" : "object",
+        "description" : "引擎配额返回信息",
+        "properties" : {
+          "quotas" : {
+            "type" : "object",
+            "properties" : {
+              "resources" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/TenantQuotaUsed"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EngineSimpleInfo" : {
+        "type" : "object",
+        "description" : "查询微服务引擎列表引擎信息",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "微服务引擎的ID"
+          },
+          "name" : {
+            "type" : "string",
+            "pattern" : "[a-zA-Z]{1}[a-z0-9A-Z-]{3,24}[a-z0-9A-Z]$",
+            "description" : "引擎的名称"
+          },
+          "enterpriseProjectId" : {
+            "type" : "string",
+            "description" : "微服务引擎所属企业项目ID"
+          },
+          "enterpriseProjectName" : {
+            "type" : "string",
+            "description" : "微服务引擎所属企业项目名称"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "微服务引擎的类型,CSE为专享版引擎,CSE_Share表示为专业版引擎",
+            "enum" : [ "CSE", "CSE_Share" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "微服务引擎的描述"
+          },
+          "flavor" : {
+            "type" : "string",
+            "description" : "微服务引擎的规格",
+            "enum" : [ "cse.s1.small2", "cse.s1.medium2", "cse.s1.large2", "cse.s1.xlarge2", "cse.nacos2.c1.large.10", "cse.nacos2.c1.xlarge.20", "cse.nacos2.c1.xlarge.50", "cse.nacos2.c1.xlarge.60", "cse.nacos2.c1.2xlarge.100", "cse.microgateway.pro.small.1", "cse.microgateway.pro.medium.1", "cse.microgateway.pro.large.1" ]
+          },
+          "payment" : {
+            "type" : "string",
+            "description" : "微服务引擎的计费方式,0表示包周期,1表示按需,2表示免费"
+          },
+          "authType" : {
+            "type" : "string",
+            "description" : "微服务引擎的认证方式,RBAC/NONE",
+            "enum" : [ "RBAC", "NONE" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "微服务引擎当前的状态",
+            "enum" : [ "Creating", "Available", "Unavailable", "Deleting", "Deleted", "Upgrading", "Modifying", "CreateFailed", "DeleteFailed", "UpgradeFailed", "ModifyFailed", "Freezed" ]
+          },
+          "externalAddress" : {
+            "type" : "string",
+            "description" : "微服务引擎暴露的IP地址"
+          },
+          "serviceEndpoint" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/EntrypointItem"
+            },
+            "description" : "微服务引擎组件的访问地址。"
+          },
+          "publicAddress" : {
+            "type" : "string",
+            "description" : "微服务引擎的公网IP地址"
+          },
+          "publicServiceEndpoint" : {
+            "type" : "object",
+            "description" : "微服务引擎的公网接入地址",
+            "additionalProperties" : {
+              "$ref" : "#/components/schemas/EntrypointItem"
+            }
+          },
+          "totalInstance" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎可支持的实例总数"
+          },
+          "usedInstance" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "已使用的实例总数"
+          },
+          "availableInstance" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "可用实例总数"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "微服务引擎当前版本"
+          },
+          "latestVersion" : {
+            "type" : "string",
+            "description" : "微服务引擎最新版本"
+          },
+          "createTime" : {
+            "description" : "微服务引擎创建时间",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "dueTo" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "微服务引擎到期时间"
+          },
+          "latestJobId" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "微服务引擎最近的任务ID"
+          },
+          "engineAdditionalActions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "Noting", "ForceDelete", "Rollback", "Retry" ]
+            },
+            "description" : "微服务引擎允许的附加操作"
+          },
+          "specType" : {
+            "type" : "string",
+            "enum" : [ "CCE", "CSE", "SpringCloud" ],
+            "description" : "微服务引擎应用部署类型"
+          },
+          "reference" : {
+            "$ref" : "#/components/schemas/EngineReference"
+          }
+        }
+      },
+      "EngineGetListResp" : {
+        "type" : "object",
+        "description" : "查询微服务引擎列表响应结构体",
+        "properties" : {
+          "total" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "当前符合查询条件的微服务引擎个数"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EngineSimpleInfo"
+            },
+            "description" : "微服务引擎详情"
+          }
+        }
+      },
+      "EngineModifyReq" : {
+        "type" : "object",
+        "properties" : {
+          "flavor" : {
+            "description" : "变更的规格",
+            "type" : "string"
+          },
+          "inputs" : {
+            "description" : "变更的配置,覆盖组件bp的input参数",
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "flavor" ],
+        "example" : {
+          "flavor" : "string",
+          "inputs" : {
+            "additionalProp1" : "string",
+            "additionalProp2" : "string",
+            "additionalProp3" : "string"
+          }
+        }
+      },
+      "EngineModifyResp" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "description" : "引擎id",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "引擎名字",
+            "type" : "string"
+          },
+          "job_id" : {
+            "description" : "jobID",
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "example" : {
+          "id" : "string",
+          "name" : "string",
+          "job_id" : 0
+        }
+      },
+      "EngineConfigureReq" : {
+        "type" : "object",
+        "description" : "更新微服务引擎配置请求体。",
+        "properties" : {
+          "authType" : {
+            "type" : "string",
+            "description" : "authType安全认证类型,支持填写NONE和RBAC。"
+          }
+        },
+        "required" : [ "authType" ],
+        "example" : {
+          "authType" : "RBAC"
+        }
+      },
+      "CreateBussinessScene" : {
+        "type" : "object",
+        "description" : "流量定义",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "default" : "",
+            "description" : "流量名称"
+          },
+          "status" : {
+            "type" : "string",
+            "default" : "enabled",
+            "description" : "启用状态,支持enabled和disabled"
+          },
+          "selector" : {
+            "$ref" : "#/components/schemas/GovSelector"
+          },
+          "spec" : {
+            "type" : "object",
+            "description" : "流量特征描述",
+            "properties" : {
+              "alias" : {
+                "type" : "string",
+                "description" : "特征名称"
+              },
+              "matches" : {
+                "type" : "array",
+                "description" : "匹配条件定义",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "string",
+                      "description" : "条件名称"
+                    },
+                    "apiPath" : {
+                      "type" : "object",
+                      "description" : "匹配的PATH"
+                    },
+                    "headers" : {
+                      "type" : "object",
+                      "description" : "匹配的Headers"
+                    },
+                    "method" : {
+                      "type" : "array",
+                      "description" : "匹配的Method列表",
+                      "items" : {
+                        "type" : "string",
+                        "description" : "匹配的Method"
+                      }
+                    },
+                    "serviceName" : {
+                      "type" : "string",
+                      "description" : "匹配的微服务名称"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GovDisplay" : {
+        "type" : "object",
+        "description" : "查询治理策略列表响应结构体。",
+        "items" : {
+          "$ref" : "#/components/schemas/GovPolicyDetail"
+        },
+        "example" : [ {
+          "matchGroup" : {
+            "name" : "",
+            "status" : "enabled",
+            "selector" : {
+              "environment" : "string",
+              "app" : "string",
+              "service" : "string"
+            },
+            "spec" : {
+              "alias" : "string",
+              "matches" : [ {
+                "name" : "string",
+                "apiPath" : { },
+                "headers" : { },
+                "method" : [ "string" ],
+                "serviceName" : "string"
+              } ]
+            }
+          },
+          "policies" : [ {
+            "id" : "string",
+            "name" : "string",
+            "kind" : "string",
+            "status" : "string",
+            "selector" : {
+              "environment" : "string",
+              "app" : "string",
+              "service" : "string"
+            },
+            "spec" : { }
+          } ]
+        } ]
+      },
+      "GovPolicyDetail" : {
+        "type" : "object",
+        "description" : "治理策略详情。",
+        "properties" : {
+          "matchGroup" : {
+            "$ref" : "#/components/schemas/CreateBussinessScene"
+          },
+          "policies" : {
+            "type" : "array",
+            "description" : "治理策略定义。",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "治理策略ID。"
+                },
+                "name" : {
+                  "type" : "string",
+                  "description" : "治理策略名称。"
+                },
+                "kind" : {
+                  "type" : "string",
+                  "description" : "治理类型,支持填写retry、rate-limiting、loadbalance、circuit-breaker、instance-isolation、fault-injection和bulkhead。"
+                },
+                "status" : {
+                  "type" : "string",
+                  "description" : "启用状态,支持enabled和disabled。"
+                },
+                "selector" : {
+                  "$ref" : "#/components/schemas/GovSelector"
+                },
+                "spec" : {
+                  "type" : "object",
+                  "description" : "治理策略定义内容。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EngineCreateReq" : {
+        "type" : "object",
+        "description" : "创建微服务引擎请求结构体",
+        "required" : [ "name", "payment", "flavor", "authType", "vpc", "networkId", "subnetCidr", "specType" ],
+        "properties" : {
+          "name" : {
+            "description" : "微服务引擎的名称,名称为字母开头,字母、数字、-组成,且不能以-结尾,3-24个字符。",
+            "pattern" : "[a-zA-Z]{1}[a-z0-9A-Z-]{3,24}[a-z0-9A-Z]$",
+            "type" : "string"
+          },
+          "description" : {
+            "description" : "微服务引擎描述,长度0~255。",
+            "maxLength" : 255,
+            "type" : "string"
+          },
+          "payment" : {
+            "description" : "微服务引擎计费方式,1表示按需",
+            "maxLength" : 24,
+            "type" : "string",
+            "enum" : [ 1 ]
+          },
+          "flavor" : {
+            "type" : "string",
+            "enum" : [ "cse.s1.small2", "cse.s1.medium2", "cse.s1.large2", "cse.s1.xlarge2", "cse.nacos2.c1.large.10", "cse.nacos2.c1.xlarge.20", "cse.nacos2.c1.xlarge.50", "cse.nacos2.c1.xlarge.60", "cse.nacos2.c1.2xlarge.100", "cse.microgateway.pro.small.1", "cse.microgateway.pro.medium.1", "cse.microgateway.pro.large.1" ],
+            "description" : "微服务引擎的规格"
+          },
+          "azList" : {
+            "minItems" : 1,
+            "maxItems" : 3,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "当前局点可用区列表,创建ServiceComb引擎专享版需要填写。"
+          },
+          "authType" : {
+            "type" : "string",
+            "enum" : [ "RBAC", "NONE" ],
+            "description" : "ServiceComb引擎专享版与注册配置中心认证方式,RBAC为安全认证,NONE为无认证。"
+          },
+          "vpc" : {
+            "maxLength" : 64,
+            "type" : "string",
+            "description" : "vpc名称"
+          },
+          "vpcId" : {
+            "maxLength" : 64,
+            "type" : "string",
+            "description" : "vpc标识"
+          },
+          "networkId" : {
+            "maxLength" : 64,
+            "type" : "string",
+            "description" : "微服务引擎子网ID"
+          },
+          "subnetCidr" : {
+            "maxLength" : 24,
+            "type" : "string",
+            "description" : "微服务引擎子网划分"
+          },
+          "publicIpId" : {
+            "maxLength" : 64,
+            "type" : "string",
+            "description" : "ServiceComb引擎专享版公网地址ID,当前为null"
+          },
+          "auth_cred" : {
+            "$ref" : "#/components/schemas/EngineRbacPwd",
+            "description" : "ServiceComb引擎专享版选择RBAC认证时必传,包含引擎的认证信息。"
+          },
+          "specType" : {
+            "default" : "CSE",
+            "type" : "string",
+            "enum" : [ "CSE2", "Nacos2", "MicroGateway" ],
+            "description" : "微服务引擎部署类型"
+          },
+          "inputs" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "description" : "引擎附加参数"
+          },
+          "enginestateInfo" : {
+            "description" : "引擎状态信息",
+            "properties" : {
+              "cluster" : {
+                "type" : "boolean",
+                "description" : "集群"
+              },
+              "twinClusters" : {
+                "type" : "boolean",
+                "description" : "双子集群"
+              },
+              "singleEngine" : {
+                "type" : "boolean",
+                "description" : "单引擎"
+              }
+            }
+          },
+          "periodType" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "创建阶段类型"
+          },
+          "flavorType" : {
+            "description" : "网关规格类型",
+            "properties" : {
+              "nodeFlavor" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "description" : "网关节点规格"
+              },
+              "flavor" : {
+                "type" : "string",
+                "description" : "网关规格"
+              },
+              "availablePrefix" : {
+                "type" : "string",
+                "description" : "可用区前缀"
+              },
+              "availableCpuMemory" : {
+                "type" : "string",
+                "description" : "可用区CPU内存"
+              },
+              "specType" : {
+                "type" : "string",
+                "description" : "引擎类型"
+              },
+              "linear" : {
+                "type" : "boolean",
+                "description" : "是否为线性"
+              },
+              "licenseAmount" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "网关证书规模"
+              },
+              "nodeLimit" : {
+                "type" : "string",
+                "description" : "网关节点数限制"
+              },
+              "id" : {
+                "type" : "string",
+                "description" : "网关规格id"
+              },
+              "microGatewayFlavor" : {
+                "type" : "string",
+                "description" : "网关规格"
+              },
+              "disable" : {
+                "type" : "boolean",
+                "description" : "网关是否禁用"
+              },
+              "spec" : {
+                "type" : "string",
+                "description" : "网关节点类型"
+              },
+              "cloudServiceType" : {
+                "type" : "string",
+                "description" : "云服务类型"
+              },
+              "currentflavor" : {
+                "type" : "string",
+                "description" : "当前规格"
+              }
+            }
+          },
+          "enterpriseProject" : {
+            "description" : "企业项目信息",
+            "properties" : {
+              "id" : {
+                "type" : "string",
+                "description" : "企业项目id"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "企业项目名称"
+              },
+              "description" : {
+                "type" : "string",
+                "description" : "企业项目描述"
+              },
+              "status" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "企业项目状态"
+              },
+              "created_at" : {
+                "type" : "string",
+                "description" : "企业项目创建时间"
+              },
+              "updated_at" : {
+                "type" : "string",
+                "description" : "企业项目升级时间"
+              },
+              "label" : {
+                "type" : "string",
+                "description" : "企业项目标签"
+              }
+            }
+          },
+          "vpcCidr" : {
+            "type" : "string",
+            "description" : "网关vpc划分"
+          },
+          "resourceParams" : {
+            "description" : "微服务引擎资源参数",
+            "properties" : {
+              "isAutoRenew" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "是否自动刷新"
+              }
+            }
+          },
+          "productId" : {
+            "type" : "string",
+            "description" : "产品ID"
+          },
+          "capacityProductId" : {
+            "type" : "string",
+            "description" : "容量产品ID"
+          },
+          "isFree" : {
+            "type" : "boolean",
+            "description" : "微服务引擎是否免费"
+          },
+          "subnetName" : {
+            "type" : "string",
+            "description" : "微服务引擎使用的子网名称"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "标签"
+          },
+          "maintenanceConfig" : {
+            "description" : "微服务引擎的维护时间窗",
+            "properties" : {
+              "time" : {
+                "type" : "string",
+                "description" : "维护时间"
+              },
+              "zone" : {
+                "type" : "string",
+                "description" : "维护时间的时区"
+              }
+            }
+          },
+          "elbid" : {
+            "type" : "string",
+            "description" : "微服务引擎使用的elb的id"
+          }
+        },
+        "example" : {
+          "name" : "test",
+          "description" : "test",
+          "payment" : "1",
+          "flavor" : "cse.s1.medium2",
+          "azList" : [ "test" ],
+          "authType" : "RBAC",
+          "vpc" : "vpc-demotest",
+          "vpcId" : "09902850-9454-4715-9764-018f0c37022",
+          "networkId" : "88550801-e892-4f8e-b21b-f7147f6229",
+          "subnetCidr" : "192.168.0.5/26",
+          "specType" : "CSE2",
+          "inputs" : {
+            "nodeFlavor" : "s6.large.2"
+          },
+          "auth_cred" : {
+            "pwd" : "test"
+          }
+        }
+      },
+      "EngineRbacPwd" : {
+        "type" : "object",
+        "description" : "操作ServiceComb引擎专享版安全认证信息",
+        "properties" : {
+          "pwd" : {
+            "type" : "string",
+            "description" : "开启安全认证的ServiceComb引擎专享版默认root帐号的密码"
+          }
+        }
+      },
+      "Job" : {
+        "type" : "object",
+        "description" : "微服务引擎任务详情列表",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "任务ID"
+          },
+          "engineId" : {
+            "type" : "string",
+            "description" : "任务所属引擎ID"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "Create", "Delete", "Upgrade", "Modify" ],
+            "description" : "任务类型"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "任务描述"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Init", "Executing", "Error", "Timeout", "Finished" ],
+            "description" : "任务状态"
+          },
+          "scheduling" : {
+            "description" : "任务是否正在执行,0表示不在执行,1表示执行中",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "createUser" : {
+            "type" : "string",
+            "description" : "任务创建者"
+          },
+          "startTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务开始时间"
+          },
+          "endTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "任务结束时间"
+          },
+          "context" : {
+            "type" : "string",
+            "description" : "任务执行上下文"
+          },
+          "tasks" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TaskSteps"
+            },
+            "description" : "任务包含的处理阶段"
+          }
+        }
+      },
+      "TaskSteps" : {
+        "type" : "object",
+        "description" : "处理阶段",
+        "properties" : {
+          "taskName" : {
+            "type" : "string",
+            "description" : "处理阶段名称"
+          },
+          "taskNames" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "当前处理阶段包含的处理步骤名称列表"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Init", "Executing", "Error", "Timeout", "Finished" ],
+            "description" : "处理阶段状态"
+          },
+          "startTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "处理阶段开始时间"
+          },
+          "endTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "处理阶段结束时间"
+          },
+          "taskExecutorBrief" : {
+            "$ref" : "#/components/schemas/TaskExecutorBrief",
+            "description" : "处理阶段元数据"
+          },
+          "tasks" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Task"
+            },
+            "description" : "处理步骤"
+          }
+        }
+      },
+      "TaskExecutorBrief" : {
+        "type" : "object",
+        "description" : "任务元数据",
+        "properties" : {
+          "duration" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "子任务持续时长"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "子任务描述"
+          }
+        }
+      },
+      "Task" : {
+        "type" : "object",
+        "description" : "子任务",
+        "properties" : {
+          "jobId" : {
+            "description" : "子任务所属任务ID",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "id" : {
+            "description" : "子任务ID,使用uuid",
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "Create", "Delete", "Upgrade", "Modify" ],
+            "description" : "子任务的类型"
+          },
+          "assigned" : {
+            "type" : "string",
+            "description" : "子任务的执行者"
+          },
+          "taskName" : {
+            "type" : "string",
+            "description" : "子任务名称"
+          },
+          "engineName" : {
+            "type" : "string",
+            "description" : "子任务所属引擎名称"
+          },
+          "taskOrder" : {
+            "description" : "子任务执行的顺序, 从小到大",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "Init", "Executing", "Error", "Timeout", "Finished" ],
+            "description" : "子任务状态"
+          },
+          "startTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "子任务开始时间"
+          },
+          "endTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "子任务结束时间"
+          },
+          "createTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "子任务创建时间"
+          },
+          "updateTime" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "子任务更新时间"
+          },
+          "timeout" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "子任务是否超时"
+          },
+          "log" : {
+            "type" : "string",
+            "description" : "子任务详细信息,执行过程中产生的辅助信息"
+          },
+          "output" : {
+            "default" : "{}",
+            "description" : "子任务输出信息",
+            "type" : "string"
+          },
+          "taskExecutorBrief" : {
+            "$ref" : "#/components/schemas/TaskExecutorBrief"
+          }
+        }
+      },
+      "Http2RpcList" : {
+        "type" : "object",
+        "properties" : {
+          "total" : {
+            "description" : "http2Rpc 总数。",
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "Http2Rpc 详细信息。",
+            "items" : {
+              "$ref" : "#/components/schemas/Http2Rpc"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ModifyHttp2Rpc" : {
+      "put" : {
+        "tags" : [ "gateway" ],
+        "summary" : "修改http转rpc方法",
+        "description" : "修改http转rpc方法。",
+        "operationId" : "ModifyHttp2Rpc",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Http2Rpc"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "创建失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "http2Rpc_id",
+          "in" : "path",
+          "description" : "http2Rpc id",
+          "required" : true,
+          "schema" : {
+            "description" : "http2Rpc id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Http2Rpc"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ModifyHttp2Rpc",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/http2Rpcs/{http2Rpc_id}"
+    },
+    "/UploadKie" : {
+      "post" : {
+        "tags" : [ "配置管理" ],
+        "summary" : "导入kie配置",
+        "description" : "导入kie配置",
+        "operationId" : "UploadKie",
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UploadKieResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "bad98901-5c4b-44de-b266-bae3e2093058",
+            "description" : "微服务引擎ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "override",
+          "in" : "query",
+          "description" : "覆盖策略,force 强制覆盖、abort 遇到第一个重复时终止导入后续的kv、skip 跳过重复的key",
+          "required" : true,
+          "schema" : {
+            "description" : "覆盖策略,force 强制覆盖、abort 遇到第一个重复时终止导入后续的kv、skip 跳过重复的key",
+            "type" : "string",
+            "default" : "force",
+            "enum" : [ "force", "abort", "skip" ]
+          }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "指定label导入,格式为:{标签key}:{标签value},如果不填则按body的label导入",
+          "schema" : {
+            "example" : "key:value",
+            "description" : "指定label导入,格式为:{标签key}:{标签value},如果不填则按body的label导入",
+            "type" : "string"
+          }
+        }, {
+          "name" : "upload_file",
+          "in" : "formData",
+          "description" : "导入文件内容的格式必须为键值对映射,例如:{\"data\":[{\"key1\":\"value1\",\"key2\":\"value2\"}]}}",
+          "required" : true,
+          "schema" : {
+            "description" : "导入文件内容的格式必须为键值对映射,例如:{\"data\":[{\"key1\":\"value1\",\"key2\":\"value2\"}]}}",
+            "type" : "file"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UploadKie",
+      "x-url" : "{endpoint}/v1/{project_id}/kie/file"
+    },
+    "/ShowEngine" : {
+      "get" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "查询微服务引擎详情",
+        "description" : "查询微服务引擎详情",
+        "operationId" : "ShowEngine",
+        "responses" : {
+          "200" : {
+            "description" : "查询微服务引擎详情响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineSearchResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"。",
+          "required" : false,
+          "schema" : {
+            "example" : "0",
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "微服务引擎ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "bad98901-5c4b-44de-b266-bae3e2093058",
+            "description" : "微服务引擎ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}"
+    },
+    "/DownloadKie" : {
+      "post" : {
+        "tags" : [ "配置管理" ],
+        "summary" : "导出kie配置",
+        "description" : "导出kie配置",
+        "operationId" : "DownloadKie",
+        "responses" : {
+          "200" : {
+            "description" : "导出的文件内容,文件名会根据environment标签的值命名,如:label=environment:development,则文件名为development+时间戳.json,如:label=environment:,则文件名为default+时间戳.json,如不包含或包含多个environment,会以custom+时间戳.json命名",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DownloadKieResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "bad98901-5c4b-44de-b266-bae3e2093058",
+            "description" : "微服务引擎ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "label",
+          "in" : "query",
+          "description" : "按label过滤项导出,格式为:{标签key}:{标签value}",
+          "schema" : {
+            "example" : "environment:development",
+            "description" : "按label过滤项导出,格式为:{标签key}:{标签value}",
+            "type" : "string"
+          }
+        }, {
+          "name" : "match",
+          "in" : "query",
+          "description" : "对label过滤项的匹配选项,如果值为exact:表示严格匹配,包括label个数和内容相等;不填表示包含匹配",
+          "schema" : {
+            "example" : "exact",
+            "description" : "对label过滤项的匹配选项,如果值为exact:表示严格匹配,包括label个数和内容相等;不填表示包含匹配",
+            "type" : "string",
+            "enum" : [ "exact" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DownloadKieReqBody"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DownloadKie",
+      "x-url" : "{endpoint}/v1/{project_id}/kie/download"
+    },
+    "/ListGovernancePolicyByPolicyId" : {
+      "get" : {
+        "tags" : [ "治理" ],
+        "summary" : "查询治理策略详情",
+        "description" : "查询治理策略详情。",
+        "operationId" : "ListGovernancePolicyByPolicyId",
+        "responses" : {
+          "200" : {
+            "description" : "查询治理策略详情响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateGovPolicy"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-environment",
+          "in" : "header",
+          "description" : "所属环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "kind",
+          "in" : "path",
+          "description" : "治理策略类型",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "治理策略id",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGovernancePolicyByPolicyId",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/{kind}/{policy_id}"
+    },
+    "/CreateGovernancePolicy" : {
+      "post" : {
+        "tags" : [ "治理" ],
+        "summary" : "创建治理策略",
+        "description" : "创建治理策略。",
+        "operationId" : "CreateGovernancePolicy",
+        "responses" : {
+          "200" : {
+            "description" : "创建治理策略响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-environment",
+          "in" : "header",
+          "description" : "所属环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "kind",
+          "in" : "path",
+          "description" : "治理策略类型",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略类型",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateGovPolicy"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateGovernancePolicy",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/{kind}"
+    },
+    "/ListNacosNamespaces" : {
+      "get" : {
+        "tags" : [ "nacos" ],
+        "summary" : "查询nacos命名空间",
+        "description" : "查询nacos命名空间。",
+        "operationId" : "ListNacosNamespaces",
+        "responses" : {
+          "200" : {
+            "description" : "查询nacos命名空间响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "分页参数,偏移量,从0开始",
+          "required" : true,
+          "schema" : {
+            "description" : "分页参数,偏移量,从0开始",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "分页参数,分页大小,0表示不分页",
+          "required" : true,
+          "schema" : {
+            "description" : "分页参数,分页大小,0表示不分页",
+            "type" : "integer"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListNacosNamespaces",
+      "x-url" : "{endpoint}/v1/{project_id}/nacos/v1/console/namespaces"
+    },
+    "/ShowPlugins" : {
+      "get" : {
+        "tags" : [ "gateway" ],
+        "summary" : "查询插件列表",
+        "description" : "查询插件列表。",
+        "operationId" : "ShowPlugins",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WasmPluginList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "查询失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPlugins",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/plugins"
+    },
+    "/DeleteNacosNamespaces" : {
+      "delete" : {
+        "tags" : [ "nacos" ],
+        "summary" : "删除nacos命名空间",
+        "description" : "删除nacos命名空间。",
+        "operationId" : "DeleteNacosNamespaces",
+        "responses" : {
+          "200" : {
+            "description" : "删除nacos命名空间响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespaceId",
+          "in" : "query",
+          "description" : "命名空间ID",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteNacosNamespaces",
+      "x-url" : "{endpoint}/v1/{project_id}/nacos/v1/console/namespaces"
+    },
+    "/DeleteEngine" : {
+      "delete" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "删除微服务引擎",
+        "description" : "删除微服务引擎。",
+        "operationId" : "DeleteEngine",
+        "responses" : {
+          "200" : {
+            "description" : "删除微服务引擎响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineCommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "微服务引擎ID",
+          "required" : true,
+          "schema" : {
+            "example" : "bad98901-5c4b-44de-b266-bae3e2093058",
+            "description" : "微服务引擎ID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}"
+    },
+    "/ModifyPlugin" : {
+      "put" : {
+        "tags" : [ "gateway" ],
+        "summary" : "修改插件",
+        "description" : "修改插件。",
+        "operationId" : "ModifyPlugin",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WasmPlugin"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "创建失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "plugin_id",
+          "in" : "path",
+          "description" : "插件id",
+          "required" : true,
+          "schema" : {
+            "description" : "插件id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/WasmPlugin"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ModifyPlugin",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/plugins/{plugin_id}"
+    },
+    "/CreateHttp2Rpc" : {
+      "post" : {
+        "tags" : [ "gateway" ],
+        "summary" : "创建http转rpc方法",
+        "description" : "创建http转rpc方法。",
+        "operationId" : "CreateHttp2Rpc",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Http2Rpc"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "创建失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Http2Rpc"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateHttp2Rpc",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/http2Rpcs"
+    },
+    "/UpdateNacosNamespaces" : {
+      "put" : {
+        "tags" : [ "nacos" ],
+        "summary" : "更新nacos命名空间",
+        "description" : "更新nacos命名空间。",
+        "operationId" : "UpdateNacosNamespaces",
+        "responses" : {
+          "200" : {
+            "description" : "修改nacos命名空间响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespace",
+          "in" : "query",
+          "description" : "命名空间ID",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespaceShowName",
+          "in" : "query",
+          "description" : "命名空间名,支持非@、#、$、%、^、&、*,不超过128个字符。",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间名,支持非@、#、$、%、^、&、*,不超过128个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespaceDesc",
+          "in" : "query",
+          "description" : "命名空间描述,不超过256个字符。",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间描述,不超过256个字符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateNacosNamespaces",
+      "x-url" : "{endpoint}/v1/{project_id}/nacos/v1/console/namespaces"
+    },
+    "/UpdateGovernancePolicy" : {
+      "put" : {
+        "tags" : [ "治理" ],
+        "summary" : "修改治理策略",
+        "description" : "修改治理策略。",
+        "operationId" : "UpdateGovernancePolicy",
+        "responses" : {
+          "200" : {
+            "description" : "修改治理策略响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-environment",
+          "in" : "header",
+          "description" : "所属环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "kind",
+          "in" : "path",
+          "description" : "治理策略类型",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "治理策略id",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateGovPolicy"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateGovernancePolicy",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/{kind}/{policy_id}"
+    },
+    "/ListFlavors" : {
+      "get" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "查询微服务引擎的规格列表",
+        "description" : "查询微服务引擎的规格列表。",
+        "operationId" : "ListFlavors",
+        "responses" : {
+          "200" : {
+            "description" : "查询微服务引擎的规格列表响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlavorGetListResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "spec_type",
+          "in" : "query",
+          "description" : "微服务引擎应用部署类型,查询ServiceComb引擎专享版需要将该值设置为CSE2,查询注册配置中心需要将该值设置为Nacos2,查询网关需要将该值设置为MicroGateway。",
+          "required" : false,
+          "schema" : {
+            "example" : "CSE2",
+            "description" : "微服务引擎应用部署类型,查询ServiceComb引擎专享版需要将该值设置为CSE2,查询注册配置中心需要将该值设置为Nacos2,查询网关需要将该值设置为MicroGateway。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListFlavors",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/flavors"
+    },
+    "/DeletePlugin" : {
+      "delete" : {
+        "tags" : [ "gateway" ],
+        "summary" : "删除插件",
+        "description" : "删除插件。",
+        "operationId" : "DeletePlugin",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "删除失"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "plugin_id",
+          "in" : "path",
+          "description" : "插件id",
+          "required" : true,
+          "schema" : {
+            "description" : "插件id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeletePlugin",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/plugins/{plugin_id}"
+    },
+    "/UpgradeEngine" : {
+      "put" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "升级微服务引擎",
+        "description" : "升级微服务引擎",
+        "operationId" : "UpgradeEngine",
+        "responses" : {
+          "200" : {
+            "description" : "升级微服务引擎响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineCommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "升级失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "升级的引擎Id",
+          "required" : true,
+          "schema" : {
+            "description" : "升级的引擎Id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EngineUpdateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpgradeEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}/upgrade"
+    },
+    "/CreateMicroserviceRouteRule" : {
+      "put" : {
+        "tags" : [ "治理" ],
+        "summary" : "创建灰度发布策略",
+        "description" : "创建灰度发布策略。",
+        "operationId" : "CreateMicroserviceRouteRule",
+        "responses" : {
+          "200" : {
+            "description" : "创建灰度发布策略响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "微服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "query",
+          "description" : "所属环境,不填表示<空>环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境,不填表示<空>环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_id",
+          "in" : "query",
+          "description" : "所属应用,不填默认为default应用",
+          "required" : false,
+          "schema" : {
+            "description" : "所属应用,不填默认为default应用",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRouteRule"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateMicroserviceRouteRule",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/route-rule/microservices/{service_name}"
+    },
+    "/RetryEngine" : {
+      "put" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "对微服务引擎进行重试",
+        "description" : "对微服务引擎进行重试,当前支持ServiceComb专享版引擎",
+        "operationId" : "RetryEngine",
+        "responses" : {
+          "200" : {
+            "description" : "重试微服务引擎的响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineCommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "重试失败",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "引擎id",
+          "required" : true,
+          "schema" : {
+            "description" : "引擎id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EngineAdditionalActionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RetryEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}/actions"
+    },
+    "/ShowEngineQuotas" : {
+      "get" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "查询微服务引擎配额",
+        "description" : "查询微服务引擎配额。",
+        "operationId" : "ShowEngineQuotas",
+        "responses" : {
+          "200" : {
+            "description" : "配额查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineQuotaV2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEngineQuotas",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/quotas"
+    },
+    "/ListEngines" : {
+      "get" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "查询微服务引擎列表",
+        "description" : "查询微服务引擎列表。",
+        "operationId" : "ListEngines",
+        "responses" : {
+          "200" : {
+            "description" : "查询微服务引擎列表响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineGetListResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "偏移量。",
+          "required" : false,
+          "schema" : {
+            "example" : "0",
+            "description" : "偏移量。",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量。",
+          "required" : false,
+          "schema" : {
+            "example" : "10",
+            "description" : "每页显示的条目数量。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "查询所有微服务引擎需要将该值设置为ALL,查询ServiceComb引擎专享版需要将该值设置为CSE,查询注册配置中心需要将该值设置为Nacos,查询网关需要将该值设置为MicroGateway。",
+          "required" : false,
+          "schema" : {
+            "example" : "CSE2",
+            "description" : "查询所有微服务引擎需要将该值设置为ALL,查询ServiceComb引擎专享版需要将该值设置为CSE,查询注册配置中心需要将该值设置为Nacos,查询网关需要将该值设置为MicroGateway。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListEngines",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines"
+    },
+    "/CreateNacosNamespaces" : {
+      "post" : {
+        "tags" : [ "nacos" ],
+        "summary" : "创建nacos命名空间",
+        "description" : "创建nacos命名空间。",
+        "operationId" : "CreateNacosNamespaces",
+        "responses" : {
+          "200" : {
+            "description" : "创建nacos命名空间响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "customNamespaceId",
+          "in" : "query",
+          "description" : "命名空间ID,仅支持大小写字母、数字、短划线(-)和下划线(_),不超过128个字符。",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间ID,仅支持大小写字母、数字、短划线(-)和下划线(_),不超过128个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespaceName",
+          "in" : "query",
+          "description" : "命名空间名,支持非@、#、$、%、^、&、*,不超过128个字符。",
+          "required" : true,
+          "schema" : {
+            "description" : "命名空间名,支持非@、#、$、%、^、&、*,不超过128个字符。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "namespaceDesc",
+          "in" : "query",
+          "description" : "命名空间描述,不超过256个字符。",
+          "required" : false,
+          "schema" : {
+            "description" : "命名空间描述,不超过256个字符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateNacosNamespaces",
+      "x-url" : "{endpoint}/v1/{project_id}/nacos/v1/console/namespaces"
+    },
+    "/CreatePlugin" : {
+      "post" : {
+        "tags" : [ "gateway" ],
+        "summary" : "创建插件",
+        "description" : "创建插件。",
+        "operationId" : "CreatePlugin",
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WasmPlugin"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "创建失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/WasmPlugin"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreatePlugin",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/plugins"
+    },
+    "/ResizeEngine" : {
+      "put" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "变更微服务引擎规格",
+        "description" : "变更微服务引擎规格。",
+        "operationId" : "ResizeEngine",
+        "responses" : {
+          "200" : {
+            "description" : "变更微服务引擎规格响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineModifyResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"",
+          "required" : true,
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "required" : true,
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "引擎id",
+          "required" : true,
+          "schema" : {
+            "description" : "引擎id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EngineModifyReq"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResizeEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}/resize"
+    },
+    "/DeleteHttp2Rpc" : {
+      "delete" : {
+        "tags" : [ "gateway" ],
+        "summary" : "删除http转rpc方法",
+        "description" : "删除http转rpc方法。",
+        "operationId" : "DeleteHttp2Rpc",
+        "responses" : {
+          "200" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "删除失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "http2Rpc_id",
+          "in" : "path",
+          "description" : "插件id",
+          "required" : true,
+          "schema" : {
+            "description" : "插件id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteHttp2Rpc",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/http2Rpcs/{http2Rpc_id}"
+    },
+    "/DeleteGovernancePolicy" : {
+      "delete" : {
+        "tags" : [ "治理" ],
+        "summary" : "删除治理策略",
+        "description" : "删除治理策略。",
+        "operationId" : "DeleteGovernancePolicy",
+        "responses" : {
+          "200" : {
+            "description" : "删除治理策略响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-environment",
+          "in" : "header",
+          "description" : "所属环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "kind",
+          "in" : "path",
+          "description" : "治理策略类型",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略类型",
+            "type" : "string"
+          }
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "治理策略id",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略id",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteGovernancePolicy",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/{kind}/{policy_id}"
+    },
+    "/UpgradeEngineConfig" : {
+      "put" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "更新微服务引擎配置",
+        "description" : "更新微服务引擎配置,更新ServiceComb专享版引擎与注册配置中心引擎的配置",
+        "operationId" : "UpgradeEngineConfig",
+        "responses" : {
+          "200" : {
+            "description" : "升级微服务引擎响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineCommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "内部错误",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "更新的引擎Id",
+          "required" : true,
+          "schema" : {
+            "description" : "更新的引擎Id",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EngineConfigureReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpgradeEngineConfig",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}/config"
+    },
+    "/DeleteMicroserviceRouteRule" : {
+      "delete" : {
+        "tags" : [ "治理" ],
+        "summary" : "删除灰度发布策略",
+        "description" : "删除灰度发布策略。",
+        "operationId" : "DeleteMicroserviceRouteRule",
+        "responses" : {
+          "200" : {
+            "description" : "删除灰度发布策略响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "微服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "query",
+          "description" : "所属环境,不填表示<空>环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境,不填表示<空>环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_id",
+          "in" : "query",
+          "description" : "所属应用,不填默认为default应用",
+          "required" : false,
+          "schema" : {
+            "description" : "所属应用,不填默认为default应用",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteMicroserviceRouteRule",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/route-rule/microservices/{service_name}"
+    },
+    "/ListGovernancePolicys" : {
+      "get" : {
+        "tags" : [ "治理" ],
+        "summary" : "查询治理策略列表",
+        "description" : "查询治理策略列表。",
+        "operationId" : "ListGovernancePolicys",
+        "responses" : {
+          "200" : {
+            "description" : "查询治理策略列表响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GovDisplay"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "query",
+          "description" : "所属环境,填写all时表示查询所有环境。",
+          "required" : true,
+          "schema" : {
+            "description" : "所属环境,填写all时表示查询所有环境。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app",
+          "in" : "query",
+          "description" : "所属应用",
+          "required" : false,
+          "schema" : {
+            "description" : "所属应用",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGovernancePolicys",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/display"
+    },
+    "/CreateEngine" : {
+      "post" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "创建微服务引擎",
+        "description" : "创建微服务引擎,支持创建ServiceComb引擎专享版、注册配置中心、应用网关(公测)。",
+        "operationId" : "CreateEngine",
+        "responses" : {
+          "200" : {
+            "description" : "创建微服务引擎响应结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EngineCommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+          "required" : false,
+          "schema" : {
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"",
+            "type" : "string",
+            "default" : "0"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EngineCreateReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateEngine",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines"
+    },
+    "/ShowEngineJob" : {
+      "get" : {
+        "tags" : [ "引擎管理" ],
+        "summary" : "查询微服务引擎任务详情",
+        "description" : "查询微服务引擎任务详情。",
+        "operationId" : "ShowEngineJob",
+        "responses" : {
+          "200" : {
+            "description" : "查询微服务引擎任务详情结构体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "服务器内部错误。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"。",
+          "required" : false,
+          "schema" : {
+            "example" : "0",
+            "description" : "如果不带则默认企业项目为\"default\",ID为\"0\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "engine_id",
+          "in" : "path",
+          "description" : "微服务引擎ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "bad98901-5c4b-44de-b266-bae3e2093058",
+            "description" : "微服务引擎ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "任务ID。",
+          "required" : true,
+          "schema" : {
+            "example" : "12115",
+            "description" : "任务ID。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowEngineJob",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/engines/{engine_id}/jobs/{job_id}"
+    },
+    "/ListGovernancePolicy" : {
+      "get" : {
+        "tags" : [ "治理" ],
+        "summary" : "查询指定类型治理策略列表",
+        "description" : "查询指定类型治理策略列表。",
+        "operationId" : "ListGovernancePolicy",
+        "responses" : {
+          "200" : {
+            "description" : "查询指定类型治理策略列表响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GovDisplay"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+          "required" : true,
+          "schema" : {
+            "example" : "application/json;charset=UTF-8",
+            "description" : "该字段内容填为 \"application/json;charset=UTF-8\"。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-environment",
+          "in" : "header",
+          "description" : "所属环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "kind",
+          "in" : "path",
+          "description" : "治理策略类型",
+          "required" : true,
+          "schema" : {
+            "description" : "治理策略类型",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListGovernancePolicy",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/governance/{kind}"
+    },
+    "/ShowHttp2Rpcs" : {
+      "get" : {
+        "tags" : [ "gateway" ],
+        "summary" : "查询http2rpc资源列表",
+        "description" : "查询http转rpc资源列表。",
+        "operationId" : "ShowHttp2Rpcs",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Http2RpcList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "查询失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowHttp2Rpcs",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/http2Rpcs"
+    },
+    "/ShowSinglePlugin" : {
+      "get" : {
+        "tags" : [ "gateway" ],
+        "summary" : "查询单个插件",
+        "description" : "查询单个插件。",
+        "operationId" : "ShowSinglePlugin",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WasmPlugin"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "查询失败"
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "gateway_id",
+          "in" : "path",
+          "description" : "网关实例id",
+          "required" : true,
+          "schema" : {
+            "description" : "网关实例id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "plugin_id",
+          "in" : "path",
+          "description" : "插件id",
+          "required" : true,
+          "schema" : {
+            "description" : "插件id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "IAM-Token",
+          "required" : true,
+          "schema" : {
+            "description" : "IAM-Token",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "该字段内容填为 \"application/json\"",
+          "schema" : {
+            "description" : "该字段内容填为 \"application/json\"",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowSinglePlugin",
+      "x-url" : "{endpoint}/v2/{project_id}/enginemgr/gateways/{gateway_id}/plugins/{plugin_id}"
+    },
+    "/ListMicroserviceRouteRule" : {
+      "get" : {
+        "tags" : [ "治理" ],
+        "summary" : "查询微服务的灰度发布规则",
+        "description" : "查询微服务的灰度发布规则。",
+        "operationId" : "ListMicroserviceRouteRule",
+        "responses" : {
+          "200" : {
+            "description" : "查询灰度发布策略响应结构体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResultObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误的请求。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "租户子项目的唯一标识。字符长度为1~64。",
+          "required" : true,
+          "schema" : {
+            "example" : "79c4086f5f3a4e34a92601dfc64b1e8c",
+            "description" : "租户子项目的唯一标识。字符长度为1~64。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "x-engine-id",
+          "in" : "header",
+          "description" : "微服务引擎的实例ID",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务引擎的实例ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Enterprise-Project-ID",
+          "in" : "header",
+          "description" : "企业项目ID",
+          "required" : true,
+          "schema" : {
+            "description" : "企业项目ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "service_name",
+          "in" : "path",
+          "description" : "微服务名称",
+          "required" : true,
+          "schema" : {
+            "description" : "微服务名称",
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "query",
+          "description" : "所属环境,不填表示<空>环境",
+          "required" : false,
+          "schema" : {
+            "description" : "所属环境,不填表示<空>环境",
+            "type" : "string"
+          }
+        }, {
+          "name" : "app_id",
+          "in" : "query",
+          "description" : "所属应用,不填默认为default应用",
+          "required" : false,
+          "schema" : {
+            "description" : "所属应用,不填默认为default应用",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListMicroserviceRouteRule",
+      "x-url" : "{endpoint}/v3/{project_id}/govern/route-rule/microservices/{service_name}"
+    }
+  }
+}

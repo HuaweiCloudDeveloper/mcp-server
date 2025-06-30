@@ -1,0 +1,1506 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "SIS-语音识别接口",
+    "title" : "SIS",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "WordInfo" : {
+        "properties" : {
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 150,
+            "description" : "起始时间"
+          },
+          "end_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 540,
+            "description" : "结束时间"
+          },
+          "word" : {
+            "type" : "string",
+            "example" : "华为",
+            "description" : "分词"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "Config" : {
+        "required" : [ "audio_format", "property" ],
+        "properties" : {
+          "audio_format" : {
+            "type" : "string",
+            "description" : "支持语音的格式。",
+            "enum" : [ "pcm16k16bit", "pcm8k16bit", "ulaw16k8bit", "ulaw8k8bit", "alaw16k8bit", "alaw8k8bit", "mp3", "aac", "wav", "amr", "amrwb", "auto" ],
+            "default" : "pcm16k16bit"
+          },
+          "property" : {
+            "type" : "string",
+            "description" : "所使用的模型特征串。通常是 “语种_采样率_领域”的形式。",
+            "enum" : [ "chinese_16k_general", "chinese_16k_travel", "chinese_8k_common", "chinese_16k_common", "sichuan_16k_common", "cantonese_16k_common", "shanghai_16k_common", "english_8k_common", "english_16k_common" ],
+            "default" : "chinese_16k_common"
+          },
+          "add_punc" : {
+            "type" : "string",
+            "description" : "表示是否在识别结果中添加标点,取值为“yes”和“no”,缺省为“no”。",
+            "enum" : [ "yes", "no" ],
+            "default" : "no"
+          },
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "热词表id,不使用则不填写。"
+          },
+          "digit_norm" : {
+            "type" : "string",
+            "description" : "表示是否将语音中的数字识别为阿拉伯数字,取值为“yes” 和 “no”,缺省为“yes”。",
+            "enum" : [ "yes", "no" ],
+            "default" : "yes"
+          },
+          "need_word_info" : {
+            "type" : "string",
+            "description" : "表示是否在识别结果中输出分词结果信息,取值为“yes”和“no”,默认为“no”。",
+            "enum" : [ "yes", "no" ],
+            "default" : "no"
+          }
+        },
+        "type" : "object"
+      },
+      "PostShortAudioReq" : {
+        "required" : [ "config", "data" ],
+        "properties" : {
+          "config" : {
+            "description" : "配置信息。",
+            "$ref" : "#/components/schemas/Config"
+          },
+          "data" : {
+            "type" : "string",
+            "description" : "语音数据,base64编码,要求base64编码后大小不超过4M,音频时长不超过1分钟。"
+          }
+        },
+        "type" : "object"
+      },
+      "PostShortAudioResp" : {
+        "required" : [ "result", "trace_id" ],
+        "properties" : {
+          "trace_id" : {
+            "type" : "string",
+            "description" : "服务内部的令牌,可用于在日志中追溯具体流程,调用失败无此字段。"
+          },
+          "result" : {
+            "description" : "调用成功表示识别结果,调用失败时无此字段。",
+            "$ref" : "#/components/schemas/Result"
+          }
+        },
+        "type" : "object"
+      },
+      "ErrorResp" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "Result" : {
+        "required" : [ "score", "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "调用成功表示识别出的内容。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "调用成功表示识别出的置信度,取值范围:0~1。"
+          },
+          "word_info" : {
+            "type" : "array",
+            "description" : "分词信息列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/WordInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "DeleteVocabulayResponse" : {
+        "properties" : {
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "删除的热词表的名称。"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "删除成功的消息。"
+          }
+        },
+        "type" : "object"
+      },
+      "PutUpdateVocabResp" : {
+        "required" : [ "vocabulary_id" ],
+        "properties" : {
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表ID,调用失败时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PutUpdateVocabReq" : {
+        "required" : [ "contents", "language", "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "热词表名,不可重复。内容限制为字母,数字,下中划线和井号,长度不超过32字节。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "热词表描述,长度不超过255字节。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "热词表语言类型。",
+            "enum" : [ "chinese_mandarin" ],
+            "default" : "chinese_mandarin"
+          },
+          "contents" : {
+            "type" : "array",
+            "description" : "支持中英混编热词,单个热词只能由英文字母和unicode编码的汉字组成,不能有其他符号,包括空格。",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "minLength" : 1,
+              "maxLength" : 32
+            },
+            "maxItems" : 1024,
+            "minItems" : 1
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "AnalysisInfoResult" : {
+        "properties" : {
+          "role" : {
+            "type" : "string",
+            "description" : "角色类型, 目前仅支持 AGENT(座席), USER(用户)。"
+          },
+          "emotion" : {
+            "type" : "string",
+            "description" : "情绪类型,目前支持NORMAL(正常),ANGRY(愤怒),UNKNOWN(未知)。"
+          },
+          "speed" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "语速信息,单位是\"每秒字数\"。"
+          }
+        },
+        "type" : "object"
+      },
+      "GetTranscriberJobResp" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "录音文件识别任务标识符。"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "当前识别状态。具体状态如下所示:"
+          },
+          "create_time" : {
+            "type" : "string",
+            "description" : "任务创建时间, 遵循 RFC 3339格式。"
+          },
+          "start_time" : {
+            "type" : "string",
+            "description" : "开始识别时间, 遵循 RFC 3339格式。"
+          },
+          "finish_time" : {
+            "type" : "string",
+            "description" : "识别完成时间, 遵循 RFC 3339格式。"
+          },
+          "segments" : {
+            "type" : "array",
+            "description" : "转写结果, 多句结果的数组。",
+            "items" : {
+              "$ref" : "#/components/schemas/Segment"
+            }
+          },
+          "audio_duration" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "音频时长,单位ms"
+          }
+        },
+        "type" : "object"
+      },
+      "TranscriberResult" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "识别结果文本。"
+          },
+          "analysis_info" : {
+            "description" : "每一句的质检分析结果对象 。",
+            "$ref" : "#/components/schemas/AnalysisInfoResult"
+          },
+          "word_info" : {
+            "type" : "array",
+            "description" : "分词输出列表",
+            "items" : {
+              "description" : "分词信息",
+              "$ref" : "#/components/schemas/WordInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "Segment" : {
+        "required" : [ "end_time", "result", "start_time" ],
+        "properties" : {
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "一句的起始时间戳,单位ms。"
+          },
+          "end_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "一句的结束时间戳,单位ms。"
+          },
+          "result" : {
+            "description" : "调用成功表示识别结果,调用失败时无此字段。",
+            "$ref" : "#/components/schemas/TranscriberResult"
+          }
+        },
+        "type" : "object"
+      },
+      "TranscriberConfig" : {
+        "required" : [ "property" ],
+        "properties" : {
+          "audio_format" : {
+            "type" : "string",
+            "description" : "支持语音的格式。",
+            "enum" : [ "auto", "pcm16k16bit", "pcm8k16bit", "ulaw16k8bit", "ulaw8k8bit", "alaw16k8bit", "alaw8k8bit", "vox8k4bit", "v3_8k4bit" ],
+            "default" : "pcm8k16bit"
+          },
+          "property" : {
+            "type" : "string",
+            "description" : "所使用的模型特征串。通常是“语种_采样率_领域”的形式,例如chinese_8k_common。",
+            "enum" : [ "chinese_16k_media", "chinese_8k_common", "chinese_16k_conversation", "chinese_8k_bank", "chinese_8k_insurance", "sichuan_8k_common", "chinese_8k_general" ],
+            "default" : "chinese_8k_common"
+          },
+          "add_punc" : {
+            "type" : "string",
+            "description" : "是否加标点, 可以为 yes, no(缺省)。",
+            "enum" : [ "yes", "no" ],
+            "default" : "no"
+          },
+          "need_analysis_info" : {
+            "description" : "该参数用于设置质检分析参数,是否需要输出质检分析内容,如果为null(缺省) , 表示不需要。仅对8K模型有效。",
+            "$ref" : "#/components/schemas/AnalysisInfo"
+          },
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "热词表id,不使用则不填写。"
+          },
+          "digit_norm" : {
+            "type" : "string",
+            "description" : "表示是否将语音中的数字识别为阿拉伯数字,取值为yes 、 no,缺省为yes。",
+            "enum" : [ "yes", "no" ],
+            "default" : "yes"
+          },
+          "callback_url" : {
+            "type" : "string",
+            "description" : "用于录音文件识表示回调 url,即用户用于接收识别结果的服务器地址,不支持IP地址方式调用,url长度小于2048字节。服务请求方法为POST。"
+          },
+          "need_word_info" : {
+            "type" : "string",
+            "description" : "表示是否在识别结果中输出分词结果信息,取值为“yes”和“no”,默认为“no”。",
+            "enum" : [ "yes", "no" ],
+            "default" : "no"
+          }
+        },
+        "type" : "object"
+      },
+      "AnalysisInfo" : {
+        "properties" : {
+          "diarization" : {
+            "type" : "boolean",
+            "description" : "是否需要做话者分离。缺省为true,表示会进行话者分离,识别结果中会包含role项(角色)。如果diarization为false, 那么结果中不会出现role项。"
+          },
+          "channel" : {
+            "type" : "string",
+            "description" : "语音文件声道信息,可以为MONO(缺省), LEFT_AGENT, RIGHT_AGENT。",
+            "enum" : [ "MONO", "LEFT_AGENT", "RIGHT_AGENT" ],
+            "default" : "MONO"
+          },
+          "emotion" : {
+            "type" : "boolean",
+            "description" : "是否需要做情绪检测, 缺省为true。"
+          },
+          "speed" : {
+            "type" : "boolean",
+            "description" : "是否需要输出语速信息, 缺省为true。"
+          }
+        },
+        "type" : "object"
+      },
+      "PostTranscriberJobs" : {
+        "required" : [ "config", "data_url" ],
+        "properties" : {
+          "config" : {
+            "description" : "录音文件识别配置信息。",
+            "$ref" : "#/components/schemas/TranscriberConfig"
+          },
+          "data_url" : {
+            "type" : "string",
+            "description" : "存放在OBS的音频文件路径。OBS的region要和请求服务的region保持一致,region不一致则OBS不可用,即使obs是公开访问权限。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostTranscriberJobsResp" : {
+        "required" : [ "job_id" ],
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "description" : "创建的任务标识, 如果创建任务成功时必须存在。"
+          }
+        },
+        "type" : "object"
+      },
+      "Sentences" : {
+        "properties" : {
+          "end_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1320,
+            "description" : "分句结果信息"
+          },
+          "result" : {
+            "description" : "分句结果信息",
+            "$ref" : "#/components/schemas/FlashScoreResult"
+          },
+          "start_time" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 560,
+            "description" : "一句话开始时间,单位毫秒"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "FlashScoreResult" : {
+        "required" : [ "score", "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "调用成功表示识别出的内容。"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "调用成功表示识别出的置信度,取值范围:0~1。"
+          },
+          "word_info" : {
+            "type" : "array",
+            "description" : "分词信息列表",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/WordInfo"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "FlashResult" : {
+        "properties" : {
+          "channel_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0,
+            "description" : "音频声道id"
+          },
+          "sentences" : {
+            "type" : "array",
+            "example" : "[{\"start_time\":560,\"end_time\":1320,\"result\":{\"text\":\"北京你好\",\"score\":0.831,\"word_info\":[{\"word\":\"北京\",\"start_time\":560,\"end_time\":890},{\"word\":\"你好\",\"start_time\":920,\"end_time\":1310}]}}]",
+            "description" : "分句结果",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/Sentences"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostFlashAsrResp" : {
+        "required" : [ "audio_duration", "flash_result", "trace_id" ],
+        "properties" : {
+          "trace_id" : {
+            "type" : "string",
+            "description" : "服务内部的令牌,可用于在日志中追溯具体调用流程"
+          },
+          "audio_duration" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "音频时长"
+          },
+          "flash_result" : {
+            "type" : "array",
+            "description" : "识别结果",
+            "items" : {
+              "description" : "",
+              "$ref" : "#/components/schemas/FlashResult"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "GetVocabResp" : {
+        "required" : [ "contents", "description", "language", "name", "vocabulary_id" ],
+        "properties" : {
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表ID,调用失败时无此字段。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表名,调用失败时无此字段。"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表描述,调用失败时无此字段。"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表语言类型,调用失败时无此字段。",
+            "enum" : [ "chinese-mandarin", " english" ]
+          },
+          "contents" : {
+            "type" : "array",
+            "description" : "调用成功返回热词列表,调用失败时无此字段。",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostCreateVocabReq" : {
+        "required" : [ "contents", "language", "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "热词表名,不可重复。内容限制为字母,数字,下中划线和井号,长度不超过32字节。",
+            "minLength" : 1,
+            "maxLength" : 32
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "热词表描述,长度不超过255字节。",
+            "minLength" : 0,
+            "maxLength" : 255
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "热词表语言类型。",
+            "enum" : [ "chinese_mandarin" ],
+            "default" : "chinese_mandarin"
+          },
+          "contents" : {
+            "type" : "array",
+            "description" : "支持中英混编热词,单个热词只能由英文字母和unicode编码的汉字组成,不能有其他符号,包括空格。",
+            "items" : {
+              "type" : "string",
+              "description" : "",
+              "minLength" : 1,
+              "maxLength" : 32
+            },
+            "maxItems" : 1024,
+            "minItems" : 1
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostCreateVocabResp" : {
+        "required" : [ "vocabulary_id" ],
+        "properties" : {
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "调用成功返回热词表ID,调用失败时无此字段。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostCustomTTSReq" : {
+        "required" : [ "text" ],
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待合成的文本,文本长度限制小于500字符。",
+            "minLength" : 1,
+            "maxLength" : 500
+          },
+          "config" : {
+            "description" : "语音合成配置信息。",
+            "$ref" : "#/components/schemas/TtsConfig"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "PostCustomTTSResp" : {
+        "required" : [ "trace_id" ],
+        "properties" : {
+          "trace_id" : {
+            "type" : "string",
+            "description" : "服务内部的令牌,可用于在日志中追溯具体流程。"
+          },
+          "result" : {
+            "description" : "调用成功表示识别结果,调用失败时无此字段。",
+            "$ref" : "#/components/schemas/CustomResult"
+          }
+        },
+        "description" : "语音合成响应消息体。",
+        "type" : "object"
+      },
+      "CustomResult" : {
+        "required" : [ "data" ],
+        "properties" : {
+          "data" : {
+            "type" : "string",
+            "description" : "语音数据, Base64编码格式返回。"
+          }
+        },
+        "description" : "调用成功表示识别结果,调用失败时无此字段。",
+        "type" : "object"
+      },
+      "TtsConfig" : {
+        "properties" : {
+          "audio_format" : {
+            "type" : "string",
+            "description" : "语音格式头:wav、mp3、pcm。",
+            "minLength" : 1,
+            "maxLength" : 500,
+            "enum" : [ "wav", "mp3", "pcm" ],
+            "default" : "wav"
+          },
+          "sample_rate" : {
+            "type" : "string",
+            "description" : "采样率:16000、8000",
+            "enum" : [ "16000", "8000" ],
+            "default" : "16000"
+          },
+          "property" : {
+            "type" : "string",
+            "description" : "语音合成特征字符串,组成形式为{language}_{speaker}_{domain},即“语种_人员标识_领域”。发音人分为普通发音人和精品发音人。",
+            "enum" : [ "chinese_xiaoqi_common", "chinese_xiaoyu_common", "chinese_xiaoyan_common", "chinese_xiaoxia_common", "chinese_xiaodai_common", "chinese_xiaoqian_common", "chinese_xiaowang_common", "chinese_xiaowen_common", "chinese_xiaojing_common", "chinese_xiaosong_common", "english_cameal_common", "chinese_huaxiaoxia_common", "chinese_huaxiaogang_common", "chinese_huaxiaolu_common", "chinese_huaxiaoshu_common", "chinese_huaxiaowei_common", "chinese_huaxiaoliang_common", "chinese_huaxiaodong_common", "chinese_huaxiaoyan_common", "chinese_huaxiaoxuan_common", "chinese_huaxiaowen_common", "chinese_huaxiaoyang_common", "chinese_huaxiaomin_common", "chinese_huanvxia_literature", "chinese_huaxiaoxuan_literature", "chinese_huaxiaomei_common", "chinese_huaxiaofei_common", "chinese_huaxiaolong_common", "chinese_huaxiaorui_common", "chinese_huaxiaoru_common", "chinese_huaxiaohan_common", "chinese_huaxiaoning_common", "chinese_huaxiaozhen_common", "chinese_huaxiaoman_common", "chinese_huaxiaofang_common", "chinese_huaxiaojun_common", "english_alvin_common", "english_amy_common" ],
+            "default" : "chinese_xiaoyan_common"
+          },
+          "speed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "语速。",
+            "minimum" : -500,
+            "maximum" : 500,
+            "default" : 0
+          },
+          "pitch" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "音高。",
+            "minimum" : -500,
+            "maximum" : 500,
+            "default" : 0
+          },
+          "volume" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "音量。",
+            "minimum" : 0,
+            "maximum" : 100,
+            "default" : 50
+          }
+        },
+        "description" : "语音合成配置数据结构。",
+        "type" : "object"
+      },
+      "TtsErrorResp" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。"
+          }
+        },
+        "description" : "错误响应消息体。",
+        "type" : "object"
+      },
+      "GetVocabsResp" : {
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "热词表数。"
+          },
+          "result" : {
+            "type" : "array",
+            "description" : "调用成功返回热词表列表,调用失败时无此字段。",
+            "items" : {
+              "$ref" : "#/components/schemas/VocabInfo"
+            },
+            "maxItems" : 10,
+            "minItems" : 1
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ShowVocabulariesParams" : {
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "热词表的表名,用于筛选热词表表名。"
+          }
+        },
+        "type" : "object"
+      },
+      "VocabInfo" : {
+        "required" : [ "description", "language", "name", "vocabulary_id" ],
+        "properties" : {
+          "vocabulary_id" : {
+            "type" : "string",
+            "description" : "热词表ID。"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "热词表名。"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "热词表语言类型。",
+            "enum" : [ "chinese_mandarin", "english" ]
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "热词表描述。"
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/RecognizeShortAudio" : {
+      "post" : {
+        "tags" : [ "语音识别接口" ],
+        "summary" : "一句话识别",
+        "description" : "一句话识别接口,用于短语音的同步识别。一次性上传整个音频,响应中即返回识别结果。",
+        "operationId" : "RecognizeShortAudio",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "The request is successful",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostShortAudioResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostShortAudioReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RecognizeShortAudio",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/short-audio"
+    },
+    "/DeleteVocabulary" : {
+      "delete" : {
+        "tags" : [ "热词管理接口" ],
+        "summary" : "删除热词表",
+        "description" : "通过热词表id删除热词表。",
+        "operationId" : "DeleteVocabulary",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteVocabulayResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "vocabulary_id",
+          "in" : "path",
+          "description" : "热词表id。",
+          "required" : true,
+          "schema" : {
+            "description" : "热词表id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVocabulary",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/vocabularies/{vocabulary_id}"
+    },
+    "/UpdateVocabulary" : {
+      "put" : {
+        "tags" : [ "热词管理接口" ],
+        "summary" : "更新热词表",
+        "description" : "更新一个热词表,更新成功返回id。",
+        "operationId" : "UpdateVocabulary",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PutUpdateVocabResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "vocabulary_id",
+          "in" : "path",
+          "description" : "被更新的热词表id。",
+          "required" : true,
+          "schema" : {
+            "description" : "被更新的热词表id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PutUpdateVocabReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVocabulary",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/vocabularies/{vocabulary_id}"
+    },
+    "/CollectTranscriberJob" : {
+      "get" : {
+        "tags" : [ "语音识别接口" ],
+        "summary" : "获取录音文件识别结果",
+        "description" : "该接口用于获取录音文件识别结果及识别状态。",
+        "operationId" : "CollectTranscriberJob",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "响应体。",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetTranscriberJobResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "{",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "录音文件识别任务标识符。",
+          "required" : true,
+          "schema" : {
+            "description" : "录音文件识别任务标识符。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CollectTranscriberJob",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/transcriber/jobs/{job_id}"
+    },
+    "/PushTranscriberJobs" : {
+      "post" : {
+        "tags" : [ "语音识别接口" ],
+        "summary" : "提交录音文件识别任务",
+        "description" : "**录音文件识别**",
+        "operationId" : "PushTranscriberJobs",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostTranscriberJobsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。SIS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。SIS支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostTranscriberJobs"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "PushTranscriberJobs",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/transcriber/jobs"
+    },
+    "/RecognizeFlashAsr" : {
+      "post" : {
+        "tags" : [ "语音识别接口" ],
+        "summary" : "录音文件识别极速版",
+        "description" : "极速版ASR(Restful API 接口, 适用于音频(文件大小<=100M,语音时长<=30分钟)文件的同步识别。",
+        "operationId" : "RecognizeFlashAsr",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostFlashAsrResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "华为云用户的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "华为云用户的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "华为云用户Token,用于鉴权",
+          "required" : true,
+          "schema" : {
+            "description" : "华为云用户Token,用于鉴权",
+            "type" : "string"
+          }
+        }, {
+          "name" : "property",
+          "in" : "query",
+          "description" : "所使用的模型特征串。通常是 “语种_采样率_领域”的形式。",
+          "required" : true,
+          "schema" : {
+            "description" : "所使用的模型特征串。通常是 “语种_采样率_领域”的形式。",
+            "type" : "string",
+            "default" : "chinese_8k_common",
+            "enum" : [ "chinese_8k_common", "chinese_16k_conversation" ]
+          }
+        }, {
+          "name" : "audio_format",
+          "in" : "query",
+          "description" : "音频格式,audio_format取值范围:",
+          "required" : true,
+          "schema" : {
+            "example" : "wav",
+            "description" : "音频格式,audio_format取值范围:",
+            "type" : "string",
+            "default" : "wav",
+            "enum" : [ "wav", "mp3", "m4a", "aac", "opus" ]
+          }
+        }, {
+          "name" : "obs_bucket_name",
+          "in" : "query",
+          "description" : "obs桶名",
+          "required" : true,
+          "schema" : {
+            "description" : "obs桶名",
+            "type" : "string"
+          }
+        }, {
+          "name" : "obs_object_key",
+          "in" : "query",
+          "description" : "obs对象key,经过urlencode编码,长度不超过1024个字符",
+          "required" : true,
+          "schema" : {
+            "description" : "obs对象key,经过urlencode编码,长度不超过1024个字符",
+            "type" : "string"
+          }
+        }, {
+          "name" : "add_punc",
+          "in" : "query",
+          "description" : "是否加标点, 可以为 yes, 默认no",
+          "required" : false,
+          "schema" : {
+            "example" : "no",
+            "description" : "是否加标点, 可以为 yes, 默认no",
+            "type" : "string",
+            "default" : "no",
+            "enum" : [ "yes", "no" ]
+          }
+        }, {
+          "name" : "digit_norm",
+          "in" : "query",
+          "description" : "是否将音频中的数字使用阿拉伯数字的形式呈现,取值为yes,no,默认为yes",
+          "required" : false,
+          "schema" : {
+            "example" : "yes",
+            "description" : "是否将音频中的数字使用阿拉伯数字的形式呈现,取值为yes,no,默认为yes",
+            "type" : "string",
+            "default" : "yes",
+            "enum" : [ "yes", "no" ]
+          }
+        }, {
+          "name" : "need_word_info",
+          "in" : "query",
+          "description" : "表示是否在识别结果中输出分词结果信息,取值为yes,no,默认no",
+          "required" : false,
+          "schema" : {
+            "example" : "no",
+            "description" : "表示是否在识别结果中输出分词结果信息,取值为yes,no,默认no",
+            "type" : "string",
+            "default" : "no",
+            "enum" : [ "yes", "no" ]
+          }
+        }, {
+          "name" : "vocabulary_id",
+          "in" : "query",
+          "description" : "热词表id",
+          "required" : false,
+          "schema" : {
+            "example" : "4c111ee8-fbd6-4a73-941a-9f869c6c56f5",
+            "description" : "热词表id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "first_channel_only",
+          "in" : "query",
+          "description" : "表示是否在识别中只识别首个声道的音频数据,取值为“yes”和“no”,默认为“no”。",
+          "required" : false,
+          "schema" : {
+            "example" : "no",
+            "description" : "表示是否在识别中只识别首个声道的音频数据,取值为“yes”和“no”,默认为“no”。",
+            "type" : "string",
+            "default" : "no",
+            "enum" : [ "yes", "no" ]
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RecognizeFlashAsr",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/flash"
+    },
+    "/ShowVocabulary" : {
+      "get" : {
+        "tags" : [ "热词管理接口" ],
+        "summary" : "查询热词表信息",
+        "description" : "通过热词表id查询热词表的信息和内容。",
+        "operationId" : "ShowVocabulary",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetVocabResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "vocabulary_id",
+          "in" : "path",
+          "description" : "热词表id。",
+          "required" : true,
+          "schema" : {
+            "description" : "热词表id。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVocabulary",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/vocabularies/{vocabulary_id}"
+    },
+    "/CreateVocabulary" : {
+      "post" : {
+        "tags" : [ "热词管理接口" ],
+        "summary" : "创建热词表",
+        "description" : "新建一个热词表,创建成功返回id。每个用户限制创建10个热词表。",
+        "operationId" : "CreateVocabulary",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "create success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostCreateVocabResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostCreateVocabReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVocabulary",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/vocabularies"
+    },
+    "/RunTts" : {
+      "post" : {
+        "tags" : [ "语音合成接口" ],
+        "summary" : "语音合成",
+        "description" : "语音合成,是一种将文本转换成逼真语音的服务。用户通过实时访问和调用API获取语音合成结果,将用户输入的文字合成为音频。通过音色选择、自定义音量、语速,为企业和个人提供个性化的发音服务",
+        "operationId" : "RunTts",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PostCustomTTSResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TtsErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TtsErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PostCustomTTSReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTts",
+      "x-url" : "{endpoint}/v1/{project_id}/tts"
+    },
+    "/ShowVocabularies" : {
+      "get" : {
+        "tags" : [ "热词管理接口" ],
+        "summary" : "查询热词表列表",
+        "description" : "查询用户所有热词表列表。",
+        "operationId" : "ShowVocabularies",
+        "deprecated" : false,
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetVocabsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "来自公有云的Project ID,用于资源隔离。",
+          "required" : true,
+          "schema" : {
+            "description" : "来自公有云的Project ID,用于资源隔离。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "页码偏移量,表示从此页码偏移量开始查询,offset大于等于0。",
+          "required" : false,
+          "schema" : {
+            "description" : "页码偏移量,表示从此页码偏移量开始查询,offset大于等于0。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "每页显示的条目数量。",
+          "required" : false,
+          "schema" : {
+            "description" : "每页显示的条目数量。",
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ShowVocabulariesParams"
+              }
+            }
+          },
+          "required" : false
+        }
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVocabularies",
+      "x-url" : "{endpoint}/v1/{project_id}/asr/vocabularies"
+    }
+  }
+}

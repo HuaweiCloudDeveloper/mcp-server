@@ -1,0 +1,8 @@
+service_code: codeartsdeploy
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8024 # sse 模式需要设定端口
+
+ 
+# 配置文件
+# 配置文件
+# 配置文件

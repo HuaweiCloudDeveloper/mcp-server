@@ -1,0 +1,5 @@
+service_code: mrs
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8886 # sse 模式需要设定端口
+
+ 

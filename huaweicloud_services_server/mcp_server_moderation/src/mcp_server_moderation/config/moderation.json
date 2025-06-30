@@ -1,0 +1,1756 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "Moderation-视频内容审核",
+    "title" : "Moderation",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "VideoCreateResponse" : {
+        "description" : "音频内容审核请求体",
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。"
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "作业唯一标识。"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoCreateRequest" : {
+        "properties" : {
+          "data" : {
+            "description" : "视频数据输入",
+            "required" : [ "url" ],
+            "properties" : {
+              "url" : {
+                "type" : "string",
+                "example" : "https://xxxx",
+                "description" : "视频url地址"
+              },
+              "frame_interval" : {
+                "type" : "integer",
+                "format" : "int32",
+                "example" : 5,
+                "description" : "截帧频率间隔,单位为秒,取值范围为1~60s;若不传递默认5s截帧一次"
+              },
+              "language" : {
+                "type" : "string",
+                "description" : "支持的语言,默认为zh",
+                "example" : "zh",
+                "enum" : [ "zh" ]
+              }
+            }
+          },
+          "biz_type" : {
+            "type" : "string",
+            "description" : "用户在控制台界面创建的biz_type名称,如果请求参数中传了biz_type则优先使用biz_type;如果用户没传biz_type则event_type和image_categories必须传。"
+          },
+          "event_type" : {
+            "type" : "string",
+            "example" : "default",
+            "description" : "事件类型,可选值如下:",
+            "enum" : [ "default" ]
+          },
+          "image_categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "example" : "",
+              "enum" : [ "porn", "politics", "terrorism", "image_text" ]
+            },
+            "example" : "[\"porn\",\"politics\",\"terrorism\",\"image_text\"]",
+            "description" : "视频中画面需要检测的风险类型,列表不能为空。"
+          },
+          "audio_categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "example" : "",
+              "enum" : [ "porn", "ad", "politics", "moan", "abuse" ]
+            },
+            "example" : "[\"porn\",\"ad\",\"politics\",\"moan\",\"abuse\"]",
+            "description" : "视频中音频需要检测的风险类型,不传或为空时表示不审核音频维度。"
+          },
+          "callback" : {
+            "type" : "string",
+            "example" : "http://xxxx",
+            "description" : "回调http接口:当该字段非空时,服务将根据该字段回调通知用户审核结果。"
+          },
+          "seed" : {
+            "type" : "string",
+            "description" : "用于回调通知时校验请求由华为云内容安全服务发起,由您自定义。随机字符串,由英文字母、数字、下划线组成,不超过64个字符。"
+          }
+        },
+        "type" : "object",
+        "required" : [ "data" ]
+      },
+      "ErrorRsp" : {
+        "description" : "失败时返回的错误对象",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "description" : "调用失败时的错误码,具体请参见错误码。",
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 36
+          },
+          "error_msg" : {
+            "description" : "调用失败时的错误信息。",
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 512
+          }
+        },
+        "type" : "object"
+      },
+      "TextDetectionResponse" : {
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 64,
+            "example" : "58e7d9c7-3456-4ba1-80df-6f25506bc4df",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存"
+          },
+          "result" : {
+            "description" : "调用成功时表示调用结果。",
+            "$ref" : "#/components/schemas/TextDetectionResult"
+          }
+        },
+        "type" : "object"
+      },
+      "SegmentResult" : {
+        "properties" : {
+          "segment" : {
+            "type" : "string",
+            "description" : "命中的风险片段。",
+            "example" : "xxx"
+          },
+          "glossary_name" : {
+            "type" : "string",
+            "description" : "命中的自定义词库名称。",
+            "example" : "zzz"
+          },
+          "position" : {
+            "type" : "array",
+            "description" : "命中的风险片段在文本中的位置,起始位置从0开始",
+            "example" : [ 3, 4, 5 ],
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "TextDetectionDataReq" : {
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "待检测文本,编码格式为“utf-8”,限定2000个字符以内,文本长度超过10000个字符时,只检测前10000个字符。",
+            "minLength" : 1,
+            "maxLength" : 10000,
+            "example" : "asdfasdfasdf"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "支持检测的文本语言",
+            "example" : "zh",
+            "enum" : [ "zh" ]
+          }
+        },
+        "required" : [ "text" ],
+        "type" : "object"
+      },
+      "TextDetectionResultDetail" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "description" : "审核结果是否通过。",
+            "example" : "block"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "检测结果的标签。",
+            "example" : "customized"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度,取值范围 0-1,值越大,可信度越高。",
+            "example" : 1
+          },
+          "segments" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SegmentResult"
+            },
+            "description" : "命中的风险片段信息,如果命中了语义算法模型,则会返回一个空的列表。"
+          }
+        },
+        "type" : "object"
+      },
+      "TextDetectionReq" : {
+        "description" : "文本内容审核请求体",
+        "properties" : {
+          "event_type" : {
+            "type" : "string",
+            "description" : "事件类型。",
+            "example" : "comment"
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "文本审核场景,可选值如下:",
+            "example" : [ "porn", "ad" ]
+          },
+          "glossary_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "检测时使用的自定义黑名单词库列表。自定义黑词库的创建和使用请参见[配置定义黑名单词库](https://support.huaweicloud.com/api-moderation/moderation_03_0027.html#moderation_03_0027__section12400140132318)。",
+            "example" : [ "custom_xxx" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/TextDetectionDataReq"
+          },
+          "white_glossary_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "检测时使用的自定义白名单词库列表。自定义白词库的创建和使用请参见[配置定义白名单词库](https://support.huaweicloud.com/api-moderation/moderation_03_0027.html#moderation_03_0027__section178844141394)。",
+            "example" : [ "custom_xxx" ]
+          },
+          "biz_type" : {
+            "type" : "string",
+            "description" : "自定义审核策略名称,可在控制台配置;如果请求参数中传了biz_type则优先使用biz_type,如果用户没传biz_type则event_type必须传。",
+            "example" : "my_custom_type"
+          }
+        },
+        "required" : [ "data" ],
+        "type" : "object"
+      },
+      "TextDetectionResult" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "description" : "审核结果是否通过。",
+            "example" : "block"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "检测结果的标签。",
+            "example" : "customized"
+          },
+          "details" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TextDetectionResultDetail"
+            },
+            "type" : "array",
+            "description" : "检测详情"
+          }
+        },
+        "type" : "object"
+      },
+      "ImgTextConfig" : {
+        "properties" : {
+          "black_glossary_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "检测时使用的自定义黑名单词库列表。"
+          },
+          "white_glossary_names" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "检测时使用的自定义白名单词库列表。"
+          }
+        },
+        "type" : "object",
+        "description" : "图文审核场景的黑白词库传入参数设置。"
+      },
+      "ImageDetectionResultDetail" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "description" : "审核结果是否通过。"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "检测结果的一级标签。"
+          },
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度,可选值在0-1之间,值越大,可信度越高。"
+          },
+          "face_location" : {
+            "$ref" : "#/components/schemas/FaceLocationDetail",
+            "description" : "人物位置信息,该数组有四个值,分别代表左上角的坐标和右下角的坐标。例如[207,522,340,567],207代表的是左上角的横坐标,522代表左上角的纵坐标,340代表的是右下角的横坐标,567代表的是右下角的纵坐标。"
+          },
+          "qr_location" : {
+            "$ref" : "#/components/schemas/QRLocationDetail",
+            "description" : "二维码位置信息,该数组有四个值,分别代表左上角的坐标和右下角的坐标。例如[207,522,340,567],207代表的是左上角的横坐标,522代表左上角的纵坐标,340代表的是右下角的横坐标,567代表的是右下角的纵坐标。"
+          },
+          "qr_content" : {
+            "type" : "string",
+            "description" : "图片中二维码指向的链接,当请求参数categories中包含image_text时存在。"
+          },
+          "segments" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OCRTextDetail"
+            },
+            "description" : "image_text场景下命中的文本片段。",
+            "type" : "array"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "识别的详细标签。"
+          }
+        },
+        "description" : "返回结果的详细内容。",
+        "required" : [ "suggestion", "category", "confidence" ],
+        "type" : "object"
+      },
+      "ImageDetectionReq" : {
+        "description" : "图像内容审核请求体",
+        "properties" : {
+          "event_type" : {
+            "type" : "string",
+            "description" : "事件类型。",
+            "example" : "comment"
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "检测场景。可添加的检测场景如下:"
+          },
+          "image_text_config" : {
+            "$ref" : "#/components/schemas/ImgTextConfig",
+            "description" : "图文审核黑白词库配置。"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "图片url, 与image二选一,目前支持:",
+            "example" : "http://xxxxxx.com/qweqeqeqzzxfdwef.jpg"
+          },
+          "image" : {
+            "type" : "string",
+            "description" : "与url二选一,图片文件Base64编码字符串,要求base64编码后大小不超过10M,支持JPG/PNG/JPEG/WEBP/GIF/TIFF/TIF/HEIF等格式。",
+            "example" : "/9j/4QO3RXhpZgAATU0AKgAAAAgADQEDAAMAAAABAAYAAAEBAAQAAAABAAAKawEPAAIAAAAFAAAAqgESAAMAAAABAAAAAAEyAAIAAAAUAAAArwEbAAUAAAABAAAAwwEaAAUAAAABAAAAywEAAAQAAAABAAAH0AEQAAIAAAAIAAAA0wExAAIAAAAcAAAA2wITAAMAAAABAAIAAIdpAAQAAAABAAAA9wEoAAMAAAABAAIAAAAAAABPUFBPADIwMTk6MDg6MjAgMTE6NDM6NTUAAAAASAAAAAEAAABIAAAAAU9QUE8gQTkATWVkaWFUZWsgQ2FtZXJhIEFwcGxpY2F0aW9uAAAbkAAAAgAAAAUAAAJBkgQACgAA"
+          },
+          "biz_type" : {
+            "type" : "string",
+            "description" : "自定义审核策略名称,可在控制台配置;如果请求参数中传了biz_type则优先使用biz_type,如果用户没传biz_type则event_type和categories必须传。",
+            "example" : "test_type"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "可指定图片中文字语种类型",
+            "example" : "zh",
+            "enum" : [ "zh" ]
+          }
+        },
+        "type" : "object"
+      },
+      "ImageDetectionResponse" : {
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 64,
+            "example" : "58e7d9c7-3456-4ba1-80df-6f25506bc4df",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。"
+          },
+          "result" : {
+            "description" : "调用成功时表示调用结果。 调用失败时无此字段。",
+            "$ref" : "#/components/schemas/ImageDetectionResult"
+          }
+        },
+        "type" : "object",
+        "required" : [ "request_id" ]
+      },
+      "FaceLocationDetail" : {
+        "properties" : {
+          "top_left_x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出人脸的左上角横坐标。"
+          },
+          "top_left_y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出人脸的左上角纵坐标。"
+          },
+          "bottom_right_x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出人脸的右下角横坐标。"
+          },
+          "bottom_right_y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出人脸的右下角纵坐标。"
+          }
+        },
+        "type" : "object"
+      },
+      "ImageDetectionResult" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "description" : "审核结果是否通过。",
+            "example" : "block"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "检测结果的一级标签。",
+            "example" : "porn"
+          },
+          "details" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ImageDetectionResultDetail"
+            },
+            "description" : "检测详情",
+            "type" : "array"
+          },
+          "ocr_text" : {
+            "type" : "string",
+            "description" : "图文审核检测出的文本,只有在category参数配置image_text且检测出文本时展示该字段。"
+          }
+        },
+        "type" : "object"
+      },
+      "QRLocationDetail" : {
+        "properties" : {
+          "top_left_x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出的二维码左上角横坐标。"
+          },
+          "top_left_y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出的二维码左上角纵坐标。"
+          },
+          "bottom_right_x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出的二维码右下角横坐标。"
+          },
+          "bottom_right_y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测出的二维码右下角纵坐标。"
+          }
+        },
+        "type" : "object"
+      },
+      "OCRTextDetail" : {
+        "properties" : {
+          "segment" : {
+            "type" : "string",
+            "description" : "命中的风险片段"
+          },
+          "glossary_name" : {
+            "type" : "string",
+            "description" : "命中的自定义词库名称。"
+          }
+        },
+        "type" : "object"
+      },
+      "ImageBatchSyncResponse" : {
+        "type" : "object",
+        "required" : [ "request_id" ],
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。"
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageBatchSyncDetectionResult"
+            },
+            "description" : "调用结果。"
+          }
+        }
+      },
+      "ImageBatchSyncReq" : {
+        "type" : "object",
+        "description" : "图像审核批量同步接口请求参数Body体",
+        "properties" : {
+          "event_type" : {
+            "type" : "string",
+            "example" : "comment",
+            "description" : "事件类型。可选值如下:"
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "string" ],
+            "description" : "检测场景。可添加的检测场景如下:"
+          },
+          "image_text_config" : {
+            "description" : "图文审核黑白词库配置。",
+            "properties" : {
+              "black_glossary_names" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ "string" ],
+                "description" : "检测时使用的自定义黑名单词库列表。"
+              },
+              "white_glossary_names" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ "string" ],
+                "description" : "检测时使用的自定义白名单词库列表。"
+              }
+            }
+          },
+          "urls" : {
+            "type" : "array",
+            "items" : {
+              "required" : [ "url", "data_id" ],
+              "properties" : {
+                "url" : {
+                  "type" : "string",
+                  "description" : "图片url,目前支持:公网HTTP/HTTPS URL。"
+                },
+                "data_id" : {
+                  "type" : "string",
+                  "description" : "图片唯一标识。同一次请求中不可重复,由大小写英文字母、数字、下划线(_)、中划线(-)组成,不超过30个字符。"
+                }
+              }
+            },
+            "example" : [ "http://xxxxxx.com/qweqeqeqz.jpg", "http://xxxxxx.com/zxfdwef.jpg" ],
+            "description" : "图片url列表。"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "zh",
+            "description" : "指定图片中文字语种类型。"
+          },
+          "biz_type" : {
+            "type" : "string",
+            "example" : "test_type",
+            "description" : "用户在控制台界面创建的自定义审核策略名称。"
+          }
+        },
+        "required" : [ "urls" ]
+      },
+      "ImageBatchSyncDetectionResult" : {
+        "type" : "object",
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "description" : "审核结果是否通过。"
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "检测结果的一级标签。支持category列表如下:"
+          },
+          "details" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageDetectionResultDetail"
+            },
+            "description" : "检测详情。"
+          },
+          "ocr_text" : {
+            "type" : "string",
+            "description" : "图文审核检测出的文本,只有在category参数配置image_text且检测出文本时展示该字段。"
+          },
+          "data_id" : {
+            "type" : "string",
+            "description" : "图片唯一标识。同一次请求中不可重复,由大小写英文字母、数字、下划线(_)、中划线(-)组成,不超过30个字符。"
+          },
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。 调用成功时无此字段。"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。 调用成功时无此字段。"
+          }
+        },
+        "required" : [ "data_id" ]
+      },
+      "AudioStreamCloseResponse" : {
+        "type" : "object",
+        "description" : "关闭音频流审核作业响应结果",
+        "properties" : {
+          "result" : {
+            "type" : "string",
+            "description" : "关闭音频流审核作业响应结果",
+            "example" : "\"result\": \"success\""
+          }
+        }
+      },
+      "AudioModerationResult" : {
+        "properties" : {
+          "job_id" : {
+            "type" : "string",
+            "example" : "01655654400_ad96b30f58cc40e8968e53f1f1e80021",
+            "description" : "作业id"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "succeeded",
+            "description" : "作业状态,可取值有:",
+            "enum" : [ "running", "succeeded", "failed" ]
+          },
+          "result" : {
+            "properties" : {
+              "suggestion" : {
+                "type" : "string",
+                "example" : "block",
+                "description" : "音频审核结果是否通过。",
+                "enum" : [ "block", "pass", "review" ]
+              },
+              "details" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/AudioModerationResultDetail"
+                },
+                "type" : "array",
+                "description" : "审核详情"
+              },
+              "audio_text" : {
+                "type" : "string",
+                "example" : "国家主席习近平十号在青岛会见白俄罗斯总统卢卡申科,习近平指出在双方共同努力下中白全面战略伙伴关系迈入相互信任合作共赢的新阶段,我和总统先生达成的合作共识得到有效落实双方领域各层级交流合作达到历史最高水平,两国人民共享合作成果带来的获得感不断增强近平强调,中国视白俄罗斯为共建一带一路的重要合作伙伴赞赏白方积极参与,几年来中白共建一带一路合作全面发力多点突破纵深推进成果显著",
+                "description" : "音频文本内容"
+              }
+            },
+            "description" : "作业审核结果,当作业状态为succeeded时存在"
+          },
+          "request_params" : {
+            "properties" : {
+              "event_type" : {
+                "type" : "string",
+                "example" : "default",
+                "description" : "创建作业时传的event_type参数"
+              },
+              "data" : {
+                "properties" : {
+                  "url" : {
+                    "type" : "string",
+                    "example" : "https://audio-annotation-1251671073.cos.ap-shanghai.myqcloud.com/0171ac03ecd5e93e66c62896f2c21db1_125.wav"
+                  }
+                },
+                "description" : "创建作业时传的data参数"
+              },
+              "callback" : {
+                "type" : "string",
+                "example" : "http://10.154.237.177:8848/v2/integration/moderation/callback",
+                "description" : "创建作业时传的callback参数"
+              },
+              "categories" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ "porn", "ad" ],
+                "description" : "创建作业时传的categories参数"
+              }
+            },
+            "description" : "作业创建参数"
+          },
+          "create_time" : {
+            "type" : "string",
+            "example" : "2022-06-20 11:05:29",
+            "description" : "作业创建时间"
+          },
+          "update_time" : {
+            "type" : "string",
+            "example" : "2022-06-20 11:07:08",
+            "description" : "作业更新时间"
+          },
+          "request_id" : {
+            "type" : "string",
+            "example" : "2419446b1fe14203f64e4018d12db3dd",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。",
+            "minLength" : 2,
+            "maxLength" : 64
+          }
+        },
+        "required" : [ "job_id", "status", "request_params", "create_time", "update_time", "request_id" ],
+        "type" : "object"
+      },
+      "AudioModerationResultDetail" : {
+        "properties" : {
+          "start_time" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 0,
+            "description" : "音频片段开始时间"
+          },
+          "suggestion" : {
+            "type" : "string",
+            "example" : "block",
+            "description" : "音频片段审核处理建议:",
+            "enum" : [ "block", "review" ]
+          },
+          "end_time" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 10,
+            "description" : "音频片段结束时间"
+          },
+          "label" : {
+            "type" : "string",
+            "example" : "politics",
+            "description" : "音频片段标签"
+          },
+          "audio_text" : {
+            "type" : "string",
+            "example" : "国家主席习近平十号在青岛会见白俄罗斯总统卢卡申科,习近平指出在双方共同努力下中白",
+            "description" : "音频片段文本内容"
+          },
+          "segments" : {
+            "items" : {
+              "$ref" : "#/components/schemas/VideoModerationDetailSegment"
+            },
+            "type" : "array",
+            "description" : "命中的风险片段信息列表,如果命中语义算法模型,则该字段不会存在"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoModerationDetailSegment" : {
+        "properties" : {
+          "segment" : {
+            "type" : "string",
+            "description" : "命中的风险片段"
+          }
+        },
+        "type" : "object"
+      },
+      "AudioCreateResponse" : {
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "58e7d9c7-3456-4ba1-80df-6f25506bc4df",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。",
+            "minLength" : 2,
+            "maxLength" : 64
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "作业唯一标识。"
+          }
+        },
+        "type" : "object"
+      },
+      "AudioCreateRequest" : {
+        "description" : "音频内容审核请求体",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/AudioInputBody",
+            "description" : "音频数据输入"
+          },
+          "biz_type" : {
+            "type" : "string",
+            "description" : "用户在控制台界面创建的biz_type名称,如果请求参数中传了biz_type则优先使用biz_type;如果用户没传biz_type则event_type和categories必须传。"
+          },
+          "event_type" : {
+            "type" : "string",
+            "description" : "事件类型,可选值如下:",
+            "example" : "comment",
+            "enum" : [ "default", "audiobook", "education", "game", "live", "ecommerce", "voiceroom", "private" ]
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "politics", "porn", "ad", "moan", "abuse" ]
+            },
+            "description" : "需要检测的风险类型,列表不能为空。"
+          },
+          "callback" : {
+            "type" : "string",
+            "description" : "回调http接口:当该字段非空时,服务将根据该字段回调通知用户审核结果。"
+          },
+          "seed" : {
+            "type" : "string",
+            "description" : "用于回调通知时校验请求由华为云内容安全服务发起,由您自定义。随机字符串,由英文字母、数字、下划线组成,不超过64个字符。"
+          }
+        },
+        "required" : [ "data" ],
+        "type" : "object"
+      },
+      "AudioInputBody" : {
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "description" : "音频url地址。",
+            "example" : "asdfasdfasdf"
+          },
+          "language" : {
+            "type" : "string",
+            "description" : "支持的语言,默认为zh,zh:中文"
+          }
+        },
+        "description" : "音频数据的输入",
+        "required" : [ "url" ],
+        "type" : "object"
+      },
+      "AudioStreamCreateRequest" : {
+        "type" : "object",
+        "required" : [ "data", "event_type", "categories", "callback" ],
+        "properties" : {
+          "data" : {
+            "description" : "音频流数据输入",
+            "required" : [ "url" ],
+            "properties" : {
+              "url" : {
+                "type" : "string",
+                "description" : "音频流url地址,支持rtmp、rtmps、hls、http、https等主流协议。"
+              },
+              "language" : {
+                "type" : "string",
+                "description" : "指定音频流中语种类型 zh: 中文,默认值为zh"
+              },
+              "return_all_results" : {
+                "type" : "boolean",
+                "description" : "返回音频片段结果的策略。可选值如下:"
+              }
+            }
+          },
+          "event_type" : {
+            "type" : "string",
+            "description" : "事件类型,可选值如下:"
+          },
+          "categories" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "需要检测的风险类型,列表不能为空。"
+          },
+          "callback" : {
+            "type" : "string",
+            "description" : "回调http接口,服务将根据该字段回调通知用户审核结果,流未结束时,回调审核违规内容,流结束时,审核片段违规或不违规都将回调客户端。"
+          },
+          "seed" : {
+            "type" : "string",
+            "description" : "用于回调通知时校验请求由华为云内容安全服务发起,由您自定义。随机字符串,由英文字母、数字、下划线组成,不超过64个字符。"
+          }
+        }
+      },
+      "AudioStreamCreateResponse" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/AudioCreateResponse"
+        } ],
+        "type" : "object"
+      },
+      "VideoModerationResult" : {
+        "properties" : {
+          "request_id" : {
+            "type" : "string",
+            "example" : "xxxx",
+            "description" : "本次请求的唯一标识,用于问题排查,建议保存。"
+          },
+          "job_id" : {
+            "type" : "string",
+            "example" : "xxx",
+            "description" : "作业id"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "succeeded",
+            "description" : "作业状态,可取值有: ",
+            "enum" : [ "running", "succeeded", "failed" ]
+          },
+          "request_params" : {
+            "properties" : {
+              "data" : {
+                "properties" : {
+                  "url" : {
+                    "type" : "string",
+                    "example" : "xxxx",
+                    "description" : "创建作业时传的url参数"
+                  },
+                  "frame_interval" : {
+                    "type" : "integer",
+                    "format" : "int32",
+                    "example" : 5,
+                    "description" : "创建作业时传的frame_interval参数,默认为5秒截取一帧"
+                  }
+                },
+                "description" : "创建作业时传的data参数",
+                "required" : [ "url" ]
+              },
+              "event_type" : {
+                "type" : "string",
+                "example" : "default",
+                "description" : "创建作业时传的event_type参数"
+              },
+              "image_categories" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ "porn", "ad", "politics", "terrorism", "qrcode", "image_text" ],
+                "description" : "创建作业时传的image_categories参数"
+              },
+              "audio_categories" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string"
+                },
+                "example" : [ "porn", "ad", "politics", "moan", "abuse" ],
+                "description" : "创建作业时传的audio_categories参数"
+              },
+              "callback" : {
+                "type" : "string",
+                "example" : "xxx",
+                "description" : "创建作业时传的callback参数"
+              }
+            },
+            "description" : "作业创建参数",
+            "required" : [ "data", "event_type", "image_categories" ]
+          },
+          "create_time" : {
+            "type" : "string",
+            "example" : "2022-07-30T08:57:11.011Z",
+            "description" : "作业创建时间"
+          },
+          "update_time" : {
+            "type" : "string",
+            "example" : "2022-07-30T08:57:14.014Z",
+            "description" : "作业更新时间"
+          },
+          "result" : {
+            "properties" : {
+              "suggestion" : {
+                "type" : "string",
+                "example" : "block",
+                "description" : "视频审核结果是否通过。",
+                "enum" : [ "block", "pass", "review" ]
+              },
+              "image_detail" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/VideoModerationImageDetail"
+                },
+                "type" : "array",
+                "description" : "图像审核详情"
+              },
+              "audio_detail" : {
+                "items" : {
+                  "$ref" : "#/components/schemas/VideoModerationVideoDetail"
+                },
+                "type" : "array",
+                "description" : "音频审核详情"
+              }
+            },
+            "description" : "作业审核结果,当作业状态为succeeded时存在"
+          }
+        },
+        "type" : "object",
+        "required" : [ "request_id", "job_id", "status", "request_params", "create_time", "update_time" ]
+      },
+      "VideoModerationImageDetailList" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 0.676015138626099,
+            "description" : "置信度,可选值在0-1之间,值越大,可信度越高。"
+          },
+          "category" : {
+            "type" : "string",
+            "example" : "porn",
+            "description" : "检测结果的一级标签。 支持category列表如下:",
+            "enum" : [ "politics", "terrorism", "porn", "image_text" ]
+          },
+          "suggestion" : {
+            "type" : "string",
+            "example" : "block",
+            "description" : "审核结果是否通过。 ",
+            "enum" : [ "block", "review" ]
+          },
+          "label" : {
+            "type" : "string",
+            "example" : "pornography",
+            "description" : "识别的详细标签。"
+          },
+          "face_location" : {
+            "description" : "人物位置信息,该数组有四个值,分别代表左上角的坐标和右下角的坐标。例如[207,522,340,567] 207代表的是左上角的坐标 522代表左上角的坐标 340代表的是右下角的坐标 567代表的是右下角的坐标。",
+            "properties" : {
+              "top_left_x" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出人脸的左上角横坐标。"
+              },
+              "top_left_y" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出人脸的左上角纵坐标。"
+              },
+              "bottom_right_x" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出人脸的右下角横坐标。"
+              },
+              "bottom_right_y" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出人脸的右下角纵坐标。"
+              }
+            }
+          },
+          "qr_location" : {
+            "description" : "二维码位置信息,该数组有四个值,分别代表左上角的坐标和右下角的坐标。例如[207,522,340,567] 207代表的是左上角的坐标 522代表左上角的坐标 340代表的是右下角的坐标 567代表的是右下角的坐标。",
+            "properties" : {
+              "top_left_x" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出的二维码左上角横坐标。"
+              },
+              "top_left_y" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出的二维码左上角纵坐标。"
+              },
+              "bottom_right_x" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出的二维码右下角横坐标。"
+              },
+              "bottom_right_y" : {
+                "type" : "integer",
+                "format" : "int32",
+                "description" : "检测出的二维码右下角纵坐标。"
+              }
+            }
+          },
+          "qr_content" : {
+            "type" : "string",
+            "description" : "图片中二维码指向的链接,当请求参数categories中包含image_text时存在。"
+          },
+          "segments" : {
+            "type" : "array",
+            "items" : {
+              "properties" : null,
+              "$ref" : "#/components/schemas/VideoModerationDetailSegment"
+            },
+            "description" : "image_text场景下命中的文本片段。"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoModerationVideoDetail" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "example" : "block",
+            "description" : "音频片段审核结果是否通过。",
+            "enum" : [ "block", "review" ]
+          },
+          "label" : {
+            "type" : "string",
+            "example" : "politics",
+            "description" : "音频片段检测标签,选取detail中置信度最大的标签,可取值如下:"
+          },
+          "audio_text" : {
+            "type" : "string",
+            "example" : "国家主席习近平十号在青岛会见白俄罗斯总统卢卡申科,习近平指出,在双方共同努力下,中白全",
+            "description" : "音频片段文本内容"
+          },
+          "end_time" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 10,
+            "description" : "音频片段结束时间"
+          },
+          "start_time" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 0,
+            "description" : "音频片段开始时间"
+          },
+          "detail" : {
+            "items" : {
+              "$ref" : "#/components/schemas/VideoModerationAudioDetailList"
+            },
+            "type" : "array",
+            "description" : "音频片段审核详情"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoModerationImageDetail" : {
+        "properties" : {
+          "suggestion" : {
+            "type" : "string",
+            "example" : "block",
+            "description" : "图像审核结果是否通过。",
+            "enum" : [ "block", "review" ]
+          },
+          "category" : {
+            "type" : "string",
+            "example" : "porn",
+            "description" : "检测结果的一级标签。 支持category列表如下:",
+            "enum" : [ "politics", "terrorism", "porn", "image_text" ]
+          },
+          "ocr_text" : {
+            "type" : "string",
+            "example" : 123,
+            "description" : "图文审核检测出的文本,只有在category参数配置image_text且检测出文本时展示该字段。"
+          },
+          "time" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 0,
+            "description" : "截帧在视频文件中的时间,单位为秒"
+          },
+          "detail" : {
+            "items" : {
+              "$ref" : "#/components/schemas/VideoModerationImageDetailList"
+            },
+            "type" : "array",
+            "description" : "图像帧审核详情"
+          }
+        },
+        "type" : "object"
+      },
+      "VideoModerationAudioDetailList" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 0.999117187582349,
+            "description" : "风险置信度"
+          },
+          "label" : {
+            "type" : "string",
+            "example" : "politics",
+            "description" : "风险标签"
+          },
+          "suggestion" : {
+            "type" : "string",
+            "example" : "block",
+            "description" : "审核处理建议:",
+            "enum" : [ "block", "review" ]
+          },
+          "segments" : {
+            "items" : {
+              "$ref" : "#/components/schemas/VideoModerationDetailSegment"
+            },
+            "type" : "array",
+            "description" : "命中的风险片段信息列表,如果命中语义算法模型,则该字段不会存在"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/RunCreateVideoModerationJob" : {
+      "post" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "创建视频内容审核作业",
+        "description" : "创建视频内容审核作业,创建成功会将作业ID返回给用户",
+        "operationId" : "RunCreateVideoModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoCreateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VideoCreateRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCreateVideoModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/video/jobs"
+    },
+    "/RunTextModeration" : {
+      "post" : {
+        "tags" : [ "文本内容审核" ],
+        "summary" : "文本内容审核",
+        "description" : "分析并识别用户上传的文本内容是否有敏感内容(如色情、政治等),并将识别结果返回给用户",
+        "operationId" : "RunTextModeration",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TextDetectionResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。Moderation支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。Moderation支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TextDetectionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunTextModeration",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/text"
+    },
+    "/CheckImageModeration" : {
+      "post" : {
+        "tags" : [ "图像内容审核" ],
+        "summary" : "图像内容审核",
+        "description" : "分析并识别用户上传的图像内容是否有敏感内容(如涉及暴恐元素、涉黄内容等),并将识别结果返回给用户。",
+        "operationId" : "CheckImageModeration",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageDetectionResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Enterprise-Project-Id",
+          "in" : "header",
+          "description" : "企业项目ID。Moderation支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+          "required" : false,
+          "schema" : {
+            "description" : "企业项目ID。Moderation支持通过企业项目管理(EPS)对不同用户组和用户的资源使用,进行分账。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageDetectionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckImageModeration",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/image"
+    },
+    "/BatchCheckImageSync" : {
+      "post" : {
+        "tags" : [ "图像审核批量同步接口" ],
+        "summary" : "图像审核批量同步接口",
+        "description" : "图像审核批量同步接口",
+        "operationId" : "BatchCheckImageSync",
+        "responses" : {
+          "200" : {
+            "description" : "图像审核批量同步接口响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageBatchSyncResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "项目id。获取方法详见获取项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "项目id。获取方法详见获取项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。用于获取操作API的权限。获取方法请参见获取Token接口,响应消息头中X-Subject-Token的值即为Token。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。用于获取操作API的权限。获取方法请参见获取Token接口,响应消息头中X-Subject-Token的值即为Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageBatchSyncReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCheckImageSync",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/image/batch"
+    },
+    "/RunCloseAudioStreamModerationJob" : {
+      "post" : {
+        "tags" : [ "音频流内容审核" ],
+        "summary" : "关闭音频流内容审核作业",
+        "description" : "关闭音频流内容审核作业",
+        "operationId" : "RunCloseAudioStreamModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "关闭音频流内容审核作业响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AudioStreamCloseResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "关闭失败时返回错误原因",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证,即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证,即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "创建作业成功时,接口返回的job_id。",
+          "required" : true,
+          "schema" : {
+            "description" : "创建作业成功时,接口返回的job_id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCloseAudioStreamModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/audio-stream/jobs/stop/{job_id}"
+    },
+    "/RunQueryAudioModerationJob" : {
+      "get" : {
+        "tags" : [ "音频内容审核" ],
+        "summary" : "查询音频内容审核作业",
+        "operationId" : "RunQueryAudioModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AudioModerationResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "创建作业成功时,接口返回的job_id。",
+          "required" : true,
+          "schema" : {
+            "description" : "创建作业成功时,接口返回的job_id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunQueryAudioModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/audio/jobs/{job_id}"
+    },
+    "/RunCreateAudioModerationJob" : {
+      "post" : {
+        "tags" : [ "音频内容审核" ],
+        "summary" : "创建音频内容审核作业",
+        "description" : "分析并识别用户上传的音频内容是否有敏感内容(如色情、政治等),并将识别结果返回给用户",
+        "operationId" : "RunCreateAudioModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AudioCreateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AudioCreateRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCreateAudioModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/audio/jobs"
+    },
+    "/RunCreateAudioStreamModerationJob" : {
+      "post" : {
+        "tags" : [ "音频流内容审核" ],
+        "summary" : "创建音频流内容审核作业",
+        "description" : "创建音频流内容审核作业,创建成功会将作业ID返回给用户",
+        "operationId" : "RunCreateAudioStreamModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "返回成功响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AudioStreamCreateResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "返回失败响应体",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AudioStreamCreateRequest"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCreateAudioStreamModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/audio-stream/jobs"
+    },
+    "/RunQueryVideoModerationJob" : {
+      "get" : {
+        "tags" : [ "视频内容审核" ],
+        "summary" : "查询视频内容审核作业",
+        "description" : "查询视频审核作业处理状态与结果,并将识别结果返回给用户",
+        "operationId" : "RunQueryVideoModerationJob",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功时返回作业状态和结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VideoModerationResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "查询失败时返回错误原因",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorRsp"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id 登陆华为云 -> 用户中心 -> 我的凭证 -> api凭证 即可查看对应区域的项目ID。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "job_id",
+          "in" : "path",
+          "description" : "创建作业成功时,接口返回的job_id。",
+          "required" : true,
+          "schema" : {
+            "description" : "创建作业成功时,接口返回的job_id。",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+          "required" : true,
+          "schema" : {
+            "description" : "用户Token。 通过调用IAM服务获取用户Token接口获取(响应消息头中X-Subject-Token的值)。",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunQueryVideoModerationJob",
+      "x-url" : "{endpoint}/v3/{project_id}/moderation/video/jobs/{job_id}"
+    }
+  }
+}

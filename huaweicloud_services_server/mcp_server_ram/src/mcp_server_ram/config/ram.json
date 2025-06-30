@@ -1,0 +1,717 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "RAM-绑定的资源使用者和共享资源",
+    "title" : "RAM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/AssociateResourceShare" : {
+      "post" : {
+        "tags" : [ "ResourceShareAssociation" ],
+        "summary" : "绑定资源使用者和共享资源",
+        "description" : "向资源共享实例绑定指定的资源使用者列表或共享资源列表。对于新增的共享资源,有权访问此资源共享实例的资源使用者获得该共享资源的访问权限。对于新增的资源使用者,获得对此资源共享实例中共享资源的访问权限。",
+        "operationId" : "AssociateResourceShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateResourceShare",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/associate"
+    },
+    "/BatchCreateResourceShareTags" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "资源共享实例增加标签",
+        "description" : "资源共享实例增加标签。",
+        "operationId" : "BatchCreateResourceShareTags",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        }, {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateResourceShareTags",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/tags/create"
+    },
+    "/DisassociateResourceShare" : {
+      "post" : {
+        "tags" : [ "ResourceShareAssociation" ],
+        "summary" : "移除资源使用者或共享资源",
+        "description" : "将指定的资源使用者或共享资源从指定的资源共享实例中移除。资源使用者也可以从指定的资源共享实例中主动退出。",
+        "operationId" : "DisassociateResourceShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateResourceShare",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/disassociate"
+    },
+    "/AcceptResourceShareInvitation" : {
+      "post" : {
+        "tags" : [ "ResourceShareInvitation" ],
+        "summary" : "接受共享邀请",
+        "description" : "接受来自其他账号的资源共享邀请。",
+        "operationId" : "AcceptResourceShareInvitation",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareInvitationId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AcceptResourceShareInvitation",
+      "x-url" : "{endpoint}/v1/resource-share-invitations/{resource_share_invitation_id}/accept"
+    },
+    "/ListQuota" : {
+      "get" : {
+        "tags" : [ "Misc" ],
+        "summary" : "查询资源共享的配额",
+        "description" : "查询当前账号的资源共享配额信息。",
+        "operationId" : "ListQuota",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListQuota",
+      "x-url" : "{endpoint}/v1/resource-shares/quotas"
+    },
+    "/DisassociateResourceSharePermission" : {
+      "post" : {
+        "tags" : [ "AssociatedPermission" ],
+        "summary" : "移除共享资源权限",
+        "description" : "移除资源共享实例绑定的共享资源权限。权限更改立即生效。只有当目前资源共享实例中没有绑定相关资源类型时,您才能从资源共享实例中移除共享资源权限。",
+        "operationId" : "DisassociateResourceSharePermission",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisassociateResourceSharePermission",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/disassociate-permission"
+    },
+    "/SearchResourceShareCountByTags" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "根据标签信息查询实例数量",
+        "description" : "根据标签信息查询资源共享实例数量。",
+        "operationId" : "SearchResourceShareCountByTags",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchResourceShareCountByTags",
+      "x-url" : "{endpoint}/v1/resource-shares/resource-instances/count"
+    },
+    "/CreateResourceShare" : {
+      "post" : {
+        "tags" : [ "ResourceShare" ],
+        "summary" : "创建资源共享实例",
+        "description" : "创建一个资源共享实例。您可以指定需要共享的资源列表,资源使用者列表,以及授予资源使用者的权限列表。",
+        "operationId" : "CreateResourceShare",
+        "responses" : {
+          "201" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateResourceShare",
+      "x-url" : "{endpoint}/v1/resource-shares"
+    },
+    "/BatchDeleteResourceShareTags" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "删除资源共享实例的标签",
+        "description" : "删除资源共享实例指定的标签。",
+        "operationId" : "BatchDeleteResourceShareTags",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        }, {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteResourceShareTags",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/tags/delete"
+    },
+    "/SearchResourceShares" : {
+      "post" : {
+        "tags" : [ "ResourceShare" ],
+        "summary" : "检索资源共享实例",
+        "description" : "检索您创建的或者共享给您的资源共享实例详情。",
+        "operationId" : "SearchResourceShares",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchResourceShares",
+      "x-url" : "{endpoint}/v1/resource-shares/search"
+    },
+    "/DisableOrganizationShare" : {
+      "post" : {
+        "tags" : [ "OrganizationSharing" ],
+        "summary" : "关闭与组织共享",
+        "description" : "关闭与组织共享资源。",
+        "operationId" : "DisableOrganizationShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DisableOrganizationShare",
+      "x-url" : "{endpoint}/v1/organization-share/disable"
+    },
+    "/ListResourceShareTags" : {
+      "get" : {
+        "tags" : [ "Tag" ],
+        "summary" : "查询已使用的标签列表",
+        "description" : "查询资源共享实例已使用标签的列表。",
+        "operationId" : "ListResourceShareTags",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/MarkerByKey"
+        }, {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceShareTags",
+      "x-url" : "{endpoint}/v1/resource-shares/tags"
+    },
+    "/ListPermissionVersions" : {
+      "get" : {
+        "tags" : [ "Permission" ],
+        "summary" : "获取权限的所有版本",
+        "description" : "获取权限的所有版本。",
+        "operationId" : "ListPermissionVersions",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/PermissionId"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPermissionVersions",
+      "x-url" : "{endpoint}/v1/permissions/{permission_id}/versions"
+    },
+    "/ShowOrganizationShare" : {
+      "get" : {
+        "tags" : [ "OrganizationSharing" ],
+        "summary" : "检索是否启用与组织共享",
+        "description" : "检索是否启用与组织共享资源。",
+        "operationId" : "ShowOrganizationShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowOrganizationShare",
+      "x-url" : "{endpoint}/v1/organization-share"
+    },
+    "/SearchResourceShareAssociations" : {
+      "post" : {
+        "tags" : [ "ResourceShareAssociation" ],
+        "summary" : "检索绑定的资源使用者和共享资源",
+        "description" : "检索您拥有的资源共享实例中绑定的共享资源和资源使用者。",
+        "operationId" : "SearchResourceShareAssociations",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchResourceShareAssociations",
+      "x-url" : "{endpoint}/v1/resource-share-associations/search"
+    },
+    "/SearchSharedPrincipals" : {
+      "post" : {
+        "tags" : [ "Principal" ],
+        "summary" : "检索资源使用者",
+        "description" : "检索共享资源的使用者。",
+        "operationId" : "SearchSharedPrincipals",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchSharedPrincipals",
+      "x-url" : "{endpoint}/v1/shared-principals/search"
+    },
+    "/AssociateResourceSharePermission" : {
+      "post" : {
+        "tags" : [ "AssociatedPermission" ],
+        "summary" : "绑定或替换共享资源权限",
+        "description" : "为资源共享实例中包含的资源类型绑定或替换共享资源权限。 对于资源共享实例中的每一种资源类型,您可以设置唯一权限。仅当资源共享实例中当前没有该资源类型的资源时,您才能绑定新的共享资源权限。",
+        "operationId" : "AssociateResourceSharePermission",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AssociateResourceSharePermission",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/associate-permission"
+    },
+    "/ListResourceTypes" : {
+      "get" : {
+        "tags" : [ "Misc" ],
+        "summary" : "检索云服务资源类型",
+        "description" : "查询已对接云服务的资源类型和区域等信息。",
+        "operationId" : "ListResourceTypes",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceTypes",
+      "x-url" : "{endpoint}/v1/resource-types"
+    },
+    "/SearchSharedResources" : {
+      "post" : {
+        "tags" : [ "Resource" ],
+        "summary" : "检索共享的资源",
+        "description" : "检索您共享的或共享给您的资源。",
+        "operationId" : "SearchSharedResources",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchSharedResources",
+      "x-url" : "{endpoint}/v1/shared-resources/search"
+    },
+    "/ListPermissions" : {
+      "get" : {
+        "tags" : [ "Permission" ],
+        "summary" : "检索共享资源权限列表",
+        "description" : "检索指定资源类型的共享资源权限列表。",
+        "operationId" : "ListPermissions",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceType"
+        }, {
+          "$ref" : "#/components/components/parameters/PermissionType"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListPermissions",
+      "x-url" : "{endpoint}/v1/permissions"
+    },
+    "/ListResourceSharePermissions" : {
+      "get" : {
+        "tags" : [ "AssociatedPermission" ],
+        "summary" : "检索绑定的共享资源权限",
+        "description" : "检索资源共享实例关联的共享资源权限。",
+        "operationId" : "ListResourceSharePermissions",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        }, {
+          "$ref" : "#/components/components/parameters/PermissionName"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceSharePermissions",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}/associated-permissions"
+    },
+    "/ListResourceSharesByTags" : {
+      "post" : {
+        "tags" : [ "Tag" ],
+        "summary" : "根据标签信息查询实例列表",
+        "description" : "根据标签信息查询资源共享实例列表。",
+        "operationId" : "ListResourceSharesByTags",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/TagLimit"
+        }, {
+          "$ref" : "#/components/components/parameters/Offset"
+        }, {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourceSharesByTags",
+      "x-url" : "{endpoint}/v1/resource-shares/resource-instances/filter"
+    },
+    "/DeleteResourceShare" : {
+      "delete" : {
+        "tags" : [ "ResourceShare" ],
+        "summary" : "删除资源共享实例",
+        "description" : "删除指定的资源共享实例。此操作不会删除实体资源,仅停止向其他账号共享资源。",
+        "operationId" : "DeleteResourceShare",
+        "responses" : {
+          "204" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteResourceShare",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}"
+    },
+    "/EnableOrganizationShare" : {
+      "post" : {
+        "tags" : [ "OrganizationSharing" ],
+        "summary" : "启用与组织共享",
+        "description" : "启用与组织共享资源。",
+        "operationId" : "EnableOrganizationShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "EnableOrganizationShare",
+      "x-url" : "{endpoint}/v1/organization-share/enable"
+    },
+    "/ShowPermission" : {
+      "get" : {
+        "tags" : [ "Permission" ],
+        "summary" : "检索资源共享权限内容",
+        "description" : "检索指定资源类型的共享资源指定版本的权限内容,如果不指定权限版本,则返回默认版本的权限内容。",
+        "operationId" : "ShowPermission",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/PermissionId"
+        }, {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/PermissionVersion"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowPermission",
+      "x-url" : "{endpoint}/v1/permissions/{permission_id}"
+    },
+    "/RejectResourceShareInvitation" : {
+      "post" : {
+        "tags" : [ "ResourceShareInvitation" ],
+        "summary" : "拒绝共享邀请",
+        "description" : "拒绝来自其他账号的资源共享邀请。",
+        "operationId" : "RejectResourceShareInvitation",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareInvitationId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RejectResourceShareInvitation",
+      "x-url" : "{endpoint}/v1/resource-share-invitations/{resource_share_invitation_id}/reject"
+    },
+    "/UpdateResourceShare" : {
+      "put" : {
+        "tags" : [ "ResourceShare" ],
+        "summary" : "更新资源共享实例",
+        "description" : "修改资源共享实例的特定属性。",
+        "operationId" : "UpdateResourceShare",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ResourceShareId"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateResourceShare",
+      "x-url" : "{endpoint}/v1/resource-shares/{resource_share_id}"
+    },
+    "/SearchResourceShareInvitation" : {
+      "post" : {
+        "tags" : [ "ResourceShareInvitation" ],
+        "summary" : "检索共享邀请",
+        "description" : "通过条件检索资源共享邀请。",
+        "operationId" : "SearchResourceShareInvitation",
+        "responses" : {
+          "200" : {
+            "description" : "请求成功。"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/SecurityTokenHeader"
+        } ],
+        "security" : [ {
+          "AccessKeyAuth" : [ ]
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "SearchResourceShareInvitation",
+      "x-url" : "{endpoint}/v1/resource-share-invitations/search"
+    }
+  }
+}

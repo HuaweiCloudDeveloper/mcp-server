@@ -1,0 +1,503 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "ASM-网格接口",
+    "title" : "ASM",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "InstallationConfig" : {
+        "type" : "object",
+        "properties" : {
+          "nodes" : {
+            "description" : "安装网格组件的节点",
+            "$ref" : "#/components/schemas/Selector"
+          }
+        }
+      },
+      "Mesh" : {
+        "type" : "object",
+        "required" : [ "apiVersion", "kind", "metadata", "spec" ],
+        "properties" : {
+          "apiVersion" : {
+            "type" : "string",
+            "default" : "v1",
+            "description" : "API版本,固定值“v1”,该值不可修改"
+          },
+          "kind" : {
+            "type" : "string",
+            "default" : "Mesh",
+            "description" : "API类型,固定值“Mesh”或“mesh”,该值不可修改"
+          },
+          "metadata" : {
+            "$ref" : "#/components/schemas/MeshMetadata",
+            "description" : "网格的基本信息,为集合类的元素类型,包含一组由不同名称定义的属性"
+          },
+          "spec" : {
+            "$ref" : "#/components/schemas/MeshSpec",
+            "description" : "集合类的元素类型,您对需要管理的网格对象进行详细描述的主体部分都在spec中给出。ASM通过spec的描述来创建或更新对象"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/MeshStatus",
+            "description" : "集合类的元素类型,用于记录对象在系统中的当前状态信息。"
+          }
+        }
+      },
+      "MeshExtendParams" : {
+        "type" : "object",
+        "properties" : {
+          "clusters" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MeshCluster"
+            },
+            "description" : "网格内集群信息",
+            "type" : "array"
+          }
+        }
+      },
+      "InjectionConfig" : {
+        "type" : "object",
+        "description" : "集群注入信息",
+        "properties" : {
+          "namespaces" : {
+            "$ref" : "#/components/schemas/Selector",
+            "description" : "需要注入的命名空间"
+          }
+        }
+      },
+      "Selector" : {
+        "type" : "object",
+        "properties" : {
+          "fieldSelector" : {
+            "$ref" : "#/components/schemas/FieldSelector",
+            "description" : "字段选择器"
+          }
+        },
+        "description" : "选择器"
+      },
+      "MeshSpec" : {
+        "type" : "object",
+        "required" : [ "region", "type", "version" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "网格类型:",
+            "enum" : [ "InCluster" ]
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "网格版本"
+          },
+          "extendParams" : {
+            "$ref" : "#/components/schemas/MeshExtendParams",
+            "description" : "网格扩展信息"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MeshTags"
+            },
+            "description" : "网格资源标签"
+          }
+        },
+        "description" : "网格参数定义"
+      },
+      "FieldSelector" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "Key值"
+          },
+          "operator" : {
+            "type" : "string",
+            "description" : "操作符,仅支持取值\"In\""
+          },
+          "values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Value值"
+          }
+        },
+        "description" : "“字段选择器(Field selectors)”允许你根据一个或多个资源字段的值筛选 Kubernetes 对象"
+      },
+      "MeshTags" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "description" : "Key值。"
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "Value值。"
+          }
+        },
+        "description" : "网格标签集合"
+      },
+      "MeshMetadata" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "网格名称。"
+          },
+          "uid" : {
+            "type" : "string",
+            "description" : "网格ID,资源唯一标识,创建成功后自动生成,填写无效"
+          },
+          "annotations" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "description" : "网格注解,由key/value组成:"
+          },
+          "labels" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string"
+            },
+            "description" : "网格标签,由key/value组成:"
+          },
+          "creationTimestamp" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "网格创建时间"
+          }
+        }
+      },
+      "MeshStatus" : {
+        "type" : "object",
+        "properties" : {
+          "phase" : {
+            "type" : "string",
+            "description" : "网格状态,取值如下"
+          }
+        }
+      },
+      "MeshCluster" : {
+        "type" : "object",
+        "required" : [ "clusterID", "projectID", "installation" ],
+        "properties" : {
+          "clusterID" : {
+            "type" : "string",
+            "description" : "集群ID,资源唯一标识,通过该ID查询需要添加的集群"
+          },
+          "projectID" : {
+            "type" : "string",
+            "description" : "集群所属的projectID"
+          },
+          "injection" : {
+            "description" : "Sidecar注入配置",
+            "$ref" : "#/components/schemas/InjectionConfig"
+          },
+          "installation" : {
+            "description" : "网格组件安装配置",
+            "$ref" : "#/components/schemas/InstallationConfig"
+          }
+        }
+      },
+      "MeshList" : {
+        "type" : "object",
+        "properties" : {
+          "apiVersion" : {
+            "type" : "string",
+            "description" : "API版本,固定值“v1”,该值不可修改"
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "API类型,固定值“MeshList”,该值不可修改"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Mesh"
+            },
+            "description" : "网格列表"
+          }
+        }
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/DeleteMesh" : {
+      "delete" : {
+        "tags" : [ "网格接口" ],
+        "summary" : "删除网格",
+        "description" : "该API用于删除一个指定的网格",
+        "operationId" : "DeleteMesh",
+        "responses" : {
+          "200" : {
+            "description" : "表示删除指定网格任务下发成功,开始删除网格",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Mesh"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "用户提供的参数有问题,未通过校验"
+          },
+          "404" : {
+            "description" : "未找到指定的网格"
+          },
+          "500" : {
+            "description" : "查询过程中出现问题"
+          }
+        },
+        "parameters" : [ {
+          "name" : "mesh_id",
+          "in" : "path",
+          "description" : "网格ID",
+          "required" : true,
+          "schema" : {
+            "description" : "网格ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式)",
+          "required" : true,
+          "schema" : {
+            "description" : "消息体的类型(格式)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+          "required" : true,
+          "schema" : {
+            "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Apply-ProjectID",
+          "in" : "header",
+          "description" : "网格所属ProjectID",
+          "required" : false,
+          "schema" : {
+            "description" : "网格所属ProjectID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteMesh",
+      "x-url" : "{endpoint}/v1/meshes/{mesh_id}"
+    },
+    "/ShowMesh" : {
+      "get" : {
+        "tags" : [ "网格接口" ],
+        "summary" : "查询网格",
+        "description" : "该API用于获取指定网格的详细信息",
+        "operationId" : "ShowMesh",
+        "responses" : {
+          "200" : {
+            "description" : "表示获取网格成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Mesh"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "用户提供的参数有问题,未通过校验"
+          },
+          "404" : {
+            "description" : "未找到指定的网格"
+          },
+          "500" : {
+            "description" : "查询过程中出现问题"
+          }
+        },
+        "parameters" : [ {
+          "name" : "mesh_id",
+          "in" : "path",
+          "description" : "网格ID",
+          "required" : true,
+          "schema" : {
+            "description" : "网格ID",
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式)",
+          "required" : true,
+          "schema" : {
+            "description" : "消息体的类型(格式)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+          "required" : true,
+          "schema" : {
+            "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Apply-ProjectID",
+          "in" : "header",
+          "description" : "网格所属ProjectID",
+          "required" : false,
+          "schema" : {
+            "description" : "网格所属ProjectID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowMesh",
+      "x-url" : "{endpoint}/v1/meshes/{mesh_id}"
+    },
+    "/ListMeshes" : {
+      "get" : {
+        "tags" : [ "网格接口" ],
+        "summary" : "查询网格列表",
+        "description" : "该API用于获取用户所有网格的详细信息",
+        "operationId" : "ListMeshes",
+        "responses" : {
+          "200" : {
+            "description" : "表示获取网格列表成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MeshList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "用户提供的参数有问题,未通过校验"
+          },
+          "500" : {
+            "description" : "查询过程中出现问题"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式)",
+          "required" : true,
+          "schema" : {
+            "description" : "消息体的类型(格式)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+          "required" : true,
+          "schema" : {
+            "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Apply-ProjectID",
+          "in" : "header",
+          "description" : "网格所属ProjectID",
+          "required" : false,
+          "schema" : {
+            "description" : "网格所属ProjectID",
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListMeshes",
+      "x-url" : "{endpoint}/v1/meshes"
+    },
+    "/CreateMesh" : {
+      "post" : {
+        "tags" : [ "网格接口" ],
+        "summary" : "创建网格",
+        "description" : "该API用于创建一个网格",
+        "operationId" : "CreateMesh",
+        "responses" : {
+          "201" : {
+            "description" : "表示创建网格任务下发成功,开始创建网格",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Mesh"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "用户提供的网格创建参数有问题,未通过校验"
+          },
+          "409" : {
+            "description" : "需要创建的网格与现有网格冲突"
+          },
+          "500" : {
+            "description" : "创建过程中出现问题"
+          }
+        },
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "消息体的类型(格式)",
+          "required" : true,
+          "schema" : {
+            "description" : "消息体的类型(格式)",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+          "required" : true,
+          "schema" : {
+            "description" : "调用接口的认证方式分为Token和AK/SK两种,如果您使用的Token方式,此参数为必填,请填写Token的值",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Apply-ProjectID",
+          "in" : "header",
+          "description" : "网格所属ProjectID",
+          "required" : false,
+          "schema" : {
+            "description" : "网格所属ProjectID",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Mesh"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateMesh",
+      "x-url" : "{endpoint}/v1/meshes"
+    }
+  }
+}

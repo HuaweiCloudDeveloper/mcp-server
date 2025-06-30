@@ -1,0 +1,1009 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "Image-名人识别",
+    "title" : "Image",
+    "version" : "2025-06-13"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : {
+      "CelebrityRecognitionReq" : {
+        "description" : "",
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "与image二选一"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度的阈值(0~1),低于此置信数的标签,将不会返回。"
+          }
+        },
+        "type" : "object"
+      },
+      "CelebrityRecognitionResultBody" : {
+        "description" : "",
+        "properties" : {
+          "confidence" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度,取值范围 0-1。"
+          },
+          "face_detail" : {
+            "type" : "object",
+            "description" : "名人的面部信息,包括4个值:"
+          },
+          "label" : {
+            "type" : "string",
+            "description" : "label为对应的名人信息。"
+          }
+        },
+        "type" : "object"
+      },
+      "CelebrityRecognitionResponse" : {
+        "properties" : {
+          "result" : {
+            "type" : "array",
+            "description" : "调用成功时表示调用结果。",
+            "items" : {
+              "$ref" : "#/components/schemas/CelebrityRecognitionResultBody"
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "CommonErrorResponse" : {
+        "properties" : {
+          "error_code" : {
+            "type" : "string",
+            "description" : "调用失败时的错误码,具体请参见错误码。",
+            "example" : "AIS.0005"
+          },
+          "error_msg" : {
+            "type" : "string",
+            "description" : "调用失败时的错误信息。",
+            "example" : "The service does not exist."
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "RecaptureDetectReq" : {
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "example" : "/9j/4AAQSkZJRgABAgEASABIAAD/4RFZRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAA...\n",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "与image二选一"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "minimum" : 0,
+            "maximum" : 100,
+            "default" : 0,
+            "description" : "判断图片真实或虚假的阈值,默认值为0.95,取值范围(0~1),输入非该范围内值算法即取默认值。"
+          }
+        },
+        "type" : "object"
+      },
+      "RecaptureDetectResponse" : {
+        "properties" : {
+          "result" : {
+            "type" : "object",
+            "description" : "调用成功时为图片标签内容。调用失败时无此字段。",
+            "properties" : {
+              "suggestion" : {
+                "type" : "string",
+                "description" : "总体的结论:"
+              },
+              "category" : {
+                "type" : "string",
+                "description" : "标签(如果suggestion为真时,则该值为空字符串,否则不为空)。recapture:翻拍图"
+              },
+              "score" : {
+                "type" : "string",
+                "description" : "总体置信度,取值范围(0~1)。"
+              },
+              "detail" : {
+                "type" : "array",
+                "description" : "识别结果详情。",
+                "items" : {
+                  "properties" : {
+                    "label" : {
+                      "type" : "string",
+                      "description" : "标签值。| original:原始图 recapture:翻拍图"
+                    },
+                    "confidence" : {
+                      "type" : "string",
+                      "description" : "置信度,取值范围(0~1)。"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type" : "object"
+      },
+      "ImageMediaTaggingInstance" : {
+        "properties" : {
+          "bounding_box" : {
+            "type" : "object",
+            "description" : "目标检测框位置信息,包括4个值:",
+            "$ref" : "#/components/schemas/BoundingBox"
+          },
+          "confidence" : {
+            "type" : "string",
+            "description" : "检测标签置信度,将Float型置信度转为String类型返回,Float取值范围(0~100)。"
+          }
+        },
+        "type" : "object"
+      },
+      "ImageMediaTaggingItemBody" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "38.51",
+            "description" : "置信度,将Float型置信度转为String类型返回,取值范围:0-100。"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "scene",
+            "description" : "标签的类别。返回的标签类型,包含二十多种大类,具体可以参考[图像标签](http://support.huaweicloud.com/image_faq/image_01_0037.html)"
+          },
+          "tag" : {
+            "type" : "string",
+            "example" : "Person",
+            "description" : "标签名称。"
+          },
+          "i18n_tag" : {
+            "type" : "object",
+            "description" : "标签的多种语言输出。",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "description" : "中文标签。",
+                "example" : "热气球"
+              },
+              "en" : {
+                "type" : "string",
+                "description" : "英文标签。",
+                "example" : "Hot air balloon"
+              }
+            }
+          },
+          "i18n_type" : {
+            "type" : "object",
+            "description" : "标签类别的多种语言输出。",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "description" : "中文标签类别。",
+                "example" : "人类"
+              },
+              "en" : {
+                "type" : "string",
+                "description" : "英文标签类别。",
+                "example" : "Human"
+              }
+            }
+          },
+          "instances" : {
+            "type" : "array",
+            "description" : "目标检测框信息,为空则表示没有目标检测框。",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageMediaTaggingInstance"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "BoundingBox" : {
+        "type" : "object",
+        "description" : "目标检测框位置信息",
+        "properties" : {
+          "width" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测框区域宽度",
+            "example" : 123
+          },
+          "height" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测框区域高度",
+            "example" : 453
+          },
+          "top_left_x" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测框左上角到垂直轴距离",
+            "example" : 513
+          },
+          "top_left_y" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "检测框左上角到水平轴距离",
+            "example" : 764
+          }
+        }
+      },
+      "ImageMediaTaggingResponse" : {
+        "properties" : {
+          "result" : {
+            "description" : "调用成功时为图片标签内容。",
+            "properties" : {
+              "tags" : {
+                "type" : "array",
+                "description" : "标签列表集合。",
+                "items" : {
+                  "$ref" : "#/components/schemas/ImageMediaTaggingItemBody"
+                }
+              }
+            }
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "ImageMediaTaggingReq" : {
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "example" : "/9j/4AAQSkZJRgABAgEASABIAAD/4RFZRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAA...\n",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "与image二选一"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "zh",
+            "description" : "zh:返回标签的语言类型为中文。"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "description" : "置信度的阈值(0~100),低于此置信数的标签,将不会返回。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "最多返回的tag数(取值范围:1~150),默认值: 10。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ImageTaggingReq" : {
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "example" : "/9j/4AAQSkZJRgABAgEASABIAAD/4RFZRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAA...\n",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "与image二选一"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "zh",
+            "description" : "zh:返回标签的语言类型为中文。"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "minimum" : 0,
+            "maximum" : 100,
+            "default" : 0,
+            "description" : "置信度的阈值(0~100),低于此置信数的标签,将不会返回。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "最多返回的tag数(最大为150),默认值: 50。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ImageTaggingInstance" : {
+        "properties" : {
+          "bounding_box" : {
+            "type" : "object",
+            "description" : "目标检测框位置信息",
+            "$ref" : "#/components/schemas/ImageTaggingBoundingBox"
+          },
+          "confidence" : {
+            "type" : "string",
+            "description" : "检测标签置信度,将Float型置信度转为String类型返回,Float取值范围(0~100)。"
+          }
+        },
+        "type" : "object"
+      },
+      "ImageTaggingResponse" : {
+        "properties" : {
+          "result" : {
+            "description" : "调用成功时为图片标签内容。",
+            "properties" : {
+              "tags" : {
+                "type" : "array",
+                "description" : "标签列表集合。",
+                "items" : {
+                  "$ref" : "#/components/schemas/ImageTaggingItemBody"
+                }
+              }
+            }
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "ImageTaggingItemBody" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "38.51",
+            "description" : "置信度,将Float型置信度转为String类型返回,取值范围:0-100。"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "scene",
+            "description" : "标签的类别。返回的标签类型,包含二十多种大类,具体可以参考[图像标签](http://support.huaweicloud.com/image_faq/image_01_0037.html)。"
+          },
+          "tag" : {
+            "type" : "string",
+            "example" : "Person",
+            "description" : "标签名称。"
+          },
+          "i18n_tag" : {
+            "type" : "object",
+            "description" : "标签的多种语言输出。",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "description" : "中文标签",
+                "example" : "热气球"
+              },
+              "en" : {
+                "type" : "string",
+                "description" : "英文标签",
+                "example" : "Hot air balloon"
+              }
+            }
+          },
+          "i18n_type" : {
+            "type" : "object",
+            "description" : "标签类别的多种语言输出。",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "description" : "中文标签类别",
+                "example" : "人类"
+              },
+              "en" : {
+                "type" : "string",
+                "description" : "英文标签类别",
+                "example" : "Human"
+              }
+            }
+          },
+          "instances" : {
+            "type" : "array",
+            "example" : "[]",
+            "description" : "目标检测框信息(该服务不返回目标检测信息)。",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageTaggingInstance"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageTaggingBoundingBox" : {
+        "type" : "object",
+        "description" : "目标检测框位置信息",
+        "properties" : {
+          "width" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "检测框区域宽度",
+            "example" : 117.5866567171537
+          },
+          "height" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "检测框区域高度",
+            "example" : 133.32496056189905
+          },
+          "top_left_x" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "检测框左上角到垂直轴距离",
+            "example" : 53.134917332575874
+          },
+          "top_left_y" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "检测框左上角到水平轴距离",
+            "example" : 254.21347984900842
+          }
+        }
+      },
+      "ImageMediaTaggingDetResponse" : {
+        "properties" : {
+          "result" : {
+            "description" : "调用成功时为图片标签内容。",
+            "properties" : {
+              "tags" : {
+                "type" : "array",
+                "description" : "标签列表集合。",
+                "items" : {
+                  "$ref" : "#/components/schemas/ImageMediaTaggingDetItemBody"
+                }
+              }
+            }
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "ImageMediaTaggingDetItemBody" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "38.51",
+            "description" : "置信度,将Float型置信度转为String类型返回,取值范围:0-100。"
+          },
+          "type" : {
+            "type" : "string",
+            "format" : "string",
+            "example" : "scene",
+            "description" : "标签的类别。返回的标签类型,包含二十种大类,具体可以参考[图像标签](http://support.huaweicloud.com/image_faq/image_01_0037.html)"
+          },
+          "tag" : {
+            "type" : "string",
+            "example" : "person",
+            "description" : "标签名称。"
+          },
+          "i18n_tag" : {
+            "type" : "object",
+            "description" : "标签的多种语言输出。",
+            "properties" : {
+              "zh" : {
+                "type" : "string",
+                "description" : "中文标签。",
+                "example" : "越野车"
+              },
+              "en" : {
+                "type" : "string",
+                "description" : "英文标签。",
+                "example" : "suv"
+              }
+            }
+          },
+          "instances" : {
+            "type" : "array",
+            "description" : "目标检测框信息,为空则表示没有目标检测框。",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageMediaTaggingDetInstance"
+            }
+          }
+        },
+        "description" : "",
+        "type" : "object"
+      },
+      "ImageMediaTaggingDetInstance" : {
+        "properties" : {
+          "bounding_box" : {
+            "type" : "object",
+            "description" : "目标检测框位置信息",
+            "$ref" : "#/components/schemas/BoundingBox"
+          },
+          "confidence" : {
+            "type" : "string",
+            "description" : "检测标签的置信度,将Float型置信度转为String类型返回,Float取值范围(0~100)。"
+          }
+        },
+        "type" : "object"
+      },
+      "ImageMediaTaggingDetReq" : {
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "example" : "/9j/4AAQSkZJRgABAgEASABIAAD/4RFZRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAA...\n",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "与image二选一"
+          },
+          "language" : {
+            "type" : "string",
+            "example" : "zh",
+            "description" : "zh:返回标签的语言类型为中文。"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "example" : 20,
+            "description" : "置信度的阈值(0~100),低于此置信数的标签,将不会返回。"
+          },
+          "limit" : {
+            "type" : "integer",
+            "example" : 5,
+            "description" : "最多返回的tag数(取值范围:1~50),默认值: 10"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ImageMainObjectDetectionResponse" : {
+        "properties" : {
+          "result" : {
+            "type" : "array",
+            "description" : "主体列表集合。",
+            "items" : {
+              "$ref" : "#/components/schemas/ImageMainObjectDetectionInstance"
+            }
+          }
+        },
+        "description" : "This is a auto create Response Object",
+        "type" : "object"
+      },
+      "ImageMainObjectDetectionReq" : {
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "example" : "/9j/4AAQSkZJRgABAgEASABIAAD/4RFZRXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAA...\n",
+            "description" : "与url二选一"
+          },
+          "url" : {
+            "type" : "string",
+            "example" : "",
+            "description" : "与image二选一"
+          },
+          "threshold" : {
+            "type" : "number",
+            "format" : "float",
+            "minimum" : 0,
+            "maximum" : 100,
+            "default" : 0,
+            "description" : "置信度的阈值(0~100),低于此置信数的检测结果,将不会返回。"
+          }
+        },
+        "description" : "This is a auto create Body Object",
+        "type" : "object"
+      },
+      "ImageMainObjectDetectionInstance" : {
+        "properties" : {
+          "label" : {
+            "type" : "string",
+            "description" : "主体的类别,现阶段分为:bounding_box和main_object_box"
+          },
+          "location" : {
+            "type" : "object",
+            "description" : "目标检测框位置信息,包括4个值:"
+          },
+          "confidence" : {
+            "type" : "string",
+            "description" : "主体框的置信度,将Float型置信度转为String类型返回,Float取值范围(0~100)。"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/RunCelebrityRecognition" : {
+      "post" : {
+        "tags" : [ "名人识别" ],
+        "summary" : "名人识别",
+        "description" : "分析并识别图片中包含的政治人物、明星及网红人物,返回人物信息及人脸坐标。",
+        "operationId" : "RunCelebrityRecognition",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CelebrityRecognitionResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CelebrityRecognitionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunCelebrityRecognition",
+      "x-url" : "{endpoint}/v2/{project_id}/image/celebrity-recognition"
+    },
+    "/RunRecaptureDetect" : {
+      "post" : {
+        "tags" : [ "翻拍识别" ],
+        "summary" : "翻拍识别",
+        "description" : "零售行业通常根据零售店的销售量进行销售奖励,拍摄售出商品的条形码上传后台是常用的统计方式。翻拍识别利用深度神经网络算法判断条形码图片为原始拍摄,还是经过二次翻拍、打印翻拍等手法二次处理的图片。利用翻拍识别,可以检测出经过二次处理的不合规范图片,使得统计数据更准确、有效。。",
+        "operationId" : "RunRecaptureDetect",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RecaptureDetectResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RecaptureDetectReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunRecaptureDetect",
+      "x-url" : "{endpoint}/v2/{project_id}/image/recapture-detect"
+    },
+    "/RunImageMediaTagging" : {
+      "post" : {
+        "tags" : [ "媒资图像标签(分类)" ],
+        "summary" : "标签识别",
+        "description" : "自然图像的语义内容非常丰富,一个图像包含多个标签内容,图像标签服务准确识别自然图片中数百种场景、上千种通用物体及其属性,让智能相册管理、照片检索和分类、基于场景内容或者物体的广告推荐等功能更加直观。使用时用户发送待处理图片,返回图片标签内容及相应置信度。",
+        "operationId" : "RunImageMediaTagging",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageMediaTaggingResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageMediaTaggingReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunImageMediaTagging",
+      "x-url" : "{endpoint}/v2/{project_id}/image/media-tagging"
+    },
+    "/RunImageTagging" : {
+      "post" : {
+        "tags" : [ "图像标签" ],
+        "summary" : "图像标签",
+        "description" : "自然图像的语义内容非常丰富,一个图像包含多个标签内容,图像标签服务准确识别自然图片中数百种场景、上千种通用物体及其属性,让智能相册管理、照片检索和分类、基于场景内容或者物体的广告推荐等功能更加直观。使用时用户发送待处理图片,返回图片标签内容及相应置信度。",
+        "operationId" : "RunImageTagging",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageTaggingResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageTaggingReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunImageTagging",
+      "x-url" : "{endpoint}/v2/{project_id}/image/tagging"
+    },
+    "/RunImageMediaTaggingDet" : {
+      "post" : {
+        "tags" : [ "媒资图像标签(检测)" ],
+        "summary" : "媒资图像标签检测",
+        "description" : "自然图像的语义内容非常丰富,一个图像包含多个标签内容,图像标签服务准确识别自然图片中数百种场景、上千种通用物体及其属性,让智能相册管理、照片检索和分类、基于场景内容或者物体的广告推荐等功能更加直观。使用时用户发送待处理图片,返回图片标签内容及相应的位置坐标。",
+        "operationId" : "RunImageMediaTaggingDet",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageMediaTaggingDetResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageMediaTaggingDetReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunImageMediaTaggingDet",
+      "x-url" : "{endpoint}/v2/{project_id}/image/media-tagging-det"
+    },
+    "/RunImageMainObjectDetection" : {
+      "post" : {
+        "tags" : [ "主体识别" ],
+        "summary" : "主体识别",
+        "description" : "检测图像中的主要内容,返回主要内容的坐标信息,这里的主要内容包括两方面:bounding_box和main_object_box",
+        "operationId" : "RunImageMainObjectDetection",
+        "responses" : {
+          "200" : {
+            "description" : "成功响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ImageMainObjectDetectionResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "失败响应结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "project_id",
+          "in" : "path",
+          "description" : "用户的project_id",
+          "required" : true,
+          "schema" : {
+            "description" : "用户的project_id",
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Token",
+          "in" : "header",
+          "description" : "用户Token。",
+          "required" : true,
+          "schema" : {
+            "example" : "MIIDkgYJKoZIhvcNAQcCoIIDgzCCXXXXXX...",
+            "description" : "用户Token。",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageMainObjectDetectionReq"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RunImageMainObjectDetection",
+      "x-url" : "{endpoint}/v3/{project_id}/image/main-object-detection"
+    }
+  }
+}

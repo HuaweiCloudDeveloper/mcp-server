@@ -1,0 +1,4 @@
+{
+  "service": "waf",
+  "description": "Configuration for waf service"
+}
