@@ -3,3 +3,4 @@ dist
 .env
 **/__pycache__
 test.py
+**/.venv
