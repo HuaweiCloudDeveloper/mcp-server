@@ -3,4 +3,5 @@ dist
 .env
 **/__pycache__
 test.py
-**/.venv
+/.venv/
+.vscode

@@ -1,4 +1,4 @@
-service_code: ecs
+service_code: vpc
 transport: sse  # 支持 stdio 和  sse
 sse_port: 8888 # sse 模式需要设定端口
 

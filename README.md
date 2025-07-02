@@ -56,133 +56,538 @@ Directly enter the directory path of the sub-project, such as the run.py file un
 ```
 ## Tools
 
-| Group Name | Product Name | Product Short |
-|----|-------|------------|
-| Cloud Store | Products and Orders | [Product&Order](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server)|
-| Operation | Customer Operation Capabilities | BSSINTL |
-| Middleware | Distributed Cache Service | [DCS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dcs) |
-| | Distributed Message Service for Kafka | [Kafka](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kafka) |
-| | Cloud Service Engines | [CSE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cse) |
-| | Distributed Message Service for RocketMQ | [RocketMQ](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rocketmq) |
-| | Distributed Message Service for RabbitMQ | RabbitMQ |
-| | API Gateway | [APIG](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_apig) |
-| | Application Performance Management | [APM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_apm) |
-| CodeArts | Cloud Performance Test Service | [CPTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cpts) |
-| | ServiceStage | ServiceStage |
-| | CodeCheck | CodeCheck |
-| | CodeArts Req | [ProjectMan](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_projectman) |
-| | CodeHub | [CodeHub](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codehub) |
-| | CloudBuild | CloudBuild |
-| | CloudTest | [CloudTest](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cloudtest) |
-| | CodeArts Deploy | [CodeArtsDeploy](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartsdeploy) |
-| | CodeArts Check | [CodeArtsCheck](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartscheck) |
-| | CodeArts Pipeline | CodeArtsPipeline |
-| | CodeArts Build | [CodeArtsBuild](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartsbuild) |
-| | CodeArts Artifact | CodeArtsArtifact |
-| | Cloud Application Engine | [CAE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cae) |
-| Networking | Elastic Load Balance | [ELB](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_elb) |
-| | Virtual Private Cloud | [VPC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpc) |
-| | Elastic IP | [EIP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eip) |
-| | NAT Gateway | [NAT](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_nat) |
-| | VPC Endpoint | [VPCEP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpcep) |
-| | Cloud Connect | CC |
-| | Enterprise Router | [ER](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_er) |
-| | Global Accelerator | GA |
-| | Direct Connect | DC |
-| | Virtual Private Network | [VPN](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpn) |
-| Content Delivery & Edge Computing | Content Delivery NetWork | CDN |
-| Compute | Elastic Cloud Server | [ECS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ecs) |
-| | Auto Scaling | [AS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_as) |
-| | FunctionGraph | [FunctionGraph](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_functiongraph) |
-| | Image Management Service | [IMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ims) |
-| | Bare Metal Server | [BMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_bms) |
-| | Dedicated Host | DeH |
-| Security & Compliance | Host Security Service | [HSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_hss) |
-| | Data Encryption Workshop KPS | [KPS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kps) |
-| | Cloud Secret Management Service | [CSMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_csms) |
-| | Data Encryption Workshop KMS | [KMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kms) |
-| | Cloud Certificate Manager Service | [CCM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ccm) |
-| | SSL Certificate Manager | [SCM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_scm) |
-| | Anti-DDoS | Anti-DDoS |
-| | Database Security Service | [DBSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dbss) |
-| | Web Application Firewall | [WAF](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_waf) |
-| | Data Security Center | [DSC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dsc) |
-| | Cloud Firewall | [CFW](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cfw) |
-| | Cloud Bastion Host | [CBH](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbh) |
-| | Edge Security | EdgeSec |
-| | SecMaster | SecMaster |
-| | Advanced Anti-DDoS | [AAD](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_aad) |
-| Databases | Document Database Service | [DDS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dds) |
-| | Relational Database Service | [RDS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rds) |
-| | TaurusDB | GaussDB |
-| | GaussDB | [GaussDBforopenGauss](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_gaussdbforopengauss) |
-| | GeminiDB | GaussDBforNoSQL |
-| | Data Replication Service | [DRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_drs) |
-| | Database and Application Migration UGO | UGO |
-| | Distributed Database Middleware | [DDM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ddm) |
-| | Data Admin Service (DAS) | [DAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_das) |
-| AI | Optical Character Recognition | [OCR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ocr) |
-| | Face Recognition Service | [FRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_frs) |
-| | ModelArts | ModelArts |
-| | Image | [Image](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_image) |
-| | ImageSearch | [ImageSearch](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_imagesearch) |
-| | Moderation | [Moderation](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_moderation) |
-| | Speech Interaction Service | [SIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sis) |
-| | Graph Engine Service | [GES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ges) |
-| | Question Answering Bot | [CBS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbs) |
-| | Autonomous Driving Cloud Service | Octopus |
-| Analytics | MapReduce Service | [MRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mrs) |
-| | Data Warehouse Service | [DWS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dws) |
-| | Data Lake Insight | [DLI](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dli) |
-| | DataArts Studio | DataArtsStudio |
-| | Cloud Search Service | [CSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_css) |
-| | Date Ingestion Service | [DIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dis) |
-| Containers | Cloud Container Engine | [CCE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cce) |
-| | SoftWare Repository for Container | [SWR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_swr) |
-| | Application Service Mesh | [ASM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_asm) |
-| | Application Orchestration Service | AOS |
-| | Cloud Container Instance | [CCI](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cci) |
-| Migration | Server Migration Service | SMS |
-| | Object Storage Migration Service | [OMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_oms) |
-| | CloudDataMigration | [CDM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cdm) |
-| Management & Governance | Identity and Access Management | [IAM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_iam) |
-| | Cloud Eye | [CES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ces) |
-| | Log Tank Service | [LTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_lts) |
-| | Resource Management Service | [RMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rms) |
-| | Cloud Trace Service | [CTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cts) |
-| | Tag Management Service | [TMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_tms) |
-| | Enterprise Project Management Service | [EPS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eps) |
-| | Simple Message Notification | [SMN](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_smn) |
-| | Application Operations Management | [AOM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_aom) |
-| | Organizations | Organizations |
-| | Resource Access Manager | [RAM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ram) |
-| | Config | Config |
-| | Resource Formation Service | RFS |
-| | IAMAccessAnalyzer | IAMAccessAnalyzer |
-| | IAM Identity Center | IdentityCenter |
-| | IAM Identity Center Store | IdentityCenterStore |
-| | IAM Identity Center SCIM | IdentityCenterSCIM |
-| | IAM Identity Center OIDC | IdentityCenterOIDC |
-| | Security Token Service | [STS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sts) |
-| | Cloud Operations Center | [COC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_coc) |
-| | Resource Governance Center | [RGC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rgc) |
-| Business Applications | ROMA | [ROMA](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_roma) |
-| | Domain Name Service | [DNS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dns) |
-| | HUAWEI CLOUD Meeting | Meeting |
-| | Workspace | Workspace |
-| Storage | Elastic Volume Service | [EVS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_evs) |
-| | Cloud Backup and Recovery | [CBR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbr) |
-| | SFSTurbo | [SFSTurbo](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sfsturbo) |
-| | Object Storage Service | [OBS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_obs) |
-| Developer Tools | APIExplorer | APIExplorer |
-| Media Services | Media Processing Center | [MPC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mpc) |
-| | Live | Live |
-| | Video On Demand | [VOD](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vod) |
-| | Huawei Cloud Real-Time Communication | CloudRTC |
-| Internet of Things | IoT Device Access | IoTDA |
-| | Global SIM Link | [GSL](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_gsl) |
-| | IoT Device Access Management | IoTDM |
-| MacroVerse aPaaS | AppStage | AppStage |
+<!DOCTYPE html>
+<html>
+<body>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr>
+    <th>Group Name</th>
+    <th>Product Name</th>
+    <th>Product Short</th>
+  </tr>
+  <tr>
+    <td rowspan="1">Cloud Store</td>
+    <td>Products and Orders</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server">Product&Order</a></td>
+  </tr>
+  <tr>
+    <td rowspan="10">Networking</td>
+    <td>Elastic Load Balance</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_elb">ELB</a></td>
+  </tr>
+  <tr>
+    <td>Virtual Private Cloud</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpc">VPC</a></td>
+  </tr>
+  <tr>
+    <td>Elastic IP</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eip">EIP</a></td>
+  </tr>
+  <tr>
+    <td>NAT Gateway</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_nat">NAT</a></td>
+  </tr>
+  <tr>
+    <td>VPC Endpoint</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpcep">VPCEP</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Connect</td>
+    <td>CC</td>
+  </tr>
+  <tr>
+    <td>Enterprise Router</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_er">ER</a></td>
+  </tr>
+  <tr>
+    <td>Global Accelerator</td>
+    <td>GA</td>
+  </tr>
+  <tr>
+    <td>Direct Connect</td>
+    <td>DC</td>
+  </tr>
+  <tr>
+    <td>Virtual Private Network</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpn">VPN</a></td>
+  </tr>
+  <tr>
+    <td rowspan="3">Migration</td>
+    <td>Server Migration Service</td>
+    <td>SMS</td>
+  </tr>
+  <tr>
+    <td>Object Storage Migration Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_oms">OMS</a></td>
+  </tr>
+  <tr>
+    <td>CloudDataMigration</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cdm">CDM</a></td>
+  </tr>
+  <tr>
+    <td rowspan="5">Containers</td>
+    <td>Cloud Container Engine</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cce">CCE</a></td>
+  </tr>
+  <tr>
+    <td>SoftWare Repository for Container</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_swr">SWR</a></td>
+  </tr>
+  <tr>
+    <td>Application Service Mesh</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_asm">ASM</a></td>
+  </tr>
+  <tr>
+    <td>Application Orchestration Service</td>
+    <td>AOS</td>
+  </tr>
+  <tr>
+    <td>Cloud Container Instance</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cci">CCI</a></td>
+  </tr>
+  <tr>
+    <td rowspan="10">AI</td>
+    <td>Optical Character Recognition</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ocr">OCR</a></td>
+  </tr>
+  <tr>
+    <td>Face Recognition Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_frs">FRS</a></td>
+  </tr>
+  <tr>
+    <td>ModelArts</td>
+    <td>ModelArts</td>
+  </tr>
+  <tr>
+    <td>Image</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_image">Image</a></td>
+  </tr>
+  <tr>
+    <td>ImageSearch</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_imagesearch">ImageSearch</a></td>
+  </tr>
+  <tr>
+    <td>Moderation</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_moderation">Moderation</a></td>
+  </tr>
+  <tr>
+    <td>Speech Interaction Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sis">SIS</a></td>
+  </tr>
+  <tr>
+    <td>Graph Engine Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ges">GES</a></td>
+  </tr>
+  <tr>
+    <td>Question Answering Bot</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbs">CBS</a></td>
+  </tr>
+  <tr>
+    <td>Autonomous Driving Cloud Service</td>
+    <td>Octopus</td>
+  </tr>
+  <tr>
+    <td rowspan="13">CodeArts</td>
+    <td>Cloud Performance Test Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cpts">CPTS</a></td>
+  </tr>
+  <tr>
+    <td>ServiceStage</td>
+    <td>ServiceStage</td>
+  </tr>
+  <tr>
+    <td>CodeCheck</td>
+    <td>CodeCheck</td>
+  </tr>
+  <tr>
+    <td>CodeArts Req</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_projectman">ProjectMan</a></td>
+  </tr>
+  <tr>
+    <td>CodeHub</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codehub">CodeHub</a></td>
+  </tr>
+  <tr>
+    <td>CloudBuild</td>
+    <td>CloudBuild</td>
+  </tr>
+  <tr>
+    <td>CloudTest</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cloudtest">CloudTest</a></td>
+  </tr>
+  <tr>
+    <td>CodeArts Deploy</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartsdeploy">CodeArtsDeploy</a></td>
+  </tr>
+  <tr>
+    <td>CodeArts Check</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartscheck">CodeArtsCheck</a></td>
+  </tr>
+  <tr>
+    <td>CodeArts Pipeline</td>
+    <td>CodeArtsPipeline</td>
+  </tr>
+  <tr>
+    <td>CodeArts Build</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartsbuild">CodeArtsBuild</a></td>
+  </tr>
+  <tr>
+    <td>CodeArts Artifact</td>
+    <td>CodeArtsArtifact</td>
+  </tr>
+  <tr>
+    <td>Cloud Application Engine</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cae">CAE</a></td>
+  </tr>
+  <tr>
+    <td rowspan="4">Business Applications</td>
+    <td>ROMA</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_roma">ROMA</a></td>
+  </tr>
+  <tr>
+    <td>Domain Name Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dns">DNS</a></td>
+  </tr>
+  <tr>
+    <td>HUAWEI CLOUD Meeting</td>
+    <td>Meeting</td>
+  </tr>
+  <tr>
+    <td>Workspace</td>
+    <td>Workspace</td>
+  </tr>
+  <tr>
+    <td rowspan="1">Operation</td>
+    <td>Customer Operation Capabilities</td>
+    <td>BSSINTL</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Internet of Things</td>
+    <td>IoT Device Access</td>
+    <td>IoTDA</td>
+  </tr>
+  <tr>
+    <td>Global SIM Link</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_gsl">GSL</a></td>
+  </tr>
+  <tr>
+    <td>IoT Device Access Management</td>
+    <td>IoTDM</td>
+  </tr>
+  <tr>
+    <td rowspan="7">Middleware</td>
+    <td>Distributed Cache Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dcs">DCS</a></td>
+  </tr>
+  <tr>
+    <td>Distributed Message Service for Kafka</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kafka">Kafka</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Service Engines</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cse">CSE</a></td>
+  </tr>
+  <tr>
+    <td>Distributed Message Service for RocketMQ</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rocketmq">RocketMQ</a></td>
+  </tr>
+  <tr>
+    <td>Distributed Message Service for RabbitMQ</td>
+    <td>RabbitMQ</td>
+  </tr>
+  <tr>
+    <td>API Gateway</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_apig">APIG</a></td>
+  </tr>
+  <tr>
+    <td>Application Performance Management</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_apm">APM</a></td>
+  </tr>
+  <tr>
+    <td rowspan="1">MacroVerse aPaaS</td>
+    <td>AppStage</td>
+    <td>AppStage</td>
+  </tr>
+  <tr>
+    <td rowspan="6">Analytics</td>
+    <td>MapReduce Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mrs">MRS</a></td>
+  </tr>
+  <tr>
+    <td>Data Warehouse Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dws">DWS</a></td>
+  </tr>
+  <tr>
+    <td>Data Lake Insight</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dli">DLI</a></td>
+  </tr>
+  <tr>
+    <td>DataArts Studio</td>
+    <td>DataArtsStudio</td>
+  </tr>
+  <tr>
+    <td>Cloud Search Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_css">CSS</a></td>
+  </tr>
+  <tr>
+    <td>Date Ingestion Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dis">DIS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="4">Media Services</td>
+    <td>Media Processing Center</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mpc">MPC</a></td>
+  </tr>
+  <tr>
+    <td>Live</td>
+    <td>Live</td>
+  </tr>
+  <tr>
+    <td>Video On Demand</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vod">VOD</a></td>
+  </tr>
+  <tr>
+    <td>Huawei Cloud Real-Time Communication</td>
+    <td>CloudRTC</td>
+  </tr>
+  <tr>
+    <td rowspan="21">Management &amp; Governance</td>
+    <td>Identity and Access Management</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_iam">IAM</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Eye</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ces">CES</a></td>
+  </tr>
+  <tr>
+    <td>Log Tank Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_lts">LTS</a></td>
+  </tr>
+  <tr>
+    <td>Resource Management Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rms">RMS</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Trace Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cts">CTS</a></td>
+  </tr>
+  <tr>
+    <td>Tag Management Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_tms">TMS</a></td>
+  </tr>
+  <tr>
+    <td>Enterprise Project Management Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eps">EPS</a></td>
+  </tr>
+  <tr>
+    <td>Simple Message Notification</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_smn">SMN</a></td>
+  </tr>
+  <tr>
+    <td>Application Operations Management</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_aom">AOM</a></td>
+  </tr>
+  <tr>
+    <td>Organizations</td>
+    <td>Organizations</td>
+  </tr>
+  <tr>
+    <td>Resource Access Manager</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ram">RAM</a></td>
+  </tr>
+  <tr>
+    <td>Config</td>
+    <td>Config</td>
+  </tr>
+  <tr>
+    <td>Resource Formation Service</td>
+    <td>RFS</td>
+  </tr>
+  <tr>
+    <td>IAMAccessAnalyzer</td>
+    <td>IAMAccessAnalyzer</td>
+  </tr>
+  <tr>
+    <td>IAM Identity Center</td>
+    <td>IdentityCenter</td>
+  </tr>
+  <tr>
+    <td>IAM Identity Center Store</td>
+    <td>IdentityCenterStore</td>
+  </tr>
+  <tr>
+    <td>IAM Identity Center SCIM</td>
+    <td>IdentityCenterSCIM</td>
+  </tr>
+  <tr>
+    <td>IAM Identity Center OIDC</td>
+    <td>IdentityCenterOIDC</td>
+  </tr>
+  <tr>
+    <td>Security Token Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sts">STS</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Operations Center</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_coc">COC</a></td>
+  </tr>
+  <tr>
+    <td>Resource Governance Center</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rgc">RGC</a></td>
+  </tr>
+  <tr>
+    <td rowspan="1">Developer Tools</td>
+    <td>APIExplorer</td>
+    <td>APIExplorer</td>
+  </tr>
+  <tr>
+    <td rowspan="4">Storage</td>
+    <td>Elastic Volume Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_evs">EVS</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Backup and Recovery</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbr">CBR</a></td>
+  </tr>
+  <tr>
+    <td>SFSTurbo</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sfsturbo">SFSTurbo</a></td>
+  </tr>
+  <tr>
+    <td>Object Storage Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_obs">OBS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="9">Databases</td>
+    <td>Document Database Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dds">DDS</a></td>
+  </tr>
+  <tr>
+    <td>Relational Database Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rds">RDS</a></td>
+  </tr>
+  <tr>
+    <td>TaurusDB</td>
+    <td>TaurusDB</td>
+  </tr>
+  <tr>
+    <td>GaussDB</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_gaussdbforopengauss">GaussDBforopenGauss</a></td>
+  </tr>
+  <tr>
+    <td>GeminiDB</td>
+    <td>GeminiDB</td>
+  </tr>
+  <tr>
+    <td>Data Replication Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_drs">DRS</a></td>
+  </tr>
+  <tr>
+    <td>Database and Application Migration UGO</td>
+    <td>UGO</td>
+  </tr>
+  <tr>
+    <td>Distributed Database Middleware</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ddm">DDM</a></td>
+  </tr>
+  <tr>
+    <td>Data Admin Service (DAS)</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_das">DAS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="6">Compute</td>
+    <td>Elastic Cloud Server</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ecs">ECS</a></td>
+  </tr>
+  <tr>
+    <td>Auto Scaling</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_as">AS</a></td>
+  </tr>
+  <tr>
+    <td>FunctionGraph</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_functiongraph">FunctionGraph</a></td>
+  </tr>
+  <tr>
+    <td>Image Management Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ims">IMS</a></td>
+  </tr>
+  <tr>
+    <td>Bare Metal Server</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_bms">BMS</a></td>
+  </tr>
+  <tr>
+    <td>Dedicated Host</td>
+    <td>DeH</td>
+  </tr>
+  <tr>
+    <td rowspan="1">Content Delivery &amp; Edge Computing</td>
+    <td>Content Delivery NetWork</td>
+    <td>CDN</td>
+  </tr>
+  <tr>
+    <td rowspan="15">Security &amp; Compliance</td>
+    <td>Host Security Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_hss">HSS</a></td>
+  </tr>
+  <tr>
+    <td>Data Encryption Workshop KPS</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kps">KPS</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Secret Management Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_csms">CSMS</a></td>
+  </tr>
+  <tr>
+    <td>Data Encryption Workshop KMS</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kms">KMS</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Certificate Manager Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ccm">CCM</a></td>
+  </tr>
+  <tr>
+    <td>SSL Certificate Manager</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_scm">SCM</a></td>
+  </tr>
+  <tr>
+    <td>Anti-DDoS</td>
+    <td>Anti-DDoS</td>
+  </tr>
+  <tr>
+    <td>Database Security Service</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dbss">DBSS</a></td>
+  </tr>
+  <tr>
+    <td>Web Application Firewall</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_waf">WAF</a></td>
+  </tr>
+  <tr>
+    <td>Data Security Center</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dsc">DSC</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Firewall</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cfw">CFW</a></td>
+  </tr>
+  <tr>
+    <td>Cloud Bastion Host</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbh">CBH</a></td>
+  </tr>
+  <tr>
+    <td>Edge Security</td>
+    <td>EdgeSec</td>
+  </tr>
+  <tr>
+    <td>SecMaster</td>
+    <td>SecMaster</td>
+  </tr>
+  <tr>
+    <td>Advanced Anti-DDoS</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_aad">AAD</a></td>
+  </tr>
+</table>
+</body>
+</html>	
 
 
 

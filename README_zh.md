@@ -59,286 +59,1151 @@
 
 ## 功能点(Tools)
 
-| Group Name | Product Name          | Product Short |
-|------------|-----------------------|------------|
-| 云商店        | 商品和订单                 | [Product&Order](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server)|
-| 计算         | 弹性云服务器                | [ECS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ecs) |
-|            | GPU加速云服务器             | GACS |
-|            | FPGA加速云服务器            | FACS |
-|            | 裸金属服务器                | [BMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_bms) |
-|            | 专属主机                  | DeH |
-|            | 弹性伸缩                  | [AS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_as) |
-|            | 镜像服务                  | [IMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ims) |
-|            | 函数工作流                 | [FunctionGraph](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_functiongraph) |
-|            | VR云渲游平台               | CVR |
-|            | 云手机                   | [CPH](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cph) |
-|            | 容量管理服务                | [CMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cms) |
-| 存储         | 对象存储服务                | [OBS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_obs) |
-|            | 云硬盘                   | [EVS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_evs) |
-|            | 云硬盘备份                 | VBS |
-|            | 云服务器备份                | CSBS |
-|            | 存储容灾服务                | [SDRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sdrs) |
-|            | 弹性文件服务(SFS Turbo)     | [SFSTurbo](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sfsturbo) |
-|            | 数据快递服务                | DES |
-|            | 直播加速                  | LSA |
-|            | 云备份                   | [CBR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbr) |
-|            | 专属分布式存储服务             | [DSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dss) |
-|            | 专属企业存储服务              | DESS |
-|            | 数据工坊                  | DWR |
-|            | 地图数据服务                | MapDS |
-|            | 键值存储服务                | [KVS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kvs) |
-|            | 知识湖存储                 | LMS |
-| 网络         | 虚拟私有云                 | [VPC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpc) |
-|            | 弹性负载均衡                | [ELB](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_elb) |
-|            | NAT网关                 | [NAT](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_nat) |
-|            | 弹性公网IP                | [EIP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eip) |
-|            | 云专线                   | DC |
-|            | 虚拟专用网络                | [VPN](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpn) |
-|            | VPC终端节点               | [VPCEP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vpcep) |
-|            | 云连接                   | CC |
-|            | 企业路由器                 | [ER](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_er) |
-|            | 全球加速                  | GA |
-|            | 企业连接                  | EC |
-|            | 全域弹性公网IP              | [GEIP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_geip) |
-| 数据库        | 云数据库                  | [RDS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rds) |
-|            | 文档数据库服务               | [DDS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dds) |
-|            | 分布式数据库中间件             | [DDM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ddm) |
-|            | 数据复制服务                | [DRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_drs) |
-|            | 数据管理服务                | [DAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_das) |
-|            | 多模NoSQL服务             | NoSQL |
-|            | 云数据库产品总览              | DBS |
-|            | 云数据库 TaurusDB         | TaurusDB |
-|            | 云数据库TaurusDB          | GaussDB |
-|            | 云数据库 GeminiDB         | GaussDBforNoSQL |
-|            | GeminiDB Cassandra 接口 | GaussDBforCassandra |
-|            | GeminiDB Mongo 接口     | GaussDBforMongo |
-|            | GeminiDB Redis接口      | GaussDBforRedis |
-|            | GeminiDB Influx 接口    | GaussDBforInflux |
-|            | 云数据库 GaussDB          | [GaussDBforopenGauss](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_gaussdbforopengauss) |
-|            | 数据库和应用迁移 UGO          | UGO |
-| 人工智能       | 机器学习服务                | MLS |
-|            | 自然语言处理                | [NLP](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_nlp) |
-|            | 语言理解                  | nlplu |
-|            | 语言生成                  | nlplg |
-|            | 定制自然语言处理              | nlpc |
-|            | 机器翻译                  | nlpmt |
-|            | 知识图谱                  | nlpkg |
-|            | 对话机器人服务               | [CBS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbs) |
-|            | 智能问答机器人               | QABot |
-|            | 智能话务机器人               | PhoneBot |
-|            | 智能对话质检                | cbssa |
-|            | 智能语音助手                | cbsc |
-|            | 人脸识别服务                | [FRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_frs) |
-|            | 内容审核                  | [Moderation](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_moderation) |
-|            | 内容审核-文本               | textmoderation |
-|            | 内容审核-图像               | imagemoderation |
-|            | 商超视频分析                | Smart Retail |
-|            | 园区视频分析                | Smart Campus |
-|            | 交通视频分析                | Smart Traffic |
-|            | 文字识别                  | [OCR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ocr) |
-|            | 文字识别-通用类              | generalocr |
-|            | 文字识别-证件类              | cardocr |
-|            | 文字识别-票据类              | receiptocr |
-|            | 文字识别-行业类              | domainocr |
-|            | 文字识别-定制模板             | customocr |
-|            | 图像识别                  | [Image](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_image) |
-|            | 名人识别                  | ROC |
-|            | 图像标签                  | imagetagging |
-|            | 深度学习服务                | DLS |
-|            | 图引擎服务                 | [GES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ges) |
-|            | 图像搜索                  | [ImageSearch](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_imagesearch) |
-|            | 推荐系统                  | [RES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_res) |
-|            | 智能水务                  | iWater |
-|            | 智能制造                  | iManufacturing |
-|            | 智能交通                  | iTransport |
-|            | 智能电力                  | iPower |
-|            | 智能金融                  | iFinance |
-|            | 智能零售                  | iRetail |
-|            | 机器翻译服务                | MTS |
-|            | AI开发平台                | ModelArts |
-|            | Huawei HiLens         | HiLens |
-|            | 视频指纹                  | VFP |
-|            | 视频编辑                  | VCP |
-|            | 视频标签                  | VCT |
-|            | 机器翻译                  | MT |
-|            | 定制语音识别                | ASRC |
-|            | 知识图谱                  | KG |
-|            | 视频分析服务                | [VAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vas) |
-|            | 语音交互服务                | [SIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sis) |
-|            | 录音文件识别                | LASR |
-|            | 语音合成                  | TTS |
-|            | 实时语音识别                | RASR |
-|            | 一句话识别                 | ASR |
-|            | 网络智能体                 | NAIE |
-|            | 人证核身服务                | [IVS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ivs) |
-|            | 园区智能体                 | CampusGo |
-|            | 视频内容审核                | [VCM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vcm) |
-|            | 医疗智能体                 | eiHealth |
-|            | 运筹优化算法服务              | [OROAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_oroas) |
-|            | 盘古大模型                 | PanguLargeModels |
-|            | 天筹求解器服务               | OptVerse |
-|            | 盘古大模型-应用开发            | AppKit |
-|            | 八爪鱼自动驾驶云服务            | Octopus |
-|            | 视频智能分析服务              | [VIAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vias) |
-|            | 大模型开发平台               | MaStudio |
-|            | 数智融合计算服务              | DataArtsFabric |
-| 大数据        | 数据接入服务                | [DIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dis) |
-|            | 数据仓库服务                | [DWS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dws) |
-|            | 云搜索服务                 | [CSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_css) |
-|            | 数据湖工厂                 | [DLF](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dlf) |
-|            | 实时流计算服务               | CS |
-|            | MapReduce服务           | [MRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mrs) |
-|            | 数据湖探索                 | [DLI](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dli) |
-|            | 批处理服务                 | Batch |
-|            | 数据湖治理中心               | [DGC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dgc) |
-|            | 表格存储服务                | CloudTable |
-|            | 数据治理中心                | DataArtsStudio |
-|            | 湖仓构建                  | LakeFormation |
-|            | 可信智能计算服务              | [TICS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_tics) |
-|            | 智能数据洞察                | DataArtsInsight |
-| 容器         | 云容器引擎                 | [CCE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cce) |
-|            | 云容器实例                 | [CCI](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cci) |
-|            | 容器镜像服务                | [SWR](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_swr) |
-|            | 应用编排服务                | AOS |
-|            | 应用服务网格                | [ASM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_asm) |
-| 安全与合规      | Web应用防火墙              | [WAF](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_waf) |
-|            | DDoS高防                | [AAD](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_aad) |
-|            | Anti-DDoS流量清洗         | Anti-DDoS |
-|            | 企业主机安全                | [HSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_hss) |
-|            | 数据加密服务-密钥管理           | [KMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kms) |
-|            | 数据加密服务-凭据管理           | [CSMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_csms) |
-|            | 数据加密服务-密钥对管理          | [KPS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kps) |
-|            | 数据库安全服务               | [DBSS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dbss) |
-|            | 安全专家服务                | SES |
-|            | 态势感知                  | [SA](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sa) |
-|            | SSL证书管理               | [SCM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_scm) |
-|            | 云堡垒机                  | [CBH](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cbh) |
-|            | 容器安全服务                | CGS |
-|            | 数据安全中心                | [DSC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dsc) |
-|            | 云证书管理服务               | [CCM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ccm) |
-|            | 云防火墙                  | [CFW](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cfw) |
-|            | 安全云脑                  | SecMaster |
-| 运营         | 运营能力开放                | BSS |
-| 应用中间件      | 微服务引擎                 | [CSE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cse) |
-|            | API网关                 | [APIG](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_apig) |
-|            | 分布式消息服务 Kafka         | [Kafka](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_kafka) |
-|            | 分布式消息服务 RocketMQ      | [RocketMQ](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rocketmq) |
-|            | 分布式消息服务 RabbitMQ      | RabbitMQ |
-|            | 分布式缓存服务               | [DCS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dcs) |
-|            | 分布式缓存服务Redis          | DCSforRedis |
-|            | 分布式缓存服务Memcached      | DCSforMemcached |
-|            | 事件网格                  | [EG](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eg) |
-|            | 多活高可用服务               | [MAS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mas) |
-| 管理与监管      | 云监控服务                 | [CES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ces) |
-|            | 云日志服务                 | [LTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_lts) |
-|            | 统一身份认证服务              | [IAM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_iam) |
-|            | 云审计服务                 | [CTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cts) |
-|            | 标签管理服务                | [TMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_tms) |
-|            | 资源模板服务                | RTS |
-|            | 企业项目管理服务              | [EPS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eps) |
-|            | 资源管理服务                | [RMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rms) |
-|            | 消息通知服务                | [SMN](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_smn) |
-|            | 应用性能管理                | [APM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_apm) |
-|            | 应用运维管理                | [AOM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_aom) |
-|            | 组织                    | Organizations |
-|            | 资源访问管理                | [RAM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ram) |
-|            | 配置审计                  | Config |
-|            | IAM 身份中心              | IdentityCenter |
-|            | 优化顾问                  | OA |
-|            | 资源治理中心                | [RGC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_rgc) |
-|            | 访问分析                  | IAMAccessAnalyzer |
-|            | IAM 身份中心身份源           | IdentityCenterStore |
-|            | IAM 身份中心 SCIM         | IdentityCenterSCIM |
-|            | IAM 身份中心 OIDC         | IdentityCenterOIDC |
-|            | 安全令牌服务                | [STS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_sts) |
-|            | 云运维中心                 | [COC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_coc) |
-|            | 消息通知服务Global          | [SMNGLOBAL](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_smnglobal) |
-|            | IAM 身份中心 PortalAPI    | IdentityCenterPortalAPI |
-| CDN与智能边缘   | 内容分发网络                | CDN |
-|            | 智能边缘平台                | [IEF](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ief) |
-|            | 智能边缘小站                | CloudPond |
-|            | 智能边缘云                 | [IEC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_iec) |
-|            | 智能边缘小站                | [IES](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ies) |
-| 软件开发生产线    | 需求管理                  | [ProjectMan](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_projectman) |
-|            | 代码托管                  | [CodeHub](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codehub) |
-|            | 流水线                   | [CloudPipeline](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cloudpipeline) |
-|            | 代码检查                  | CodeCheck |
-|            | 移动应用测试                | MobileAppTest |
-|            | 测试计划                  | [CloudTest](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cloudtest) |
-|            | 意见反馈                  | VOC |
-|            | CloudIDE              | CloudIDE |
-|            | 大赛服务                  | CodeCraft |
-|            | 研发安全服务                | DevSecurity |
-|            | 应用管理与运维平台             | ServiceStage |
-|            | 云性能测试服务               | [CPTS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cpts) |
-|            | 云应用引擎                 | [CAE](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cae) |
-|            | 制品仓库                  | CodeArtsArtifact |
-|            | 编译构建                  | [CodeArtsBuild](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartsbuild) |
-|            | 代码检查                  | [CodeArtsCheck](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartscheck) |
-|            | 部署                    | [CodeArtsDeploy](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartsdeploy) |
-|            | 漏洞管理服务                | [CodeArtsInspector](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_codeartsinspector) |
-|            | 流水线                   | CodeArtsPipeline |
-| 企业应用       | 云解析服务                 | [DNS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dns) |
-|            | 华为云WeLink             | WeLink |
-|            | 华为云会议                 | Meeting |
-|            | 语音通话                  | VoiceCall |
-|            | 消息&短信                 | [MSGSMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_msgsms) |
-|            | 隐私保护通话                | PrivateNumber |
-|            | 联络中心                  | ContactCenter |
-|            | 全栈专属服务                | FCS |
-|            | 云管理网络                 | CMN |
-|            | 应用与数据集成平台             | [ROMA](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_roma) |
-|            | 云桌面                   | Workspace |
-|            | 云应用                   | WorkspaceApp |
-|            | 消息&短信(业务API)          | SMSApi |
-| 迁移         | 云迁移中心                 | CMC |
-|            | 对象存储迁移服务              | [OMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_oms) |
-|            | 云数据迁移                 | [CDM](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_cdm) |
-|            | 数据复制服务                | [DRS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_drs) |
-|            | 主机迁移服务                | SMS |
-| 区块链        | 区块链服务                 | [BCS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_bcs) |
-| 视频         | 媒体转码                  | [MPC](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mpc) |
-|            | 视频点播                  | [VOD](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vod) |
-|            | 视频直播                  | Live |
-|            | 融合视频云服务               | CVCS |
-|            | 云VR                   | CloudVR |
-|            | 媒体智能                  | Media AI |
-|            | 华为好望云服务               | IVM |
-|            | 华为云实时音视频              | CloudRTC |
-|            | 视频接入服务                | [VIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_vis) |
-|            | 数字内容生产线               | MetaStudio |
-| IoT物联网     | 智能边缘平台                | [IEF](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_ief) |
-|            | OceanBooster          | OceanBooster |
-|            | 设备发放                  | IoTDP |
-|            | 车路协同平台                | ocv2x |
-|            | OceanConnect 车联网      | OCIOV |
-|            | 设备接入                  | IoTDA |
-|            | 物联网应用构建器              | OCStudio |
-|            | 物联网数据分析               | IoTAnalytics |
-|            | 路网数字化服务               | [DRIS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_dris) |
-|            | IoT边缘                 | IoTEdge |
-|            | 全球SIM联接               | [GSL](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_gsl) |
-|            | 设备接入管理                | IoTDM |
-| 专属云        | 专属计算集群服务              | DCC |
-|            | 裸金属服务器                | [BMS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_bms) |
-| 企业网络       | 视频加速服务                | VGVAS |
-| 开天aPaaS    | 云消息服务                 | KooMessage |
-|            | 云地图服务                 | KooMap |
-|            | 交换数据空间                | [EDS](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_eds) |
-|            | 开天集成工作台               | [MSSI](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_mssi) |
-|            | 云手机服务                 | KooPhone |
-|            | 组织成员账号                | OrgID |
-|            | 应用平台                  | AppStage |
-| 工业软件       | 工业数字主线云服务             | [IDT](https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master/huaweicloud_services_server/mcp_server_idt) |
-|            | 工业数字模型驱动引擎            | iDME |
-|            | 工业数字模型驱动引擎(典型API体验)   | iDMEClassicAPI |
-|            | 硬件开发工具链平台云服务          | CraftArtsIPDCenter |
-| 开发者工具      | DevStar               | DevStar |
-|            | 开源平台                  | OpenSource |
-|            | 华为云CLI                | HCloud CLI |
-|            | APIExplorer           | APIExplorer |
-|            | FlowCube              | FlowCube |
-| 支持与服务      | 工单管理                  | OSM |
+<!DOCTYPE html>
+<html>
+<body>
+<table border="1" cellspacing="0" cellpadding="5">
+  <tr>
+    <th>Group Name</th>
+    <th>Product Name</th>
+    <th>Product Short</th>
+  </tr>
+<tr>
+    <td rowspan="1">云商店</td>
+    <td>商品和订单</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server">Product&Order</a></td>
+  </tr>
+  <tr>
+    <td rowspan="25">管理与监管</td>
+    <td>云监控服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ces">CES</a></td>
+  </tr>
+  <tr>
+    <td>云日志服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_lts">LTS</a></td>
+  </tr>
+  <tr>
+    <td>统一身份认证服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_iam">IAM</a></td>
+  </tr>
+  <tr>
+    <td>云审计服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cts">CTS</a></td>
+  </tr>
+  <tr>
+    <td>标签管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_tms">TMS</a></td>
+  </tr>
+  <tr>
+    <td>资源模板服务</td>
+    <td>RTS</td>
+  </tr>
+  <tr>
+    <td>企业项目管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eps">EPS</a></td>
+  </tr>
+  <tr>
+    <td>资源管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rms">RMS</a></td>
+  </tr>
+  <tr>
+    <td>消息通知服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_smn">SMN</a></td>
+  </tr>
+  <tr>
+    <td>应用性能管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_apm">APM</a></td>
+  </tr>
+  <tr>
+    <td>应用运维管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_aom">AOM</a></td>
+  </tr>
+  <tr>
+    <td>组织</td>
+    <td>Organizations</td>
+  </tr>
+  <tr>
+    <td>资源访问管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ram">RAM</a></td>
+  </tr>
+  <tr>
+    <td>配置审计</td>
+    <td>Config</td>
+  </tr>
+  <tr>
+    <td>IAM 身份中心</td>
+    <td>IdentityCenter</td>
+  </tr>
+  <tr>
+    <td>优化顾问</td>
+    <td>OA</td>
+  </tr>
+  <tr>
+    <td>资源治理中心</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rgc">RGC</a></td>
+  </tr>
+  <tr>
+    <td>访问分析</td>
+    <td>IAMAccessAnalyzer</td>
+  </tr>
+  <tr>
+    <td>IAM 身份中心身份源</td>
+    <td>IdentityCenterStore</td>
+  </tr>
+  <tr>
+    <td>IAM 身份中心 SCIM</td>
+    <td>IdentityCenterSCIM</td>
+  </tr>
+  <tr>
+    <td>IAM 身份中心 OIDC</td>
+    <td>IdentityCenterOIDC</td>
+  </tr>
+  <tr>
+    <td>安全令牌服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sts">STS</a></td>
+  </tr>
+  <tr>
+    <td>云运维中心</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_coc">COC</a></td>
+  </tr>
+  <tr>
+    <td>消息通知服务Global</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_smnglobal">SMNGLOBAL</a></td>
+  </tr>
+  <tr>
+    <td>IAM 身份中心 PortalAPI</td>
+    <td>IdentityCenterPortalAPI</td>
+  </tr>
+  <tr>
+    <td rowspan="1">区块链</td>
+    <td>区块链服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_bcs">BCS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="7">开天aPaaS</td>
+    <td>云消息服务</td>
+    <td>KooMessage</td>
+  </tr>
+  <tr>
+    <td>云地图服务</td>
+    <td>KooMap</td>
+  </tr>
+  <tr>
+    <td>交换数据空间</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eds">EDS</a></td>
+  </tr>
+  <tr>
+    <td>开天集成工作台</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mssi">MSSI</a></td>
+  </tr>
+  <tr>
+    <td>云手机服务</td>
+    <td>KooPhone</td>
+  </tr>
+  <tr>
+    <td>组织成员账号</td>
+    <td>OrgID</td>
+  </tr>
+  <tr>
+    <td>应用平台</td>
+    <td>AppStage</td>
+  </tr>
+  <tr>
+    <td rowspan="1">运营</td>
+    <td>运营能力开放</td>
+    <td>BSS</td>
+  </tr>
+  <tr>
+    <td rowspan="5">容器</td>
+    <td>云容器引擎</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cce">CCE</a></td>
+  </tr>
+  <tr>
+    <td>云容器实例</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cci">CCI</a></td>
+  </tr>
+  <tr>
+    <td>容器镜像服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_swr">SWR</a></td>
+  </tr>
+  <tr>
+    <td>应用编排服务</td>
+    <td>AOS</td>
+  </tr>
+  <tr>
+    <td>应用服务网格</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_asm">ASM</a></td>
+  </tr>
+  <tr>
+    <td rowspan="12">网络</td>
+    <td>虚拟私有云</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpc">VPC</a></td>
+  </tr>
+  <tr>
+    <td>弹性负载均衡</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_elb">ELB</a></td>
+  </tr>
+  <tr>
+    <td>NAT网关</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_nat">NAT</a></td>
+  </tr>
+  <tr>
+    <td>弹性公网IP</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eip">EIP</a></td>
+  </tr>
+  <tr>
+    <td>云专线</td>
+    <td>DC</td>
+  </tr>
+  <tr>
+    <td>虚拟专用网络</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpn">VPN</a></td>
+  </tr>
+  <tr>
+    <td>VPC终端节点 </td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vpcep">VPCEP</a></td>
+  </tr>
+  <tr>
+    <td>云连接</td>
+    <td>CC</td>
+  </tr>
+  <tr>
+    <td>企业路由器</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_er">ER</a></td>
+  </tr>
+  <tr>
+    <td>全球加速</td>
+    <td>GA</td>
+  </tr>
+  <tr>
+    <td>企业连接</td>
+    <td>EC</td>
+  </tr>
+  <tr>
+    <td>全域弹性公网IP</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_geip">GEIP</a></td>
+  </tr>
+  <tr>
+    <td rowspan="11">计算</td>
+    <td>弹性云服务器</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ecs">ECS</a></td>
+  </tr>
+  <tr>
+    <td>GPU加速云服务器</td>
+    <td>GACS</td>
+  </tr>
+  <tr>
+    <td>FPGA加速云服务器</td>
+    <td>FACS</td>
+  </tr>
+  <tr>
+    <td>裸金属服务器</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_bms">BMS</a></td>
+  </tr>
+  <tr>
+    <td>专属主机</td>
+    <td>DeH</td>
+  </tr>
+  <tr>
+    <td>弹性伸缩</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_as">AS</a></td>
+  </tr>
+  <tr>
+    <td>镜像服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ims">IMS</a></td>
+  </tr>
+  <tr>
+    <td>函数工作流</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_functiongraph">FunctionGraph</a></td>
+  </tr>
+  <tr>
+    <td>VR云渲游平台</td>
+    <td>CVR</td>
+  </tr>
+  <tr>
+    <td>云手机</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cph">CPH</a></td>
+  </tr>
+  <tr>
+    <td>容量管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cms">CMS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="12">IoT物联网</td>
+    <td>智能边缘平台</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ief">IEF</a></td>
+  </tr>
+  <tr>
+    <td>OceanBooster</td>
+    <td>OceanBooster</td>
+  </tr>
+  <tr>
+    <td>设备发放</td>
+    <td>IoTDP</td>
+  </tr>
+  <tr>
+    <td>车路协同平台</td>
+    <td>ocv2x</td>
+  </tr>
+  <tr>
+    <td>OceanConnect 车联网</td>
+    <td>OCIOV</td>
+  </tr>
+  <tr>
+    <td>设备接入</td>
+    <td>IoTDA</td>
+  </tr>
+  <tr>
+    <td>物联网应用构建器</td>
+    <td>OCStudio</td>
+  </tr>
+  <tr>
+    <td>物联网数据分析</td>
+    <td>IoTAnalytics</td>
+  </tr>
+  <tr>
+    <td> 路网数字化服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dris">DRIS</a></td>
+  </tr>
+  <tr>
+    <td>IoT边缘</td>
+    <td>IoTEdge</td>
+  </tr>
+  <tr>
+    <td>全球SIM联接</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_gsl">GSL</a></td>
+  </tr>
+  <tr>
+    <td>设备接入管理</td>
+    <td>IoTDM</td>
+  </tr>
+  <tr>
+    <td rowspan="5">CDN与智能边缘</td>
+    <td>内容分发网络</td>
+    <td>CDN</td>
+  </tr>
+  <tr>
+    <td>智能边缘平台</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ief">IEF</a></td>
+  </tr>
+  <tr>
+    <td>智能边缘小站</td>
+    <td>CloudPond</td>
+  </tr>
+  <tr>
+    <td>智能边缘云</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_iec">IEC</a></td>
+  </tr>
+  <tr>
+    <td>智能边缘小站</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ies">IES</a></td>
+  </tr>
+  <tr>
+    <td rowspan="5">迁移</td>
+    <td>云迁移中心</td>
+    <td>CMC</td>
+  </tr>
+  <tr>
+    <td>对象存储迁移服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_oms">OMS</a></td>
+  </tr>
+  <tr>
+    <td>云数据迁移</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cdm">CDM</a></td>
+  </tr>
+  <tr>
+    <td>数据复制服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_drs">DRS</a></td>
+  </tr>
+  <tr>
+    <td>主机迁移服务</td>
+    <td>SMS</td>
+  </tr>
+  <tr>
+    <td rowspan="2">专属云</td>
+    <td>专属计算集群服务</td>
+    <td>DCC</td>
+  </tr>
+  <tr>
+    <td>裸金属服务器</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_bms">BMS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="19">软件开发生产线</td>
+    <td>需求管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_projectman">ProjectMan</a></td>
+  </tr>
+  <tr>
+    <td>代码托管</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codehub">CodeHub</a></td>
+  </tr>
+  <tr>
+    <td>流水线</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cloudpipeline">CloudPipeline</a></td>
+  </tr>
+  <tr>
+    <td>代码检查</td>
+    <td>CodeCheck</td>
+  </tr>
+  <tr>
+    <td>移动应用测试</td>
+    <td>MobileAppTest</td>
+  </tr>
+  <tr>
+    <td>测试计划</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cloudtest">CloudTest</a></td>
+  </tr>
+  <tr>
+    <td>意见反馈</td>
+    <td>VOC</td>
+  </tr>
+  <tr>
+    <td>CloudIDE</td>
+    <td>CloudIDE</td>
+  </tr>
+  <tr>
+    <td>大赛服务</td>
+    <td>CodeCraft</td>
+  </tr>
+  <tr>
+    <td>研发安全服务</td>
+    <td>DevSecurity</td>
+  </tr>
+  <tr>
+    <td>应用管理与运维平台</td>
+    <td>ServiceStage</td>
+  </tr>
+  <tr>
+    <td>云性能测试服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cpts">CPTS</a></td>
+  </tr>
+  <tr>
+    <td>云应用引擎</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cae">CAE</a></td>
+  </tr>
+  <tr>
+    <td>制品仓库</td>
+    <td>CodeArtsArtifact</td>
+  </tr>
+  <tr>
+    <td>编译构建</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartsbuild">CodeArtsBuild</a></td>
+  </tr>
+  <tr>
+    <td>代码检查</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartscheck">CodeArtsCheck</a></td>
+  </tr>
+  <tr>
+    <td>部署</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartsdeploy">CodeArtsDeploy</a></td>
+  </tr>
+  <tr>
+    <td>漏洞管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_codeartsinspector">CodeArtsInspector</a></td>
+  </tr>
+  <tr>
+    <td>流水线</td>
+    <td>CodeArtsPipeline</td>
+  </tr>
+  <tr>
+    <td rowspan="13">企业应用</td>
+    <td>云解析服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dns">DNS</a></td>
+  </tr>
+  <tr>
+    <td>华为云WeLink</td>
+    <td>WeLink</td>
+  </tr>
+  <tr>
+    <td>华为云会议</td>
+    <td>Meeting</td>
+  </tr>
+  <tr>
+    <td>语音通话</td>
+    <td>VoiceCall</td>
+  </tr>
+  <tr>
+    <td>消息&amp;短信</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_msgsms">MSGSMS</a></td>
+  </tr>
+  <tr>
+    <td>隐私保护通话</td>
+    <td>PrivateNumber</td>
+  </tr>
+  <tr>
+    <td>联络中心</td>
+    <td>ContactCenter</td>
+  </tr>
+  <tr>
+    <td>全栈专属服务</td>
+    <td>FCS</td>
+  </tr>
+  <tr>
+    <td>云管理网络</td>
+    <td>CMN</td>
+  </tr>
+  <tr>
+    <td>应用与数据集成平台</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_roma">ROMA</a></td>
+  </tr>
+  <tr>
+    <td>云桌面</td>
+    <td>Workspace</td>
+  </tr>
+  <tr>
+    <td>云应用</td>
+    <td>WorkspaceApp</td>
+  </tr>
+  <tr>
+    <td>消息&amp;短信(业务API)</td>
+    <td>SMSApi</td>
+  </tr>
+  <tr>
+    <td rowspan="5">开发者工具</td>
+    <td>DevStar</td>
+    <td>DevStar</td>
+  </tr>
+  <tr>
+    <td>开源平台</td>
+    <td>OpenSource</td>
+  </tr>
+  <tr>
+    <td>华为云CLI</td>
+    <td>HCloud CLI</td>
+  </tr>
+  <tr>
+    <td>APIExplorer</td>
+    <td>APIExplorer</td>
+  </tr>
+  <tr>
+    <td>FlowCube</td>
+    <td>FlowCube</td>
+  </tr>
+  <tr>
+    <td rowspan="66">人工智能</td>
+    <td>机器学习服务</td>
+    <td>MLS</td>
+  </tr>
+  <tr>
+    <td>自然语言处理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_nlp">NLP</a></td>
+  </tr>
+  <tr>
+    <td>语言理解</td>
+    <td>nlplu</td>
+  </tr>
+  <tr>
+    <td>语言生成</td>
+    <td>nlplg</td>
+  </tr>
+  <tr>
+    <td>定制自然语言处理</td>
+    <td>nlpc</td>
+  </tr>
+  <tr>
+    <td>机器翻译</td>
+    <td>nlpmt</td>
+  </tr>
+  <tr>
+    <td>知识图谱</td>
+    <td>nlpkg</td>
+  </tr>
+  <tr>
+    <td>对话机器人服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbs">CBS</a></td>
+  </tr>
+  <tr>
+    <td>智能问答机器人</td>
+    <td>QABot</td>
+  </tr>
+  <tr>
+    <td>智能话务机器人</td>
+    <td>PhoneBot</td>
+  </tr>
+  <tr>
+    <td>智能对话质检</td>
+    <td>cbssa</td>
+  </tr>
+  <tr>
+    <td>智能语音助手</td>
+    <td>cbsc</td>
+  </tr>
+  <tr>
+    <td>人脸识别服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_frs">FRS</a></td>
+  </tr>
+  <tr>
+    <td>内容审核</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_moderation">Moderation</a></td>
+  </tr>
+  <tr>
+    <td>内容审核-文本</td>
+    <td>textmoderation</td>
+  </tr>
+  <tr>
+    <td>内容审核-图像</td>
+    <td>imagemoderation</td>
+  </tr>
+  <tr>
+    <td>商超视频分析</td>
+    <td>Smart Retail</td>
+  </tr>
+  <tr>
+    <td>园区视频分析</td>
+    <td>Smart Campus</td>
+  </tr>
+  <tr>
+    <td>交通视频分析</td>
+    <td>Smart Traffic</td>
+  </tr>
+  <tr>
+    <td>文字识别</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ocr">OCR</a></td>
+  </tr>
+  <tr>
+    <td>文字识别-通用类</td>
+    <td>generalocr</td>
+  </tr>
+  <tr>
+    <td>文字识别-证件类</td>
+    <td>cardocr</td>
+  </tr>
+  <tr>
+    <td>文字识别-票据类</td>
+    <td>receiptocr</td>
+  </tr>
+  <tr>
+    <td>文字识别-行业类</td>
+    <td>domainocr</td>
+  </tr>
+  <tr>
+    <td>文字识别-定制模板</td>
+    <td>customocr</td>
+  </tr>
+  <tr>
+    <td>图像识别</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_image">Image</a></td>
+  </tr>
+  <tr>
+    <td>名人识别</td>
+    <td>ROC</td>
+  </tr>
+  <tr>
+    <td>图像标签</td>
+    <td>imagetagging</td>
+  </tr>
+  <tr>
+    <td>深度学习服务</td>
+    <td>DLS</td>
+  </tr>
+  <tr>
+    <td>图引擎服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ges">GES</a></td>
+  </tr>
+  <tr>
+    <td>图像搜索</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_imagesearch">ImageSearch</a></td>
+  </tr>
+  <tr>
+    <td>推荐系统</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_res">RES</a></td>
+  </tr>
+  <tr>
+    <td>智能水务</td>
+    <td>iWater</td>
+  </tr>
+  <tr>
+    <td>智能制造</td>
+    <td>iManufacturing</td>
+  </tr>
+  <tr>
+    <td>智能交通</td>
+    <td>iTransport</td>
+  </tr>
+  <tr>
+    <td>智能电力</td>
+    <td>iPower</td>
+  </tr>
+  <tr>
+    <td>智能金融</td>
+    <td>iFinance</td>
+  </tr>
+  <tr>
+    <td>智能零售</td>
+    <td>iRetail</td>
+  </tr>
+  <tr>
+    <td>机器翻译服务</td>
+    <td>MTS</td>
+  </tr>
+  <tr>
+    <td>AI开发平台</td>
+    <td>ModelArts</td>
+  </tr>
+  <tr>
+    <td>Huawei HiLens</td>
+    <td>HiLens</td>
+  </tr>
+  <tr>
+    <td>视频指纹</td>
+    <td>VFP</td>
+  </tr>
+  <tr>
+    <td>视频编辑</td>
+    <td>VCP</td>
+  </tr>
+  <tr>
+    <td>视频标签</td>
+    <td>VCT</td>
+  </tr>
+  <tr>
+    <td>机器翻译</td>
+    <td>MT</td>
+  </tr>
+  <tr>
+    <td>定制语音识别</td>
+    <td>ASRC</td>
+  </tr>
+  <tr>
+    <td>知识图谱</td>
+    <td>KG</td>
+  </tr>
+  <tr>
+    <td>视频分析服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vas">VAS</a></td>
+  </tr>
+  <tr>
+    <td>语音交互服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sis">SIS</a></td>
+  </tr>
+  <tr>
+    <td>录音文件识别</td>
+    <td>LASR</td>
+  </tr>
+  <tr>
+    <td>语音合成</td>
+    <td>TTS</td>
+  </tr>
+  <tr>
+    <td>实时语音识别</td>
+    <td>RASR</td>
+  </tr>
+  <tr>
+    <td>一句话识别</td>
+    <td>ASR</td>
+  </tr>
+  <tr>
+    <td>网络智能体</td>
+    <td>NAIE</td>
+  </tr>
+  <tr>
+    <td>人证核身服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ivs">IVS</a></td>
+  </tr>
+  <tr>
+    <td>园区智能体</td>
+    <td>CampusGo</td>
+  </tr>
+  <tr>
+    <td>视频内容审核</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vcm">VCM</a></td>
+  </tr>
+  <tr>
+    <td>医疗智能体</td>
+    <td>eiHealth</td>
+  </tr>
+  <tr>
+    <td>运筹优化算法服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_oroas">OROAS</a></td>
+  </tr>
+  <tr>
+    <td>盘古大模型</td>
+    <td>PanguLargeModels</td>
+  </tr>
+  <tr>
+    <td>天筹求解器服务</td>
+    <td>OptVerse</td>
+  </tr>
+  <tr>
+    <td>盘古大模型-应用开发</td>
+    <td>AppKit</td>
+  </tr>
+  <tr>
+    <td>八爪鱼自动驾驶云服务</td>
+    <td>Octopus</td>
+  </tr>
+  <tr>
+    <td>视频智能分析服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vias">VIAS</a></td>
+  </tr>
+  <tr>
+    <td>大模型开发平台</td>
+    <td>MaStudio</td>
+  </tr>
+  <tr>
+    <td>数智融合计算服务</td>
+    <td>DataArtsFabric</td>
+  </tr>
+  <tr>
+    <td rowspan="4">工业软件</td>
+    <td>工业数字主线云服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_idt">IDT</a></td>
+  </tr>
+  <tr>
+    <td>工业数字模型驱动引擎</td>
+    <td>iDME</td>
+  </tr>
+  <tr>
+    <td>工业数字模型驱动引擎(典型API体验)</td>
+    <td>iDMEClassicAPI</td>
+  </tr>
+  <tr>
+    <td>硬件开发工具链平台云服务</td>
+    <td>CraftArtsIPDCenter</td>
+  </tr>
+  <tr>
+    <td rowspan="1">企业网络</td>
+    <td>视频加速服务</td>
+    <td>VGVAS</td>
+  </tr>
+  <tr>
+    <td rowspan="10">视频</td>
+    <td>媒体转码</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mpc">MPC</a></td>
+  </tr>
+  <tr>
+    <td>视频点播</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vod">VOD</a></td>
+  </tr>
+  <tr>
+    <td>视频直播</td>
+    <td>Live</td>
+  </tr>
+  <tr>
+    <td>融合视频云服务</td>
+    <td>CVCS</td>
+  </tr>
+  <tr>
+    <td>云VR</td>
+    <td>CloudVR</td>
+  </tr>
+  <tr>
+    <td>媒体智能</td>
+    <td>Media AI</td>
+  </tr>
+  <tr>
+    <td>华为好望云服务</td>
+    <td>IVM</td>
+  </tr>
+  <tr>
+    <td>华为云实时音视频</td>
+    <td>CloudRTC</td>
+  </tr>
+  <tr>
+    <td>视频接入服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_vis">VIS</a></td>
+  </tr>
+  <tr>
+    <td>数字内容生产线</td>
+    <td>MetaStudio</td>
+  </tr>
+  <tr>
+    <td rowspan="10">应用中间件</td>
+    <td>微服务引擎</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cse">CSE</a></td>
+  </tr>
+  <tr>
+    <td>API网关</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_apig">APIG</a></td>
+  </tr>
+  <tr>
+    <td>分布式消息服务 Kafka</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kafka">Kafka</a></td>
+  </tr>
+  <tr>
+    <td>分布式消息服务 RocketMQ</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rocketmq">RocketMQ</a></td>
+  </tr>
+  <tr>
+    <td>分布式消息服务 RabbitMQ</td>
+    <td>RabbitMQ</td>
+  </tr>
+  <tr>
+    <td>分布式缓存服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dcs">DCS</a></td>
+  </tr>
+  <tr>
+    <td>分布式缓存服务Redis</td>
+    <td>DCSforRedis</td>
+  </tr>
+  <tr>
+    <td>分布式缓存服务Memcached</td>
+    <td>DCSforMemcached</td>
+  </tr>
+  <tr>
+    <td>事件网格</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_eg">EG</a></td>
+  </tr>
+  <tr>
+    <td>多活高可用服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mas">MAS</a></td>
+  </tr>
+  <tr>
+    <td rowspan="15">存储</td>
+    <td>对象存储服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_obs">OBS</a></td>
+  </tr>
+  <tr>
+    <td>云硬盘</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_evs">EVS</a></td>
+  </tr>
+  <tr>
+    <td>云硬盘备份</td>
+    <td>VBS</td>
+  </tr>
+  <tr>
+    <td>云服务器备份</td>
+    <td>CSBS</td>
+  </tr>
+  <tr>
+    <td>存储容灾服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sdrs">SDRS</a></td>
+  </tr>
+  <tr>
+    <td>弹性文件服务(SFS Turbo)</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sfsturbo">SFSTurbo</a></td>
+  </tr>
+  <tr>
+    <td>数据快递服务</td>
+    <td>DES</td>
+  </tr>
+  <tr>
+    <td>直播加速</td>
+    <td>LSA</td>
+  </tr>
+  <tr>
+    <td>云备份</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbr">CBR</a></td>
+  </tr>
+  <tr>
+    <td>专属分布式存储服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dss">DSS</a></td>
+  </tr>
+  <tr>
+    <td>专属企业存储服务</td>
+    <td>DESS</td>
+  </tr>
+  <tr>
+    <td>数据工坊</td>
+    <td>DWR</td>
+  </tr>
+  <tr>
+    <td>地图数据服务</td>
+    <td>MapDS</td>
+  </tr>
+  <tr>
+    <td>键值存储服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kvs">KVS</a></td>
+  </tr>
+  <tr>
+    <td>知识湖存储</td>
+    <td>LMS</td>
+  </tr>
+  <tr>
+    <td rowspan="15">数据库</td>
+    <td>云数据库</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_rds">RDS</a></td>
+  </tr>
+  <tr>
+    <td>文档数据库服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dds">DDS</a></td>
+  </tr>
+  <tr>
+    <td>分布式数据库中间件</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ddm">DDM</a></td>
+  </tr>
+  <tr>
+    <td>数据复制服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_drs">DRS</a></td>
+  </tr>
+  <tr>
+    <td>数据管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_das">DAS</a></td>
+  </tr>
+  <tr>
+    <td>多模NoSQL服务</td>
+    <td>NoSQL</td>
+  </tr>
+  <tr>
+    <td>云数据库产品总览</td>
+    <td>DBS</td>
+  </tr>
+  <tr>
+    <td>云数据库 TaurusDB</td>
+    <td>TaurusDB</td>
+  </tr>
+  <tr>
+    <td>云数据库 GeminiDB</td>
+    <td>GeminiDB</td>
+  </tr>
+  <tr>
+    <td>GeminiDB Cassandra 接口</td>
+    <td>GaussDBforCassandra</td>
+  </tr>
+  <tr>
+    <td>GeminiDB Mongo 接口</td>
+    <td>GaussDBforMongo</td>
+  </tr>
+  <tr>
+    <td>GeminiDB Redis接口</td>
+    <td>GaussDBforRedis</td>
+  </tr>
+  <tr>
+    <td>GeminiDB Influx 接口</td>
+    <td>GaussDBforInflux</td>
+  </tr>
+  <tr>
+    <td>云数据库 GaussDB</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_gaussdbforopengauss">GaussDBforopenGauss</a></td>
+  </tr>
+  <tr>
+    <td>数据库和应用迁移 UGO</td>
+    <td>UGO</td>
+  </tr>
+  <tr>
+    <td rowspan="17">安全与合规</td>
+    <td>Web应用防火墙</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_waf">WAF</a></td>
+  </tr>
+  <tr>
+    <td>DDoS高防</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_aad">AAD</a></td>
+  </tr>
+  <tr>
+    <td>Anti-DDoS流量清洗</td>
+    <td>Anti-DDoS</td>
+  </tr>
+  <tr>
+    <td>企业主机安全</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_hss">HSS</a></td>
+  </tr>
+  <tr>
+    <td>数据加密服务-密钥管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kms">KMS</a></td>
+  </tr>
+  <tr>
+    <td>数据加密服务-凭据管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_csms">CSMS</a></td>
+  </tr>
+  <tr>
+    <td>数据加密服务-密钥对管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_kps">KPS</a></td>
+  </tr>
+  <tr>
+    <td>数据库安全服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dbss">DBSS</a></td>
+  </tr>
+  <tr>
+    <td>安全专家服务</td>
+    <td>SES</td>
+  </tr>
+  <tr>
+    <td>态势感知</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_sa">SA</a></td>
+  </tr>
+  <tr>
+    <td>SSL证书管理</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_scm">SCM</a></td>
+  </tr>
+  <tr>
+    <td>云堡垒机</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cbh">CBH</a></td>
+  </tr>
+  <tr>
+    <td>容器安全服务</td>
+    <td>CGS</td>
+  </tr>
+  <tr>
+    <td>数据安全中心</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dsc">DSC</a></td>
+  </tr>
+  <tr>
+    <td>云证书管理服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_ccm">CCM</a></td>
+  </tr>
+  <tr>
+    <td>云防火墙</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_cfw">CFW</a></td>
+  </tr>
+  <tr>
+    <td>安全云脑</td>
+    <td>SecMaster</td>
+  </tr>
+  <tr>
+    <td rowspan="14">大数据</td>
+    <td>数据接入服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dis">DIS</a></td>
+  </tr>
+  <tr>
+    <td>数据仓库服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dws">DWS</a></td>
+  </tr>
+  <tr>
+    <td>云搜索服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_css">CSS</a></td>
+  </tr>
+  <tr>
+    <td>数据湖工厂</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dlf">DLF</a></td>
+  </tr>
+  <tr>
+    <td>实时流计算服务</td>
+    <td>CS</td>
+  </tr>
+  <tr>
+    <td>MapReduce服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_mrs">MRS</a></td>
+  </tr>
+  <tr>
+    <td>数据湖探索</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dli">DLI</a></td>
+  </tr>
+  <tr>
+    <td>批处理服务</td>
+    <td>Batch</td>
+  </tr>
+  <tr>
+    <td>数据湖治理中心</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_dgc">DGC</a></td>
+  </tr>
+  <tr>
+    <td>表格存储服务</td>
+    <td>CloudTable</td>
+  </tr>
+  <tr>
+    <td>数据治理中心</td>
+    <td>DataArtsStudio</td>
+  </tr>
+  <tr>
+    <td>湖仓构建</td>
+    <td>LakeFormation</td>
+  </tr>
+  <tr>
+    <td>可信智能计算服务</td>
+    <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_services_server/mcp_server_tics">TICS</a></td>
+  </tr>
+  <tr>
+    <td>智能数据洞察</td>
+    <td>DataArtsInsight</td>
+  </tr>
+  <tr>
+    <td rowspan="1">支持与服务</td>
+    <td>工单管理</td>
+    <td>OSM</td>
+  </tr>
+</table>
+</body>
+</html>
 
 
 
