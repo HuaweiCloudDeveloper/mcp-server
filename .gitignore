@@ -5,3 +5,4 @@ dist
 test.py
 /.venv/
 .vscode
+*.egg-info

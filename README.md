@@ -22,7 +22,7 @@ The video demonstrates using Cline with Huawei MCP Server to create a new ECS in
 
 Install the Python environment in advance. Since Python 3.4 and 2.7.9, pip has been installed with Python as a standard component.
 
-`pip install -r assets/requirements.txt`
+`pip install -e .`
 
 ### 2. Environment variable settings
 

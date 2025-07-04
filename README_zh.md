@@ -22,7 +22,7 @@
 
 提前安装python环境，自Python 3.4和2.7.9版本起，pip已经作为标准组件与Python一同安装。
 
-`pip install -r assets/requirements.txt`
+`pip install -e .`
 
 ### 2. 环境变量设置
 
