@@ -256,6 +256,8 @@ def load_config(config_path: Union[str, Path]) -> MCPConfig:
             service_code=config_dict.get("service_code", ""),
             transport=config_dict.get("transport", ""),
             sse_port=config_dict.get("sse_port", 8888),
+            ak=config_dict.get("ak", ""),
+            sk=config_dict.get("sk", ""),
         )
 
         env_mapping = [
