@@ -14,25 +14,33 @@ from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
 from starlette.routing import Mount, Route
 
-from .hwc_tools import create_api_client, build_http_info, load_openapi, filter_parameters, load_config
+from .hwc_tools import (
+    create_api_client,
+    build_http_info,
+    load_openapi,
+    filter_parameters,
+    load_config,
+)
 from .model import TopResponseModel, MCPConfig
 from .openapi import OpenAPIToToolsConverter
 from .variable import TRANSPORT_SSE
 
-auth_context: ContextVar[Optional[dict[str, Any]]] = ContextVar("auth_context", default=None)
+auth_context: ContextVar[Optional[dict[str, Any]]] = ContextVar(
+    "auth_context", default=None
+)
 
 logger = get_logger(__name__)
 configure_logging("INFO")
 
 server_config: Optional[MCPConfig] = None
-config_folder = Path(__file__).parent / 'config'
-config_file = 'config.yaml'
+config_folder = Path(__file__).parent / "config"
+config_file = "config.yaml"
 
 
 async def serve() -> None:
     mcp_tools = []
     # 加载OpenAPI
-    openapi_path = Path(config_folder) / f'{server_config.service_code}.json'
+    openapi_path = Path(config_folder) / f"{server_config.service_code}.json"
     openapi_dict = load_openapi(openapi_path)
     try:
         mcp_tools = OpenAPIToToolsConverter(openapi_dict).convert()
@@ -40,7 +48,7 @@ async def serve() -> None:
         logger.error(f"加载OpenAPI转换MCP工具失败: {e}")
         raise
 
-    server = Server(f'hwc-mcp-server-{server_config.service_code.lower()}')
+    server = Server(f"hwc-mcp-server-{server_config.service_code.lower()}")
 
     @server.list_tools()
     async def list_tools() -> list[Tool]:
@@ -48,10 +56,10 @@ async def serve() -> None:
 
     @server.call_tool()
     async def call_tool(
-            name: str, arguments: dict
+        name: str, arguments: dict
     ) -> Sequence[TextContent | ImageContent | EmbeddedResource]:
         result: TopResponseModel
-        region = arguments.get('region') or "cn-north-4"
+        region = arguments.get("region") or "cn-north-4"
         product_short = openapi_dict["info"]["title"].lower()
 
         ak = server_config.ak
@@ -60,7 +68,7 @@ async def serve() -> None:
         if not ak or not sk:
             error_msg = {
                 "code": "MISSING_CREDENTIALS",
-                "message": "HUAWEI_ACCESS_KEY or HUAWEI_SECRET_KEY not configured"
+                "message": "HUAWEI_ACCESS_KEY or HUAWEI_SECRET_KEY not configured",
             }
             return [TextContent(type="text", text=json.dumps(error_msg, indent=2))]
 
@@ -87,7 +95,7 @@ async def serve() -> None:
 
         async def handle_sse_connection(request):
             async with sse.connect_sse(
-                    request.scope, request.receive, request._send
+                request.scope, request.receive, request._send
             ) as streams:
                 await server.run(
                     streams[0], streams[1], server.create_initialization_options()
@@ -121,6 +129,6 @@ async def serve() -> None:
 
 if __name__ == "__main__":
     # 获取全局配置
-    config_folder = Path(__file__).parent / 'config'
-    config_file = 'config.yaml'
+    config_folder = Path(__file__).parent / "config"
+    config_file = "config.yaml"
     server_config = load_config(config_folder / config_file)

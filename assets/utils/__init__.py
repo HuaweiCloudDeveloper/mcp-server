@@ -8,8 +8,8 @@ def main():
     """Huawei Cloud MCP Server"""
     import asyncio
 
-    server.config_folder = Path(__file__).parent / 'config'
-    server.config_file = 'config.yaml'
+    server.config_folder = Path(__file__).parent / "config"
+    server.config_file = "config.yaml"
     server.server_config = load_config(Path(server.config_folder) / server.config_file)
     asyncio.run(server.serve())
 

@@ -1,7 +1,7 @@
 # mcp-server
 
 [![GitHub License](https://img.shields.io/github/license/manusa/kubernetes-mcp-server)](https://github.com/manusa/kubernetes-mcp-server/blob/main/LICENSE)
-[![CI](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/lint.yaml/badge.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml)
+[![CI](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml/badge.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/HuaweiCloudDeveloper/mcp-server)](https://github.com/HuaweiCloudDeveloper/mcp-server/commits/main)
 [![Language](https://img.shields.io/github/languages/top/HuaweiCloudDeveloper/mcp-server)](https://github.com/HuaweiCloudDeveloper/mcp-server)
@@ -22,7 +22,7 @@ The video demonstrates using Cline with Huawei MCP Server to create a new ECS in
 
 Install the Python environment in advance. Since Python 3.4 and 2.7.9, pip has been installed with Python as a standard component.
 
-`pip install -r assets/requirements.txt`
+`pip install -e .`
 
 ### 2. Environment variable settings
 

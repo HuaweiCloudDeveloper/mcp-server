@@ -24,9 +24,7 @@ class MCPConfig:
 
 class TopResponseModel(BaseModel):
     model_config = ConfigDict(
-        extra="allow",
-        from_attributes=True,
-        arbitrary_types_allowed=True
+        extra="allow", from_attributes=True, arbitrary_types_allowed=True
     )
 
     def __init__(self, **data):
