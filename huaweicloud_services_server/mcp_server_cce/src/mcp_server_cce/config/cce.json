@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CCE-集群升级",
     "title" : "CCE",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cce"
   },
   "servers" : [ {
     "url" : "/"
