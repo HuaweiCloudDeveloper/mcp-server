@@ -3,7 +3,8 @@
   "info" : {
     "description" : "NAT-公网NAT网关",
     "title" : "NAT",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "nat"
   },
   "servers" : [ {
     "url" : "/"

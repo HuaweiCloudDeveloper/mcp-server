@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CTS-其它接口",
     "title" : "CTS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cts"
   },
   "servers" : [ {
     "url" : "/"

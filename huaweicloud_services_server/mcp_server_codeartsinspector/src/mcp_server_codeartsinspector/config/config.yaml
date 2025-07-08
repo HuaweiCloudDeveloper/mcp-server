@@ -1,6 +1,6 @@
 service_code: codeartsinspector
 transport: sse  # 支持 stdio 和  sse
-sse_port:  # sse 模式需要设定端口
+sse_port:  8025 # sse 模式需要设定端口
 
  
 # 配置文件

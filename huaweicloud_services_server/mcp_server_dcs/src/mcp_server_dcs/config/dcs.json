@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DCS-实例管理",
     "title" : "DCS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dcs"
   },
   "servers" : [ {
     "url" : "/"

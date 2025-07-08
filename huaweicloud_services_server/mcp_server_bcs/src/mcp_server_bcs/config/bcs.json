@@ -3,7 +3,8 @@
   "info" : {
     "description" : "BCS-BCS管理",
     "title" : "BCS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "bcs"
   },
   "servers" : [ {
     "url" : "/"

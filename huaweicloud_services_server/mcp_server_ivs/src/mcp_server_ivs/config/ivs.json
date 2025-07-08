@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IVS-人证核身标准版(三要素)",
     "title" : "IVS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ivs"
   },
   "servers" : [ {
     "url" : "/"

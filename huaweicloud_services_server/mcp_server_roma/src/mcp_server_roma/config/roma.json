@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ROMA-域名管理",
     "title" : "ROMA",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "roma"
   },
   "servers" : [ {
     "url" : "/"

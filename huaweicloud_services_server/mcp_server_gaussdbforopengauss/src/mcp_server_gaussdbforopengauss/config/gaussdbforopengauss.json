@@ -3,7 +3,8 @@
   "info" : {
     "description" : "GaussDBforopenGauss-引擎版本和规格",
     "title" : "GaussDBforopenGauss",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "gaussdb-opengauss"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DNS-记录集管理(待废弃)",
     "title" : "DNS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dns"
   },
   "servers" : [ {
     "url" : "/"

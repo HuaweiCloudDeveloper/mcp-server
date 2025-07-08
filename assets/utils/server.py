@@ -60,7 +60,7 @@ async def serve() -> None:
     ) -> Sequence[TextContent | ImageContent | EmbeddedResource]:
         result: TopResponseModel
         region = arguments.get("region") or "cn-north-4"
-        product_short = openapi_dict["info"]["title"].lower()
+        product_short = openapi_dict["info"]["x-host_prefix"].lower()
 
         ak = server_config.ak
         sk = server_config.sk

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "GES-图管理API",
     "title" : "GES",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "geip"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ER-路由",
     "title" : "ER",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "er"
   },
   "servers" : [ {
     "url" : "/"

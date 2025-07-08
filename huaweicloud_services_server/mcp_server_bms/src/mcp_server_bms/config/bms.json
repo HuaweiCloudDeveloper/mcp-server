@@ -3,7 +3,8 @@
   "info" : {
     "description" : "BMS-裸金属服务器云硬盘管理",
     "title" : "BMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "bms"
   },
   "servers" : [ {
     "url" : "/"

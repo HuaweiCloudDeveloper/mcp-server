@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IEF-边缘节点组管理",
     "title" : "IEF",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ief"
   },
   "servers" : [ {
     "url" : "/"

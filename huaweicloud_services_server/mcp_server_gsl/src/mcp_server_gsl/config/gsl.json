@@ -1,9 +1,10 @@
 
-  "openapi" : "3.0.0",
+{ "openapi" : "3.0.0",
   "info" : {
     "description" : "GSL-标签管理",
     "title" : "GSL",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "gsl"
   },
   "servers" : [ {
     "url" : "/"

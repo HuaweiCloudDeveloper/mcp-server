@@ -3,7 +3,8 @@
   "info" : {
     "description" : "VCM-长语音内容审核",
     "title" : "VCM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "iva"
   },
   "servers" : [ {
     "url" : "/"

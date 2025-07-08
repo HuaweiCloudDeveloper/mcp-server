@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DBSS-审计Agent",
     "title" : "DBSS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dbss"
   },
   "servers" : [ {
     "url" : "/"

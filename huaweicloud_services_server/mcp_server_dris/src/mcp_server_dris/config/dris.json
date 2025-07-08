@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DRIS-即时交通事件分发",
     "title" : "DRIS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ocv2x-api"
   },
   "servers" : [ {
     "url" : "/"

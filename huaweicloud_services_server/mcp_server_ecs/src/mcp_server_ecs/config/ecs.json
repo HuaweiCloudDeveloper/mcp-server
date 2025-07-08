@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ECS-规格管理",
     "title" : "ECS",
-    "version" : "2025-06-09"
+    "version" : "2025-06-09",
+    "x-host_prefix": "ecs"
   },
   "servers" : [ {
     "url" : "/"

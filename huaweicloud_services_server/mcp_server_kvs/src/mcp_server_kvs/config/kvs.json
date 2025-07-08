@@ -3,7 +3,8 @@
   "info" : {
     "description" : "KVS-KV接口",
     "title" : "KVS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "kvs"
   },
   "servers" : [ {
     "url" : "/"

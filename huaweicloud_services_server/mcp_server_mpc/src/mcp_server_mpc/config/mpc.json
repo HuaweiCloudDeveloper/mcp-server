@@ -3,7 +3,8 @@
   "info" : {
     "description" : "MPC-视频解析接口",
     "title" : "MPC",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "mpc"
   },
   "servers" : [ {
     "url" : "/"

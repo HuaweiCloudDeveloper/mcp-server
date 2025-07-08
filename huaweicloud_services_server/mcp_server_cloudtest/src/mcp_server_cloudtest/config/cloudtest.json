@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CloudTest-测试计划管理",
     "title" : "CloudTest",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cloudtest-ext"
   },
   "servers" : [ {
     "url" : "/"

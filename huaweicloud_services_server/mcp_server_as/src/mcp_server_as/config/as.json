@@ -3,7 +3,8 @@
   "info" : {
     "description" : "AS-配额管理",
     "title" : "AS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "as"
   },
   "servers" : [ {
     "url" : "/"

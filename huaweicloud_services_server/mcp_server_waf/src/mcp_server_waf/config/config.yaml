@@ -1,1 +1,5 @@
-# Configuration file for mcp_server_waf
+service_code: waf
+transport: sse  # 支持 stdio 和  sse
+sse_port: 8889 # sse 模式需要设定端口
+
+ 

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CodeArtsInspector-主机组管理",
     "title" : "CodeArtsInspector",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "vss"
   },
   "servers" : [ {
     "url" : "/"

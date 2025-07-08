@@ -3,7 +3,8 @@
   "info" : {
     "description" : "MSGSMS-短信签名API",
     "title" : "MSGSMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "msgsms"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "VOD-水印模板管理",
     "title" : "VOD",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "vod"
   },
   "servers" : [ {
     "url" : "/"

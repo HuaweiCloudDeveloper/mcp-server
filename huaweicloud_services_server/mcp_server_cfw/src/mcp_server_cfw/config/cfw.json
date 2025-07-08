@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CFW-黑白名单管理",
     "title" : "CFW",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cfw"
   },
   "servers" : [ {
     "url" : "/"

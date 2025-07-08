@@ -1,5 +1,0 @@
-service_code: fgs
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8861 # sse 模式需要设定端口
-
- 

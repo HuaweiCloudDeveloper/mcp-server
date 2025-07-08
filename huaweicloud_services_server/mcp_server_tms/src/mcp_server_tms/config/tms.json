@@ -3,7 +3,8 @@
   "info" : {
     "description" : "TMS-预定义标签操作",
     "title" : "TMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "tms"
   },
   "servers" : [ {
     "url" : "/"

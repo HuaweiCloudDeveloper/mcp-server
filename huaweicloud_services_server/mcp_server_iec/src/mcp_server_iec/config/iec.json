@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IEC-安全组",
     "title" : "IEC",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "iecs"
   },
   "servers" : [ {
     "url" : "/"

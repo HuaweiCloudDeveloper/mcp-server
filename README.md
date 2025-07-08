@@ -66,7 +66,7 @@ Directly enter the directory path of the sub-project, such as the run.py file un
     <th>Product Short</th>
   </tr>
   <tr>
-    <td rowspan="1">Cloud Store</td>
+    <td rowspan="1">KooGallery</td>
     <td>Products and Orders</td>
     <td><a href="https://github.com/HuaweiCloudDeveloper/mcp-server/tree/master-dev/huaweicloud_marketplace_server">Product&Order</a></td>
   </tr>

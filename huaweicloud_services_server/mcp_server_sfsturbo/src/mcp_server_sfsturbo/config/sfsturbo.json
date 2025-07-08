@@ -3,7 +3,8 @@
   "info" : {
     "description" : "SFSTurbo-文件系统管理",
     "title" : "SFSTurbo",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "sfs-turbo"
   },
   "servers" : [ {
     "url" : "/"

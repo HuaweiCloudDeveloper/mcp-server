@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CCM-私有CA管理",
     "title" : "CCM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ccm"
   },
   "servers" : [ {
     "url" : "/"

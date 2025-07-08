@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CES-告警规则管理",
     "title" : "CES",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ces"
   },
   "servers" : [ {
     "url" : "/"

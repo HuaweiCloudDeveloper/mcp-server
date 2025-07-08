@@ -3,7 +3,8 @@
   "info" : {
     "description" : "RAM-绑定的资源使用者和共享资源",
     "title" : "RAM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ram"
   },
   "servers" : [ {
     "url" : "/"

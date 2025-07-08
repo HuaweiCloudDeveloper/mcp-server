@@ -3,7 +3,8 @@
   "info" : {
     "description" : "OROAS-OROAS Service",
     "title" : "OROAS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "oroas"
   },
   "servers" : [ {
     "url" : "/"

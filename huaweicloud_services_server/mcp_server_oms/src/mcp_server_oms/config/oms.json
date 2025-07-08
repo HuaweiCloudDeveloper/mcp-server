@@ -3,7 +3,8 @@
   "info" : {
     "description" : "OMS-迁移任务组管理",
     "title" : "OMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ocr"
   },
   "servers" : [ {
     "url" : "/"

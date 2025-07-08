@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DSS-DSS管理",
     "title" : "DSS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dss"
   },
   "servers" : [ {
     "url" : "/"

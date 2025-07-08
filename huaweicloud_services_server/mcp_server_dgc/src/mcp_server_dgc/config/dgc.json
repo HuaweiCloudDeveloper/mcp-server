@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DGC-连接相关的API",
     "title" : "DGC",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dayu"
   },
   "servers" : [ {
     "url" : "/"

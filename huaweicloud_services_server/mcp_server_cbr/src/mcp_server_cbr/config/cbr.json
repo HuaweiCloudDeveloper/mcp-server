@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CBR-组织策略",
     "title" : "CBR",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cbr"
   },
   "servers" : [ {
     "url" : "/"

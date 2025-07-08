@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IDT-生命周期操作类型",
     "title" : "IDT",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dme"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "Kafka-标签管理",
     "title" : "Kafka",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dms"
   },
   "servers" : [ {
     "url" : "/"

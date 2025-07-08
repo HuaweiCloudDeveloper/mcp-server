@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DSC-敏感数据发现",
     "title" : "DSC",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "sdg"
   },
   "servers" : [ {
     "url" : "/"

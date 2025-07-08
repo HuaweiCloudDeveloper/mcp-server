@@ -3,7 +3,9 @@
   "info" : {
     "description" : "VIS-凭证管理",
     "title" : "VIS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "vis"
+
   },
   "servers" : [ {
     "url" : "/"

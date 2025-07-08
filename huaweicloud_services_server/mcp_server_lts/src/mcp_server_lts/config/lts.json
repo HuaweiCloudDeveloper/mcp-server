@@ -3,7 +3,8 @@
   "info" : {
     "description" : "LTS-SDK流式消费开放API",
     "title" : "LTS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "lts"
   },
   "servers" : [ {
     "url" : "/"
