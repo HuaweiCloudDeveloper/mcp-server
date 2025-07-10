@@ -22,7 +22,7 @@ from .hwc_tools import (
     build_http_info,
     load_openapi,
     filter_parameters,
-    load_config
+    load_config,
 )
 from .model import TopResponseModel, MCPConfig
 from .openapi import OpenAPIToToolsConverter
@@ -61,17 +61,21 @@ class MCPServer:
                 raise ValueError("无法加载服务器配置")
 
             # 加载OpenAPI规范
-            openapi_path = Path(self.config_path.parent) / f'{self.config.service_code}.json'
+            openapi_path = (
+                Path(self.config_path.parent) / f"{self.config.service_code}.json"
+            )
             self.openapi_dict = load_openapi(openapi_path)
             if not self.openapi_dict:
-                raise ValueError(f"加载OpenAPI文档失败，请检查{openapi_path}文档内容是否有误")
+                raise ValueError(
+                    f"加载OpenAPI文档失败，请检查{openapi_path}文档内容是否有误"
+                )
 
             # 转换为MCP工具
             self.tools = OpenAPIToToolsConverter(self.openapi_dict).convert()
             logger.info(f"成功加载 {len(self.tools)} 个工具")
 
             # 初始化MCP服务器实例
-            self.server = Server(f'hwc-mcp-server-{self.config.service_code.lower()}')
+            self.server = Server(f"hwc-mcp-server-{self.config.service_code.lower()}")
 
             # 注册工具处理函数
             self._register_tool_handlers()
@@ -87,7 +91,7 @@ class MCPServer:
         async with self._clients_lock:
             self.active_clients[client_id] = {
                 "request": request,
-                "connected_at": time.time()
+                "connected_at": time.time(),
             }
             logger.info(f"客户端注册成功: {client_id}")
 
@@ -110,9 +114,11 @@ class MCPServer:
             return self.tools
 
         @self.server.call_tool()
-        async def call_tool(name: str, arguments: dict) -> list[TextContent | ImageContent | EmbeddedResource]:
+        async def call_tool(
+            name: str, arguments: dict
+        ) -> list[TextContent | ImageContent | EmbeddedResource]:
             result: TopResponseModel
-            region = arguments.get('region') or "cn-north-4"
+            region = arguments.get("region") or "cn-north-4"
             product_short = self.openapi_dict["info"]["x-host_prefix"].lower()
 
             ak = self.config.ak
@@ -121,7 +127,7 @@ class MCPServer:
             if not ak or not sk:
                 error_msg = {
                     "code": "MISSING_CREDENTIALS",
-                    "message": "HUAWEI_ACCESS_KEY or HUAWEI_SECRET_KEY not configured"
+                    "message": "HUAWEI_ACCESS_KEY or HUAWEI_SECRET_KEY not configured",
                 }
                 return [TextContent(type="text", text=json.dumps(error_msg, indent=2))]
 
@@ -129,7 +135,9 @@ class MCPServer:
             try:
                 arguments = filter_parameters(arguments)
 
-                http_info = build_http_info(name, arguments, self.openapi_dict, self.tools)
+                http_info = build_http_info(
+                    name, arguments, self.openapi_dict, self.tools
+                )
 
                 response = client.do_http_request(**http_info)
                 response_data = response.json() if response and response.content else {}
@@ -174,7 +182,7 @@ class MCPServer:
 
                 # 使用MCP的SSE连接工具建立连接
                 async with sse.connect_sse(
-                        request.scope, request.receive, request._send
+                    request.scope, request.receive, request._send
                 ) as streams:
                     input_stream, output_stream = streams
 
@@ -182,7 +190,7 @@ class MCPServer:
                         await self.server.run(
                             input_stream,
                             output_stream,
-                            self.server.create_initialization_options()
+                            self.server.create_initialization_options(),
                         )
 
                     except asyncio.CancelledError:
@@ -200,7 +208,7 @@ class MCPServer:
                             try:
                                 error_msg = {
                                     "event": "error",
-                                    "data": {"message": str(e), "code": 500}
+                                    "data": {"message": str(e), "code": 500},
                                 }
                                 await output_stream.send(json.dumps(error_msg))
                             except Exception as send_error:
@@ -218,18 +226,20 @@ class MCPServer:
 
                 return JSONResponse(
                     {"error": "Failed to establish SSE connection", "details": str(e)},
-                    status_code=500
+                    status_code=500,
                 )
 
             # 如果没有异常，返回成功响应
-            return JSONResponse({"status": "SSE connection closed normally"}, status_code=200)
+            return JSONResponse(
+                {"status": "SSE connection closed normally"}, status_code=200
+            )
 
         app = Starlette(
             routes=[
                 Route("/sse", endpoint=handle_sse_connection),
                 Mount("/messages/", app=sse.handle_post_message),
             ],
-            debug=True
+            debug=True,
         )
 
         # 添加CORS中间件
@@ -248,7 +258,5 @@ class MCPServer:
         logger.info("启动STDIO服务器")
         async with stdio_server() as streams:
             await self.server.run(
-                streams[0],
-                streams[1],
-                self.server.create_initialization_options()
+                streams[0], streams[1], self.server.create_initialization_options()
             )
