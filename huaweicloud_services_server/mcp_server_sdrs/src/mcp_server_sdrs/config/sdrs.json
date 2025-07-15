@@ -3,7 +3,8 @@
   "info" : {
     "description" : "SDRS-容灾演练",
     "title" : "SDRS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "sdrs"
   },
   "servers" : [ {
     "url" : "/"

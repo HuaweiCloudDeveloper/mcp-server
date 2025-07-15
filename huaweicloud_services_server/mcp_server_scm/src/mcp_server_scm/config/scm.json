@@ -3,7 +3,8 @@
   "info" : {
     "description" : "SCM-证书申请管理",
     "title" : "SCM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "scm"
   },
   "servers" : [ {
     "url" : "/"

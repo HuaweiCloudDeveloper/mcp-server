@@ -3,7 +3,8 @@
   "info" : {
     "description" : "RGC-Landing Zone治理",
     "title" : "RGC",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "rgc"
   },
   "servers" : [ {
     "url" : "/"

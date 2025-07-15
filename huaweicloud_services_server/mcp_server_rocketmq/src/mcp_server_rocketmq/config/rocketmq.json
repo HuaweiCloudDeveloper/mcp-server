@@ -3,7 +3,8 @@
   "info" : {
     "description" : "RocketMQ-参数管理",
     "title" : "RocketMQ",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dms"
   },
   "servers" : [ {
     "url" : "/"

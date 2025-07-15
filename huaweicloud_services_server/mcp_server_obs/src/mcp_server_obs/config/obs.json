@@ -3,7 +3,8 @@
   "info" : {
     "description" : "OBS-桶的高级配置",
     "title" : "OBS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "obs"
   },
   "servers" : [ {
     "url" : "/"

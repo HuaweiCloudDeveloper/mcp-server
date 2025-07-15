@@ -3,7 +3,8 @@
   "info" : {
     "description" : "EPS-企业项目管理操作",
     "title" : "EPS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "eps"
   },
   "servers" : [ {
     "url" : "/"

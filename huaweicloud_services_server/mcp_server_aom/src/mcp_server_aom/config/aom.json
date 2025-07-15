@@ -3,7 +3,8 @@
   "info" : {
     "description" : "AOM-应用资源管理(aom2.0接口)",
     "title" : "AOM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "aom"
   },
   "servers" : [ {
     "url" : "/"

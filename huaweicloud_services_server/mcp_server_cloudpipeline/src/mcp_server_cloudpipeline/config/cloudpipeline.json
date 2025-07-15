@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CloudPipeline-流水线管理--新",
     "title" : "CloudPipeline",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cloudpipeline-ext"
   },
   "servers" : [ {
     "url" : "/"

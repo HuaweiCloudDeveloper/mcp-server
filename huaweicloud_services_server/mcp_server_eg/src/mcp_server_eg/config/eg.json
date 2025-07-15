@@ -3,7 +3,8 @@
   "info" : {
     "description" : "EG-事件流管理",
     "title" : "EG",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "eg"
   },
   "servers" : [ {
     "url" : "/"

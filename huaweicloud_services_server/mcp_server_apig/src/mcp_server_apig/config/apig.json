@@ -3,7 +3,8 @@
   "info" : {
     "description" : "APIG-共享版-域名管理",
     "title" : "APIG",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "apig"
   },
   "servers" : [ {
     "url" : "/"

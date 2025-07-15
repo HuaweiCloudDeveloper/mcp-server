@@ -3,7 +3,8 @@
   "info" : {
     "description" : "AAD-DDoS原生高级防护-防护对象管理",
     "title" : "AAD",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "aad"
   },
   "servers" : [ {
     "url" : "/"

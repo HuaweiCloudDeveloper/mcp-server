@@ -3,7 +3,8 @@
   "info" : {
     "description" : "KMS-密钥轮换管理",
     "title" : "KMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "kms"
   },
   "servers" : [ {
     "url" : "/"

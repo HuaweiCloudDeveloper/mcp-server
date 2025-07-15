@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CBS-问答会话",
     "title" : "CBS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cbs-ext"
   },
   "servers" : [ {
     "url" : "/"

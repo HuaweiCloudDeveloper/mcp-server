@@ -3,7 +3,8 @@
   "info" : {
     "description" : "VAS-服务作业管理",
     "title" : "VAS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "iva"
   },
   "servers" : [ {
     "url" : "/"

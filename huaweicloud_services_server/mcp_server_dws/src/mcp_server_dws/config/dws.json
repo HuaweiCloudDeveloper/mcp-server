@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DWS-集群管理",
     "title" : "DWS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dws"
   },
   "servers" : [ {
     "url" : "/"

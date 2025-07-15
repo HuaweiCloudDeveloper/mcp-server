@@ -3,7 +3,8 @@
   "info" : {
     "description" : "TICS-联盟管理",
     "title" : "TICS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "tics"
   },
   "servers" : [ {
     "url" : "/"

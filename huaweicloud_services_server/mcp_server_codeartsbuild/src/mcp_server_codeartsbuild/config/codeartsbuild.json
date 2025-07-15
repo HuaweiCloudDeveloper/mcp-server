@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CodeArtsBuild-编译构建",
     "title" : "CodeArtsBuild",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cloudbuild-ext"
   },
   "servers" : [ {
     "url" : "/"

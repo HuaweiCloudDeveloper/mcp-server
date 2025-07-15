@@ -3,7 +3,8 @@
   "info" : {
     "description" : "OCR-飞机行程单识别",
     "title" : "OCR",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ocr"
   },
   "servers" : [ {
     "url" : "/"

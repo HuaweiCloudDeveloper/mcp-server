@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ImageSearch-删除数据",
     "title" : "ImageSearch",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "mms"
   },
   "servers" : [ {
     "url" : "/"

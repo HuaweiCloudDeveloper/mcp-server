@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CPTS-全局变量管理",
     "title" : "CPTS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cpts"
   },
   "servers" : [ {
     "url" : "/"

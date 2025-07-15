@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CodeArtsDeploy-主机集群管理",
     "title" : "CodeArtsDeploy",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "codearts-deploy"
   },
   "servers" : [ {
     "url" : "/"

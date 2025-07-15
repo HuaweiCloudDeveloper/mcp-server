@@ -3,7 +3,8 @@
   "info" : {
     "description" : "MRS-弹性伸缩接口",
     "title" : "MRS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "mrs"
   },
   "servers" : [ {
     "url" : "/"

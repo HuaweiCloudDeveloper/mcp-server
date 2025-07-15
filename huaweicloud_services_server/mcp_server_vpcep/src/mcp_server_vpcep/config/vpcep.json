@@ -3,7 +3,8 @@
   "info" : {
     "description" : "VPCEP-终端节点服务功能",
     "title" : "VPCEP",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "vpcep"
   },
   "servers" : [ {
     "url" : "/"

@@ -2,8 +2,9 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "DRS-实例操作",
-  "title" : "DRS",
-    "version" : "2025-06-13"
+    "title" : "DRS",
+    "version" : "2025-06-13",
+    "x-host_prefix": "drs"
   },
   "servers" : [ {
     "url" : "/"

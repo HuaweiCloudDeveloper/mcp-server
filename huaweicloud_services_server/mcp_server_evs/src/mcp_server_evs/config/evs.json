@@ -3,7 +3,8 @@
   "info" : {
     "description" : "EVS-云硬盘过户",
     "title" : "EVS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "evs"
   },
   "servers" : [ {
     "url" : "/"

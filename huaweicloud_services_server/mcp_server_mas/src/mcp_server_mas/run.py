@@ -1,16 +1,15 @@
+import asyncio
 from pathlib import Path
 
-from assets.utils import server, load_config
+from assets.utils.server import MCPServer
 
 
-def main():
-    """Huawei Cloud MCP Server"""
-    import asyncio
-    server.config_folder = Path(__file__).parent / 'config'
-    server.config_file = 'config.yaml'
-    server.server_config = load_config(Path(server.config_folder) / server.config_file)
-    asyncio.run(server.serve())
+async def main():
+    config_folder = Path(__file__).parent / "config"
+    config_file = "config.yaml"
+    mcp_server = MCPServer(config_folder / config_file)
+    await mcp_server.run_server()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DIS-通道管理",
     "title" : "DIS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dis"
   },
   "servers" : [ {
     "url" : "/"

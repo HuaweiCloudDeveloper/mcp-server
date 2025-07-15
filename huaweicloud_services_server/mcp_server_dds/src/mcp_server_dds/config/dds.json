@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DDS-参数配置",
     "title" : "DDS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dds"
   },
   "servers" : [ {
     "url" : "/"

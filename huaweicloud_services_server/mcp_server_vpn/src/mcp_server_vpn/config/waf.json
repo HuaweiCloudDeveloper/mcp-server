@@ -3,7 +3,8 @@
   "info" : {
     "description" : "WAF-策略规则管理",
     "title" : "WAF",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "vpcep"
   },
   "servers" : [ {
     "url" : "/"

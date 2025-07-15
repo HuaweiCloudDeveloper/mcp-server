@@ -3,7 +3,8 @@
   "info" : {
     "description" : "GEIP-全域弹性公网IP",
     "title" : "GEIP",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "geip"
   },
   "servers" : [ {
     "url" : "/"

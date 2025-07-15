@@ -1,7 +1,7 @@
 # mcp-server
 
 [![GitHub License](https://img.shields.io/github/license/manusa/kubernetes-mcp-server)](https://github.com/manusa/kubernetes-mcp-server/blob/main/LICENSE)
-[![CI](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/lint.yaml/badge.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml)
+[![CI](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml/badge.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/actions/workflows/ci.yaml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/HuaweiCloudDeveloper/mcp-server/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/HuaweiCloudDeveloper/mcp-server)](https://github.com/HuaweiCloudDeveloper/mcp-server/commits/main)
 [![Language](https://img.shields.io/github/languages/top/HuaweiCloudDeveloper/mcp-server)](https://github.com/HuaweiCloudDeveloper/mcp-server)
@@ -22,7 +22,7 @@
 
 提前安装python环境，自Python 3.4和2.7.9版本起，pip已经作为标准组件与Python一同安装。
 
-`pip install -r assets/requirements.txt`
+`pip install -e .`
 
 ### 2. 环境变量设置
 

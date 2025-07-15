@@ -3,7 +3,8 @@
   "info" : {
     "description" : "STS-鉴权结果查询",
     "title" : "STS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "smn-global"
   },
   "servers" : [ {
     "url" : "/"

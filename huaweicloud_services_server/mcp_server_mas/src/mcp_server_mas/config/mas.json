@@ -3,7 +3,8 @@
   "info" : {
     "description" : "MAS-数据同步任务管理",
     "title" : "MAS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "mas"
   },
   "servers" : [ {
     "url" : "/"

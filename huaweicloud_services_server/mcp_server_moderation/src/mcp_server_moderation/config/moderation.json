@@ -3,7 +3,8 @@
   "info" : {
     "description" : "Moderation-视频内容审核",
     "title" : "Moderation",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "moderation"
   },
   "servers" : [ {
     "url" : "/"

@@ -1,33 +1,7 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-bin/*
-Dockerfile.cross
-
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
-
-# Virtual environments
-.venv
-
-# editor and IDE paraphernalia
 .idea
+dist
+.env
+**/__pycache__
+test.py
+/.venv/
 .vscode
-*.swp
-*.swo
-*~
-.tiltbuild/*
-_artifacts/*
-out/
-.trunk/
-
-# OS Generated
-.DS_Store

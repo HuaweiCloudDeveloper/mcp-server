@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IAM-联邦身份认证管理",
     "title" : "IAM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "iam"
   },
   "servers" : [ {
     "url" : "/"

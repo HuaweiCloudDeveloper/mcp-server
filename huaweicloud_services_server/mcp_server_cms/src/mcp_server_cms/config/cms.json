@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CMS-规格推荐管理",
     "title" : "CMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cms"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "DLF-作业相关的API",
     "title" : "DLF",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "dayu-dlf"
   },
   "servers" : [ {
     "url" : "/"

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "IMS-镜像",
     "title" : "IMS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "ims"
   },
   "servers" : [ {
     "url" : "/"

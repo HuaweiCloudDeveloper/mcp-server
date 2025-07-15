@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ASM-网格接口",
     "title" : "ASM",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "asm"
   },
   "servers" : [ {
     "url" : "/"

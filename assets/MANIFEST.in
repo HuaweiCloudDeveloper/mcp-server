@@ -1,4 +1,0 @@
-# MANIFEST.in
-include README.md
-recursive-include src/mcp_server_huaweicloud/config/config.yaml
-recursive-include src/mcp_server_huaweicloud/config/ *.json  # 包含 src/mcp_server_huaweicloud/config 下的所有 JSON 文件

@@ -3,7 +3,8 @@
   "info" : {
     "description" : "ProjectMan-项目成员",
     "title" : "ProjectMan",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "projectman-ext"
   },
   "servers" : [ {
     "url" : "/"

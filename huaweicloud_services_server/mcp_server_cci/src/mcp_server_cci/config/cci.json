@@ -3,7 +3,8 @@
   "info" : {
     "description" : "CCI-Event",
     "title" : "CCI",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "cci"
   },
   "servers" : [ {
     "url" : "/"

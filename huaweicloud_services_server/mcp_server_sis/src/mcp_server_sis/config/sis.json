@@ -3,7 +3,8 @@
   "info" : {
     "description" : "SIS-语音识别接口",
     "title" : "SIS",
-    "version" : "2025-06-13"
+    "version" : "2025-06-13",
+    "x-host_prefix": "sis-ext"
   },
   "servers" : [ {
     "url" : "/"
