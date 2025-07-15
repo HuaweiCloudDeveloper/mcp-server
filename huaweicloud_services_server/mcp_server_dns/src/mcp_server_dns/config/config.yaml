@@ -1,4 +1,4 @@
-service_code: dli
+service_code: dns
 transport: sse  # 支持 stdio 和  sse
 sse_port: 8846 # sse 模式需要设定端口
 

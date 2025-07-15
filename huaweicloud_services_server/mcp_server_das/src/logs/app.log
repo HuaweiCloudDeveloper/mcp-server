@@ -376,3 +376,14 @@
 2025-06-11 16:12:41 - __main__ - DEBUG - mcp server is running on stdio mode.
 2025-06-11 16:12:41 - __main__ - DEBUG - C:\kylecheng\mcp-server
 2025-06-11 16:12:41 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Initializing server 'huawei-cloud-mcp-server-das'
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListToolsRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for CallToolRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourcesRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for ReadResourceRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for PromptListRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for GetPromptRequest
+2025-06-11 17:54:00 - mcp.server.lowlevel.server - DEBUG - Registering handler for ListResourceTemplatesRequest
+2025-06-11 17:54:00 - __main__ - DEBUG - mcp server is running on stdio mode.
+2025-06-11 17:54:00 - __main__ - DEBUG - C:\kylecheng\mcp-server
+2025-06-11 17:54:00 - asyncio - DEBUG - Using proactor: IocpProactor

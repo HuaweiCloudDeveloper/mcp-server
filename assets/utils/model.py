@@ -21,7 +21,6 @@ class MCPConfig:
         if self.transport == "sse" and self.sse_port == 0:
             raise ValueError("sse服务端口不能设为0")
 
-
 class TopResponseModel(BaseModel):
     model_config = ConfigDict(
         extra="allow", from_attributes=True, arbitrary_types_allowed=True
