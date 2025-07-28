@@ -20,9 +20,8 @@
 
 ### 1. 依赖安装
 
-提前安装python环境，自Python 3.4和2.7.9版本起，pip已经作为标准组件与Python一同安装。
-
-`pip install -e .`
+- 安装 [uv](https://docs.astral.sh/uv/getting-started/installation/) (推荐)
+- 安装 `3.10` 及以上版本的 [python](https://www.python.org/downloads/)
 
 ### 2. 环境变量设置
 
@@ -30,14 +29,53 @@
 
 - ak 环境变量名:  HUAWEI_ACCESS_KEY
 - sk 环境变量名:  HUAWEI_SECRET_KEY
-- ![img.png](images/img.png)
+
+![img.png](images/img.png)
 
 ### 3. 运行方法
 
+以运行 `mcp-server-ecs` 服务举例
 
+#### 使用 `uv` 运行 (推荐)
+
+```shell
+# 进入项目的根路径
+cd /path/to/you/mcp-server
+
+# 启动服务
+uv run mcp-server-ecs
+```
+
+可执行 `uv run mcp-server-ecs -h` 查看使用帮助，使用命令行可选参数可覆盖子项目中 `config.yaml` 文件的配置值 
+
+```text
+usage: mcp-server-ecs [-h] [-p PORT] [-t {http,sse,stdio}]
+
+MCP Server
+
+options:
+  -h, --help            show this help message and exit
+  -p, --port PORT       Port number
+  -t, --transport {http,sse,stdio}
+                        Transport of MCP Server
+```
+
+#### 使用 `python` 运行 
 ![img_1.png](images/img_1.png)
 
-直接进入子项目的目录路径，比如 mcp_server_ecs 下的run.py文件，cd进入run.py在所在目录，执行命令：`python run.py`，或者使用pycharm工具右键直接Run run.py
+```shell
+# 进入项目的根路径
+cd /path/to/you/mcp-server
+
+# 安装依赖
+pip install -e .
+
+# 进入指定服务(mcp-server-ecs)路径
+cd huaweicloud_services_server/mcp_server_ecs/src/mcp_server_ecs
+
+# 启动服务
+python run.py
+```
 
 ## MCP市场集成
 
@@ -54,8 +92,6 @@
   }
 }
 ```
-
-
 
 ## 功能点(Tools)
 
@@ -1204,8 +1240,6 @@
 </table>
 </body>
 </html>
-
-
 
 
 ## 贡献指南

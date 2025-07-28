@@ -25,10 +25,10 @@ def main():
     print("Starting MCP DATE Server...")
     asyncio.run(
         mcp.run(
-            transport="http",
+            transport="streamable-http",
             host=args.host,
             port=args.port,
-            path="/sse",
+            path="/mcp",
         )
     )
 

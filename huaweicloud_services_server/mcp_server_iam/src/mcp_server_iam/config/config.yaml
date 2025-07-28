@@ -1,5 +1,5 @@
 service_code: iam
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8870 # sse 模式需要设定端口
+transport: http  # 支持 stdio, http 和  sse
+port: 8870 # http 和 sse 模式需要设定端口
 
 

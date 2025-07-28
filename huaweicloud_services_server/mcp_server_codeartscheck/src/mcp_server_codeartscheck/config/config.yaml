@@ -1,6 +1,6 @@
 service_code: codeartscheck
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8023 # sse 模式需要设定端口
+transport: http  # 支持 stdio, http 和  sse
+port: 8023 # http 和 sse 模式需要设定端口
 
  
 # 配置文件

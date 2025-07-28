@@ -255,7 +255,7 @@ def load_config(config_path: Union[str, Path]) -> MCPConfig:
         cfg = MCPConfig(
             service_code=config_dict.get("service_code", ""),
             transport=config_dict.get("transport", ""),
-            sse_port=config_dict.get("sse_port", 8888),
+            port=config_dict.get("port", 8888),
             ak=config_dict.get("ak", ""),
             sk=config_dict.get("sk", ""),
         )
@@ -264,7 +264,7 @@ def load_config(config_path: Union[str, Path]) -> MCPConfig:
             (HUAWEI_ACCESS_KEY, "ak", None, None),
             (HUAWEI_SECRET_KEY, "sk", None, None),
             (MCP_SERVER_MODE, "transport", None, get_args(TransportType)),
-            (MCP_SERVER_PORT, "sse_port", int, None),
+            (MCP_SERVER_PORT, "port", int, None),
         ]
 
         for env_var, attr_name, converter, allowed_values in env_mapping:

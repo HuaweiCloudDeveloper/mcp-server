@@ -1,6 +1,6 @@
 service_code: dns
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8846 # sse 模式需要设定端口
+transport: http  # 支持 stdio, http 和  sse
+port: 8846 # http 和 sse 模式需要设定端口
 
  
 # Configuration file for mcp_server_dms

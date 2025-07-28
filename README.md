@@ -22,24 +22,65 @@ The video demonstrates using Cline with Huawei MCP Server to create a new ECS in
 
 Install the Python environment in advance. Since Python 3.4 and 2.7.9, pip has been installed with Python as a standard component.
 
-`pip install -e .`
+- Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (Recommended)
+- Install [python](https://www.python.org/downloads/) version `3.10` or above
 
 ### 2. Environment variable settings
 
 Prepare AK and SK and set them to environment variables
 
 - ak environment variable name: HUAWEI_ACCESS_KEY
-
 - sk environment variable name: HUAWEI_SECRET_KEY
-- ![img.png](images/img.png)
+
+![img.png](images/img.png)
 
 ### 3. Running method
 
+Take running the `mcp-server-ecs` service as an example
+
+#### Run with 'uv' (recommended)
+
+```shell
+# Enter the root path of the project
+cd /path/to/you/mcp-server
+
+# Start the service
+uv run mcp-server-ecs
+```
+
+Execute `uv run mcp-server-ecs -h` to view the usage instructions, the configuration values of the `config.yaml` file in the sub-project can be overwritten by using the optional parameters in the command line
+
+```text
+usage: mcp-server-ecs [-h] [-p PORT] [-t {http,sse,stdio}]
+
+MCP Server
+
+options:
+  -h, --help            show this help message and exit
+  -p, --port PORT       Port number
+  -t, --transport {http,sse,stdio}
+                        Transport of MCP Server
+```
+
+#### Run with `python`
+
 ![img_1.png](images/img_1.png)
 
-Directly enter the directory path of the sub-project, such as the run.py file under mcp_server_ecs, cd to the directory where run.py is located, and execute the command: `python run.py`, or use the pycharm tool to right-click and directly run run.py
+```shell
+# Enter the root path of the project
+cd /path/to/you/mcp-server
 
-## MCP Maketplace Integration
+# Install dependencies
+pip install -e .
+
+# Enter the specified service (mcp-server-ecs) path
+cd huaweicloud_services_server/mcp_server_ecs/src/mcp_server_ecs
+
+# Start the service
+python run.py
+```
+
+## MCP Marketplace Integration
 
 * [Cline](https://cline.bot/mcp-marketplace)
 * Configure the mcp service to use sse in cline. The json format is as follows
@@ -54,6 +95,7 @@ Directly enter the directory path of the sub-project, such as the run.py file un
   }
 }
 ```
+
 ## Tools
 
 <!DOCTYPE html>
@@ -587,8 +629,7 @@ Directly enter the directory path of the sub-project, such as the run.py file un
   </tr>
 </table>
 </body>
-</html>	
-
+</html>
 
 
 ## Contribution

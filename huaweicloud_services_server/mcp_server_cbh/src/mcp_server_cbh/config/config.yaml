@@ -1,8 +1,8 @@
 # 配置文件
 # Configuration file for mcp_server_aom
 service_code: cbh
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8009 # sse 模式需要设定端口
+transport: http  # 支持 stdio, http 和  sse
+port: 8009 # http 和 sse 模式需要设定端口
 
 
  # Configuration file for mcp_server_asm

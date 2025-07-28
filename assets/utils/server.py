@@ -1,9 +1,10 @@
 import asyncio
+import contextlib
 import json
 import time
 import uuid
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, AsyncIterator
 
 import uvicorn
 from huaweicloudsdkcore.exceptions.exceptions import ClientRequestException
@@ -11,11 +12,13 @@ from mcp.server import Server
 from mcp.server.fastmcp.utilities.logging import configure_logging, get_logger
 from mcp.server.sse import SseServerTransport
 from mcp.server.stdio import stdio_server
+from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
 from mcp.types import Tool, TextContent, ImageContent, EmbeddedResource
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from starlette.routing import Mount, Route
+from starlette.types import Receive, Scope, Send
 
 from .hwc_tools import (
     create_api_client,
@@ -26,7 +29,7 @@ from .hwc_tools import (
 )
 from .model import TopResponseModel, MCPConfig
 from .openapi import OpenAPIToToolsConverter
-from .variable import TRANSPORT_SSE
+from .variable import TRANSPORT_SSE, TRANSPORT_HTTP
 
 logger = get_logger(__name__)
 configure_logging("INFO")
@@ -55,10 +58,14 @@ class MCPServer:
         logger.info("开始初始化MCP服务器...")
 
         try:
-            # 加载配置
             self.config = load_config(self.config_path)
             if not self.config:
                 raise ValueError("无法加载服务器配置")
+
+            self.server = Server(f"hwc-mcp-server-{self.config.service_code.lower()}")
+            logger.info(
+                f"初始化MCP服务器实例： hwc-mcp-server-{self.config.service_code.lower()}"
+            )
 
             # 加载OpenAPI规范
             openapi_path = (
@@ -73,9 +80,6 @@ class MCPServer:
             # 转换为MCP工具
             self.tools = OpenAPIToToolsConverter(self.openapi_dict).convert()
             logger.info(f"成功加载 {len(self.tools)} 个工具")
-
-            # 初始化MCP服务器实例
-            self.server = Server(f"hwc-mcp-server-{self.config.service_code.lower()}")
 
             # 注册工具处理函数
             self._register_tool_handlers()
@@ -159,10 +163,13 @@ class MCPServer:
         self._ensure_initialized()
         if self.config.transport == TRANSPORT_SSE:
             await self.run_sse_server()
+        elif self.config.transport == TRANSPORT_HTTP:
+            await self.run_http_server()
         else:
             await self.run_stdio_server()
 
     async def run_sse_server(self):
+        logger.info("启动SSE服务器")
         # 配置SSE服务器
         sse = SseServerTransport("/messages/")
 
@@ -250,7 +257,7 @@ class MCPServer:
             allow_credentials=True,
             allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         )
-        sse_config = uvicorn.Config(app, host="0.0.0.0", port=self.config.sse_port)
+        sse_config = uvicorn.Config(app, host="0.0.0.0", port=self.config.port)
         sse_server = uvicorn.Server(sse_config)
         await sse_server.serve()
 
@@ -260,3 +267,42 @@ class MCPServer:
             await self.server.run(
                 streams[0], streams[1], self.server.create_initialization_options()
             )
+
+    async def run_http_server(self):
+        logger.info("启动StreamableHTTP服务器")
+        # Create the session manager with true stateless mode
+        session_manager = StreamableHTTPSessionManager(
+            app=self.server,
+            event_store=None,
+            stateless=True,
+        )
+
+        async def handle_streamable_http(
+            scope: Scope, receive: Receive, send: Send
+        ) -> None:
+            await session_manager.handle_request(scope, receive, send)
+
+        @contextlib.asynccontextmanager
+        async def lifespan(app: Starlette) -> AsyncIterator[None]:
+            """Context manager for session manager."""
+            async with session_manager.run():
+                logger.info("Application started with StreamableHTTP session manager!")
+                try:
+                    yield
+                finally:
+                    logger.info("Application shutting down...")
+
+        # Create an ASGI application using the transport
+        starlette_app = Starlette(
+            debug=True,
+            routes=[
+                Mount("/mcp", app=handle_streamable_http),
+            ],
+            lifespan=lifespan,
+        )
+
+        http_config = uvicorn.Config(
+            starlette_app, host="0.0.0.0", port=self.config.port
+        )
+        http_server = uvicorn.Server(http_config)
+        await http_server.serve()

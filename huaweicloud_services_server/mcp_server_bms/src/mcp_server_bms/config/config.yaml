@@ -1,7 +1,7 @@
 # Configuration file for mcp_server_aom
 service_code: bms
-transport: sse  # 支持 stdio 和  sse
-sse_port: 8007 # sse 模式需要设定端口
+transport: http  # 支持 stdio, http 和  sse
+port: 8007 # http 和 sse 模式需要设定端口
 
 
  # Configuration file for mcp_server_asm
