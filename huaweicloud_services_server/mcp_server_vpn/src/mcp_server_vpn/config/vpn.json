@@ -1,0 +1,3732 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "VPN-VpnConnection",
+    "title" : "VPN",
+    "version" : "2025-06-13",
+    "x-host_prefix": "vpn"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "components" : {
+    "parameters" : { },
+    "schemas" : { },
+    "securitySchemes" : { }
+  },
+  "paths" : {
+    "/ShowVpnConnection" : {
+      "get" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "查询VPN连接",
+        "description" : "根据连接ID,查询指定的VPN连接的参数",
+        "operationId" : "ShowVpnConnection",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "path",
+          "description" : "vpn连接ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection/{vpn_connection_id}"
+    },
+    "/ShowVgw" : {
+      "get" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "查询VPN网关",
+        "description" : "根据VPN网关ID,查询指定的VPN网关",
+        "operationId" : "ShowVgw",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}"
+    },
+    "/ShowResourceTags" : {
+      "get" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询资源标签",
+        "description" : "查询指定实例的标签信息",
+        "operationId" : "ShowResourceTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowResourceTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/{resource_id}/tags"
+    },
+    "/UpdateVpnAccessPolicy" : {
+      "put" : {
+        "tags" : [ "VpnAccessPolicy" ],
+        "summary" : "修改VPN访问策略",
+        "description" : "修改VPN访问策略",
+        "operationId" : "UpdateVpnAccessPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "VPN访问策略ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnAccessPolicy",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/access-policies/{policy_id}"
+    },
+    "/DeleteP2cVgwConnection" : {
+      "post" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "断开P2C VPN网关连接",
+        "description" : "断开P2C VPN网关连接",
+        "operationId" : "DeleteP2cVgwConnection",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/ConnectionId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteP2cVgwConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/connections/{connection_id}/disconnect"
+    },
+    "/UpdateVpnConnection" : {
+      "put" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "更新VPN连接",
+        "description" : "根据连接ID,更新指定的VPN连接的参数",
+        "operationId" : "UpdateVpnConnection",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "409" : {
+            "description" : "冲突操作"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "path",
+          "description" : "vpn连接ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection/{vpn_connection_id}"
+    },
+    "/ListVpnServersByVgw" : {
+      "get" : {
+        "tags" : [ "VpnServer" ],
+        "summary" : "查询一个网关下的服务端信息",
+        "description" : "查询一个网关下的服务端信息",
+        "operationId" : "ListVpnServersByVgw",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnServersByVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/vpn-servers"
+    },
+    "/DeleteVpnAccessPolicy" : {
+      "delete" : {
+        "tags" : [ "VpnAccessPolicy" ],
+        "summary" : "删除VPN访问策略",
+        "description" : "删除VPN访问策略",
+        "operationId" : "DeleteVpnAccessPolicy",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "VPN访问策略ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpnAccessPolicy",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/access-policies/{policy_id}"
+    },
+    "/ShowCgw" : {
+      "get" : {
+        "tags" : [ "CustomerGateway" ],
+        "summary" : "查询对端网关",
+        "description" : "根据对端网关ID,查询指定的对端网关",
+        "operationId" : "ShowCgw",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "customer_gateway_id",
+          "in" : "path",
+          "description" : "对端网关ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowCgw",
+      "x-url" : "{endpoint}/v5/{project_id}/customer-gateways/{customer_gateway_id}"
+    },
+    "/ResetVpnConnection" : {
+      "post" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "重置VPN连接",
+        "description" : "根据连接ID,重置指定VPN连接",
+        "operationId" : "ResetVpnConnection",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "path",
+          "description" : "vpn连接ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResetVpnConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection/{vpn_connection_id}/reset"
+    },
+    "/ListVpnUsers" : {
+      "get" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "查询VPN用户列表",
+        "description" : "查询VPN用户列表",
+        "operationId" : "ListVpnUsers",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnUsers",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users"
+    },
+    "/BatchCreateResourceTags" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "批量添加资源标签",
+        "description" : "为指定实例批量添加标签",
+        "operationId" : "BatchCreateResourceTags",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateResourceTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/{resource_id}/tags/create"
+    },
+    "/ListExtendedAvailabilityZones" : {
+      "get" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "查询VPN网关可用区",
+        "description" : "查询VPN网关可用区",
+        "operationId" : "ListExtendedAvailabilityZones",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListExtendedAvailabilityZones",
+      "x-url" : "{endpoint}/v5.1/{project_id}/vpn-gateways/availability-zones"
+    },
+    "/ListVpnAccessPolicies" : {
+      "get" : {
+        "tags" : [ "VpnAccessPolicy" ],
+        "summary" : "查询VPN访问策略列表",
+        "description" : "查询VPN访问策略列表",
+        "operationId" : "ListVpnAccessPolicies",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnAccessPolicies",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/access-policies"
+    },
+    "/ListResourcesByTags" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询资源实例列表",
+        "description" : "根据标签查询资源实例列表",
+        "operationId" : "ListResourcesByTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "limit",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "offset",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListResourcesByTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/resource-instances/filter"
+    },
+    "/UpdateVpnUser" : {
+      "put" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "修改VPN用户",
+        "description" : "修改VPN用户",
+        "operationId" : "UpdateVpnUser",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnUser",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/{user_id}"
+    },
+    "/ShowVpnGatewayRoutingTable" : {
+      "get" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "查询VPN网关路由表",
+        "operationId" : "ShowVpnGatewayRoutingTable",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/Offset"
+        }, {
+          "$ref" : "#/components/components/parameters/IsIncludeNexthopResource"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnGatewayRoutingTable",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}/routing-table"
+    },
+    "/ListP2cVgwAvailabilityZones" : {
+      "get" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "查询P2C VPN网关可用区",
+        "description" : "查询P2C VPN网关可用区",
+        "operationId" : "ListP2cVgwAvailabilityZones",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "flavor",
+          "in" : "query",
+          "description" : "flavor规格",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "Professional1" ]
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListP2cVgwAvailabilityZones",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/availability-zones"
+    },
+    "/DeleteCgw" : {
+      "delete" : {
+        "tags" : [ "CustomerGateway" ],
+        "summary" : "删除对端网关",
+        "description" : "根据对端网关ID,删除指定的对端网关",
+        "operationId" : "DeleteCgw",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "customer_gateway_id",
+          "in" : "path",
+          "description" : "对端网关ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteCgw",
+      "x-url" : "{endpoint}/v5/{project_id}/customer-gateways/{customer_gateway_id}"
+    },
+    "/AddVpnUsersToGroup" : {
+      "post" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "添加VPN用户到组",
+        "description" : "添加VPN用户到组",
+        "operationId" : "AddVpnUsersToGroup",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "AddVpnUsersToGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}/add-users"
+    },
+    "/ShowVpnGatewayCertificate" : {
+      "get" : {
+        "tags" : [ "VpnGatewayCertificate" ],
+        "summary" : "查询VPN网关证书",
+        "description" : "根据VPN网关ID,查询所指定的VPN网关证书",
+        "operationId" : "ShowVpnGatewayCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnGatewayCertificate",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}/certificate"
+    },
+    "/UpdatePostpaidVgwSpecification" : {
+      "post" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "修改网关规格",
+        "description" : "对单个网关规格进行修改,可以升配或降配",
+        "operationId" : "UpdatePostpaidVgwSpecification",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdatePostpaidVgwSpecification",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}/update-specification"
+    },
+    "/CreateVpnAccessPolicy" : {
+      "post" : {
+        "tags" : [ "VpnAccessPolicy" ],
+        "summary" : "创建VPN访问策略",
+        "description" : "创建VPN访问策略",
+        "operationId" : "CreateVpnAccessPolicy",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpnAccessPolicy",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/access-policies"
+    },
+    "/CreateVpnUserGroup" : {
+      "post" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "创建VPN用户组",
+        "description" : "创建VPN用户组",
+        "operationId" : "CreateVpnUserGroup",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpnUserGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups"
+    },
+    "/ListVpnUserGroups" : {
+      "get" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "查询VPN用户组列表",
+        "description" : "查询VPN用户组列表",
+        "operationId" : "ListVpnUserGroups",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnUserGroups",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups"
+    },
+    "/CreateVpnUser" : {
+      "post" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "创建VPN用户",
+        "description" : "创建VPN用户",
+        "operationId" : "CreateVpnUser",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpnUser",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users"
+    },
+    "/CheckClientCaCertificate" : {
+      "post" : {
+        "tags" : [ "ClientCaCertificate" ],
+        "summary" : "校验客户端CA",
+        "description" : "创建服务端时,可以先调用客户端CA的预校验API,检查CA的合法性",
+        "operationId" : "CheckClientCaCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "检查操作成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CheckClientCaCertificate",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/client-ca-certificates/check"
+    },
+    "/ListAvailabilityZones" : {
+      "get" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "查询VPN网关可用区",
+        "description" : "查询VPN网关可用区",
+        "operationId" : "ListAvailabilityZones",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListAvailabilityZones",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/availability-zones"
+    },
+    "/UpdateClientCa" : {
+      "put" : {
+        "tags" : [ "ClientCaCertificate" ],
+        "summary" : "修改客户端的CA证书",
+        "description" : "修改客户端CA证书",
+        "operationId" : "UpdateClientCa",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "client_ca_certificate_id",
+          "in" : "path",
+          "description" : "客户端 CA 证书 ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateClientCa",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/client-ca-certificates/{client_ca_certificate_id}"
+    },
+    "/UpdateVpnServer" : {
+      "put" : {
+        "tags" : [ "VpnServer" ],
+        "summary" : "更新指定VPN 服务端",
+        "description" : "更新指定VPN 服务端",
+        "operationId" : "UpdateVpnServer",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnServer",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}"
+    },
+    "/ListConnectionMonitors" : {
+      "get" : {
+        "tags" : [ "ConnectionMonitor" ],
+        "summary" : "查询VPN连接监控列表",
+        "description" : "查询VPN连接监控列表",
+        "operationId" : "ListConnectionMonitors",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "query",
+          "description" : "VPN连接Id",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/FilterEpsId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListConnectionMonitors",
+      "x-url" : "{endpoint}/v5/{project_id}/connection-monitors"
+    },
+    "/ExportClientConfig" : {
+      "post" : {
+        "tags" : [ "VpnServer" ],
+        "summary" : "导出服务端对应的客户端配置信息",
+        "description" : "导出客户端配置信息",
+        "operationId" : "ExportClientConfig",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ExportClientConfig",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/client-config/export"
+    },
+    "/ListP2cVgwConnections" : {
+      "get" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "查询P2C VPN网关连接信息列表",
+        "description" : "List p2c vpn gateway connections",
+        "operationId" : "ListP2cVgwConnections",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Offset"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListP2cVgwConnections",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/connections"
+    },
+    "/DeleteVpnUserGroup" : {
+      "delete" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "删除VPN用户组",
+        "description" : "删除VPN用户组",
+        "operationId" : "DeleteVpnUserGroup",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpnUserGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}"
+    },
+    "/UpdateVpnUserGroup" : {
+      "put" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "修改VPN用户组",
+        "description" : "修改VPN用户组",
+        "operationId" : "UpdateVpnUserGroup",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnUserGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}"
+    },
+    "/ShowConnectionMonitor" : {
+      "get" : {
+        "tags" : [ "ConnectionMonitor" ],
+        "summary" : "查询VPN连接监控",
+        "description" : "根据VPN连接监控的ID,查询指定的VPN连接监控",
+        "operationId" : "ShowConnectionMonitor",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "connection_monitor_id",
+          "in" : "path",
+          "description" : "VPN连接监控的ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowConnectionMonitor",
+      "x-url" : "{endpoint}/v5/{project_id}/connection-monitors/{connection_monitor_id}"
+    },
+    "/CreateVgw" : {
+      "post" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "创建VPN网关",
+        "description" : "创建一个VPN网关",
+        "operationId" : "CreateVgw",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways"
+    },
+    "/UpdateVgw" : {
+      "put" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "更新VPN网关",
+        "description" : "根据VPN网关ID,更新指定的VPN网关",
+        "operationId" : "UpdateVgw",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}"
+    },
+    "/DeleteConnectionMonitor" : {
+      "delete" : {
+        "tags" : [ "ConnectionMonitor" ],
+        "summary" : "删除VPN连接监控",
+        "description" : "根据VPN连接监控的ID,删除指定的VPN连接监控",
+        "operationId" : "DeleteConnectionMonitor",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "connection_monitor_id",
+          "in" : "path",
+          "description" : "VPN连接监控的ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteConnectionMonitor",
+      "x-url" : "{endpoint}/v5/{project_id}/connection-monitors/{connection_monitor_id}"
+    },
+    "/ListVpnUsersInGroup" : {
+      "get" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "查询组内VPN用户",
+        "description" : "查询组内VPN用户",
+        "operationId" : "ListVpnUsersInGroup",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnUsersInGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}/users"
+    },
+    "/CreateVpnServer" : {
+      "post" : {
+        "tags" : [ "VpnServer" ],
+        "summary" : "创建一个VPN 服务端",
+        "description" : "创建一个VPN 服务端",
+        "operationId" : "CreateVpnServer",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpnServer",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/vpn-servers"
+    },
+    "/RemoveVpnUsersFromGroup" : {
+      "post" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "删除组内VPN用户",
+        "description" : "删除组内VPN用户",
+        "operationId" : "RemoveVpnUsersFromGroup",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "RemoveVpnUsersFromGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}/remove-users"
+    },
+    "/ShowVpnConnectionsLogConfig" : {
+      "get" : {
+        "tags" : [ "VpnConnectionsLogConfig" ],
+        "summary" : "查询VPN连接日志配置",
+        "description" : "查询VPN连接日志配置",
+        "operationId" : "ShowVpnConnectionsLogConfig",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnConnectionsLogConfig",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/log-config"
+    },
+    "/ShowVpnAccessPolicy" : {
+      "get" : {
+        "tags" : [ "VpnAccessPolicy" ],
+        "summary" : "查询VPN访问策略",
+        "description" : "查询VPN访问策略",
+        "operationId" : "ShowVpnAccessPolicy",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "policy_id",
+          "in" : "path",
+          "description" : "VPN访问策略ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnAccessPolicy",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/access-policies/{policy_id}"
+    },
+    "/CreateCgw" : {
+      "post" : {
+        "tags" : [ "CustomerGateway" ],
+        "summary" : "创建对端网关",
+        "description" : "创建租户用于与VPN网关相连的对端网关",
+        "operationId" : "CreateCgw",
+        "responses" : {
+          "201" : {
+            "description" : "创建成功",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateCgw",
+      "x-url" : "{endpoint}/v5/{project_id}/customer-gateways"
+    },
+    "/CreateConnectionMonitor" : {
+      "post" : {
+        "tags" : [ "ConnectionMonitor" ],
+        "summary" : "创建VPN连接监控",
+        "description" : "创建VPN连接监控",
+        "operationId" : "CreateConnectionMonitor",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateConnectionMonitor",
+      "x-url" : "{endpoint}/v5/{project_id}/connection-monitors"
+    },
+    "/ShowVpnUserGroup" : {
+      "get" : {
+        "tags" : [ "VpnUserGroup" ],
+        "summary" : "查询VPN用户组",
+        "description" : "查询VPN用户组",
+        "operationId" : "ShowVpnUserGroup",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "group_id",
+          "in" : "path",
+          "description" : "用户组ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnUserGroup",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/groups/{group_id}"
+    },
+    "/BatchCreateVpnUsers" : {
+      "post" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "批量创建VPN用户",
+        "description" : "批量创建P2C VPN用户",
+        "operationId" : "BatchCreateVpnUsers",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchCreateVpnUsers",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/batch-create"
+    },
+    "/ImportClientCa" : {
+      "post" : {
+        "tags" : [ "ClientCaCertificate" ],
+        "summary" : "导入客户端 CA 证书",
+        "description" : "导入客户端 CA 证书",
+        "operationId" : "ImportClientCa",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XClientTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ImportClientCa",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/client-ca-certificates"
+    },
+    "/DeleteClientCa" : {
+      "delete" : {
+        "tags" : [ "ClientCaCertificate" ],
+        "summary" : "删除客户端的CA证书",
+        "description" : "删除客户端CA证书",
+        "operationId" : "DeleteClientCa",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "client_ca_certificate_id",
+          "in" : "path",
+          "description" : "客户端 CA 证书 ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteClientCa",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/client-ca-certificates/{client_ca_certificate_id}"
+    },
+    "/ListP2cVgws" : {
+      "get" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "查询P2C VPN网关列表",
+        "description" : "查询P2C VPN网关列表",
+        "operationId" : "ListP2cVgws",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListP2cVgws",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways"
+    },
+    "/UpdateVgwCertificate" : {
+      "put" : {
+        "tags" : [ "VpnGatewayCertificate" ],
+        "summary" : "更新VPN网关证书",
+        "description" : "更新租户VPN网关所使用的证书,包括签名证书、签名私钥、加密证书、加密私钥和CA证书链。当前只支持国密证书",
+        "operationId" : "UpdateVgwCertificate",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "name" : "certificate_id",
+          "in" : "path",
+          "description" : "VPN网关证书ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVgwCertificate",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}/certificate/{certificate_id}"
+    },
+    "/UpdateVpnUserPassword" : {
+      "put" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "修改VPN用户密码",
+        "description" : "修改VPN用户密码",
+        "operationId" : "UpdateVpnUserPassword",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnUserPassword",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/{user_id}/password"
+    },
+    "/ListVgws" : {
+      "get" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "查询VPN网关列表",
+        "description" : "查询VPN网关列表",
+        "operationId" : "ListVgws",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/FilterVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/FilterEpsId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVgws",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways"
+    },
+    "/ShowP2cVgw" : {
+      "get" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "查询P2C VPN网关",
+        "description" : "根据P2C VPN网关ID,查询指定的VPN网关",
+        "operationId" : "ShowP2cVgw",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowP2cVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}"
+    },
+    "/DeleteVpnConnectionsLogConfig" : {
+      "delete" : {
+        "tags" : [ "VpnConnectionsLogConfig" ],
+        "summary" : "删除VPN连接日志配置",
+        "description" : "删除VPN连接日志配置",
+        "operationId" : "DeleteVpnConnectionsLogConfig",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpnConnectionsLogConfig",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/log-config"
+    },
+    "/CreateVpnConnection" : {
+      "post" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "创建VPN连接",
+        "description" : "创建VPN连接,连接VPN网关与对端网关",
+        "operationId" : "CreateVpnConnection",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVpnConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection"
+    },
+    "/ShowVpnConnectionLog" : {
+      "get" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "查询VPN连接日志",
+        "description" : "根据连接ID,查询指定的VPN连接日志",
+        "operationId" : "ShowVpnConnectionLog",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "path",
+          "description" : "vpn连接ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnConnectionLog",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection/{vpn_connection_id}/log"
+    },
+    "/UpdateCgw" : {
+      "put" : {
+        "tags" : [ "CustomerGateway" ],
+        "summary" : "更新对端网关",
+        "description" : "根据对端网关ID,更新指定的对端网关",
+        "operationId" : "UpdateCgw",
+        "responses" : {
+          "200" : {
+            "description" : "更新成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "customer_gateway_id",
+          "in" : "path",
+          "description" : "对端网关ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateCgw",
+      "x-url" : "{endpoint}/v5/{project_id}/customer-gateways/{customer_gateway_id}"
+    },
+    "/UpdateP2cVgw" : {
+      "put" : {
+        "tags" : [ "P2cVpnGateway" ],
+        "summary" : "更新P2C VPN网关",
+        "description" : "根据P2C VPN网关ID,更新指定的P2C VPN网关",
+        "operationId" : "UpdateP2cVgw",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateP2cVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}"
+    },
+    "/CreateVgwCertificate" : {
+      "post" : {
+        "tags" : [ "VpnGatewayCertificate" ],
+        "summary" : "导入VPN网关证书",
+        "description" : "导入租户VPN网关所使用的证书,包括签名证书、签名私钥、加密证书、加密私钥和CA证书链。当前只支持国密证书",
+        "operationId" : "CreateVgwCertificate",
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CreateVgwCertificate",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}/certificate"
+    },
+    "/ListVpnConnections" : {
+      "get" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "查询VPN连接列表",
+        "description" : "查询VPN连接列表",
+        "operationId" : "ListVpnConnections",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_id",
+          "in" : "query",
+          "description" : "VPN ID",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "eip_id",
+          "in" : "query",
+          "description" : "Eip ID",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "vgw_ip",
+          "in" : "query",
+          "description" : "VGW IP",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/FilterVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/FilterEpsId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnConnections",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection"
+    },
+    "/ShowQuotasInfo" : {
+      "get" : {
+        "tags" : [ "VpnQuota" ],
+        "summary" : "查询指定租户配额",
+        "description" : "查询指定租户的配额",
+        "operationId" : "ShowQuotasInfo",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowQuotasInfo",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn/quotas"
+    },
+    "/UpdateVpnConnectionsLogConfig" : {
+      "put" : {
+        "tags" : [ "VpnConnectionsLogConfig" ],
+        "summary" : "更新VPN连接日志配置",
+        "description" : "更新VPN连接日志配置",
+        "operationId" : "UpdateVpnConnectionsLogConfig",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/P2cVgwId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "put",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "UpdateVpnConnectionsLogConfig",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/{p2c_vgw_id}/log-config"
+    },
+    "/ShowVpnUser" : {
+      "get" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "查询VPN用户",
+        "description" : "查询VPN用户",
+        "operationId" : "ShowVpnUser",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowVpnUser",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/{user_id}"
+    },
+    "/ShowClientCa" : {
+      "get" : {
+        "tags" : [ "ClientCaCertificate" ],
+        "summary" : "查询客户端的CA证书",
+        "description" : "查询客户端CA证书",
+        "operationId" : "ShowClientCa",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "client_ca_certificate_id",
+          "in" : "path",
+          "description" : "客户端 CA 证书 ID",
+          "required" : true,
+          "schema" : {
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ShowClientCa",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/client-ca-certificates/{client_ca_certificate_id}"
+    },
+    "/ListProjectTags" : {
+      "get" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询项目标签",
+        "description" : "查询租户在指定项目中指定资源类型下的所有标签",
+        "operationId" : "ListProjectTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListProjectTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/tags"
+    },
+    "/DeleteVgw" : {
+      "delete" : {
+        "tags" : [ "VpnGateway" ],
+        "summary" : "删除VPN网关",
+        "description" : "根据VPN网关ID,删除指定的VPN网关",
+        "operationId" : "DeleteVgw",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnGatewayId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVgw",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-gateways/{vgw_id}"
+    },
+    "/BatchDeleteResourceTags" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "批量删除资源标签",
+        "description" : "为指定实例批量删除标签",
+        "operationId" : "BatchDeleteResourceTags",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        }, {
+          "name" : "resource_id",
+          "in" : "path",
+          "description" : "资源ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteResourceTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/{resource_id}/tags/delete"
+    },
+    "/ListCgws" : {
+      "get" : {
+        "tags" : [ "CustomerGateway" ],
+        "summary" : "查询对端网关列表",
+        "description" : "查询对端网关列表",
+        "operationId" : "ListCgws",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "cgw_id",
+          "in" : "query",
+          "description" : "CustomerGateway ID",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListCgws",
+      "x-url" : "{endpoint}/v5/{project_id}/customer-gateways"
+    },
+    "/ListVpnServersByProject" : {
+      "get" : {
+        "tags" : [ "VpnServer" ],
+        "summary" : "查询租户下的所有服务端信息",
+        "description" : "查询租户下的所有服务端信息",
+        "operationId" : "ListVpnServersByProject",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/components/parameters/Marker"
+        } ]
+      },
+      "x-method" : "get",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ListVpnServersByProject",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-servers"
+    },
+    "/DeleteVpnUser" : {
+      "delete" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "删除VPN用户",
+        "description" : "删除VPN用户",
+        "operationId" : "DeleteVpnUser",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpnUser",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/{user_id}"
+    },
+    "/DeleteVpnConnection" : {
+      "delete" : {
+        "tags" : [ "VpnConnection" ],
+        "summary" : "删除VPN连接",
+        "description" : "根据连接ID,删除指定的VPN连接",
+        "operationId" : "DeleteVpnConnection",
+        "responses" : {
+          "204" : {
+            "description" : ""
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "vpn_connection_id",
+          "in" : "path",
+          "description" : "vpn连接ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "delete",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "DeleteVpnConnection",
+      "x-url" : "{endpoint}/v5/{project_id}/vpn-connection/{vpn_connection_id}"
+    },
+    "/ResetVpnUserPassword" : {
+      "post" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "重置VPN用户密码",
+        "description" : "重置VPN用户密码",
+        "operationId" : "ResetVpnUserPassword",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "name" : "user_id",
+          "in" : "path",
+          "description" : "用户ID",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 36,
+            "minLength" : 36,
+            "pattern" : "[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}",
+            "type" : "string"
+          }
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "ResetVpnUserPassword",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/{user_id}/reset-password"
+    },
+    "/CountResourcesByTags" : {
+      "post" : {
+        "tags" : [ "Tags" ],
+        "summary" : "查询资源实例数量",
+        "description" : "根据标签查询资源实例数量",
+        "operationId" : "CountResourcesByTags",
+        "responses" : {
+          "200" : {
+            "description" : "查询成功"
+          },
+          "400" : {
+            "description" : "参数非法"
+          },
+          "401" : {
+            "description" : "鉴权失败"
+          },
+          "403" : {
+            "description" : "权限不足"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "系统异常"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ContentType"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        }, {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "name" : "resource_type",
+          "in" : "path",
+          "description" : "资源类型",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "vpn-gateway", "vpn-connection", "customer-gateway", "p2c-vpn-gateways" ]
+          }
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "CountResourcesByTags",
+      "x-url" : "{endpoint}/v5/{project_id}/{resource_type}/resource-instances/count"
+    },
+    "/BatchDeleteVpnUsers" : {
+      "post" : {
+        "tags" : [ "VpnUser" ],
+        "summary" : "批量删除VPN用户",
+        "description" : "批量删除P2C VPN用户",
+        "operationId" : "BatchDeleteVpnUsers",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "header-response-token" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "输入参数不合法"
+          },
+          "401" : {
+            "description" : "认证失败"
+          },
+          "403" : {
+            "description" : "拒绝访问"
+          },
+          "404" : {
+            "description" : "资源未找到"
+          },
+          "500" : {
+            "description" : "服务器内部错误"
+          }
+        },
+        "parameters" : [ {
+          "$ref" : "#/components/components/parameters/ProjectId"
+        }, {
+          "$ref" : "#/components/components/parameters/VpnServerId"
+        }, {
+          "$ref" : "#/components/components/parameters/XAuthTokenInHeader"
+        } ]
+      },
+      "x-method" : "post",
+      "x-content-type" : "application/json;charset=UTF-8",
+      "x-operationId" : "BatchDeleteVpnUsers",
+      "x-url" : "{endpoint}/v5/{project_id}/p2c-vpn-gateways/vpn-servers/{vpn_server_id}/users/batch-delete"
+    }
+  }
+}
