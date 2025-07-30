@@ -14,6 +14,7 @@
 - [Demo](#Demo)
 - [运行指南](#运行指南)
 - [功能点(Tools)](#功能点Tools)
+- [实用文档](实用文档)
 - [贡献指南](#贡献指南)
 
 ## Demo
@@ -1246,6 +1247,9 @@ python run.py
 </table>
 </body>
 </html>
+
+## 实用文档
+https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html
 
 
 ## 贡献指南

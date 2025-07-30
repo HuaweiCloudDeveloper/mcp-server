@@ -14,7 +14,8 @@ Huawei MCP Server is a Model Context Protocol server built on Huawei Cloud servi
 - [Demo](#Demo)
 - [running Guide](#Running-Guide)
 - [tools list](#Tools)
-- [participate documents](#Contribution)
+- [practical documents](#practical-documents)
+- [Contribution](#Contribution)
 ## Demo
 
 [Demo](https://github.com/user-attachments/assets/f0cdc18f-e3dc-401e-9ed5-5185e710b1a7)
@@ -636,6 +637,8 @@ python run.py
 </body>
 </html>
 
+## practical documents
+https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html
 
 ## Contribution
 
