@@ -12,7 +12,7 @@ Huawei MCP Server is a Model Context Protocol server built on Huawei Cloud servi
 ## mcp-server catalog
 
 - [Demo](#Demo)
-- [running Guide](#Running Guide)
+- [running Guide](#Running-Guide)
 - [tools list](#Tools)
 - [participate documents](#Contribution)
 ## Demo
