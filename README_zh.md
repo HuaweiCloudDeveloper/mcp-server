@@ -1249,7 +1249,7 @@ python run.py
 </html>
 
 ## 实用文档
-https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html
+- [使用DAS MCP实现数据库对话式运维](https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html) 
 
 
 ## 贡献指南
