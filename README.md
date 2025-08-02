@@ -641,7 +641,7 @@ python run.py
 ## Practical documents
 - [Using DAS MCP to implement database conversational operation and maintenance](https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html) 
 
-## Contribution
+## Contributing
 
 We welcome contributions from the open-source community! 
-If you'd like to contribute to this project, please refer to the [DEVELOPEMENT](./docs/develope-mcp-EN.md) file.
+If you'd like to contribute to this project, please refer to the [contributing guide](CONTRIBUTING.md).

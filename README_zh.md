@@ -1252,7 +1252,7 @@ python run.py
 - [使用DAS MCP实现数据库对话式运维](https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html) 
 
 
-## 贡献指南
+## 贡献
 
-我们热忱欢迎开源社区的贡献
-如果您想参与本项目开发，请查阅[开发文档](./docs/develope-mcp.md)。
+我们热忱欢迎开源社区的贡献!
+如果您想参与本项目开发，请查阅[贡献指南](CONTRIBUTING.md)。
