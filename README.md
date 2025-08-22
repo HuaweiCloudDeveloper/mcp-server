@@ -27,7 +27,7 @@ Huawei MCP Server is a Model Context Protocol server built on Huawei Cloud servi
 
 Cline shows the entire process of creating and deleting ECS ​​instances using Huawei's ECS MCP Server.
 
-[Demo2](https://github.com/user-attachments/assets/15197296-d109-464b-87c0-3bcc291bb073)
+[Demo2](https://github.com/user-attachments/assets/f04cfcac-f657-4346-9080-8433520f8b0a)
 
 Cline uses Huawei Cloud EIP MCP Server to create and delete EIP instances.
 
