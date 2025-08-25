@@ -22,11 +22,7 @@
 
 ## Demo
 
-[Demo1](https://github.com/user-attachments/assets/f0cdc18f-e3dc-401e-9ed5-5185e710b1a7)
-
-Cline 使用 华为ecs MCP Server创建并删除ECS实例的全过程。
-
-[Demo2](https://github.com/user-attachments/assets/f04cfcac-f657-4346-9080-8433520f8b0a)
+[Demo1](https://github.com/user-attachments/assets/df2c2993-42ec-4f7e-8631-29c44c58fcbd)
 
 Cline 使用华为云eip MCP Server 创建和删除eip实例的全过程。
 
