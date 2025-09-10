@@ -3,8 +3,9 @@
   "info" : {
     "description" : "RDS-实例管理",
     "title" : "RDS",
-    "version" : "2025-06-13",
-    "x-host_prefix": "rds"
+    "version" : "2025-09-02",
+    "x-host_prefix" : "rds",
+    "x-host" : "rds.{region}.myhuaweicloud.com"
   },
   "servers" : [ {
     "url" : "/"
@@ -8909,7 +8910,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -9095,7 +9096,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "put",
@@ -10544,7 +10545,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -11183,7 +11184,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -11236,7 +11237,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "delete",
@@ -11748,7 +11749,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -13566,7 +13567,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -14305,19 +14306,14 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "properties" : {
-                  "DeletePostgresqlHbaConfRequestBody" : {
-                    "description" : "修改参数",
-                    "type" : "array",
-                    "items" : {
-                      "$ref" : "#/components/schemas/PostgresqlHbaConf"
-                    }
-                  }
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/PostgresqlHbaConf"
                 }
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "delete",
@@ -16565,7 +16561,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -17548,7 +17544,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "delete",
@@ -18494,19 +18490,14 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "properties" : {
-                  "AddPostgresqlHbaConfRequestBody" : {
-                    "description" : "修改参数",
-                    "type" : "array",
-                    "items" : {
-                      "$ref" : "#/components/schemas/PostgresqlHbaConf"
-                    }
-                  }
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/PostgresqlHbaConf"
                 }
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
@@ -22408,19 +22399,14 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "properties" : {
-                  "ModifyPostgresqlHbaConfRequestBody" : {
-                    "description" : "修改参数",
-                    "type" : "array",
-                    "items" : {
-                      "$ref" : "#/components/schemas/PostgresqlHbaConf"
-                    }
-                  }
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/PostgresqlHbaConf"
                 }
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "put",
@@ -22778,7 +22764,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "put",
@@ -23422,7 +23408,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "delete",
@@ -25623,7 +25609,7 @@
               }
             }
           },
-          "required" : false
+          "required" : true
         }
       },
       "x-method" : "post",
