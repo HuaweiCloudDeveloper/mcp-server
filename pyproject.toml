@@ -5,7 +5,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mcp-server-huaweicloud-workspace"
+name = "huaweicloud-mcp-server"
 version = "0.3.0"
 description = "A Model Context Protocol server providing tools for Huawei Cloud"
 readme = "README.md"
