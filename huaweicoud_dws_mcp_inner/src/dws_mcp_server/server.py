@@ -1,9 +1,7 @@
 import asyncio
-import os
 import logging
-from logging import Logger
 from mcp.server import Server
-from mcp.types import Resource, Tool, TextContent, ResourceTemplate, GetPromptResult, Prompt
+from mcp.types import Resource, Tool, TextContent, ResourceTemplate
 import dws_mcp_server.utils as utils
 from pydantic import AnyUrl
 

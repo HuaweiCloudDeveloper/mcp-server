@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from mcp.types import TextContent, Resource, ResourceTemplate
 from dws_mcp_server.server import list_resources, list_resource_templates, read_resource, list_tools, call_tool
 from pydantic import AnyUrl
