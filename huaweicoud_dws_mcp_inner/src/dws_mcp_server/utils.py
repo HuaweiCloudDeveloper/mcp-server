@@ -1,6 +1,7 @@
 import psycopg2
 import dws_mcp_server.config as config
 
+
 def connect_db():
     try:
         db_config = config.get_config()
@@ -97,7 +98,9 @@ def execute_query(query):
             cur.execute(query)
             if cur.description:
                 columns = [desc[0] for desc in cur.description]
-                return "\n".join([",".join(columns)] + preprocess_result(cur.fetchall()))
+                return "\n".join(
+                    [",".join(columns)] + preprocess_result(cur.fetchall())
+                )
             else:
                 return f"Query executed successfully. Rows affected: {cur.rowcount}"
 
