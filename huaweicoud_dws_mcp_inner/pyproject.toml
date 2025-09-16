@@ -1,0 +1,25 @@
+[project]
+name = "dws-mcp-server"
+version = "0.1.0"
+description = "Model Context Protocol (MCP) server for GaussDB database system"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.9.3",
+    "psycopg2>=2.9.10",
+]
+
+[[project.authors]]
+name = "Ryan Fan"
+email = "ryanfan310@gmail.com"
+
+[build-system]
+requires = [ "hatchling",]
+build-backend = "hatchling.build"
+
+[project.scripts]
+dws-mcp-server = "dws_mcp_server:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

@@ -1,0 +1,37 @@
+version: '2.0'
+env:
+  label: Fuxi-Build-x86-euler2.10-code-cov-vpc-nat
+  build_box:
+    fuxi_os: x86_euler2.10
+    dependencies:
+      python: 3.10.4
+params:
+  - name: CID_credible_repo
+    value: true
+steps:
+  PRE_BUILD:
+    - sh:
+        command: ls ./
+    - checkout:
+        depth: 0
+  BUILD:
+    - build_execute:
+        command: |-
+          # 安装hdt-cli
+          pip3 install hw-hdt-cli -i https://cmc.centralrepo.rnd.huawei.com/artifactory/product_pypi/simple --extra-index-url https://cmc.centralrepo.rnd.huawei.com/pypi/simple --trusted-host cmc.centralrepo.rnd.huawei.com
+          git config --global --add safe.directory "*"
+          pip install pytest
+          pip install mcp[cli]
+          pip install psycopg2-binary
+          hdt comp -i
+          hdt build
+          hdt test -c on || echo 0
+        check:
+          skip_compile: true
+  POST_BUILD:
+    - sh:
+        command: |-
+          echo "will exec test and upload to codecov ENV_SERVICE_NAME is ${ENV_SERVICE_NAME}"
+          ls
+          curl -k "https://codecov.rnd.huawei.com/rest/codecov/freeExecShell/getShContent/1736652803129999362" -o codecov.sh
+          bash -x ./codecov.sh

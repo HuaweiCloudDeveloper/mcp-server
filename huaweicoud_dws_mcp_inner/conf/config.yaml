@@ -1,0 +1,28 @@
+version: 1.0.0
+
+project:
+  name: "pytest_mini_template"
+  desc: "pytest mini template project"
+  prod: null
+  team: null
+
+pipeline:
+  run:
+    - task: "run_pytest"
+  clean:
+    - task: "clean"
+    - task: "clean pycache"
+      exec: pyclean .. --debris
+      args: false
+
+components:
+  - type: "pypi"
+    repo: null
+    dest: null
+    manifest:
+      pytest: null
+      pytest-mock: null
+      pytest-cov: null
+      pytest-html: null
+      pytest-json: null
+      pyclean: null
