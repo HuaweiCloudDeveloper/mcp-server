@@ -1,0 +1,1336 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "MSS",
+    "description" : "MSS接口文档",
+    "version" : "v1",
+    "x-host_prefix": "mss",
+    "x-host": "mss.{region}.myhuaweicloud.com"
+  },
+  "servers" : [ {
+    "url" : "https://mss.myhuaweicloud.com",
+    "description" : "Public zone."
+  }, {
+    "url" : "https://mss-internal.myhuaweicloud.com",
+    "description" : "Private zone."
+  } ],
+  "tags" : [ {
+    "name" : "Memorybase",
+    "description" : "记忆仓管理"
+  }, {
+    "name" : "Records",
+    "description" : "长期记忆"
+  }, {
+    "name" : "Events",
+    "description" : "短期记忆"
+  }, {
+    "name" : "Statistics",
+    "description" : "统计"
+  }, {
+    "name" : "Whitelist",
+    "description" : "白名单"
+  } ],
+  "paths" : {
+    "/CreateMemorybase" : {
+      "post" : {
+        "tags" : [ "Memorybase" ],
+        "operationId" : "CreateMemorybase",
+        "summary" : "新建记忆仓",
+        "description" : "创建一个新的记忆仓",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        }, {
+          "$ref" : "#/components/parameters/content_length"
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "description" : "Memorybase 创建请求",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateMemorybaseRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateMemorybaseResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases",
+      "x-method" : "post"
+    },
+    "/ShowMemorybase" : {
+      "get" : {
+        "tags" : [ "Memorybase" ],
+        "operationId" : "ShowMemorybase",
+        "summary" : "查询记忆仓",
+        "description" : "通过ID获取记忆仓详情",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "description" : "记忆仓ID",
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowMemorybaseResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}",
+      "x-method" : "get"
+    },
+    "/DeleteMemorybase" : {
+      "delete" : {
+        "tags" : [ "Memorybase" ],
+        "operationId" : "DeleteMemorybase",
+        "summary" : "删除记忆仓",
+        "description" : "通过ID删除记忆仓",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "description" : "记忆仓ID",
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "删除成功，无返回体"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}",
+      "x-method" : "get"
+    },
+    "/ListMemorybases" : {
+      "post" : {
+        "tags" : [ "Memorybase" ],
+        "operationId" : "ListMemorybases",
+        "summary" : "列举记忆仓",
+        "description" : "分页列出记忆仓",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        } ],
+        "requestBody" : {
+          "required" : false,
+          "description" : "分页与翻页参数",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListMemorybasesRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "列表返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListMemorybasesResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/list",
+      "x-method" : "post"
+    },
+    "/SearchRecords" : {
+      "post" : {
+        "tags" : [ "Records" ],
+        "operationId" : "SearchRecords",
+        "summary" : "语义搜索长期记忆",
+        "description" : "基于语义检索长期记忆",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SearchRecordsRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "检索结果",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SearchRecordsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/records/search",
+      "x-method" : "post"
+    },
+    "/ListRecords" : {
+      "post" : {
+        "tags" : [ "Records" ],
+        "operationId" : "ListRecords",
+        "summary" : "列举长期记忆",
+        "description" : "按条件列出记录并分页",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "requestBody" : {
+          "required" : false,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListRecordsRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "列表返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRecordsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/records/list",
+      "x-method" : "post"
+    },
+    "/ShowRecord" : {
+      "get" : {
+        "tags" : [ "Records" ],
+        "operationId" : "ShowRecord",
+        "summary" : "获取长期记忆",
+        "description" : "根据 record_id 获取记录",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        }, {
+          "name" : "record_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/RecordId"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowRecordResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/records/{record_id}"
+    },
+    "/ListRecordHistory" : {
+      "get" : {
+        "tags" : [ "Records" ],
+        "operationId" : "ListRecordHistory",
+        "summary" : "获取长期记忆历史",
+        "description" : "返回指定记录的历史事件",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        }, {
+          "name" : "record_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/RecordId"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "历史列表",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListRecordHistoryResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/records/{record_id}/history",
+      "x-method" : "get"
+    },
+    "/AddEvent" : {
+      "post" : {
+        "tags" : [ "Events" ],
+        "operationId" : "AddEvent",
+        "summary" : "新增短期记忆",
+        "description" : "向指定记忆仓添加事件",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        }, {
+          "$ref" : "#/components/parameters/content_length"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "description" : "新增事件请求",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddEventRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "创建成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddEventResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/events",
+      "x-method" : "post"
+    },
+    "/ShowEvent" : {
+      "get" : {
+        "tags" : [ "Events" ],
+        "operationId" : "ShowEvent",
+        "summary" : "获取短期记忆",
+        "description" : "根据 event_id 获取事件",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        }, {
+          "name" : "event_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/EventId"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "查询成功",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ShowEventResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/events/{event_id}",
+      "x-method" : "get"
+    },
+    "/DeleteEvent" : {
+      "delete" : {
+        "tags" : [ "Events" ],
+        "operationId" : "DeleteEvent",
+        "summary" : "删除短期记忆",
+        "description" : "根据 event_id 删除事件",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        }, {
+          "name" : "event_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/EventId"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "删除成功"
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+       "x-url" : "/v1/memorybases/{memorybase_id}/events/{event_id}",
+       "x-method" : "get"
+    },
+    "/ListEvents" : {
+      "post" : {
+        "tags" : [ "Events" ],
+        "operationId" : "ListEvents",
+        "summary" : "列举短期记忆",
+        "description" : "支持筛选、时间范围与分页",
+        "x-is-registered" : "Y",
+        "x-apiexplorer-hide" : "false",
+        "x-support-sdk" : "Y",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/host"
+        }, {
+          "$ref" : "#/components/parameters/content_type"
+        }, {
+          "name" : "memorybase_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          }
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ListEventsRequestBody"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "列表返回",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ListEventsResponseBody"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "错误响应",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponseBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-url" : "/v1/memorybases/{memorybase_id}/events/list",
+      "x-method" : "post"
+    }
+  },
+  "components" : {
+    "parameters" : {
+      "host" : {
+        "name" : "Host",
+        "in" : "header",
+        "description" : "请求的目标主机名",
+        "required" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "content_type" : {
+        "name" : "Content-Type",
+        "in" : "header",
+        "description" : "请求体的媒体类型",
+        "required" : false,
+        "schema" : {
+          "type" : "string",
+          "default" : "application/json"
+        }
+      },
+      "content_length" : {
+        "name" : "Content-Length",
+        "in" : "header",
+        "description" : "请求体的字节长度",
+        "required" : false,
+        "schema" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      }
+    },
+    "schemas" : {
+      "ErrorResponseBody" : {
+        "description" : "失败时返回的错误对象",
+        "type" : "object",
+        "required" : [ "error_code", "error_msg" ],
+        "properties" : {
+          "error_code" : {
+            "description" : "错误码",
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 36,
+            "example" : "MSS.00001001"
+          },
+          "error_msg" : {
+            "description" : "错误描述",
+            "type" : "string",
+            "minLength" : 2,
+            "maxLength" : 512,
+            "example" : "memorybase_name: string element has invalid char."
+          }
+        }
+      },
+      "MemorybaseId" : {
+        "type" : "string",
+        "description" : "记忆仓的唯一标识符（8位预留码 + 36位UUID）",
+        "maxLength" : 45,
+        "pattern" : "^[A-Za-z0-9\\-_]{8}-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+        "example" : "ABCD1234-28f61af5-0fc9-452a-80ed-5ea25c3cc3d3"
+      },
+      "CreateMemorybaseRequestBody" : {
+        "type" : "object",
+        "required" : [ "name" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "记忆仓名称，在账户内唯一",
+            "pattern" : "^[a-zA-Z][a-zA-Z0-9_]{0,47}$",
+            "example" : "MyMemoryBase_01"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "描述",
+            "minLength" : 1,
+            "maxLength" : 4096,
+            "example" : "this is a memorybase"
+          },
+          "event_expiry_duration" : {
+            "type" : "integer",
+            "description" : "短期记忆过期天数（默认不淘汰）",
+            "minimum" : 7,
+            "maximum" : 365,
+            "example" : 30
+          },
+          "safety_strategies" : {
+            "description" : "安全策略（0915不支持）；字典形式",
+            "type" : "object",
+            "additionalProperties" : true
+          },
+          "memorybase_strategies" : {
+            "description" : "记忆策略（0915不支持）；对象（map），包含 enable_mem_trans 等",
+            "type" : "object",
+            "additionalProperties" : true,
+            "properties" : {
+              "enable_mem_trans" : {
+                "type" : "boolean",
+                "description" : "是否开启短期记忆转长期记忆（默认 true）",
+                "example" : true
+              }
+            }
+          },
+          "event_schema" : {
+            "description" : "短期记忆自定义元数据列（0915不支持）；字典：key=string，value=任意",
+            "type" : "object",
+            "additionalProperties" : true
+          },
+          "record_schema" : {
+            "description" : "长期记忆自定义元数据列（0915不支持）；字典：key=string，value=任意",
+            "type" : "object",
+            "additionalProperties" : true
+          }
+        }
+      },
+      "Memorybase" : {
+        "type" : "object",
+        "required" : [ "name", "memorybase_id", "created_at", "updated_at", "status", "event_expiry_duration" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z][a-zA-Z0-9_]{0,47}$",
+            "example" : "MyMemoryBase_01"
+          },
+          "memorybase_id" : {
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/MemorybaseId"
+            } ]
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "创建时间戳",
+            "example" : "2024-09-15T10:20:30Z"
+          },
+          "event_expiry_duration" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 365
+          },
+          "updated_at" : {
+            "type" : "string",
+            "description" : "更新时间戳",
+            "example" : "2024-09-16T11:22:33Z"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "当前状态",
+            "enum" : [ "CREATING", "ACTIVE", "FAILED", "DELETING" ]
+          },
+          "failure_reason" : {
+            "type" : "string"
+          },
+          "safety_strategies" : {
+            "type" : "object",
+            "additionalProperties" : true
+          },
+          "memorybase_strategies" : {
+            "type" : "object",
+            "additionalProperties" : true,
+            "properties" : {
+              "enable_mem_trans" : {
+                "type" : "boolean",
+                "example" : true
+              }
+            }
+          },
+          "event_schema" : {
+            "type" : "object",
+            "additionalProperties" : true
+          },
+          "record_schema" : {
+            "type" : "object",
+            "additionalProperties" : true
+          }
+        }
+      },
+      "CreateMemorybaseResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "memorybase" : {
+            "$ref" : "#/components/schemas/Memorybase"
+          }
+        }
+      },
+      "ShowMemorybaseResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "memorybase" : {
+            "$ref" : "#/components/schemas/Memorybase"
+          }
+        }
+      },
+      "ListMemorybasesRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "limit" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 60,
+            "default" : 10
+          },
+          "next_marker" : {
+            "type" : "string",
+            "description" : "翻页令牌"
+          }
+        }
+      },
+      "MemorybaseListItem" : {
+        "type" : "object",
+        "required" : [ "name", "created_at", "memorybase_id", "status", "updated_at", "event_expiry_duration" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "pattern" : "^[a-zA-Z][a-zA-Z0-9_]{0,47}$"
+          },
+          "created_at" : {
+            "type" : "string"
+          },
+          "memorybase_id" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "CREATING", "ACTIVE", "FAILED", "DELETING" ]
+          },
+          "updated_at" : {
+            "type" : "string"
+          },
+          "event_count" : {
+            "type" : "integer"
+          },
+          "record_count" : {
+            "type" : "integer"
+          },
+          "event_expiry_duration" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 365
+          },
+          "description" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 4096
+          }
+        }
+      },
+      "PageInfo" : {
+        "type" : "object",
+        "properties" : {
+          "next_marker" : {
+            "type" : "string"
+          },
+          "current_count" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ListMemorybasesResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "memorybases" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MemorybaseListItem"
+            }
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        }
+      },
+      "RecordId" : {
+        "type" : "string",
+        "description" : "记录ID",
+        "pattern" : "^[0-9]+#[a-fA-F0-9]+$",
+        "example" : "12345#7a9b3c"
+      },
+      "MessageItem" : {
+        "type" : "object",
+        "required" : [ "role", "content" ],
+        "properties" : {
+          "role" : {
+            "type" : "string",
+            "example" : "user"
+          },
+          "content" : {
+            "type" : "string",
+            "example" : "你好，小鲁班！"
+          }
+        }
+      },
+      "SearchRecordsRequestBody" : {
+        "type" : "object",
+        "required" : [ "query" ],
+        "properties" : {
+          "query" : {
+            "type" : "string"
+          },
+          "top_k" : {
+            "type" : "integer",
+            "description" : "结果限制，默认10",
+            "minimum" : 1,
+            "maximum" : 100,
+            "default" : 10
+          },
+          "filter" : {
+            "type" : "object",
+            "properties" : {
+              "actor_id" : {
+                "type" : "string",
+                "minLength" : 1,
+                "maxLength" : 255,
+                "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+              },
+              "agent_id" : {
+                "type" : "string",
+                "minLength" : 1,
+                "maxLength" : 255,
+                "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+              },
+              "session_id" : {
+                "type" : "string",
+                "minLength" : 1,
+                "maxLength" : 100,
+                "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*$"
+              }
+            }
+          }
+        }
+      },
+      "RecordSearchItem" : {
+        "type" : "object",
+        "required" : [ "record_id", "memory", "created_at", "updated_at" ],
+        "properties" : {
+          "record_id" : {
+            "$ref" : "#/components/schemas/RecordId"
+          },
+          "memory" : {
+            "type" : "string"
+          },
+          "created_at" : {
+            "type" : "string"
+          },
+          "updated_at" : {
+            "type" : "string"
+          },
+          "score" : {
+            "type" : "number",
+            "format" : "float"
+          }
+        }
+      },
+      "SearchRecordsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "records" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RecordSearchItem"
+            }
+          }
+        }
+      },
+      "ListRecordsRequestBody" : {
+        "type" : "object",
+        "properties" : {
+          "actor_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+          },
+          "agent_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+          },
+          "session_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*$"
+          },
+          "filter" : {
+            "type" : "object",
+            "properties" : {
+              "xxx" : {
+                "type" : "string"
+              }
+            }
+          },
+          "limit" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "default" : 20
+          },
+          "next_marker" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RecordListItem" : {
+        "type" : "object",
+        "required" : [ "record_id", "memory", "created_at", "updated_at" ],
+        "properties" : {
+          "record_id" : {
+            "$ref" : "#/components/schemas/RecordId"
+          },
+          "memory" : {
+            "type" : "string"
+          },
+          "created_at" : {
+            "type" : "string"
+          },
+          "updated_at" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ListRecordsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "records" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RecordListItem"
+            }
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        }
+      },
+      "ShowRecordResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "record" : {
+            "$ref" : "#/components/schemas/RecordListItem"
+          }
+        }
+      },
+      "ListRecordHistoryResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "record_id" : {
+                  "$ref" : "#/components/schemas/RecordId"
+                },
+                "old_memory" : {
+                  "type" : "string"
+                },
+                "new_memory" : {
+                  "type" : "string"
+                },
+                "event" : {
+                  "type" : "string",
+                  "enum" : [ "ADD", "UPDATE", "DELETE" ]
+                },
+                "created_at" : {
+                  "type" : "string"
+                },
+                "updated_at" : {
+                  "type" : "string"
+                },
+                "role" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EventId" : {
+        "type" : "string",
+        "description" : "事件ID",
+        "pattern" : "^[0-9]+#[a-fA-F0-9]+$",
+        "example" : "67890#1a2b3c"
+      },
+      "AddEventRequestBody" : {
+        "type" : "object",
+        "required" : [ "timestamp", "messages" ],
+        "properties" : {
+          "actor_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+          },
+          "agent_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 255,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_/]*$"
+          },
+          "session_id" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 100,
+            "pattern" : "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*$"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "description" : "ISO8601 格式",
+            "example" : "2024-09-15T10:20:30Z"
+          },
+          "messages" : {
+            "type" : "array",
+            "minItems" : 0,
+            "maxItems" : 100,
+            "items" : {
+              "$ref" : "#/components/schemas/MessageItem"
+            }
+          }
+        }
+      },
+      "AddEventResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "event" : {
+            "type" : "object",
+            "required" : [ "actor_id", "agent_id", "event_id", "timestamp", "memorybase_id", "session_id" ],
+            "properties" : {
+              "actor_id" : {
+                "type" : "string"
+              },
+              "agent_id" : {
+                "type" : "string"
+              },
+              "event_id" : {
+                "$ref" : "#/components/schemas/EventId"
+              },
+              "timestamp" : {
+                "type" : "string"
+              },
+              "memorybase_id" : {
+                "$ref" : "#/components/schemas/MemorybaseId"
+              },
+              "messages" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/MessageItem"
+                }
+              },
+              "session_id" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "ShowEventResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "event" : {
+            "type" : "object",
+            "required" : [ "actor_id", "event_id", "agent_id", "timestamp", "memorybase_id", "session_id" ],
+            "properties" : {
+              "actor_id" : {
+                "type" : "string"
+              },
+              "event_id" : {
+                "$ref" : "#/components/schemas/EventId"
+              },
+              "agent_id" : {
+                "type" : "string"
+              },
+              "timestamp" : {
+                "type" : "string"
+              },
+              "memorybase_id" : {
+                "$ref" : "#/components/schemas/MemorybaseId"
+              },
+              "messages" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/MessageItem"
+                }
+              },
+              "session_id" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "ListEventsRequestBody" : {
+        "type" : "object",
+        "required" : [ "filter", "include_message", "limit" ],
+        "properties" : {
+          "filter" : {
+            "type" : "object",
+            "properties" : {
+              "agent_id" : {
+                "type" : "string"
+              },
+              "session_id" : {
+                "type" : "string"
+              },
+              "actor_id" : {
+                "type" : "string"
+              },
+              "before_timestamp" : {
+                "type" : "string"
+              },
+              "after_timestamp" : {
+                "type" : "string"
+              }
+            }
+          },
+          "include_message" : {
+            "type" : "boolean",
+            "description" : "是否在响应包含 message",
+            "default" : false
+          },
+          "limit" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 100,
+            "default" : 20
+          },
+          "next_marker" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EventItem" : {
+        "type" : "object",
+        "required" : [ "actor_id", "event_id", "agent_id", "timestamp", "memorybase_id", "session_id" ],
+        "properties" : {
+          "actor_id" : {
+            "type" : "string"
+          },
+          "event_id" : {
+            "$ref" : "#/components/schemas/EventId"
+          },
+          "agent_id" : {
+            "type" : "string"
+          },
+          "timestamp" : {
+            "type" : "string"
+          },
+          "memorybase_id" : {
+            "$ref" : "#/components/schemas/MemorybaseId"
+          },
+          "messages" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MessageItem"
+            }
+          },
+          "session_id" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ListEventsResponseBody" : {
+        "type" : "object",
+        "properties" : {
+          "events" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EventItem"
+            }
+          },
+          "page_info" : {
+            "$ref" : "#/components/schemas/PageInfo"
+          }
+        }
+      }
+    }
+  }
+}
