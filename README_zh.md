@@ -15,7 +15,7 @@
 - [Demo](#Demo)
 - [运行指南](#运行指南)
 - [功能点(Tools)](#功能点Tools)
-- [贡献指南](#贡献指南)
+- [贡献](#贡献)
 
 ## 实用文档
 - [使用DAS MCP实现数据库对话式运维](https://support.huaweicloud.com/bestpractice-das/das_best_practice_01_0017.html) 
