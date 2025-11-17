@@ -1,7 +1,6 @@
 import psycopg2
 import dws_mcp_server.config as config
 
-
 def connect_db():
     try:
         db_config = config.get_config()
@@ -80,7 +79,7 @@ def handle_tool_call(tool_name, args):
 
         return "Tool handler not implemented."
     except Exception as e:
-        return f"Error handling tool{tool_name}: {str(e)}"
+        return f"Error handling tool {tool_name}: {str(e)}"
 
 
 def _ensure_connection(conn):
@@ -98,9 +97,7 @@ def execute_query(query):
             cur.execute(query)
             if cur.description:
                 columns = [desc[0] for desc in cur.description]
-                return "\n".join(
-                    [",".join(columns)] + preprocess_result(cur.fetchall())
-                )
+                return "\n".join([",".join(columns)] + preprocess_result(cur.fetchall()))
             else:
                 return f"Query executed successfully. Rows affected: {cur.rowcount}"
 
