@@ -17,6 +17,10 @@ from .model import MCPConfig, TransportType
 from .variable import (
     HUAWEI_ACCESS_KEY,
     HUAWEI_SECRET_KEY,
+    HUAWEI_ENDPOINT_DOMAIN,
+    HUAWEI_ENDPOINT_PREFIX,
+    HUAWEI_PROJECT_ID,
+    HUAWEI_IAM_ENDPOINT,
     MCP_SERVER_MODE,
     MCP_SERVER_PORT,
 )
@@ -160,16 +164,29 @@ class CustomClient(Client):
         return response
 
 
-def create_api_client(ak, sk, x_host, region="cn-north-4"):
+def create_api_client(ak, sk, x_host, region="cn-north-4", endpoint_domain=None,
+                      endpoint_prefix=None, project_id=None, iam_endpoint=None):
     endpoint = x_host
 
-    if x_host.find("com") != -1:
-        endpoint = f"https://{x_host}"
+    # Support custom endpoint domain for HCSO / on-premise deployments
+    if endpoint_domain and "myhuaweicloud.com" in endpoint:
+        endpoint = endpoint.replace("myhuaweicloud.com", endpoint_domain)
+
+    # Inject prefix into service name (e.g. "-prevnet" for internal network)
+    # roma.region.domain → roma-prevnet.region.domain
+    if endpoint_prefix:
+        dot_idx = endpoint.index(".")
+        endpoint = endpoint[:dot_idx] + endpoint_prefix + endpoint[dot_idx:]
+
+    if "." in endpoint and not endpoint.startswith("http"):
+        endpoint = f"https://{endpoint}"
 
     if endpoint.find("{region}") != -1:
         endpoint = endpoint.replace("{region}", region)
 
-    credentials = BasicCredentials(ak, sk)
+    credentials = BasicCredentials(ak, sk, project_id)
+    if iam_endpoint:
+        credentials = credentials.with_iam_endpoint(iam_endpoint)
 
     http_config = HttpConfig()
     http_config.ignore_ssl_verification = True
@@ -269,11 +286,19 @@ def load_config(config_path: Union[str, Path]) -> MCPConfig:
             port=config_dict.get("port", 8888),
             ak=config_dict.get("ak", ""),
             sk=config_dict.get("sk", ""),
+            endpoint_domain=config_dict.get("endpoint_domain", ""),
+            endpoint_prefix=config_dict.get("endpoint_prefix", ""),
+            project_id=config_dict.get("project_id", ""),
+            iam_endpoint=config_dict.get("iam_endpoint", ""),
         )
 
         env_mapping = [
             (HUAWEI_ACCESS_KEY, "ak", None, None),
             (HUAWEI_SECRET_KEY, "sk", None, None),
+            (HUAWEI_ENDPOINT_DOMAIN, "endpoint_domain", None, None),
+            (HUAWEI_ENDPOINT_PREFIX, "endpoint_prefix", None, None),
+            (HUAWEI_PROJECT_ID, "project_id", None, None),
+            (HUAWEI_IAM_ENDPOINT, "iam_endpoint", None, None),
             (MCP_SERVER_MODE, "transport", None, get_args(TransportType)),
             (MCP_SERVER_PORT, "port", int, None),
         ]

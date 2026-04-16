@@ -11,6 +11,10 @@ class MCPConfig:
     transport: TransportType
     ak: Optional[str] = None
     sk: Optional[str] = None
+    endpoint_domain: Optional[str] = None
+    endpoint_prefix: Optional[str] = None
+    project_id: Optional[str] = None
+    iam_endpoint: Optional[str] = None
 
     def check(self):
         if not self.service_code:

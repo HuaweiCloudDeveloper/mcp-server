@@ -135,7 +135,13 @@ class MCPServer:
                 }
                 raise ToolError(error_msg)
 
-            client = create_api_client(ak, sk, x_host, region)
+            client = create_api_client(
+                ak, sk, x_host, region,
+                self.config.endpoint_domain,
+                self.config.endpoint_prefix,
+                self.config.project_id,
+                self.config.iam_endpoint,
+            )
             try:
                 arguments = filter_parameters(arguments)
 
