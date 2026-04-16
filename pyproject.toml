@@ -6,21 +6,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "huaweicloud-mcp-server"
-version = "0.3.0"
-description = "A Model Context Protocol server providing tools for Huawei Cloud"
+version = "0.3.1"
+description = "A Model Context Protocol server providing tools for Huawei Cloud. Fork with HCSO/on-premise support."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     { name = "huaweicloud-dtse-team", email = "huaweicloud-dtse-team@huawei.com" },
+    { name = "Claudio Filho", email = "filhocf@gmail.com" },
 ]
-keywords = ["huaweicloud", "mcp", "llm"]
-license = { text = "MIT" }
+keywords = ["huaweicloud", "mcp", "llm", "hcso", "on-premise"]
+license = { text = "Apache-2.0" }
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "aiohttp>=3.11.18",
@@ -31,6 +35,12 @@ dependencies = [
     "tzdata>=2024.2",
     "huaweicloudsdkcore>=3.1.150"
 ]
+
+[project.urls]
+Homepage = "https://github.com/filhocf/mcp-server"
+Repository = "https://github.com/filhocf/mcp-server"
+Upstream = "https://github.com/HuaweiCloudDeveloper/mcp-server"
+Issues = "https://github.com/HuaweiCloudDeveloper/mcp-server/issues"
 
 [tool.setuptools]
 packages = [

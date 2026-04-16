@@ -6,4 +6,8 @@ test.py
 /.venv/
 .vscode
 *.egg-info
+uv.lockdocs/
+NOTA-FORNECEDOR-HUAWEI.md
+docs/
 uv.lock
+tenants.json
