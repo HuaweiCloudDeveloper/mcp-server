@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 import json
+import os
 import time
 import uuid
 from pathlib import Path
@@ -82,6 +83,19 @@ class MCPServer:
             self.tools = OpenAPIToToolsConverter(self.openapi_dict).convert()
             logger.info(f"成功加载 {len(self.tools)} 个工具")
 
+            # Inject 'tenant' parameter into all tools if multi-tenant is configured
+            tenants_file = os.environ.get("HUAWEI_TENANTS_FILE")
+            if tenants_file and self.config.tenants:
+                tenant_names = list(self.config.tenants.keys())
+                for tool in self.tools:
+                    schema = tool.inputSchema
+                    if "properties" not in schema:
+                        schema["properties"] = {}
+                    schema["properties"]["tenant"] = {
+                        "type": "string",
+                        "description": f"Tenant name. Available: {tenant_names}",
+                    }
+
             # 注册工具处理函数
             self._register_tool_handlers()
 
@@ -122,11 +136,32 @@ class MCPServer:
         async def call_tool(
             name: str, arguments: dict
         ) -> list[TextContent | ImageContent | EmbeddedResource]:
-            region = arguments.get("region") or "cn-north-4"
+            region = arguments.pop("region", None) or "cn-north-4"
+            tenant_name = arguments.pop("tenant", None)
             x_host = self.openapi_dict["info"]["x-host"]
 
-            ak = self.config.ak
-            sk = self.config.sk
+            # Resolve credentials: tenant > config defaults
+            ak, sk = self.config.ak, self.config.sk
+            endpoint_domain = self.config.endpoint_domain
+            endpoint_prefix = self.config.endpoint_prefix
+            project_id = self.config.project_id
+            iam_endpoint = self.config.iam_endpoint
+
+            if self.config.tenants:
+                t_name = tenant_name or self.config.default_tenant
+                if t_name and t_name in self.config.tenants:
+                    t = self.config.tenants[t_name]
+                    ak, sk = t.ak, t.sk
+                    endpoint_domain = t.endpoint_domain or endpoint_domain
+                    endpoint_prefix = t.endpoint_prefix or endpoint_prefix
+                    project_id = t.project_id or project_id
+                    iam_endpoint = t.iam_endpoint or iam_endpoint
+                    region = t.region or region
+                elif t_name:
+                    available = list(self.config.tenants.keys())
+                    raise ToolError(
+                        f"Unknown tenant '{t_name}'. Available: {available}"
+                    )
 
             if not ak or not sk:
                 error_msg = {
@@ -135,7 +170,13 @@ class MCPServer:
                 }
                 raise ToolError(error_msg)
 
-            client = create_api_client(ak, sk, x_host, region)
+            client = create_api_client(
+                ak, sk, x_host, region,
+                endpoint_domain,
+                endpoint_prefix,
+                project_id,
+                iam_endpoint,
+            )
             try:
                 arguments = filter_parameters(arguments)
 

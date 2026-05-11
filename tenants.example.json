@@ -1,0 +1,23 @@
+{
+  "default": "sicar",
+  "tenants": {
+    "sicar": {
+      "ak": "",
+      "sk": "",
+      "project_id": "",
+      "endpoint_domain": "hcso.dataprev.gov.br",
+      "endpoint_prefix": "-prevnet",
+      "iam_endpoint": "https://iam-pub-prevnet.la-south-6001.hcso.dataprev.gov.br",
+      "region": "la-south-6001"
+    },
+    "mgi": {
+      "ak": "",
+      "sk": "",
+      "project_id": "",
+      "endpoint_domain": "",
+      "endpoint_prefix": "",
+      "iam_endpoint": "",
+      "region": ""
+    }
+  }
+}
